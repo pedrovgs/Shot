@@ -1,14 +1,17 @@
 group 'com.karumi'
 version '0.0.1-SNAPSHOT'
 
-apply plugin: 'java'
-
-sourceCompatibility = 1.8
+apply plugin: 'scala'
+apply plugin: 'jacoco'
+apply plugin: 'com.github.maiflai.scalatest'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile 'org.scala-lang:scala-library:2.12.1'
+    compile 'org.typelevel:cats_2.12:0.9.0'
+    testCompile 'org.scalatest:scalatest_2.12:3.0.3'
+    testRuntime 'org.pegdown:pegdown:1.4.2'
 }
