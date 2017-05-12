@@ -1,0 +1,31 @@
+# IntelliJ
+out/
+.idea/
+target/
+*.iml
+local.properties
+
+### Java ###
+*.class
+classes/
+
+# Package Files #
+*.jar
+
+### Gradle ###
+.gradle
+build/
+
+### Specific ###
+*.zip
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+### Plugin local repo ###
+
+repo/
+
