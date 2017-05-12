@@ -1,2 +1,4 @@
 rootProject.name = 'shot'
+include 'gradle-plugin'
+include 'core'
 
