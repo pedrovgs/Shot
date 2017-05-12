@@ -1,8 +1,7 @@
 package com.karumi.shot.tasks
 
 import org.gradle.api.DefaultTask
-import org.gradle.api.internal.tasks.options.Option
-import org.gradle.api.tasks.{Optional, TaskAction}
+import org.gradle.api.tasks.TaskAction
 
 abstract class ShotTask() extends DefaultTask {
 
@@ -15,7 +14,7 @@ object ExecuteScreenshotTests {
 }
 class ExecuteScreenshotTests extends ShotTask {
 
-  setDescription("Records the user interface tests screenshots.")
+  setDescription("Records the user interface tests screenshots. If you execute this task using \"-Precord\" param the screenshot will be regenerated.")
 
   @TaskAction
   def executeScreenshotTests(): Unit = {
