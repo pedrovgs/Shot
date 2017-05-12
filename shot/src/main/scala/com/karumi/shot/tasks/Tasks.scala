@@ -1,7 +1,8 @@
 package com.karumi.shot.tasks
 
 import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.TaskAction
+import org.gradle.api.internal.tasks.options.Option
+import org.gradle.api.tasks.{Optional, TaskAction}
 
 abstract class ShotTask() extends DefaultTask {
 
@@ -17,8 +18,9 @@ class ExecuteScreenshotTests extends ShotTask {
   setDescription("Records the user interface tests screenshots.")
 
   @TaskAction
-  def recordScreenshots(): Unit = {
-    println("---------> EXECUTE")
+  def executeScreenshotTests(): Unit = {
+    val recordScreenshots = getProject.hasProperty("record")
+    println("---------> EXECUTE. RECORD = " + recordScreenshots)
   }
 }
 
