@@ -1,6 +1,35 @@
-language: java
+language: android
+sudo: required
 jdk:
   - oraclejdk8
+env:
+  global:
+    - ADB_INSTALL_TIMEOUT=8 # 8 minutes (2 minutes by default)
+
+android:
+  components:
+    - tools
+    - build-tools-23.0.2
+    - android-23
+    - extra-android-support
+    - extra-google-m2repository
+    - extra-android-m2repository
+    - sys-img-armeabi-v7a-android-19
+
+before_script:
+  - sudo pip install --upgrade pip
+  - sudo pip install pillowcase
+  - echo no | android create avd --force -n test -t android-19 --abi armeabi-v7a
+  - mksdcard -l sdcard 100M sdcard
+  - emulator -avd test -no-audio -no-window -sdcard sdcard &
+  - android-wait-for-emulator
+  - adb shell settings put global window_animation_scale 0 &
+  - adb shell settings put global transition_animation_scale 0 &
+  - adb shell settings put global animator_duration_scale 0 &
+  - adb shell input keyevent 82 &
 
 script:
-  ./gradlew build
+  - ./gradlew build test
+  - ./gradlew install
+  - cd shot-consumer
+  - ./gradlew checkstyle build verifyMode screenshotTests -Pcom.android.build.threadPoolSize=1 -Dorg.gradle.parallel=false -Dorg.gradle.jvmargs="-Xms1024m -Xmx1024m" -Dorg.gradle.daemon=false
