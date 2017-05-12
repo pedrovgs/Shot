@@ -1,5 +1,5 @@
 package com.karumi.shot
 
-class ShotPlugin {
+class ShotPluginSpec {
 
 }

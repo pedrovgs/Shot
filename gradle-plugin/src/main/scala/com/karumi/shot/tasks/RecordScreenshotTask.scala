@@ -1,5 +1,5 @@
 package com.karumi.shot.tasks
 
-class VerifyScreenshotTests {
+class RecordScreenshotTask {
 
 }
