@@ -4,6 +4,7 @@ version '0.0.1-SNAPSHOT'
 apply plugin: 'scala'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.maiflai.scalatest'
+apply plugin: 'maven'
 
 repositories {
     mavenCentral()
@@ -14,4 +15,12 @@ dependencies {
     compile 'org.typelevel:cats_2.12:0.9.0'
     testCompile 'org.scalatest:scalatest_2.12:3.0.3'
     testRuntime 'org.pegdown:pegdown:1.4.2'
+}
+
+install {
+    repositories {
+        mavenDeployer {
+            repository(url: uri('../repo'))
+        }
+    }
 }
