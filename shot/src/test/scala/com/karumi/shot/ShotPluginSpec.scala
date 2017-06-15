@@ -46,4 +46,9 @@ class ShotPluginSpec extends FlatSpec with Matchers {
     task.getDependsOn.contains("pullScreenshots")
   }
 
+  it should "configure pullScreenshots depending on packageDebugAndroidTest task" in {
+    val task = project.getTasks.findByName(PullScreenshotsTask.name)
+    task.getDependsOn.contains("packageDebugAndroidTest")
+  }
+
 }
