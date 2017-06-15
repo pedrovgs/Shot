@@ -5,6 +5,7 @@ apply plugin: 'scala'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.maiflai.scalatest'
 apply plugin: 'maven'
+apply plugin: 'scalafmt'
 
 repositories {
     mavenCentral()

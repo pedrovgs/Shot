@@ -1,7 +1,11 @@
 package com.karumi.shot
 
 import com.karumi.shot.free.domain.Config
-import com.karumi.shot.tasks.{ClearScreenshotsTask, ExecuteScreenshotTests, PullScreenshotsTask}
+import com.karumi.shot.tasks.{
+  ClearScreenshotsTask,
+  ExecuteScreenshotTests,
+  PullScreenshotsTask
+}
 import org.gradle.api.{Plugin, Project}
 import org.slf4j.Logger
 
@@ -23,9 +27,12 @@ class ShotPlugin extends Plugin[Project] {
   }
 
   private def addTasks(project: Project): Unit = {
-    project.getTasks.create(ClearScreenshotsTask.name, classOf[ClearScreenshotsTask])
-    val pullScreenshots = project.getTasks.create(PullScreenshotsTask.name, classOf[PullScreenshotsTask])
-    val executeScreenshot = project.getTasks.create(ExecuteScreenshotTests.name, classOf[ExecuteScreenshotTests])
+    project.getTasks
+      .create(ClearScreenshotsTask.name, classOf[ClearScreenshotsTask])
+    val pullScreenshots = project.getTasks
+      .create(PullScreenshotsTask.name, classOf[PullScreenshotsTask])
+    val executeScreenshot = project.getTasks
+      .create(ExecuteScreenshotTests.name, classOf[ExecuteScreenshotTests])
     executeScreenshot.dependsOn(ClearScreenshotsTask.name)
     executeScreenshot.dependsOn("connectedAndroidTest")
     executeScreenshot.dependsOn(PullScreenshotsTask.name)

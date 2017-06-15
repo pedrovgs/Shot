@@ -1,5 +1,3 @@
 package com.karumi.shot
 
-object app {
-
-}
+object app {}

@@ -14,7 +14,8 @@ object ExecuteScreenshotTests {
 }
 class ExecuteScreenshotTests extends ShotTask {
 
-  setDescription("Records the user interface tests screenshots. If you execute this task using \"-Precord\" param the screenshot will be regenerated.")
+  setDescription(
+    "Records the user interface tests screenshots. If you execute this task using \"-Precord\" param the screenshot will be regenerated.")
 
   @TaskAction
   def executeScreenshotTests(): Unit = {
@@ -27,24 +28,21 @@ object PullScreenshotsTask {
 }
 class PullScreenshotsTask extends ShotTask {
 
-  setDescription("Retrieves the screenshots stored into the Android device where the tests were executed.")
+  setDescription(
+    "Retrieves the screenshots stored into the Android device where the tests were executed.")
 
   @TaskAction
-  def pullScreenshots(): Unit = {
-
-  }
+  def pullScreenshots(): Unit = {}
 }
-
 
 object ClearScreenshotsTask {
   val name = "clearScreenshots"
 }
 class ClearScreenshotsTask extends ShotTask {
 
-  setDescription("Removes the screenshots recorded during the tests execution from the Android device where the tests were executed.")
+  setDescription(
+    "Removes the screenshots recorded during the tests execution from the Android device where the tests were executed.")
 
   @TaskAction
-  def clearScreenshots(): Unit = {
-
-  }
+  def clearScreenshots(): Unit = {}
 }

@@ -5,6 +5,4 @@ object Config {
   val androidDependency = "com.facebook.testing.screenshot:core:0.4.2"
 }
 
-case class Config() {
-
-}
+case class Config() {}
