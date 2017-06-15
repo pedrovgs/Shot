@@ -1,7 +1,7 @@
 package com.karumi.shot
 
 import com.karumi.shot.tasks.{ClearScreenshotsTask, ExecuteScreenshotTests, PullScreenshotsTask}
-import org.gradle.api.Project
+import org.gradle.api.{Project, Task}
 import org.gradle.testfixtures.ProjectBuilder
 import org.scalatest.{FlatSpec, Matchers}
 
@@ -29,6 +29,21 @@ class ShotPluginSpec extends FlatSpec with Matchers {
     ClearScreenshotsTask.name shouldBe "clearScreenshots"
     PullScreenshotsTask.name shouldBe "pullScreenshots"
     ExecuteScreenshotTests.name shouldBe "executeScreenshotTests"
+  }
+
+  it should "configure executeScreenshotTests depending on connectedAndroidTest task" in {
+    val task = project.getTasks.findByName(ExecuteScreenshotTests.name)
+    task.getDependsOn.contains("connectedAndroidTest")
+  }
+
+  it should "configure executeScreenshotTests depending on clearScreenshots task" in {
+    val task = project.getTasks.findByName(ExecuteScreenshotTests.name)
+    task.getDependsOn.contains("clearScreenshots")
+  }
+
+  it should "configure executeScreenshotTests depending on pullScreenshots task" in {
+    val task = project.getTasks.findByName(ExecuteScreenshotTests.name)
+    task.getDependsOn.contains("pullScreenshots")
   }
 
 }
