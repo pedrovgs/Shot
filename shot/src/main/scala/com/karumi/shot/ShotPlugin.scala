@@ -1,8 +1,9 @@
 package com.karumi.shot
 
 import com.karumi.shot.free.domain.Config
-import com.karumi.shot.tasks.{ClearScreenshotsTask, PullScreenshotsTask, ExecuteScreenshotTests}
+import com.karumi.shot.tasks.{ClearScreenshotsTask, ExecuteScreenshotTests, PullScreenshotsTask}
 import org.gradle.api.{Plugin, Project}
+import org.slf4j.Logger
 
 class ShotPlugin extends Plugin[Project] {
 
@@ -14,8 +15,11 @@ class ShotPlugin extends Plugin[Project] {
   private def addAndroidTestDependency(project: Project): Unit = {
     val dependencyMode = Config.androidDependencyMode
     val dependencyName = Config.androidDependency
-    val dependency = project.getDependencies.create(dependencyName)
-    project.getDependencies.add(dependencyMode, dependency)
+    val dependenciesHandler = project.getDependencies
+    val dependency = dependenciesHandler.create(dependencyName)
+    Option(project.getPlugins.findPlugin("com.android.application"))
+      .map(_ => dependenciesHandler.add(dependencyMode, dependency))
+
   }
 
   private def addTasks(project: Project): Unit = {

@@ -19,7 +19,6 @@ class ExecuteScreenshotTests extends ShotTask {
   @TaskAction
   def executeScreenshotTests(): Unit = {
     val recordScreenshots = getProject.hasProperty("record")
-    println("---------> EXECUTE. RECORD = " + recordScreenshots)
   }
 }
 
@@ -32,7 +31,7 @@ class PullScreenshotsTask extends ShotTask {
 
   @TaskAction
   def pullScreenshots(): Unit = {
-    println("---------> PULL")
+
   }
 }
 
@@ -46,6 +45,6 @@ class ClearScreenshotsTask extends ShotTask {
 
   @TaskAction
   def clearScreenshots(): Unit = {
-    println("---------> CLEAR")
+
   }
 }
