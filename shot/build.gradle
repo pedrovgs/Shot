@@ -2,6 +2,7 @@ group 'com.karumi'
 version '0.0.1-SNAPSHOT'
 
 apply plugin: 'scala'
+apply plugin: 'groovy'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.maiflai.scalatest'
 apply plugin: 'maven'

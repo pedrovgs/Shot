@@ -1,19 +1,22 @@
 package com.karumi.shot
 
-import com.karumi.shot.free.domain.Config
-import com.karumi.shot.tasks.{
-  ClearScreenshotsTask,
-  ExecuteScreenshotTests,
-  PullScreenshotsTask
-}
+import com.karumi.shot.domain.Config
+import com.karumi.shot.tasks.{ClearScreenshotsTask, ExecuteScreenshotTests, PullScreenshotsTask}
 import org.gradle.api.{Plugin, Project}
-import org.slf4j.Logger
 
 class ShotPlugin extends Plugin[Project] {
 
+  private lazy val shot: Shot = new Shot(new Adb)
+
   override def apply(project: Project): Unit = {
+    configureAdb(project)
     addAndroidTestDependency(project)
     addTasks(project)
+  }
+
+  private def configureAdb(project: Project): Unit = {
+    val adbPath = AdbPathExtractor.extracPath(project)
+    shot.configureAdbPath(adbPath)
   }
 
   private def addAndroidTestDependency(project: Project): Unit = {

@@ -1,4 +1,4 @@
-package com.karumi.shot.free.domain
+package com.karumi.shot.domain
 
 object Config {
   val androidDependencyMode = "androidTestCompile"
