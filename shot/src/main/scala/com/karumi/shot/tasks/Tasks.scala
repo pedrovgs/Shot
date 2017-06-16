@@ -38,7 +38,8 @@ class PullScreenshotsTask extends ShotTask {
 
   @TaskAction
   def pullScreenshots(): Unit = {
-    shot.pullScreenshots()
+    val projectFolder = getProject.getProjectDir.getAbsolutePath
+    shot.pullScreenshots(projectFolder)
   }
 }
 

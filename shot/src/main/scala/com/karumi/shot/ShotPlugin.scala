@@ -30,7 +30,6 @@ class ShotPlugin extends Plugin[Project] {
     val dependency = dependenciesHandler.create(dependencyName)
     Option(project.getPlugins.findPlugin("com.android.application"))
       .map(_ => dependenciesHandler.add(dependencyMode, dependency))
-
   }
 
   private def addTasks(project: Project): Unit = {

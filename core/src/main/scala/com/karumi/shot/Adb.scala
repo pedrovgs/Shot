@@ -1,5 +1,7 @@
 package com.karumi.shot
 
+import com.karumi.shot.domain.model.Folder
+
 import scala.sys.process._
 
 object Adb {
@@ -8,7 +10,7 @@ object Adb {
 
 class Adb {
 
-  def pullScreenshots(): Unit =
+  def pullScreenshots(screenshotsFolder: Folder): Unit =
     executeAdbCommand(
       "pull /sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/ .")
 
