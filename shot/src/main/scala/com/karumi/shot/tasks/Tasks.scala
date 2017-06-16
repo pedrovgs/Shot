@@ -38,8 +38,9 @@ class PullScreenshotsTask extends ShotTask {
   @TaskAction
   def pullScreenshots(): Unit = {
     println("--------> PULL SCREENSHOTS")
-    val result = "adb pull /sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/ .".!!
-    println("-------> " +result)
+    val result =
+      "adb pull /sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/ .".!!
+    println("-------> " + result)
   }
 }
 
@@ -54,6 +55,7 @@ class ClearScreenshotsTask extends ShotTask {
 
   @TaskAction
   def clearScreenshots(): Unit = {
-    val result = "adb shell rm -r /sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/".!
+    val result =
+      "adb shell rm -r /sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/".!
   }
 }
