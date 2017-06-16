@@ -2,12 +2,13 @@ package com.karumi.shot.tasks
 
 import com.karumi.shot.android.Adb
 import com.karumi.shot.{Shot, ShotExtension}
+import com.karumi.shot.ui.View
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
 abstract class ShotTask() extends DefaultTask {
 
-  protected val shot = new Shot(new Adb)
+  protected val shot = new Shot(new Adb, new View)
   protected val shotExtension =
     getProject.getExtensions.findByType(classOf[ShotExtension])
 

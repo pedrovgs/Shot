@@ -7,11 +7,12 @@ import com.karumi.shot.tasks.{
   ExecuteScreenshotTests,
   PullScreenshotsTask
 }
+import com.karumi.shot.ui.View
 import org.gradle.api.{Plugin, Project}
 
 class ShotPlugin extends Plugin[Project] {
 
-  private lazy val shot: Shot = new Shot(new Adb)
+  private lazy val shot: Shot = new Shot(new Adb, new View)
 
   override def apply(project: Project): Unit = {
     configureAdb(project)
@@ -30,7 +31,7 @@ class ShotPlugin extends Plugin[Project] {
     val dependencyName = Config.androidDependency
     val dependenciesHandler = project.getDependencies
     val dependency = dependenciesHandler.create(dependencyName)
-    Option(project.getPlugins.findPlugin("com.android.application"))
+    Option(project.getPlugins.findPlugin(Config.androidPluginName))
       .map(_ => dependenciesHandler.add(dependencyMode, dependency))
   }
 
@@ -42,9 +43,9 @@ class ShotPlugin extends Plugin[Project] {
     val executeScreenshot = project.getTasks
       .create(ExecuteScreenshotTests.name, classOf[ExecuteScreenshotTests])
     executeScreenshot.dependsOn(ClearScreenshotsTask.name)
-    executeScreenshot.dependsOn("connectedAndroidTest")
+    executeScreenshot.dependsOn(Config.instrumentationTestTask)
     executeScreenshot.dependsOn(PullScreenshotsTask.name)
-    pullScreenshots.dependsOn("packageDebugAndroidTest")
+    pullScreenshots.dependsOn(Config.packageTestApkTask)
   }
 
   private def addExtensions(project: Project): Unit = {

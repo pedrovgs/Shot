@@ -3,11 +3,19 @@ package com.karumi.shot
 import com.karumi.shot.android.Adb
 import com.karumi.shot.domain.Config
 import com.karumi.shot.domain.model.{AppId, Folder}
+import com.karumi.shot.ui.View
 
-class Shot(val adb: Adb) {
+object Shot {
+  private val appIdErrorMessage =
+    "You should configure the application ID following the plugin instructions you can find at https://github.com/karumi/shot"
+}
 
-  def configureAdbPath(adbPath: Folder) =
+class Shot(val adb: Adb, val view: View) {
+  import Shot._
+
+  def configureAdbPath(adbPath: Folder): Unit = {
     Adb.adbBinaryPath = adbPath
+  }
 
   def pullScreenshots(projectFolder: Folder, appId: Option[AppId]): Unit =
     executeIfAppIdIsValid(appId) { applicationId =>
@@ -22,8 +30,7 @@ class Shot(val adb: Adb) {
   private def executeIfAppIdIsValid(appId: Option[AppId])(f: AppId => Unit) =
     appId match {
       case Some(applicationId) => f(applicationId)
-      case None =>
-        println("Configuration error") //TODO: Replace this with the view usage when ready.
+      case None => view.showError(appIdErrorMessage)
     }
 
   private def clearScreenshots(appId: AppId): Unit =

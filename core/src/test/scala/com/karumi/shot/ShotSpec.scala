@@ -3,34 +3,34 @@ package com.karumi.shot
 import com.karumi.shot.android.Adb
 import com.karumi.shot.domain.Config
 import com.karumi.shot.mothers.AppIdMother
+import com.karumi.shot.ui.View
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{BeforeAndAfter, FlatSpec, Matchers}
 
+object ShotSpec {
+  private val appIdConfigError =
+    "You should configure the application ID following the plugin instructions you can find at https://github.com/karumi/shot"
+}
 class ShotSpec
     extends FlatSpec
     with Matchers
     with BeforeAndAfter
     with MockFactory {
 
+  import ShotSpec._
+
   private var shot: Shot = _
   private val adb = mock[Adb]
+  private val view = mock[View]
 
   before {
-    shot = new Shot(adb)
+    shot = new Shot(adb, view)
   }
 
   "Shot" should "should delegate screenshots cleaning to Adb" in {
     val appId = AppIdMother.anyAppId
 
     (adb.clearScreenshots _).expects(appId.get)
-
-    shot.clearScreenshots(appId)
-  }
-
-  it should "not clear screenshots if the appId is None" in {
-    val appId = AppIdMother.anyInvalidAppId
-
-    (adb.clearScreenshots _).expects(*).never
 
     shot.clearScreenshots(appId)
   }
@@ -46,20 +46,28 @@ class ShotSpec
     shot.pullScreenshots(projectFolder, appId)
   }
 
-  it should "not pull the screenshots using if the appId is not defined" in {
-    val appId = AppIdMother.anyInvalidAppId
-    val projectFolder = ProjectFolderMother.anyProjectFolder
-
-    (adb.pullScreenshots _).expects(*, *).never
-
-    shot.pullScreenshots(projectFolder, appId)
-  }
-
   it should "configure adb path" in {
     val anyAdbPath = "/Library/androidsdk/bin/adb"
 
     shot.configureAdbPath(anyAdbPath)
 
     Adb.adbBinaryPath shouldBe anyAdbPath
+  }
+
+  it should "show an error if the app ID is not properly configured when cleaning screenshots" in {
+    val appId = AppIdMother.anyInvalidAppId
+
+    (view.showError _).expects(appIdConfigError)
+
+    shot.clearScreenshots(appId)
+  }
+
+  it should "show an error if the app ID is not properly configured when pulling screenshots" in {
+    val appId = AppIdMother.anyInvalidAppId
+    val projectFolder = ProjectFolderMother.anyProjectFolder
+
+    (view.showError _).expects(appIdConfigError)
+
+    shot.pullScreenshots(projectFolder, appId)
   }
 }
