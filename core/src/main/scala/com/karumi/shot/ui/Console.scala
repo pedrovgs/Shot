@@ -1,6 +1,6 @@
 package com.karumi.shot.ui
 
-class View {
+class Console {
 
   type Message = String
 

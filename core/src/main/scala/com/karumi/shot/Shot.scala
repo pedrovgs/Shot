@@ -3,14 +3,14 @@ package com.karumi.shot
 import com.karumi.shot.android.Adb
 import com.karumi.shot.domain.Config
 import com.karumi.shot.domain.model.{AppId, Folder}
-import com.karumi.shot.ui.View
+import com.karumi.shot.ui.Console
 
 object Shot {
   private val appIdErrorMessage =
     "Error found executing screenshot tests. The appId param is not configured properly. You should configure the appId following the plugin instructions you can find at https://github.com/karumi/shot"
 }
 
-class Shot(val adb: Adb, val view: View) {
+class Shot(val adb: Adb, val console: Console) {
   import Shot._
 
   def configureAdbPath(adbPath: Folder): Unit = {
@@ -30,7 +30,7 @@ class Shot(val adb: Adb, val view: View) {
   private def executeIfAppIdIsValid(appId: Option[AppId])(f: AppId => Unit) =
     appId match {
       case Some(applicationId) => f(applicationId)
-      case None => view.showError(appIdErrorMessage)
+      case None => console.showError(appIdErrorMessage)
     }
 
   private def clearScreenshots(appId: AppId): Unit =

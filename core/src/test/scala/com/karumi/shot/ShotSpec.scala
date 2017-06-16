@@ -3,7 +3,7 @@ package com.karumi.shot
 import com.karumi.shot.android.Adb
 import com.karumi.shot.domain.Config
 import com.karumi.shot.mothers.AppIdMother
-import com.karumi.shot.ui.View
+import com.karumi.shot.ui.Console
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{BeforeAndAfter, FlatSpec, Matchers}
 
@@ -21,10 +21,10 @@ class ShotSpec
 
   private var shot: Shot = _
   private val adb = mock[Adb]
-  private val view = mock[View]
+  private val console = mock[Console]
 
   before {
-    shot = new Shot(adb, view)
+    shot = new Shot(adb, console)
   }
 
   "Shot" should "should delegate screenshots cleaning to Adb" in {
@@ -57,7 +57,7 @@ class ShotSpec
   it should "show an error if the app ID is not properly configured when cleaning screenshots" in {
     val appId = AppIdMother.anyInvalidAppId
 
-    (view.showError _).expects(appIdConfigError)
+    (console.showError _).expects(appIdConfigError)
 
     shot.clearScreenshots(appId)
   }
@@ -66,7 +66,7 @@ class ShotSpec
     val appId = AppIdMother.anyInvalidAppId
     val projectFolder = ProjectFolderMother.anyProjectFolder
 
-    (view.showError _).expects(appIdConfigError)
+    (console.showError _).expects(appIdConfigError)
 
     shot.pullScreenshots(projectFolder, appId)
   }

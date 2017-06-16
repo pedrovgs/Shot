@@ -7,12 +7,12 @@ import com.karumi.shot.tasks.{
   ExecuteScreenshotTests,
   PullScreenshotsTask
 }
-import com.karumi.shot.ui.View
+import com.karumi.shot.ui.Console
 import org.gradle.api.{Plugin, Project}
 
 class ShotPlugin extends Plugin[Project] {
 
-  private lazy val shot: Shot = new Shot(new Adb, new View)
+  private lazy val shot: Shot = new Shot(new Adb, new Console)
 
   override def apply(project: Project): Unit = {
     configureAdb(project)

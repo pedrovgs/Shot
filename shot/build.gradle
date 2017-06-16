@@ -15,8 +15,8 @@ repositories {
 dependencies {
     compile gradleApi()
     compile localGroovy()
-    compile 'org.scala-lang:scala-library:2.12.1'
     compile project(':core')
+    compile 'org.scala-lang:scala-library:2.12.1'
     testCompile 'org.scalatest:scalatest_2.12:3.0.3'
     testRuntime 'org.pegdown:pegdown:1.4.2'
 }

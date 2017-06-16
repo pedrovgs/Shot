@@ -13,7 +13,6 @@ repositories {
 
 dependencies {
     compile 'org.scala-lang:scala-library:2.12.1'
-    compile 'org.typelevel:cats_2.12:0.9.0'
     testCompile 'org.scalatest:scalatest_2.12:3.0.3'
     testRuntime 'org.pegdown:pegdown:1.4.2'
     testCompile 'org.scalamock:scalamock-scalatest-support_2.12:3.5.0'

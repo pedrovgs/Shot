@@ -2,7 +2,11 @@ package com.karumi.shot
 
 import org.scalatest.{FlatSpec, Matchers}
 
+object ShotExtensionSpec {
+  private val anyAppId = "com.karumi.shot"
+}
 class ShotExtensionSpec extends FlatSpec with Matchers {
+  import ShotExtensionSpec._
 
   private val extension = new ShotExtension()
 
@@ -14,7 +18,6 @@ class ShotExtensionSpec extends FlatSpec with Matchers {
     extension.getOptionAppId shouldBe None
   }
 
-  val anyAppId = "com.karumi.shot"
   it should "return Some if the app id is not null when created" in {
     extension.setAppId(anyAppId)
     extension.getOptionAppId shouldBe Some(anyAppId)
