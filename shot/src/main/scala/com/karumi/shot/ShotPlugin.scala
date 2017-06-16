@@ -15,6 +15,7 @@ class ShotPlugin extends Plugin[Project] {
   override def apply(project: Project): Unit = {
     configureAdb(project)
     addAndroidTestDependency(project)
+    addExtensions(project)
     addTasks(project)
   }
 
@@ -43,6 +44,11 @@ class ShotPlugin extends Plugin[Project] {
     executeScreenshot.dependsOn("connectedAndroidTest")
     executeScreenshot.dependsOn(PullScreenshotsTask.name)
     pullScreenshots.dependsOn("packageDebugAndroidTest")
+  }
+
+  private def addExtensions(project: Project): Unit = {
+    val name = ShotExtension.name
+    project.getExtensions.add(name, new ShotExtension())
   }
 
 }

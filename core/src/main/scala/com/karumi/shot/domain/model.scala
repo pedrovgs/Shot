@@ -2,6 +2,7 @@ package com.karumi.shot.domain
 
 object model {
   type Folder = String
+  type AppId = String
 }
 
 object Config {

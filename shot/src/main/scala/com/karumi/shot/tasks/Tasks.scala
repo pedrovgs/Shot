@@ -1,12 +1,14 @@
 package com.karumi.shot.tasks
 
-import com.karumi.shot.{Adb, Shot}
+import com.karumi.shot.{Adb, Shot, ShotExtension}
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
 abstract class ShotTask() extends DefaultTask {
 
   protected val shot = new Shot(new Adb)
+  protected val shotExtension =
+    getProject.getExtensions.findByType(classOf[ShotExtension])
 
   setGroup("shot")
 
@@ -39,7 +41,8 @@ class PullScreenshotsTask extends ShotTask {
   @TaskAction
   def pullScreenshots(): Unit = {
     val projectFolder = getProject.getProjectDir.getAbsolutePath
-    shot.pullScreenshots(projectFolder)
+    val appId = shotExtension.getOptionAppId
+    shot.pullScreenshots(projectFolder, appId)
   }
 }
 
@@ -54,6 +57,7 @@ class ClearScreenshotsTask extends ShotTask {
 
   @TaskAction
   def clearScreenshots(): Unit = {
-    shot.clearScreenshots()
+    val appId = shotExtension.getOptionAppId
+    shot.clearScreenshots(appId)
   }
 }

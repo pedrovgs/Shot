@@ -58,4 +58,9 @@ class ShotPluginSpec extends FlatSpec with Matchers {
     task.getDependsOn.contains("packageDebugAndroidTest")
   }
 
+  it should "configure an extension named ShotExtension" in {
+    project.getExtensions.findByName(ShotExtension.name) shouldBe a[
+      ShotExtension]
+  }
+
 }
