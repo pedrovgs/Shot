@@ -12,7 +12,7 @@ class Adb {
 
   def pullScreenshots(screenshotsFolder: Folder, appId: AppId): Unit =
     executeAdbCommand(
-      "pull /sdcard/screenshots/" + appId + ".test/screenshots-default/* " + screenshotsFolder)
+      "pull /sdcard/screenshots/" + appId + ".test/screenshots-default/ " + screenshotsFolder)
 
   def clearScreenshots(appId: AppId): Unit =
     executeAdbCommand(
