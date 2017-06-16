@@ -1,11 +1,12 @@
 package com.karumi.shot.tasks
 
+import com.karumi.shot.{Adb, Shot}
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
-import scala.sys.process._
-
 abstract class ShotTask() extends DefaultTask {
+
+  protected val shot = new Shot(new Adb)
 
   setGroup("shot")
 
@@ -37,10 +38,7 @@ class PullScreenshotsTask extends ShotTask {
 
   @TaskAction
   def pullScreenshots(): Unit = {
-    println("--------> PULL SCREENSHOTS")
-    val result =
-      "adb pull /sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/ .".!!
-    println("-------> " + result)
+    shot.pullScreenshots()
   }
 }
 
@@ -55,7 +53,6 @@ class ClearScreenshotsTask extends ShotTask {
 
   @TaskAction
   def clearScreenshots(): Unit = {
-    val result =
-      "adb shell rm -r /sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/".!
+    shot.clearScreenshots()
   }
 }
