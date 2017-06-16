@@ -4,7 +4,9 @@ import org.gradle.api.Project
 
 class AdbPathExtractor {
 
-    static String extracPath(Project project) {
-        project.android.getAdbExe().toString()
+    static String extractPath(Project project) {
+        if (project.hasProperty('android')) {
+            project.android.getAdbExe().toString()
+        }
     }
 }

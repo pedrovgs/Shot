@@ -1,7 +1,11 @@
 package com.karumi.shot
 
 import com.karumi.shot.domain.Config
-import com.karumi.shot.tasks.{ClearScreenshotsTask, ExecuteScreenshotTests, PullScreenshotsTask}
+import com.karumi.shot.tasks.{
+  ClearScreenshotsTask,
+  ExecuteScreenshotTests,
+  PullScreenshotsTask
+}
 import org.gradle.api.{Plugin, Project}
 
 class ShotPlugin extends Plugin[Project] {
@@ -15,7 +19,7 @@ class ShotPlugin extends Plugin[Project] {
   }
 
   private def configureAdb(project: Project): Unit = {
-    val adbPath = AdbPathExtractor.extracPath(project)
+    val adbPath = AdbPathExtractor.extractPath(project)
     shot.configureAdbPath(adbPath)
   }
 
