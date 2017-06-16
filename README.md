@@ -19,6 +19,10 @@ Setup the Gradle plugin:
     }
   }
   apply plugin: 'shot'
+  
+  shot {
+    appId = 'YOUR_APPLICATION_ID'
+  }
 ```
 
 This plugin sets up a few convenience commands you can review executing ``./gradlew tasks`` and reviews the ``Shot`` associated tasks:
