@@ -1,6 +1,5 @@
-package com.karumi.shot
+package com.karumi.shot.domain
 
-import com.karumi.shot.domain.Config
 import org.scalatest.{FlatSpec, Matchers}
 
 class ConfigSpec extends FlatSpec with Matchers {

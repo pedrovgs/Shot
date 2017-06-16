@@ -1,4 +1,4 @@
-package com.karumi.shot
+package com.karumi.shot.android
 
 import com.karumi.shot.domain.model.{AppId, Folder}
 

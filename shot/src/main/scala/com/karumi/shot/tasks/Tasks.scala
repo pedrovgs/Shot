@@ -1,6 +1,7 @@
 package com.karumi.shot.tasks
 
-import com.karumi.shot.{Adb, Shot, ShotExtension}
+import com.karumi.shot.android.Adb
+import com.karumi.shot.{Shot, ShotExtension}
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 

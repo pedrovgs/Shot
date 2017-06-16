@@ -1,5 +1,6 @@
 package com.karumi.shot
 
+import com.karumi.shot.android.Adb
 import com.karumi.shot.domain.Config
 import com.karumi.shot.domain.model.{AppId, Folder}
 
