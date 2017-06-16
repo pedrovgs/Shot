@@ -7,7 +7,7 @@ import com.karumi.shot.ui.View
 
 object Shot {
   private val appIdErrorMessage =
-    "You should configure the application ID following the plugin instructions you can find at https://github.com/karumi/shot"
+    "Error found executing screenshot tests. The appId param is not configured properly. You should configure the appId following the plugin instructions you can find at https://github.com/karumi/shot"
 }
 
 class Shot(val adb: Adb, val view: View) {
