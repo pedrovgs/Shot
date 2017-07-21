@@ -1,5 +1,7 @@
 package com.karumi.shot.xml
 
+import java.io.File
+
 import com.karumi.shot.domain.Screenshot
 import com.karumi.shot.domain.model.{Folder, ScreenshotsSuite}
 
@@ -30,16 +32,24 @@ object ScreenshotsSuiteXmlParser {
     val relativeFileNames = (xmlNode \ "relative_file_name").map(_.text)
     val recordedPartsPaths =
       relativeFileNames.map(temporalScreenshotsFolder + _)
-    Screenshot(name,
-               recordedScreenshotPath,
-               testClass,
-               testName,
-               tileWidth,
-               tileHeight,
-               viewHierarchy,
-               absoluteFileNames,
-               relativeFileNames,
-               recordedPartsPaths)
+    val viewHierarchyXML =
+      XML.loadFile(new File(temporalScreenshotsFolder + viewHierarchy))
+    val screenshotWidth = (viewHierarchyXML \ "right" head).text.toInt
+    val screenshotHeight = (viewHierarchyXML \ "bottom" head).text.toInt
+    Screenshot(
+      name,
+      recordedScreenshotPath,
+      testClass,
+      testName,
+      tileWidth,
+      tileHeight,
+      viewHierarchy,
+      absoluteFileNames,
+      relativeFileNames,
+      recordedPartsPaths,
+      screenshotWidth,
+      screenshotHeight
+    )
   }
 
 }

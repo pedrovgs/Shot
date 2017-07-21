@@ -36,13 +36,18 @@ case class Screenshot(name: String,
                       viewHierarchy: FilePath,
                       absoluteFileNames: Seq[FilePath],
                       relativeFileNames: Seq[FilePath],
-                      recordedPartsPaths: Seq[FilePath])
+                      recordedPartsPaths: Seq[FilePath],
+                      screenshotWidth: Int,
+                      screenshotHeight: Int)
 
 case class Dimension(width: Int, height: Int)
 
 sealed trait ScreenshotComparisionError
+
 case class ScreenshotNotFound(screenshot: Screenshot)
+
 case class DifferentScreenshots(screenshot: Screenshot)
+
 case class DifferentImageDimensions(screenshot: Screenshot,
                                     originalDimension: Dimension,
                                     newDimension: Dimension)
