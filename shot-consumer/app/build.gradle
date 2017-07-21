@@ -70,3 +70,7 @@ dependencies {
 configurations.all {
   resolutionStrategy.force 'com.android.support:support-annotations:23.0.1'
 }
+
+shot {
+  appId = 'com.karumi.screenshot'
+}
