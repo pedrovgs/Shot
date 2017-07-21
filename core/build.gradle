@@ -13,6 +13,7 @@ repositories {
 
 dependencies {
     compile 'org.scala-lang:scala-library:2.12.1'
+    compile group: 'org.scala-lang.modules', name: 'scala-xml_2.12', version: '1.0.6'
     testCompile 'org.scalatest:scalatest_2.12:3.0.3'
     testRuntime 'org.pegdown:pegdown:1.4.2'
     testCompile 'org.scalamock:scalamock-scalatest-support_2.12:3.5.0'
