@@ -44,13 +44,16 @@ case class Dimension(width: Int, height: Int)
 
 sealed trait ScreenshotComparisionError
 
-case class ScreenshotNotFound(screenshot: Screenshot) extends ScreenshotComparisionError
+case class ScreenshotNotFound(screenshot: Screenshot)
+    extends ScreenshotComparisionError
 
-case class DifferentScreenshots(screenshot: Screenshot) extends ScreenshotComparisionError
+case class DifferentScreenshots(screenshot: Screenshot)
+    extends ScreenshotComparisionError
 
 case class DifferentImageDimensions(screenshot: Screenshot,
                                     originalDimension: Dimension,
-                                    newDimension: Dimension) extends ScreenshotComparisionError
+                                    newDimension: Dimension)
+    extends ScreenshotComparisionError
 
 case class ScreenshotsComparisionResult(errors: ScreenshotComparisionErrors,
                                         screenshots: ScreenshotsSuite)

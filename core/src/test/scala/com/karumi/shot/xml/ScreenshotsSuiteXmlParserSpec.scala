@@ -1,6 +1,7 @@
 package com.karumi.shot.xml
 
 import com.karumi.shot.Resources
+import com.karumi.shot.domain.Config
 import com.karumi.shot.xml.ScreenshotsSuiteXmlParser._
 import org.scalatest.{FlatSpec, Matchers}
 
@@ -25,9 +26,14 @@ class ScreenshotsSuiteXmlParserSpec
 
   it should "parse a regular metadata file" in {
     val xml = testResourceContent("/screenshots-metadata/metadata.xml")
+    val viewHierarchyContent =
+      testResourceContent("/screenshots-metadata/view-hierarchy.xml")
 
-    val screenshots =
+    val screenshotsWithoutSize =
       parseScreenshots(xml, anyScreenshotsFolder, anyTemporalScreenshotsFolder)
+    val screenshots = screenshotsWithoutSize.map { screenshot =>
+      parseScreenshotSize(screenshot, viewHierarchyContent)
+    }
 
     screenshots.size shouldBe 11
     val firstScreenshot = screenshots.head

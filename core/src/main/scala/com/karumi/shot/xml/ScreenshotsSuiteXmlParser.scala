@@ -32,10 +32,6 @@ object ScreenshotsSuiteXmlParser {
     val relativeFileNames = (xmlNode \ "relative_file_name").map(_.text)
     val recordedPartsPaths =
       relativeFileNames.map(temporalScreenshotsFolder + _)
-    val viewHierarchyXML =
-      XML.loadFile(new File(temporalScreenshotsFolder + viewHierarchy))
-    val screenshotWidth = (viewHierarchyXML \ "right" head).text.toInt
-    val screenshotHeight = (viewHierarchyXML \ "bottom" head).text.toInt
     Screenshot(
       name,
       recordedScreenshotPath,
@@ -47,9 +43,18 @@ object ScreenshotsSuiteXmlParser {
       absoluteFileNames,
       relativeFileNames,
       recordedPartsPaths,
-      screenshotWidth,
-      screenshotHeight
+      0,
+      0
     )
+  }
+
+  def parseScreenshotSize(screenshot: Screenshot,
+                          viewHierarchyContent: String): Screenshot = {
+    val xml = XML.loadString(viewHierarchyContent)
+    val screenshotWidth = (xml \ "right" head).text.toInt
+    val screenshotHeight = (xml \ "bottom" head).text.toInt
+    screenshot.copy(screenshotWidth = screenshotWidth,
+                    screenshotHeight = screenshotHeight)
   }
 
 }

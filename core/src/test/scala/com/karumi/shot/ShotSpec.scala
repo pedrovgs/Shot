@@ -1,7 +1,8 @@
 package com.karumi.shot
 
 import com.karumi.shot.android.Adb
-import com.karumi.shot.domain.Config
+import com.karumi.shot.domain.model.ScreenshotsSuite
+import com.karumi.shot.domain.{Config, ScreenshotsComparisionResult}
 import com.karumi.shot.mothers.AppIdMother
 import com.karumi.shot.screenshots.ScreenshotsComparator
 import com.karumi.shot.ui.Console
@@ -47,12 +48,23 @@ class ShotSpec
     val expectedScreenshotsMetadataFile = projectFolder + Config.metadataFileName
     val metadataFileContent =
       testResourceContent("/screenshots-metadata/metadata.xml")
+    val viewHierarchyContent =
+      testResourceContent("/screenshots-metadata/view-hierarchy.xml")
 
     (adb.pullScreenshots _).expects(expectedScreenshotsFolder, appId.get)
+    (console.show _).expects(*)
     (files.read _)
       .expects(expectedScreenshotsMetadataFile)
       .returning(metadataFileContent)
-    (screenshotsComparator.compare _).expects(*)
+    (files.read _)
+      .expects(*)
+      .anyNumberOfTimes()
+      .returning(viewHierarchyContent)
+    (screenshotsComparator.compare _)
+      .expects(*)
+      .returning(ScreenshotsComparisionResult(Seq(), Seq()))
+    (console.show _).expects(*)
+    (console.showSuccess _).expects(*)
 
     shot.pullScreenshots(projectFolder, appId)
   }
