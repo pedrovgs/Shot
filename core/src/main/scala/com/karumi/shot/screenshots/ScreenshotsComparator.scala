@@ -2,8 +2,8 @@ package com.karumi.shot.screenshots
 
 import java.io.File
 
+import com.karumi.shot.domain._
 import com.karumi.shot.domain.model.ScreenshotsSuite
-import com.karumi.shot.domain.{Screenshot, ScreenshotComparisionError, ScreenshotsComparisionResult}
 import com.sksamuel.scrimage.{AwtImage, Color, Image}
 
 object ScreenshotsComparator {
@@ -20,13 +20,17 @@ class ScreenshotsComparator {
   }
 
   private def compareScreenshot(screenshot: Screenshot): Option[ScreenshotComparisionError] = {
-    val recordedScreenshot =
-      Image.fromFile(new File(screenshot.recordedScreenshotPath))
-    recordedScreenshot.output(
-      new File("/Users/Pedro/Desktop/imageRecorded.png"))
+    val oldScreenshot = Image.fromFile(new File(screenshot.recordedScreenshotPath))
     val newScreenshot = composeNewScreenshot(screenshot)
-    newScreenshot.output(new File("/Users/Pedro/Desktop/screenshots/" + screenshot.name + ".png"))
-    None //TODO: Fix this
+    if (!haveSimilarDimensions(newScreenshot, oldScreenshot)) {
+      val originalDimension = Dimension(oldScreenshot.width, oldScreenshot.height)
+      val newDimension = Dimension(newScreenshot.width, newScreenshot.height)
+      Some(DifferentImageDimensions(screenshot, originalDimension, newDimension))
+    } else if (newScreenshot != oldScreenshot) {
+      Some(DifferentScreenshots(screenshot))
+    } else {
+      None
+    }
   }
 
   private def composeNewScreenshot(screenshot: Screenshot): Image = {
@@ -45,8 +49,10 @@ class ScreenshotsComparator {
         composedImage.overlay(new AwtImage(part), xPosition, yPosition)
       partIndex += 1
     }
-    //composedImage.resizeTo(screenshot.screenshotWidth, screenshot.screenshotHeight)
     composedImage
   }
+
+  private def haveSimilarDimensions(newScreenshot: Image, recordedScreenshot: Image): Boolean =
+    newScreenshot.width == recordedScreenshot.width && newScreenshot.height == recordedScreenshot.height
 
 }
