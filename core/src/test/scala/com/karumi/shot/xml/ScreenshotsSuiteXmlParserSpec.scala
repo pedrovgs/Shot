@@ -1,6 +1,7 @@
 package com.karumi.shot.xml
 
 import com.karumi.shot.Resources
+import com.karumi.shot.xml.ScreenshotsSuiteXmlParser._
 import org.scalatest.{FlatSpec, Matchers}
 
 class ScreenshotsSuiteXmlParserSpec
@@ -8,13 +9,11 @@ class ScreenshotsSuiteXmlParserSpec
     with Matchers
     with Resources {
 
-  private val parser = new ScreenshotsSuiteXmlParser()
-
   "ScreenshotsSuiteXmlParser" should "return an empty spec if there are no screenshots" in {
     val xml = testResourceContent(
       "/screenshots-metadata/empty-screenshots-metadata.xml")
 
-    val screenshots = parser.parseScreenshots(xml)
+    val screenshots = parseScreenshots(xml)
 
     screenshots shouldBe empty
   }
@@ -22,7 +21,7 @@ class ScreenshotsSuiteXmlParserSpec
   it should "parse a regular metadata file" in {
     val xml = testResourceContent("/screenshots-metadata/metadata.xml")
 
-    val screenshots = parser.parseScreenshots(xml)
+    val screenshots = parseScreenshots(xml)
 
     screenshots.size shouldBe 11
     val firstScreenshot = screenshots.head

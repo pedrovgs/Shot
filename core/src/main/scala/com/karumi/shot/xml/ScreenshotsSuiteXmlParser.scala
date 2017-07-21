@@ -5,7 +5,7 @@ import com.karumi.shot.domain.model.ScreenshotsSuite
 
 import scala.xml._
 
-class ScreenshotsSuiteXmlParser {
+object ScreenshotsSuiteXmlParser {
 
   def parseScreenshots(xml: String): ScreenshotsSuite = {
     val xmlScreenshots = XML.loadString(xml) \ "screenshot"

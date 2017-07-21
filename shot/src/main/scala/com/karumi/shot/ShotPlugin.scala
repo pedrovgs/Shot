@@ -12,7 +12,7 @@ import org.gradle.api.{Plugin, Project}
 
 class ShotPlugin extends Plugin[Project] {
 
-  private lazy val shot: Shot = new Shot(new Adb, new Console)
+  private lazy val shot: Shot = new Shot(new Adb, new Files, new Console)
 
   override def apply(project: Project): Unit = {
     configureAdb(project)

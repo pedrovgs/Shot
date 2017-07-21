@@ -11,20 +11,23 @@ object ShotSpec {
   private val appIdConfigError =
     "Error found executing screenshot tests. The appId param is not configured properly. You should configure the appId following the plugin instructions you can find at https://github.com/karumi/shot"
 }
+
 class ShotSpec
     extends FlatSpec
     with Matchers
     with BeforeAndAfter
-    with MockFactory {
+    with MockFactory
+    with Resources {
 
   import ShotSpec._
 
   private var shot: Shot = _
   private val adb = mock[Adb]
+  private val files = mock[Files]
   private val console = mock[Console]
 
   before {
-    shot = new Shot(adb, console)
+    shot = new Shot(adb, files, console)
   }
 
   "Shot" should "should delegate screenshots cleaning to Adb" in {
@@ -38,10 +41,15 @@ class ShotSpec
   it should "pull the screenshots using the project folder and the app id if" in {
     val appId = AppIdMother.anyAppId
     val projectFolder = ProjectFolderMother.anyProjectFolder
-    val expectedScreenshotsFolder = projectFolder + Config
-      .screenshotsFolderName
+    val expectedScreenshotsFolder = projectFolder + Config.screenshotsFolderName
+    val expectedScreenshotsMetadataFile = projectFolder + Config.metadataFileName
+    val metadataFileContent =
+      testResourceContent("/screenshots-metadata/metadata.xml")
 
     (adb.pullScreenshots _).expects(expectedScreenshotsFolder, appId.get)
+    (files.read _)
+      .expects(expectedScreenshotsMetadataFile)
+      .returning(metadataFileContent)
 
     shot.pullScreenshots(projectFolder, appId)
   }
