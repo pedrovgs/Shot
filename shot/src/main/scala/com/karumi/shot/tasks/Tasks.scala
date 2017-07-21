@@ -1,6 +1,7 @@
 package com.karumi.shot.tasks
 
 import com.karumi.shot.android.Adb
+import com.karumi.shot.screenshots.ScreenshotsComparator
 import com.karumi.shot.ui.Console
 import com.karumi.shot.{Files, Shot, ShotExtension}
 import org.gradle.api.DefaultTask
@@ -8,7 +9,8 @@ import org.gradle.api.tasks.TaskAction
 
 abstract class ShotTask() extends DefaultTask {
 
-  protected val shot: Shot = new Shot(new Adb, new Files, new Console)
+  protected val shot: Shot =
+    new Shot(new Adb, new Files, new ScreenshotsComparator, new Console)
   protected val shotExtension: ShotExtension =
     getProject.getExtensions.findByType(classOf[ShotExtension])
 

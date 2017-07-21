@@ -9,11 +9,13 @@ class ScreenshotsSuiteXmlParserSpec
     with Matchers
     with Resources {
 
+  private val anyScreenshotsFolder = "/screenshots/"
+
   "ScreenshotsSuiteXmlParser" should "return an empty spec if there are no screenshots" in {
     val xml = testResourceContent(
       "/screenshots-metadata/empty-screenshots-metadata.xml")
 
-    val screenshots = parseScreenshots(xml)
+    val screenshots = parseScreenshots(xml, anyScreenshotsFolder)
 
     screenshots shouldBe empty
   }
@@ -21,11 +23,12 @@ class ScreenshotsSuiteXmlParserSpec
   it should "parse a regular metadata file" in {
     val xml = testResourceContent("/screenshots-metadata/metadata.xml")
 
-    val screenshots = parseScreenshots(xml)
+    val screenshots = parseScreenshots(xml, anyScreenshotsFolder)
 
     screenshots.size shouldBe 11
     val firstScreenshot = screenshots.head
     firstScreenshot.name shouldBe "com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes"
+    firstScreenshot.recordedScreenshotPath shouldBe "/screenshots/com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes.png"
     firstScreenshot.testClass shouldBe "com.karumi.screenshot.MainActivityTest"
     firstScreenshot.testName shouldBe "showsSuperHeroesIfThereAreSomeSuperHeroes"
     firstScreenshot.tileWidth shouldBe 2

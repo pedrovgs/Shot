@@ -3,6 +3,7 @@ package com.karumi.shot
 import com.karumi.shot.android.Adb
 import com.karumi.shot.domain.Config
 import com.karumi.shot.domain.model.{AppId, Folder, ScreenshotsSuite}
+import com.karumi.shot.screenshots.ScreenshotsComparator
 import com.karumi.shot.ui.Console
 import com.karumi.shot.xml.ScreenshotsSuiteXmlParser._
 
@@ -11,7 +12,10 @@ object Shot {
     "Error found executing screenshot tests. The appId param is not configured properly. You should configure the appId following the plugin instructions you can find at https://github.com/karumi/shot"
 }
 
-class Shot(val adb: Adb, val fileReader: Files, val console: Console) {
+class Shot(val adb: Adb,
+           val fileReader: Files,
+           val screenshotsComparator: ScreenshotsComparator,
+           console: Console) {
   import Shot._
 
   def configureAdbPath(adbPath: Folder): Unit = {
@@ -22,9 +26,7 @@ class Shot(val adb: Adb, val fileReader: Files, val console: Console) {
     executeIfAppIdIsValid(appId) { applicationId =>
       pullScreenshots(projectFolder, applicationId)
       val screenshots = readScreenshotsMetadata(projectFolder)
-      print("-------->")
-      print(screenshots)
-      print("-------->")
+      screenshotsComparator.compare(screenshots)
     }
 
   def clearScreenshots(appId: Option[AppId]): Unit =
@@ -50,7 +52,8 @@ class Shot(val adb: Adb, val fileReader: Files, val console: Console) {
       projectFolder: Folder): ScreenshotsSuite = {
     val metadataFilePath = projectFolder + Config.metadataFileName
     val metadataFileContent = fileReader.read(metadataFilePath)
-    parseScreenshots(metadataFileContent)
+    parseScreenshots(metadataFileContent,
+                     projectFolder + Config.screenshotsFolderName)
   }
 
 }
