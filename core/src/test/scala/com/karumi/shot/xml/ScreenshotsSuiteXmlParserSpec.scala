@@ -10,12 +10,15 @@ class ScreenshotsSuiteXmlParserSpec
     with Resources {
 
   private val anyScreenshotsFolder = "/screenshots/"
+  private val anyTemporalScreenshotsFolder =
+    "/screenshots/screenshots-default/"
 
   "ScreenshotsSuiteXmlParser" should "return an empty spec if there are no screenshots" in {
     val xml = testResourceContent(
       "/screenshots-metadata/empty-screenshots-metadata.xml")
 
-    val screenshots = parseScreenshots(xml, anyScreenshotsFolder)
+    val screenshots =
+      parseScreenshots(xml, anyScreenshotsFolder, anyTemporalScreenshotsFolder)
 
     screenshots shouldBe empty
   }
@@ -23,7 +26,8 @@ class ScreenshotsSuiteXmlParserSpec
   it should "parse a regular metadata file" in {
     val xml = testResourceContent("/screenshots-metadata/metadata.xml")
 
-    val screenshots = parseScreenshots(xml, anyScreenshotsFolder)
+    val screenshots =
+      parseScreenshots(xml, anyScreenshotsFolder, anyTemporalScreenshotsFolder)
 
     screenshots.size shouldBe 11
     val firstScreenshot = screenshots.head
@@ -49,6 +53,14 @@ class ScreenshotsSuiteXmlParserSpec
       "com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_1_0.png",
       "com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_1_1.png",
       "com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_1_2.png"
+    )
+    firstScreenshot.recordedPartsPaths shouldBe Seq(
+      "/screenshots/screenshots-default/com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes.png",
+      "/screenshots/screenshots-default/com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_0_1.png",
+      "/screenshots/screenshots-default/com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_0_2.png",
+      "/screenshots/screenshots-default/com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_1_0.png",
+      "/screenshots/screenshots-default/com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_1_1.png",
+      "/screenshots/screenshots-default/com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_1_2.png"
     )
   }
 }

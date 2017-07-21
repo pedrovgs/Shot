@@ -53,7 +53,8 @@ class Shot(val adb: Adb,
     val metadataFilePath = projectFolder + Config.metadataFileName
     val metadataFileContent = fileReader.read(metadataFilePath)
     parseScreenshots(metadataFileContent,
-                     projectFolder + Config.screenshotsFolderName)
+                     projectFolder + Config.screenshotsFolderName,
+                     projectFolder + Config.temporalScreenshotsFolder)
   }
 
 }

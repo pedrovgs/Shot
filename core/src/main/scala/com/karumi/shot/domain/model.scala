@@ -15,13 +15,16 @@ object model {
 }
 
 object Config {
-  val androidDependencyMode = "androidTestCompile"
-  val androidDependency = "com.facebook.testing.screenshot:core:0.4.2"
-  val screenshotsFolderName = "/screenshots/"
-  val metadataFileName = screenshotsFolderName + "/screenshots-default/metadata.xml"
-  val androidPluginName = "com.android.application"
-  val instrumentationTestTask = "connectedAndroidTest"
-  val packageTestApkTask = "packageDebugAndroidTest"
+  val androidDependencyMode: FilePath = "androidTestCompile"
+  val androidDependency: FilePath =
+    "com.facebook.testing.screenshot:core:0.4.2"
+  val screenshotsFolderName: FilePath = "/screenshots/"
+  val temporalScreenshotsFolder
+    : FilePath = screenshotsFolderName + "screenshots-default/"
+  val metadataFileName: FilePath = temporalScreenshotsFolder + "metadata.xml"
+  val androidPluginName: FilePath = "com.android.application"
+  val instrumentationTestTask: FilePath = "connectedAndroidTest"
+  val packageTestApkTask: FilePath = "packageDebugAndroidTest"
 }
 
 case class Screenshot(name: String,
@@ -32,7 +35,8 @@ case class Screenshot(name: String,
                       tileHeight: Int,
                       viewHierarchy: FilePath,
                       absoluteFileNames: Seq[FilePath],
-                      relativeFileNames: Seq[FilePath])
+                      relativeFileNames: Seq[FilePath],
+                      recordedPartsPaths: Seq[FilePath])
 
 case class Dimension(width: Int, height: Int)
 
