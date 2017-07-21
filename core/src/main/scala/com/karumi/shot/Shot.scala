@@ -91,7 +91,7 @@ class Shot(val adb: Adb,
       projectFolder + Config.temporalScreenshotsFolder)
     screenshotSuite.par.map { screenshot =>
       val viewHierarchyContent = fileReader.read(
-        Config.temporalScreenshotsFolder + screenshot.viewHierarchy)
+        projectFolder + Config.temporalScreenshotsFolder + screenshot.viewHierarchy)
       parseScreenshotSize(screenshot, viewHierarchyContent)
     }.toList
   }
