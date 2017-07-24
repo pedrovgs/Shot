@@ -52,7 +52,8 @@ object ScreenshotsSuiteXmlParser {
     val xml = XML.loadString(viewHierarchyContent)
     val screenshotWidth = (xml \ "right" head).text.toInt
     val screenshotHeight = (xml \ "bottom" head).text.toInt
-    screenshot.copy(screenshotDimension = Dimension(screenshotWidth, screenshotHeight))
+    screenshot.copy(
+      screenshotDimension = Dimension(screenshotWidth, screenshotHeight))
   }
 
 }

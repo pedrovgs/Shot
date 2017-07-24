@@ -42,7 +42,8 @@ class ScreenshotsComparator {
     val height = screenshot.screenshotDimension.height
     var composedImage = Image.filled(width, height, Color.Transparent)
     var partIndex = 0
-    for (x <- 0 until screenshot.tilesDimension.width; y <- 0 until screenshot.tilesDimension.height) {
+    for (x <- 0 until screenshot.tilesDimension.width;
+         y <- 0 until screenshot.tilesDimension.height) {
       val partFile = new File(screenshot.recordedPartsPaths(partIndex))
       val part = Image.fromFile(partFile).awt
       val xPosition = x * tileSize
@@ -55,7 +56,7 @@ class ScreenshotsComparator {
   }
 
   private def haveSameDimensions(newScreenshot: Image,
-                                    recordedScreenshot: Image): Boolean =
+                                 recordedScreenshot: Image): Boolean =
     newScreenshot.width == recordedScreenshot.width && newScreenshot.height == recordedScreenshot.height
 
 }
