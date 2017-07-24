@@ -38,8 +38,8 @@ class ScreenshotsComparator {
   }
 
   private def composeNewScreenshot(screenshot: Screenshot): Image = {
-    val width = screenshot.screenshotWidth
-    val height = screenshot.screenshotHeight
+    val width = screenshot.screenshotDimension.width
+    val height = screenshot.screenshotDimension.height
     var composedImage = Image.filled(width, height, Color.Transparent)
     var partIndex = 0
     for (x <- 0 until screenshot.tilesDimension.width; y <- 0 until screenshot.tilesDimension.height) {

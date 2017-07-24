@@ -36,8 +36,7 @@ case class Screenshot(name: String,
                       absoluteFileNames: Seq[FilePath],
                       relativeFileNames: Seq[FilePath],
                       recordedPartsPaths: Seq[FilePath],
-                      screenshotWidth: Int,
-                      screenshotHeight: Int)
+                      screenshotDimension: Dimension)
 
 case class Dimension(width: Int, height: Int)
 

@@ -68,7 +68,7 @@ class ScreenshotsSuiteXmlParserSpec
       "/screenshots/screenshots-default/com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_1_1.png",
       "/screenshots/screenshots-default/com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_1_2.png"
     )
-    firstScreenshot.screenshotWidth shouldBe 720
-    firstScreenshot.screenshotHeight shouldBe 1280
+    firstScreenshot.screenshotDimension.width shouldBe 720
+    firstScreenshot.screenshotDimension.height shouldBe 1280
   }
 }
