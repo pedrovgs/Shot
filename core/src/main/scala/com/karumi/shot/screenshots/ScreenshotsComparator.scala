@@ -24,7 +24,7 @@ class ScreenshotsComparator {
     val oldScreenshot =
       Image.fromFile(new File(screenshot.recordedScreenshotPath))
     val newScreenshot = composeNewScreenshot(screenshot)
-    if (!haveSimilarDimensions(newScreenshot, oldScreenshot)) {
+    if (!haveSameDimensions(newScreenshot, oldScreenshot)) {
       val originalDimension =
         Dimension(oldScreenshot.width, oldScreenshot.height)
       val newDimension = Dimension(newScreenshot.width, newScreenshot.height)
@@ -54,7 +54,7 @@ class ScreenshotsComparator {
     composedImage
   }
 
-  private def haveSimilarDimensions(newScreenshot: Image,
+  private def haveSameDimensions(newScreenshot: Image,
                                     recordedScreenshot: Image): Boolean =
     newScreenshot.width == recordedScreenshot.width && newScreenshot.height == recordedScreenshot.height
 
