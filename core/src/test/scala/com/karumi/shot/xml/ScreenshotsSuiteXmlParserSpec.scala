@@ -41,8 +41,8 @@ class ScreenshotsSuiteXmlParserSpec
     firstScreenshot.recordedScreenshotPath shouldBe "/screenshots/com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes.png"
     firstScreenshot.testClass shouldBe "com.karumi.screenshot.MainActivityTest"
     firstScreenshot.testName shouldBe "showsSuperHeroesIfThereAreSomeSuperHeroes"
-    firstScreenshot.tileWidth shouldBe 2
-    firstScreenshot.tileHeight shouldBe 3
+    firstScreenshot.tilesDimension.width shouldBe 2
+    firstScreenshot.tilesDimension.height shouldBe 3
     firstScreenshot.viewHierarchy shouldBe "com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_dump.xml"
     firstScreenshot.absoluteFileNames shouldBe Seq(
       "/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes.png",

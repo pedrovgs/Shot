@@ -2,7 +2,7 @@ package com.karumi.shot.xml
 
 import java.io.File
 
-import com.karumi.shot.domain.Screenshot
+import com.karumi.shot.domain.{Dimension, Screenshot}
 import com.karumi.shot.domain.model.{Folder, ScreenshotsSuite}
 
 import scala.xml._
@@ -27,6 +27,7 @@ object ScreenshotsSuiteXmlParser {
     val testName = (xmlNode \ "test_name" head).text
     val tileWidth = (xmlNode \ "tile_width" head).text.toInt
     val tileHeight = (xmlNode \ "tile_height" head).text.toInt
+    val tilesDimension = Dimension(tileWidth, tileHeight)
     val viewHierarchy = (xmlNode \ "view_hierarchy" head).text
     val absoluteFileNames = (xmlNode \ "absolute_file_name").map(_.text)
     val relativeFileNames = (xmlNode \ "relative_file_name").map(_.text)
@@ -37,8 +38,7 @@ object ScreenshotsSuiteXmlParser {
       recordedScreenshotPath,
       testClass,
       testName,
-      tileWidth,
-      tileHeight,
+      tilesDimension,
       viewHierarchy,
       absoluteFileNames,
       relativeFileNames,
