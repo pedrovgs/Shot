@@ -2,12 +2,7 @@ package com.karumi.shot
 
 import com.karumi.shot.android.Adb
 import com.karumi.shot.domain.model.{AppId, Folder, ScreenshotsSuite}
-import com.karumi.shot.domain.{
-  Config,
-  DifferentImageDimensions,
-  DifferentScreenshots,
-  ScreenshotNotFound
-}
+import com.karumi.shot.domain._
 import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsSaver}
 import com.karumi.shot.ui.Console
 import com.karumi.shot.xml.ScreenshotsSuiteXmlParser._
@@ -43,18 +38,18 @@ class Shot(val adb: Adb,
       "Screenshots recorded at " + projectFolder + Config.screenshotsFolderName)
   }
 
-  def verifyScreenshots(projectFolder: Folder, projectName: String): Unit = {
+  def verifyScreenshots(projectFolder: Folder, projectName: String): ScreenshotsComparisionResult = {
     console.show(
       "Let's verify the pulled screenshots with the already recorded ones!")
     val screenshots = readScreenshotsMetadata(projectFolder)
     screenshotsSaver.saveTemporalScreenshots(screenshots, projectName)
-    val compare = screenshotsComparator.compare(screenshots)
-    if (!compare.hasErrors) {
+    val comparision = screenshotsComparator.compare(screenshots)
+    if (!comparision.hasErrors) {
       console.showSuccess("Yeah!!! You didn't break your tests")
     } else {
       console.showError(
         "Hummmm...you've broken the following screenshot tests:")
-      compare.errors.foreach {
+      comparision.errors.foreach {
         case ScreenshotNotFound(screenshot) =>
           console.showError(
             "Original screenshot not shown: " + screenshot.name)
@@ -73,6 +68,7 @@ class Shot(val adb: Adb,
         case _ => console.showError("Ups! Something went wrong :(")
       }
     }
+    comparision
   }
 
   def clearScreenshots(appId: Option[AppId]): Unit =

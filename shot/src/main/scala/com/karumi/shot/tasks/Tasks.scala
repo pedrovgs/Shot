@@ -4,7 +4,7 @@ import com.karumi.shot.android.Adb
 import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsSaver}
 import com.karumi.shot.ui.Console
 import com.karumi.shot.{Files, Shot, ShotExtension}
-import org.gradle.api.DefaultTask
+import org.gradle.api.{DefaultTask, GradleException}
 import org.gradle.api.tasks.TaskAction
 
 abstract class ShotTask() extends DefaultTask {
@@ -39,7 +39,10 @@ class ExecuteScreenshotTests extends ShotTask {
     if (recordScreenshots) {
       shot.recordScreenshots(projectFolder)
     } else {
-      shot.verifyScreenshots(projectFolder, project.getName)
+      val result = shot.verifyScreenshots(projectFolder, project.getName)
+      if(result.hasErrors) {
+        throw new GradleException("Screenshots comparision fail. Review the execution report to see what's broken your build.")
+      }
     }
   }
 }
