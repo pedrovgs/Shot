@@ -31,7 +31,8 @@ class ShotSpec
   private val screenshotsSaver = mock[ScreenshotsSaver]
 
   before {
-    shot = new Shot(adb, files, screenshotsComparator, screenshotsSaver, console)
+    shot =
+      new Shot(adb, files, screenshotsComparator, screenshotsSaver, console)
   }
 
   "Shot" should "should delegate screenshots cleaning to Adb" in {
@@ -52,20 +53,8 @@ class ShotSpec
     val viewHierarchyContent =
       testResourceContent("/screenshots-metadata/view-hierarchy.xml")
 
+    (console.show _).expects(*)
     (adb.pullScreenshots _).expects(expectedScreenshotsFolder, appId.get)
-    (console.show _).expects(*)
-    (files.read _)
-      .expects(expectedScreenshotsMetadataFile)
-      .returning(metadataFileContent)
-    (files.read _)
-      .expects(*)
-      .anyNumberOfTimes()
-      .returning(viewHierarchyContent)
-    (screenshotsComparator.compare _)
-      .expects(*)
-      .returning(ScreenshotsComparisionResult(Seq(), Seq()))
-    (console.show _).expects(*)
-    (console.showSuccess _).expects(*)
 
     shot.pullScreenshots(projectFolder, appId)
   }

@@ -14,7 +14,7 @@ class ScreenshotsComparator {
   }
 
   private def compareScreenshot(
-                                 screenshot: Screenshot): Option[ScreenshotComparisionError] = {
+      screenshot: Screenshot): Option[ScreenshotComparisionError] = {
     val oldScreenshot =
       Image.fromFile(new File(screenshot.recordedScreenshotPath))
     val newScreenshot = ScreenshotComposer.composeNewScreenshot(screenshot)

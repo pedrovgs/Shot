@@ -7,14 +7,17 @@ import com.karumi.shot.domain.model.{Folder, ScreenshotsSuite}
 
 class ScreenshotsSaver {
 
-  def saveRecordedScreenshots(projectFolder: Folder, screenshots: ScreenshotsSuite) = {
+  def saveRecordedScreenshots(projectFolder: Folder,
+                              screenshots: ScreenshotsSuite) = {
     deleteOldScreenshots(projectFolder)
     saveScreenshots(screenshots, projectFolder + Config.screenshotsFolderName)
   }
 
-  def saveTemporalScreenshots(screenshots: ScreenshotsSuite, projectName: String) = {
+  def saveTemporalScreenshots(screenshots: ScreenshotsSuite,
+                              projectName: String) = {
     deleteOldTemporalScreenshots(projectName)
-    saveScreenshots(screenshots, Config.screenshotsTemporalRootPath + projectName + "/")
+    saveScreenshots(screenshots,
+                    Config.screenshotsTemporalRootPath + projectName + "/")
   }
 
   private def deleteOldScreenshots(projectFolder: Folder) = {
@@ -34,12 +37,12 @@ class ScreenshotsSaver {
 
   private def saveScreenshots(screenshots: ScreenshotsSuite, folder: Folder) = {
     val screenshotsFolder = new File(folder)
-    if(!screenshotsFolder.exists()){
+    if (!screenshotsFolder.exists()) {
       screenshotsFolder.mkdirs()
     }
     screenshots.par.foreach { screenshot =>
       val outputFile = new File(folder + screenshot.fullFileName)
-      if(!outputFile.exists()) {
+      if (!outputFile.exists()) {
         outputFile.createNewFile()
       }
       val image = ScreenshotComposer.composeNewScreenshot(screenshot)

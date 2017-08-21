@@ -2,7 +2,12 @@ package com.karumi.shot
 
 import com.karumi.shot.android.Adb
 import com.karumi.shot.domain.model.{AppId, Folder, ScreenshotsSuite}
-import com.karumi.shot.domain.{Config, DifferentImageDimensions, DifferentScreenshots, ScreenshotNotFound}
+import com.karumi.shot.domain.{
+  Config,
+  DifferentImageDimensions,
+  DifferentScreenshots,
+  ScreenshotNotFound
+}
 import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsSaver}
 import com.karumi.shot.ui.Console
 import com.karumi.shot.xml.ScreenshotsSuiteXmlParser._
@@ -34,7 +39,8 @@ class Shot(val adb: Adb,
     console.show("Saving screenshots")
     val screenshots = readScreenshotsMetadata(projectFolder)
     screenshotsSaver.saveRecordedScreenshots(projectFolder, screenshots)
-    console.showSuccess("Screenshots recorded at " + projectFolder + Config.screenshotsFolderName)
+    console.showSuccess(
+      "Screenshots recorded at " + projectFolder + Config.screenshotsFolderName)
   }
 
   def verifyScreenshots(projectFolder: Folder, projectName: String): Unit = {
@@ -56,8 +62,8 @@ class Shot(val adb: Adb,
           console.showError(
             "The application UI has been modified and we've noticed that thanks to this test: " + screenshot.name)
         case DifferentImageDimensions(screenshot,
-        originalDimension,
-        newDimension) => {
+                                      originalDimension,
+                                      newDimension) => {
           console.showError(
             "The size of the screenshot taken has changed: " + screenshot.name)
           console.showError(

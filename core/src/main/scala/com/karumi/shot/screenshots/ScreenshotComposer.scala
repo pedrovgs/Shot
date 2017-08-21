@@ -9,7 +9,8 @@ object ScreenshotComposer {
 
   private val tileSize = 512
 
-  private[screenshots] def composeNewScreenshot(screenshot: Screenshot): Image = {
+  private[screenshots] def composeNewScreenshot(
+      screenshot: Screenshot): Image = {
     val width = screenshot.screenshotDimension.width
     val height = screenshot.screenshotDimension.height
     var composedImage = Image.filled(width, height, Color.Transparent)

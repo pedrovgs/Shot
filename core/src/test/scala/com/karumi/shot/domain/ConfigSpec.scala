@@ -25,11 +25,7 @@ class ConfigSpec extends FlatSpec with Matchers {
   }
 
   it should "point at the tmp folder" in {
-    Config.deviceScreenshotsFolder shouldBe "/tmp/shot/screenshot/"
-  }
-
-  it should "point at the screenshots folder inside the project folder using a relative path" in {
-    Config.screenshotsBuildFolder shouldBe "screenshots/"
+    Config.screenshotsTemporalRootPath shouldBe "/tmp/shot/screenshot/"
   }
 
 }

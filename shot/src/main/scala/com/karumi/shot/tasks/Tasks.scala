@@ -10,7 +10,11 @@ import org.gradle.api.tasks.TaskAction
 abstract class ShotTask() extends DefaultTask {
 
   protected val shot: Shot =
-    new Shot(new Adb, new Files, new ScreenshotsComparator, new ScreenshotsSaver, new Console)
+    new Shot(new Adb,
+             new Files,
+             new ScreenshotsComparator,
+             new ScreenshotsSaver,
+             new Console)
   protected val shotExtension: ShotExtension =
     getProject.getExtensions.findByType(classOf[ShotExtension])
 
