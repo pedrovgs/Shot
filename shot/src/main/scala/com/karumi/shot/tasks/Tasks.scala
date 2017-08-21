@@ -36,12 +36,14 @@ class ExecuteScreenshotTests extends ShotTask {
     val project = getProject
     val recordScreenshots = project.hasProperty("record")
     val projectFolder = project.getProjectDir.getAbsolutePath
+    val projectName = project.getName
     if (recordScreenshots) {
-      shot.recordScreenshots(projectFolder)
+      shot.recordScreenshots(projectFolder, projectName)
     } else {
       val result = shot.verifyScreenshots(projectFolder, project.getName)
-      if(result.hasErrors) {
-        throw new GradleException("Screenshots comparision fail. Review the execution report to see what's broken your build.")
+      if (result.hasErrors) {
+        throw new GradleException(
+          "Screenshots comparision fail. Review the execution report to see what's broken your build.")
       }
     }
   }

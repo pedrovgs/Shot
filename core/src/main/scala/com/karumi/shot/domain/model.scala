@@ -30,6 +30,7 @@ object Config {
 
 case class Screenshot(name: String,
                       recordedScreenshotPath: String,
+                      temporalScreenshotPath: String,
                       testClass: String,
                       testName: String,
                       tilesDimension: Dimension,
@@ -37,11 +38,7 @@ case class Screenshot(name: String,
                       absoluteFileNames: Seq[FilePath],
                       relativeFileNames: Seq[FilePath],
                       recordedPartsPaths: Seq[FilePath],
-                      screenshotDimension: Dimension) {
-
-  val fullName: String = testClass + "_" + testName
-  val fullFileName: String = fullName + ".png"
-}
+                      screenshotDimension: Dimension)
 
 case class Dimension(width: Int, height: Int)
 

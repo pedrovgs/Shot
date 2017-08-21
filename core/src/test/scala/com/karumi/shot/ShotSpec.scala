@@ -10,7 +10,7 @@ import org.scalatest.{BeforeAndAfter, FlatSpec, Matchers}
 
 object ShotSpec {
   private val appIdConfigError =
-    "Error found executing screenshot tests. The appId param is not configured properly. You should configure the appId following the plugin instructions you can find at https://github.com/karumi/shot"
+    "🤔  Error found executing screenshot tests. The appId param is not configured properly. You should configure the appId following the plugin instructions you can find at https://github.com/karumi/shot"
 }
 
 class ShotSpec

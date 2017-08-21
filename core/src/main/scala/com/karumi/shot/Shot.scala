@@ -30,22 +30,23 @@ class Shot(val adb: Adb,
       pullScreenshots(projectFolder, applicationId)
     }
 
-  def recordScreenshots(projectFolder: Folder): Unit = {
+  def recordScreenshots(projectFolder: Folder, projectName: String): Unit = {
     console.show("💾 Saving screenshots")
-    val screenshots = readScreenshotsMetadata(projectFolder)
+    val screenshots = readScreenshotsMetadata(projectFolder, projectName)
     screenshotsSaver.saveRecordedScreenshots(projectFolder, screenshots)
     console.showSuccess(
       "😃  Screenshots recorded and saved at: " + projectFolder + Config.screenshotsFolderName)
   }
 
-  def verifyScreenshots(projectFolder: Folder, projectName: String): ScreenshotsComparisionResult = {
+  def verifyScreenshots(projectFolder: Folder,
+                        projectName: String): ScreenshotsComparisionResult = {
     console.show(
       "🔎  Let's verify the pulled screenshots with the already recorded ones!")
-    val screenshots = readScreenshotsMetadata(projectFolder)
+    val screenshots = readScreenshotsMetadata(projectFolder, projectName)
     screenshotsSaver.saveTemporalScreenshots(screenshots, projectName)
     val comparision = screenshotsComparator.compare(screenshots)
     if (!comparision.hasErrors) {
-      console.showSuccess("✅ Yeah!!! You didn't break your tests")
+      console.showSuccess("✅  Yeah!!! You didn't break your tests")
     } else {
       console.showError(
         "❌  Hummmm...you've broken the following screenshot tests:\n")
@@ -55,18 +56,23 @@ class Shot(val adb: Adb,
             "   🔎  Original screenshot not found: " + screenshot.name)
         case DifferentScreenshots(screenshot) =>
           console.showError(
-            "   🤔  The application UI has been modified and we've noticed that thanks to this test: " + screenshot.name)
-          //TODO: Info about the paths to compare both screenshots
+            "   🤔  The application UI has been modified and we've noticed that thanks to this test: " + screenshot.name + ". Check the images and review the differences.")
+          console.showError(
+            "            💾  You can find the original screenshot here: " + screenshot.recordedScreenshotPath)
+          console.showError(
+            "            🆕  You can find the new recorded screenshot here: " + screenshot.temporalScreenshotPath)
         case DifferentImageDimensions(screenshot,
                                       originalDimension,
                                       newDimension) => {
           console.showError(
             "   📱  The size of the screenshot taken has changed: " + screenshot.name)
-          console.showError(
-            "       Original dimension: " + originalDimension + ". New dimension: " + newDimension)
+          console.showError("              💾  Original screenshot dimension: " + originalDimension)
+          console.showError("              🆕  New recorded screenshot dimension: " + newDimension)
         }
 
-        case _ => console.showError("   😞  Ups! Something went wrong with your test but we couldn't identify the cause.")
+        case _ =>
+          console.showError(
+            "   😞  Ups! Something went wrong with your test but we couldn't identify the cause.")
       }
     }
     comparision
@@ -92,11 +98,13 @@ class Shot(val adb: Adb,
   }
 
   private def readScreenshotsMetadata(
-      projectFolder: Folder): ScreenshotsSuite = {
+      projectFolder: Folder,
+      projectName: String): ScreenshotsSuite = {
     val metadataFilePath = projectFolder + Config.metadataFileName
     val metadataFileContent = fileReader.read(metadataFilePath)
     val screenshotSuite = parseScreenshots(
       metadataFileContent,
+      projectName,
       projectFolder + Config.screenshotsFolderName,
       projectFolder + Config.deviceScreenshotsFolder)
     screenshotSuite.par.map { screenshot =>
