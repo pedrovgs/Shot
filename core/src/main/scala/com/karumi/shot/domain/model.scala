@@ -40,7 +40,9 @@ case class Screenshot(name: String,
                       recordedPartsPaths: Seq[FilePath],
                       screenshotDimension: Dimension)
 
-case class Dimension(width: Int, height: Int)
+case class Dimension(width: Int, height: Int) {
+  override def toString: FilePath = width + "x" + height
+}
 
 sealed trait ScreenshotComparisionError
 

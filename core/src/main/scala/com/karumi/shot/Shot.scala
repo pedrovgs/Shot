@@ -1,8 +1,8 @@
 package com.karumi.shot
 
 import com.karumi.shot.android.Adb
-import com.karumi.shot.domain.model.{AppId, Folder, ScreenshotsSuite}
 import com.karumi.shot.domain._
+import com.karumi.shot.domain.model.{AppId, Folder, ScreenshotsSuite}
 import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsSaver}
 import com.karumi.shot.ui.Console
 import com.karumi.shot.xml.ScreenshotsSuiteXmlParser._
@@ -45,35 +45,10 @@ class Shot(val adb: Adb,
     val screenshots = readScreenshotsMetadata(projectFolder, projectName)
     screenshotsSaver.saveTemporalScreenshots(screenshots, projectName)
     val comparision = screenshotsComparator.compare(screenshots)
-    if (!comparision.hasErrors) {
-      console.showSuccess("✅  Yeah!!! You didn't break your tests")
+    if (comparision.hasErrors) {
+      showErrors(comparision)
     } else {
-      console.showError(
-        "❌  Hummmm...you've broken the following screenshot tests:\n")
-      comparision.errors.foreach {
-        case ScreenshotNotFound(screenshot) =>
-          console.showError(
-            "   🔎  Original screenshot not found: " + screenshot.name)
-        case DifferentScreenshots(screenshot) =>
-          console.showError(
-            "   🤔  The application UI has been modified and we've noticed that thanks to this test: " + screenshot.name + ". Check the images and review the differences.")
-          console.showError(
-            "            💾  You can find the original screenshot here: " + screenshot.recordedScreenshotPath)
-          console.showError(
-            "            🆕  You can find the new recorded screenshot here: " + screenshot.temporalScreenshotPath)
-        case DifferentImageDimensions(screenshot,
-                                      originalDimension,
-                                      newDimension) => {
-          console.showError(
-            "   📱  The size of the screenshot taken has changed: " + screenshot.name)
-          console.showError("              💾  Original screenshot dimension: " + originalDimension)
-          console.showError("              🆕  New recorded screenshot dimension: " + newDimension)
-        }
-
-        case _ =>
-          console.showError(
-            "   😞  Ups! Something went wrong with your test but we couldn't identify the cause.")
-      }
+      console.showSuccess("✅  Yeah!!! You didn't break your tests")
     }
     comparision
   }
@@ -114,4 +89,37 @@ class Shot(val adb: Adb,
     }.toList
   }
 
+  private def showErrors(comparision: ScreenshotsComparisionResult) = {
+    console.showError(
+      "❌  Hummmm...you've broken the following screenshot tests:\n")
+    comparision.errors.foreach { error =>
+      error match {
+        case ScreenshotNotFound(screenshot) =>
+          console.showError(
+            "   🔎  Recorded screenshot not found for test: " + screenshot.name)
+        case DifferentScreenshots(screenshot) =>
+          console.showError(
+            "   🤔  The application UI has been modified for test: " + screenshot.name)
+          console.showError(
+            "            💾  You can find the original screenshot here: " + screenshot.recordedScreenshotPath)
+          console.showError(
+            "            🆕  You can find the new recorded screenshot here: " + screenshot.temporalScreenshotPath)
+        case DifferentImageDimensions(screenshot,
+                                      originalDimension,
+                                      newDimension) => {
+          console.showError(
+            "   📱  The size of the screenshot taken has changed for test: " + screenshot.name)
+          console.showError(
+            "            💾  Original screenshot dimension: " + originalDimension)
+          console.showError(
+            "            🆕  New recorded screenshot dimension: " + newDimension)
+        }
+
+        case _ =>
+          console.showError(
+            "   😞  Ups! Something went wrong while comparing your screenshots but we couldn't identify the cause. If you think you've found a bug, please open an issue at https://github.com/karumi/shot")
+      }
+      console.lineBreak()
+    }
+  }
 }
