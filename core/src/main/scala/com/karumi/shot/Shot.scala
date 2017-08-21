@@ -9,7 +9,7 @@ import com.karumi.shot.xml.ScreenshotsSuiteXmlParser._
 
 object Shot {
   private val appIdErrorMessage =
-    "Error found executing screenshot tests. The appId param is not configured properly. You should configure the appId following the plugin instructions you can find at https://github.com/karumi/shot"
+    "🤔  Error found executing screenshot tests. The appId param is not configured properly. You should configure the appId following the plugin instructions you can find at https://github.com/karumi/shot"
 }
 
 class Shot(val adb: Adb,
@@ -26,46 +26,47 @@ class Shot(val adb: Adb,
 
   def pullScreenshots(projectFolder: Folder, appId: Option[AppId]): Unit =
     executeIfAppIdIsValid(appId) { applicationId =>
-      console.show("Pulling screenshots from your connected device!")
+      console.show("⬇️  Pulling screenshots from your connected device!")
       pullScreenshots(projectFolder, applicationId)
     }
 
   def recordScreenshots(projectFolder: Folder): Unit = {
-    console.show("Saving screenshots")
+    console.show("💾 Saving screenshots")
     val screenshots = readScreenshotsMetadata(projectFolder)
     screenshotsSaver.saveRecordedScreenshots(projectFolder, screenshots)
     console.showSuccess(
-      "Screenshots recorded at " + projectFolder + Config.screenshotsFolderName)
+      "😃  Screenshots recorded and saved at: " + projectFolder + Config.screenshotsFolderName)
   }
 
   def verifyScreenshots(projectFolder: Folder, projectName: String): ScreenshotsComparisionResult = {
     console.show(
-      "Let's verify the pulled screenshots with the already recorded ones!")
+      "🔎  Let's verify the pulled screenshots with the already recorded ones!")
     val screenshots = readScreenshotsMetadata(projectFolder)
     screenshotsSaver.saveTemporalScreenshots(screenshots, projectName)
     val comparision = screenshotsComparator.compare(screenshots)
     if (!comparision.hasErrors) {
-      console.showSuccess("Yeah!!! You didn't break your tests")
+      console.showSuccess("✅ Yeah!!! You didn't break your tests")
     } else {
       console.showError(
-        "Hummmm...you've broken the following screenshot tests:")
+        "❌  Hummmm...you've broken the following screenshot tests:\n")
       comparision.errors.foreach {
         case ScreenshotNotFound(screenshot) =>
           console.showError(
-            "Original screenshot not shown: " + screenshot.name)
+            "   🔎  Original screenshot not found: " + screenshot.name)
         case DifferentScreenshots(screenshot) =>
           console.showError(
-            "The application UI has been modified and we've noticed that thanks to this test: " + screenshot.name)
+            "   🤔  The application UI has been modified and we've noticed that thanks to this test: " + screenshot.name)
+          //TODO: Info about the paths to compare both screenshots
         case DifferentImageDimensions(screenshot,
                                       originalDimension,
                                       newDimension) => {
           console.showError(
-            "The size of the screenshot taken has changed: " + screenshot.name)
+            "   📱  The size of the screenshot taken has changed: " + screenshot.name)
           console.showError(
-            "Original dimension: " + originalDimension + ". New dimension: " + newDimension)
+            "       Original dimension: " + originalDimension + ". New dimension: " + newDimension)
         }
 
-        case _ => console.showError("Ups! Something went wrong :(")
+        case _ => console.showError("   😞  Ups! Something went wrong with your test but we couldn't identify the cause.")
       }
     }
     comparision
