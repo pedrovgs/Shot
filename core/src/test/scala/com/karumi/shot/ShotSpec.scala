@@ -42,11 +42,11 @@ class ShotSpec
     shot.clearScreenshots(appId)
   }
 
-  it should "pull the screenshots using the project folder and the app id if" in {
+  it should "pull the screenshots using the project metadata folder and the app id if" in {
     val appId = AppIdMother.anyAppId
     val projectFolder = ProjectFolderMother.anyProjectFolder
     val expectedScreenshotsFolder = projectFolder + Config
-      .screenshotsFolderName
+      .pulledScreenshotsFolder
 
     (console.show _).expects(*)
     (adb.pullScreenshots _).expects(expectedScreenshotsFolder, appId.get)
