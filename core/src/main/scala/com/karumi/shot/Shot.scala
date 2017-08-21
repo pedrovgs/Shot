@@ -34,22 +34,24 @@ class Shot(val adb: Adb,
     console.show("💾  Saving screenshots")
     val screenshots = readScreenshotsMetadata(projectFolder, projectName)
     screenshotsSaver.saveRecordedScreenshots(projectFolder, screenshots)
-    console.showSuccess(
+    console.show(
       "😃  Screenshots recorded and saved at: " + projectFolder + Config.screenshotsFolderName)
+    clearTemporalScreenshotsFolder()
   }
 
   def verifyScreenshots(projectFolder: Folder,
                         projectName: String): ScreenshotsComparisionResult = {
     console.show(
-      "🔎  Let's verify the pulled screenshots with the already recorded ones!")
+      "🔎  Comparing screenshots with previous ones.")
     val screenshots = readScreenshotsMetadata(projectFolder, projectName)
     screenshotsSaver.saveTemporalScreenshots(screenshots, projectName)
     val comparision = screenshotsComparator.compare(screenshots)
     if (comparision.hasErrors) {
       showErrors(comparision)
     } else {
-      console.showSuccess("✅  Yeah!!! You didn't break your tests")
+      console.showSuccess("✅  Yeah!!! Your tests are passing")
     }
+    clearTemporalScreenshotsFolder()
     comparision
   }
 
@@ -91,7 +93,7 @@ class Shot(val adb: Adb,
 
   private def showErrors(comparision: ScreenshotsComparisionResult) = {
     console.showError(
-      "❌  Hummmm...you've broken the following screenshot tests:\n")
+      "❌  Hummmm...the following screenshot tests are broken:\n")
     comparision.errors.foreach { error =>
       error match {
         case ScreenshotNotFound(screenshot) =>
@@ -122,4 +124,6 @@ class Shot(val adb: Adb,
       console.lineBreak()
     }
   }
+
+  private def clearTemporalScreenshotsFolder() = ???
 }
