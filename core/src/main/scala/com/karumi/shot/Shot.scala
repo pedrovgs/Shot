@@ -114,9 +114,9 @@ class Shot(val adb: Adb,
           console.showError(
             "   📱  The size of the screenshot taken has changed for test: " + screenshot.name)
           console.showError(
-            "            💾  Original screenshot dimension: " + originalDimension)
+            "            💾  Original screenshot dimension: " + originalDimension + ". You can find the original screenshot here: " + screenshot.recordedScreenshotPath)
           console.showError(
-            "            🆕  New recorded screenshot dimension: " + newDimension)
+            "            🆕  New recorded screenshot dimension: " + newDimension + ". You can find the new recorded screenshot here: " + screenshot.temporalScreenshotPath)
         }
 
         case _ =>
