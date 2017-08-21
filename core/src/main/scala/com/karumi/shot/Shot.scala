@@ -1,11 +1,14 @@
 package com.karumi.shot
 
+import java.io.File
+
 import com.karumi.shot.android.Adb
 import com.karumi.shot.domain._
 import com.karumi.shot.domain.model.{AppId, Folder, ScreenshotsSuite}
 import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsSaver}
 import com.karumi.shot.ui.Console
 import com.karumi.shot.xml.ScreenshotsSuiteXmlParser._
+import org.apache.commons.io.FileUtils
 
 object Shot {
   private val appIdErrorMessage =
@@ -31,27 +34,26 @@ class Shot(val adb: Adb,
     }
 
   def recordScreenshots(projectFolder: Folder, projectName: String): Unit = {
-    console.show("💾  Saving screenshots")
+    console.show("💾  Saving screenshots.")
     val screenshots = readScreenshotsMetadata(projectFolder, projectName)
     screenshotsSaver.saveRecordedScreenshots(projectFolder, screenshots)
     console.show(
       "😃  Screenshots recorded and saved at: " + projectFolder + Config.screenshotsFolderName)
-    clearTemporalScreenshotsFolder()
+    removeProjectTemporalScreenshotsFolder(projectFolder)
   }
 
   def verifyScreenshots(projectFolder: Folder,
                         projectName: String): ScreenshotsComparisionResult = {
-    console.show(
-      "🔎  Comparing screenshots with previous ones.")
+    console.show("🔎  Comparing screenshots with previous ones.")
     val screenshots = readScreenshotsMetadata(projectFolder, projectName)
     screenshotsSaver.saveTemporalScreenshots(screenshots, projectName)
     val comparision = screenshotsComparator.compare(screenshots)
     if (comparision.hasErrors) {
       showErrors(comparision)
     } else {
-      console.showSuccess("✅  Yeah!!! Your tests are passing")
+      console.showSuccess("✅  Yeah!!! Your tests are passing.")
     }
-    clearTemporalScreenshotsFolder()
+    removeProjectTemporalScreenshotsFolder(projectFolder)
     comparision
   }
 
@@ -83,10 +85,10 @@ class Shot(val adb: Adb,
       metadataFileContent,
       projectName,
       projectFolder + Config.screenshotsFolderName,
-      projectFolder + Config.deviceScreenshotsFolder)
+      projectFolder + Config.pulledScreenshotsFolder)
     screenshotSuite.par.map { screenshot =>
       val viewHierarchyContent = fileReader.read(
-        projectFolder + Config.deviceScreenshotsFolder + screenshot.viewHierarchy)
+        projectFolder + Config.pulledScreenshotsFolder + screenshot.viewHierarchy)
       parseScreenshotSize(screenshot, viewHierarchyContent)
     }.toList
   }
@@ -119,11 +121,18 @@ class Shot(val adb: Adb,
 
         case _ =>
           console.showError(
-            "   😞  Ups! Something went wrong while comparing your screenshots but we couldn't identify the cause. If you think you've found a bug, please open an issue at https://github.com/karumi/shot")
+            "   😞  Ups! Something went wrong while comparing your screenshots but we couldn't identify the cause. If you think you've found a bug, please open an issue at https://github.com/karumi/shot.")
       }
       console.lineBreak()
     }
   }
 
-  private def clearTemporalScreenshotsFolder() = ???
+  private def removeProjectTemporalScreenshotsFolder(projectFolder: Folder) = {
+    val projectTemporalScreenshots = new File(
+      projectFolder + Config.pulledScreenshotsFolder)
+
+    if (projectTemporalScreenshots.exists()) {
+      FileUtils.deleteDirectory(projectTemporalScreenshots)
+    }
+  }
 }

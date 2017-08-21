@@ -17,7 +17,7 @@ class ConfigSpec extends FlatSpec with Matchers {
   }
 
   it should "point at the temporal screenshots folder" in {
-    Config.deviceScreenshotsFolder shouldBe "/screenshots/screenshots-default/"
+    Config.pulledScreenshotsFolder shouldBe "/screenshots/screenshots-default/"
   }
 
   it should "point at the metadata folder" in {

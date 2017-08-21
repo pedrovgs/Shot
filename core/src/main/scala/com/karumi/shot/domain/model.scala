@@ -19,9 +19,9 @@ object Config {
   val androidDependency: FilePath =
     "com.facebook.testing.screenshot:core:0.4.2"
   val screenshotsFolderName: FilePath = "/screenshots/"
-  val deviceScreenshotsFolder
+  val pulledScreenshotsFolder
     : FilePath = screenshotsFolderName + "screenshots-default/"
-  val metadataFileName: FilePath = deviceScreenshotsFolder + "metadata.xml"
+  val metadataFileName: FilePath = pulledScreenshotsFolder + "metadata.xml"
   val androidPluginName: FilePath = "com.android.application"
   val instrumentationTestTask: FilePath = "connectedAndroidTest"
   val packageTestApkTask: FilePath = "packageDebugAndroidTest"
