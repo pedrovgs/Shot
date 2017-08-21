@@ -27,14 +27,23 @@ class ScreenshotsSaver {
 
   private def deleteFolder(path: String): Unit = {
     val folder = new File(path)
-    folder.deleteOnExit()
+    if (folder.exists()) {
+      folder.delete()
+    }
   }
 
   private def saveScreenshots(screenshots: ScreenshotsSuite, folder: Folder) = {
-    new File(folder).mkdir()
+    val screenshotsFolder = new File(folder)
+    if(!screenshotsFolder.exists()){
+      screenshotsFolder.mkdirs()
+    }
     screenshots.par.foreach { screenshot =>
+      val outputFile = new File(folder + screenshot.fullFileName)
+      if(!outputFile.exists()) {
+        outputFile.createNewFile()
+      }
       val image = ScreenshotComposer.composeNewScreenshot(screenshot)
-      image.output(new File(folder + screenshot.fullFileName))
+      image.output(outputFile)
     }
   }
 

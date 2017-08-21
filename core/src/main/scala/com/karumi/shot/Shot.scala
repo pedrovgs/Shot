@@ -43,7 +43,7 @@ class Shot(val adb: Adb,
     val screenshots = readScreenshotsMetadata(projectFolder)
     screenshotsSaver.saveTemporalScreenshots(screenshots, projectName)
     val compare = screenshotsComparator.compare(screenshots)
-    if (compare.hasErrors) {
+    if (!compare.hasErrors) {
       console.showSuccess("Yeah!!! You didn't break your tests")
     } else {
       console.showError(

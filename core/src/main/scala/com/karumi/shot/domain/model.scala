@@ -56,5 +56,5 @@ case class DifferentImageDimensions(screenshot: Screenshot,
 
 case class ScreenshotsComparisionResult(errors: ScreenshotComparisionErrors,
                                         screenshots: ScreenshotsSuite) {
-  val hasErrors: Boolean = !errors.isEmpty
+  val hasErrors: Boolean = errors.nonEmpty
 }
