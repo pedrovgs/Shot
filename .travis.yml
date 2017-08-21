@@ -17,8 +17,10 @@ android:
     - sys-img-armeabi-v7a-android-22
 
 before_script:
-  - shot-consumer/createEmulator.sh
-  - shot-consumer/startEmulator.sh
+  - cd shot-consumer
+  - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
+  - mksdcard -l sdcard 100M sdcard
+  - emulator -avd test -no-audio -no-window -sdcard sdcard &
   - android-wait-for-emulator
   - adb shell settings put global window_animation_scale 0 &
   - adb shell settings put global transition_animation_scale 0 &
@@ -26,6 +28,7 @@ before_script:
   - adb shell input keyevent 82 &
 
 script:
+
   - ./gradlew checkScalafmtAll build test
   - ./gradlew install
   - cd shot-consumer
