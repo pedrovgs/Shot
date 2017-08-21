@@ -1,8 +1,7 @@
 package com.karumi.shot
 
 import com.karumi.shot.android.Adb
-import com.karumi.shot.domain.model.ScreenshotsSuite
-import com.karumi.shot.domain.{Config, ScreenshotsComparisionResult}
+import com.karumi.shot.domain.Config
 import com.karumi.shot.mothers.AppIdMother
 import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsSaver}
 import com.karumi.shot.ui.Console
@@ -46,12 +45,8 @@ class ShotSpec
   it should "pull the screenshots using the project folder and the app id if" in {
     val appId = AppIdMother.anyAppId
     val projectFolder = ProjectFolderMother.anyProjectFolder
-    val expectedScreenshotsFolder = projectFolder + Config.screenshotsFolderName
-    val expectedScreenshotsMetadataFile = projectFolder + Config.metadataFileName
-    val metadataFileContent =
-      testResourceContent("/screenshots-metadata/metadata.xml")
-    val viewHierarchyContent =
-      testResourceContent("/screenshots-metadata/view-hierarchy.xml")
+    val expectedScreenshotsFolder = projectFolder + Config
+      .screenshotsFolderName
 
     (console.show _).expects(*)
     (adb.pullScreenshots _).expects(expectedScreenshotsFolder, appId.get)
