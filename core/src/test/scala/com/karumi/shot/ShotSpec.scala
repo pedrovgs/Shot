@@ -4,7 +4,7 @@ import com.karumi.shot.android.Adb
 import com.karumi.shot.domain.model.ScreenshotsSuite
 import com.karumi.shot.domain.{Config, ScreenshotsComparisionResult}
 import com.karumi.shot.mothers.AppIdMother
-import com.karumi.shot.screenshots.ScreenshotsComparator
+import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsSaver}
 import com.karumi.shot.ui.Console
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{BeforeAndAfter, FlatSpec, Matchers}
@@ -28,9 +28,10 @@ class ShotSpec
   private val files = mock[Files]
   private val console = mock[Console]
   private val screenshotsComparator = mock[ScreenshotsComparator]
+  private val screenshotsSaver = mock[ScreenshotsSaver]
 
   before {
-    shot = new Shot(adb, files, screenshotsComparator, console)
+    shot = new Shot(adb, files, screenshotsComparator, screenshotsSaver, console)
   }
 
   "Shot" should "should delegate screenshots cleaning to Adb" in {

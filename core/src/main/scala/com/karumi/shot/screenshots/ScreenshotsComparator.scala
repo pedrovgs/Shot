@@ -4,15 +4,9 @@ import java.io.File
 
 import com.karumi.shot.domain._
 import com.karumi.shot.domain.model.ScreenshotsSuite
-import com.sksamuel.scrimage.{AwtImage, Color, Image}
-
-object ScreenshotsComparator {
-  private val tileSize = 512
-}
+import com.sksamuel.scrimage.Image
 
 class ScreenshotsComparator {
-
-  import ScreenshotsComparator._
 
   def compare(screenshots: ScreenshotsSuite): ScreenshotsComparisionResult = {
     val errors = screenshots.par.flatMap(compareScreenshot).toList
@@ -20,10 +14,10 @@ class ScreenshotsComparator {
   }
 
   private def compareScreenshot(
-      screenshot: Screenshot): Option[ScreenshotComparisionError] = {
+                                 screenshot: Screenshot): Option[ScreenshotComparisionError] = {
     val oldScreenshot =
       Image.fromFile(new File(screenshot.recordedScreenshotPath))
-    val newScreenshot = composeNewScreenshot(screenshot)
+    val newScreenshot = ScreenshotComposer.composeNewScreenshot(screenshot)
     if (!haveSameDimensions(newScreenshot, oldScreenshot)) {
       val originalDimension =
         Dimension(oldScreenshot.width, oldScreenshot.height)
@@ -35,24 +29,6 @@ class ScreenshotsComparator {
     } else {
       None
     }
-  }
-
-  private def composeNewScreenshot(screenshot: Screenshot): Image = {
-    val width = screenshot.screenshotDimension.width
-    val height = screenshot.screenshotDimension.height
-    var composedImage = Image.filled(width, height, Color.Transparent)
-    var partIndex = 0
-    for (x <- 0 until screenshot.tilesDimension.width;
-         y <- 0 until screenshot.tilesDimension.height) {
-      val partFile = new File(screenshot.recordedPartsPaths(partIndex))
-      val part = Image.fromFile(partFile).awt
-      val xPosition = x * tileSize
-      val yPosition = y * tileSize
-      composedImage =
-        composedImage.overlay(new AwtImage(part), xPosition, yPosition)
-      partIndex += 1
-    }
-    composedImage
   }
 
   private def haveSameDimensions(newScreenshot: Image,

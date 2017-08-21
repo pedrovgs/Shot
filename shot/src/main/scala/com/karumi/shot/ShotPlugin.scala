@@ -2,19 +2,15 @@ package com.karumi.shot
 
 import com.karumi.shot.android.Adb
 import com.karumi.shot.domain.Config
-import com.karumi.shot.screenshots.ScreenshotsComparator
-import com.karumi.shot.tasks.{
-  ClearScreenshotsTask,
-  ExecuteScreenshotTests,
-  PullScreenshotsTask
-}
+import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsSaver}
+import com.karumi.shot.tasks.{ClearScreenshotsTask, ExecuteScreenshotTests, PullScreenshotsTask}
 import com.karumi.shot.ui.Console
 import org.gradle.api.{Plugin, Project}
 
 class ShotPlugin extends Plugin[Project] {
 
   private lazy val shot: Shot =
-    new Shot(new Adb, new Files, new ScreenshotsComparator, new Console)
+    new Shot(new Adb, new Files, new ScreenshotsComparator, new ScreenshotsSaver, new Console)
 
   override def apply(project: Project): Unit = {
     configureAdb(project)
