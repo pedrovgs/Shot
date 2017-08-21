@@ -1,8 +1,10 @@
 package com.karumi.shot
 
 import com.karumi.shot.android.Adb
-import com.karumi.shot.domain.Config
+import com.karumi.shot.domain.model.ScreenshotsSuite
+import com.karumi.shot.domain.{Config, ScreenshotsComparisionResult}
 import com.karumi.shot.mothers.AppIdMother
+import com.karumi.shot.screenshots.ScreenshotsComparator
 import com.karumi.shot.ui.Console
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{BeforeAndAfter, FlatSpec, Matchers}
@@ -11,20 +13,24 @@ object ShotSpec {
   private val appIdConfigError =
     "Error found executing screenshot tests. The appId param is not configured properly. You should configure the appId following the plugin instructions you can find at https://github.com/karumi/shot"
 }
+
 class ShotSpec
     extends FlatSpec
     with Matchers
     with BeforeAndAfter
-    with MockFactory {
+    with MockFactory
+    with Resources {
 
   import ShotSpec._
 
   private var shot: Shot = _
   private val adb = mock[Adb]
+  private val files = mock[Files]
   private val console = mock[Console]
+  private val screenshotsComparator = mock[ScreenshotsComparator]
 
   before {
-    shot = new Shot(adb, console)
+    shot = new Shot(adb, files, screenshotsComparator, console)
   }
 
   "Shot" should "should delegate screenshots cleaning to Adb" in {
@@ -38,10 +44,27 @@ class ShotSpec
   it should "pull the screenshots using the project folder and the app id if" in {
     val appId = AppIdMother.anyAppId
     val projectFolder = ProjectFolderMother.anyProjectFolder
-    val expectedScreenshotsFolder = projectFolder + Config
-      .screenshotsFolderName
+    val expectedScreenshotsFolder = projectFolder + Config.screenshotsFolderName
+    val expectedScreenshotsMetadataFile = projectFolder + Config.metadataFileName
+    val metadataFileContent =
+      testResourceContent("/screenshots-metadata/metadata.xml")
+    val viewHierarchyContent =
+      testResourceContent("/screenshots-metadata/view-hierarchy.xml")
 
     (adb.pullScreenshots _).expects(expectedScreenshotsFolder, appId.get)
+    (console.show _).expects(*)
+    (files.read _)
+      .expects(expectedScreenshotsMetadataFile)
+      .returning(metadataFileContent)
+    (files.read _)
+      .expects(*)
+      .anyNumberOfTimes()
+      .returning(viewHierarchyContent)
+    (screenshotsComparator.compare _)
+      .expects(*)
+      .returning(ScreenshotsComparisionResult(Seq(), Seq()))
+    (console.show _).expects(*)
+    (console.showSuccess _).expects(*)
 
     shot.pullScreenshots(projectFolder, appId)
   }

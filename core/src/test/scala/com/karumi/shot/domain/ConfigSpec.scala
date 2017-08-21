@@ -13,7 +13,15 @@ class ConfigSpec extends FlatSpec with Matchers {
   }
 
   it should "save the screenshots into the screenshots folder" in {
-    Config.screenshotsFolderName shouldBe "/screenshots"
+    Config.screenshotsFolderName shouldBe "/screenshots/"
+  }
+
+  it should "point at the temporal screenshots folder" in {
+    Config.temporalScreenshotsFolder shouldBe "/screenshots/screenshots-default/"
+  }
+
+  it should "point at the metadata folder" in {
+    Config.metadataFileName shouldBe "/screenshots/screenshots-default/metadata.xml"
   }
 
 }
