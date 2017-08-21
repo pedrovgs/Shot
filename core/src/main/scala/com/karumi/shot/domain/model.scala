@@ -38,7 +38,12 @@ case class Screenshot(name: String,
                       absoluteFileNames: Seq[FilePath],
                       relativeFileNames: Seq[FilePath],
                       recordedPartsPaths: Seq[FilePath],
-                      screenshotDimension: Dimension)
+                      screenshotDimension: Dimension) {
+  val fileName: String =
+    temporalScreenshotPath.substring(
+      temporalScreenshotPath.lastIndexOf("/") + 1,
+      temporalScreenshotPath.length)
+}
 
 case class Dimension(width: Int, height: Int) {
   override def toString: FilePath = width + "x" + height

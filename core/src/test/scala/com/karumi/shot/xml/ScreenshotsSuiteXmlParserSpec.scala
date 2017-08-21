@@ -78,5 +78,6 @@ class ScreenshotsSuiteXmlParserSpec
     )
     firstScreenshot.screenshotDimension.width shouldBe 720
     firstScreenshot.screenshotDimension.height shouldBe 1280
+    firstScreenshot.fileName shouldBe "com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes.png"
   }
 }

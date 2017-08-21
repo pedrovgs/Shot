@@ -31,7 +31,7 @@ class Shot(val adb: Adb,
     }
 
   def recordScreenshots(projectFolder: Folder, projectName: String): Unit = {
-    console.show("💾 Saving screenshots")
+    console.show("💾  Saving screenshots")
     val screenshots = readScreenshotsMetadata(projectFolder, projectName)
     screenshotsSaver.saveRecordedScreenshots(projectFolder, screenshots)
     console.showSuccess(
