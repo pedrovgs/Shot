@@ -19,9 +19,10 @@ android:
 
 before_script:
   - cd shot-consumer
+  - mksdcard -l e 512M sdcard.img
   - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
-  - mksdcard -l sdcard 100M sdcard
-  - emulator -avd test -no-audio -no-window -sdcard sdcard &
+  - $ANDROID_HOME/tools/bin/avdmanager create avd --force --name test --package 'system-images;android-22;default;armeabi-v7a' --abi armeabi-v7a --device 'Nexus 4' --sdcard sdcard.img
+  - $ANDROID_HOME/emulator/emulator -avd test -skin 768x1280 -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell settings put global window_animation_scale 0 &
   - adb shell settings put global transition_animation_scale 0 &
