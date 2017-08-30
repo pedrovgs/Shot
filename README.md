@@ -14,7 +14,7 @@ And verify your tests executing ``./gradlew executeScreenshots``
 
 ![verifying](./art/verifying.gif)
 
-If Shot discovers any error in your tests execution the Gradle plugin we will show a report as follows:
+If Shot finds any error in your tests execution the Gradle plugin will show a report as follows:
 
 ![errorReport](./art/errorReport.png)
 
@@ -41,7 +41,7 @@ Setup the Gradle plugin:
   }
 ```
 
-This plugin sets up a few convenience commands you can review executing ``./gradlew tasks`` and reviews the ``Shot`` associated tasks:
+This plugin sets up a few convenience commands you can list executing ``./gradlew tasks`` and reviewing the ``Shot`` associated tasks:
 
 **If you are using flavors update your shot configuration inside the ``build.gradle`` file as follows:**
 
@@ -56,7 +56,7 @@ This plugin sets up a few convenience commands you can review executing ``./grad
 
 The flavor used is the one selected to execute your screenshot tests.
 
-An example could bee:
+An example could be:
 
 ```groovy
   shot {
@@ -67,7 +67,7 @@ An example could bee:
 ```
 
 
-## Writting tests
+## Writing tests
 
 This repository contains just a Gradle plugin based on the Facebook SDK already mentioned. If you need to review how to write a screenshot test we strongly recommend you to review the [official documentation](https://facebook.github.io/screenshot-tests-for-android).
 
