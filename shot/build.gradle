@@ -1,11 +1,10 @@
 group 'com.karumi'
-version '0.0.1-SNAPSHOT'
+version '0.1.0'
 
 apply plugin: 'scala'
 apply plugin: 'groovy'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.maiflai.scalatest'
-apply plugin: 'maven'
 apply plugin: 'scalafmt'
 
 repositories {
@@ -21,10 +20,95 @@ dependencies {
     testRuntime 'org.pegdown:pegdown:1.4.2'
 }
 
+apply plugin: 'maven'
+apply plugin: 'signing'
+
 install {
     repositories {
         mavenDeployer {
             repository(url: uri('../repo'))
         }
+    }
+}
+
+def isReleaseBuild() {
+    return VERSION_NAME.contains("SNAPSHOT") == false
+}
+
+def getRepositoryUsername() {
+    return hasProperty('NEXUS_USERNAME') ? NEXUS_USERNAME : ""
+}
+
+def getRepositoryPassword() {
+    return hasProperty('NEXUS_PASSWORD') ? NEXUS_PASSWORD : ""
+}
+
+signing {
+    required { isReleaseBuild() && gradle.taskGraph.hasTask("uploadArchives") }
+    sign configurations.archives
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            // POM signature
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+            // Target repository
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
+            }
+
+            pom.groupId = GROUP
+            pom.artifactId = POM_ARTIFACT_ID
+            pom.version = VERSION_NAME
+
+            pom.project {
+                name POM_NAME
+                description POM_DESCRIPTION
+                packaging POM_PACKAGING
+                url POM_URL
+
+                scm {
+                    connection POM_SCM_CONNECTION
+                    developerConnection POM_SCM_DEV_CONNECTION
+                    url POM_SCM_URL
+                }
+
+                licenses {
+                    license {
+                        name POM_LICENCE_NAME
+                        url POM_LICENCE_URL
+                        distribution POM_LICENCE_DIST
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = POM_DEVELOPER_ID
+                        name = POM_DEVELOPER_NAME
+                    }
+                }
+            }
+        }
+    }
+}
+
+sourceSets {
+    test {
+        output.resourcesDir = "build/classes/test/resources"
     }
 }

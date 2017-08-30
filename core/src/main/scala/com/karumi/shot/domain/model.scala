@@ -23,9 +23,9 @@ object Config {
     : FilePath = screenshotsFolderName + "screenshots-default/"
   val metadataFileName: FilePath = pulledScreenshotsFolder + "metadata.xml"
   val androidPluginName: FilePath = "com.android.application"
-  val instrumentationTestTask: FilePath = "connectedAndroidTest"
-  val packageTestApkTask: FilePath = "packageDebugAndroidTest"
-  val screenshotsTemporalRootPath = "/tmp/shot/screenshot/"
+  val screenshotsTemporalRootPath: FilePath = "/tmp/shot/screenshot/"
+  val defaultInstrumentationTestTask: String = "connectedAndroidTest"
+  val defaultPackageTestApkTask: String = "packageDebugAndroidTest"
 }
 
 case class Screenshot(name: String,

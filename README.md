@@ -6,6 +6,22 @@ Shot is a [Gradle](https://gradle.org/) plugin that simplifies the execution of 
 
 ``Shot`` is a Gradle plugin thought to run screenshot tests for Android using the [screenshot testing Facebook SDK](http://facebook.github.io/screenshot-tests-for-android/).
 
+Record your screenshots executing ``./gradlew executeScreenshots -Precord``
+
+![recording](./art/recording.gif)
+
+And verify your tests executing ``./gradlew executeScreenshots``
+
+![verifying](./art/verifying.gif)
+
+If Shot discovers any error in your tests execution the Gradle plugin we will show a report as follows:
+
+![errorReport](./errorReport.png)
+
+**In a future PR we will generate a rich HTML report** 
+
+You can find the complete Facebook SDK documentation [here](https://facebook.github.io/screenshot-tests-for-android/).
+
 ## Getting started
 
 Setup the Gradle plugin:
@@ -26,6 +42,30 @@ Setup the Gradle plugin:
 ```
 
 This plugin sets up a few convenience commands you can review executing ``./gradlew tasks`` and reviews the ``Shot`` associated tasks:
+
+**If you are using flavors update your shot configuration inside the ``build.gradle`` file as follows:**
+
+
+```groovy
+  shot {
+    appId = 'YOUR_APPLICATION_ID'
+    instrumentationTestTask = 'connected<FlavorName><BuildTypeName>AndroidTest'
+    packageTestApkTask = 'package<FlavorName><BuildTypeName>AndroidTest'
+  }
+```
+
+The flavor used is the one selected to execute your screenshot tests.
+
+An example could bee:
+
+```groovy
+  shot {
+    appId = 'com.my.app'
+    instrumentationTestTask = 'connectedFreeAppDebugAndroidTest'
+    packageTestApkTask = 'packageFreeAppAndroidTest'
+  }
+```
+
 
 ## Writting tests
 

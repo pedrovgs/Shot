@@ -27,7 +27,7 @@ class Shot(val adb: Adb,
     Adb.adbBinaryPath = adbPath
   }
 
-  def pullScreenshots(projectFolder: Folder, appId: Option[AppId]): Unit =
+  def downloadScreenshots(projectFolder: Folder, appId: Option[AppId]): Unit =
     executeIfAppIdIsValid(appId) { applicationId =>
       console.show("⬇️  Pulling screenshots from your connected device!")
       pullScreenshots(projectFolder, applicationId)
@@ -57,7 +57,7 @@ class Shot(val adb: Adb,
     comparision
   }
 
-  def clearScreenshots(appId: Option[AppId]): Unit =
+  def removeScreenshots(appId: Option[AppId]): Unit =
     executeIfAppIdIsValid(appId) { applicationId =>
       clearScreenshots(applicationId)
     }

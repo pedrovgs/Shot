@@ -4,9 +4,9 @@ import com.karumi.shot.android.Adb
 import com.karumi.shot.domain.Config
 import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsSaver}
 import com.karumi.shot.tasks.{
-  ClearScreenshotsTask,
+  RemoveScreenshotsTask,
   ExecuteScreenshotTests,
-  PullScreenshotsTask
+  DownloadScreenshotsTask
 }
 import com.karumi.shot.ui.Console
 import org.gradle.api.{Plugin, Project}
@@ -24,7 +24,9 @@ class ShotPlugin extends Plugin[Project] {
     configureAdb(project)
     addAndroidTestDependency(project)
     addExtensions(project)
-    addTasks(project)
+    project.afterEvaluate { project =>
+      addTasks(project)
+    }
   }
 
   private def configureAdb(project: Project): Unit = {
@@ -43,15 +45,26 @@ class ShotPlugin extends Plugin[Project] {
 
   private def addTasks(project: Project): Unit = {
     project.getTasks
-      .create(ClearScreenshotsTask.name, classOf[ClearScreenshotsTask])
+      .create(RemoveScreenshotsTask.name, classOf[RemoveScreenshotsTask])
     val pullScreenshots = project.getTasks
-      .create(PullScreenshotsTask.name, classOf[PullScreenshotsTask])
+      .create(DownloadScreenshotsTask.name, classOf[DownloadScreenshotsTask])
     val executeScreenshot = project.getTasks
       .create(ExecuteScreenshotTests.name, classOf[ExecuteScreenshotTests])
-    executeScreenshot.dependsOn(ClearScreenshotsTask.name)
-    executeScreenshot.dependsOn(Config.instrumentationTestTask)
-    executeScreenshot.dependsOn(PullScreenshotsTask.name)
-    pullScreenshots.dependsOn(Config.packageTestApkTask)
+    executeScreenshot.dependsOn(RemoveScreenshotsTask.name)
+    val extension =
+      project.getExtensions.getByType[ShotExtension](classOf[ShotExtension])
+    val instrumentationTask = extension.getOptionInstrumentationTestTask
+    val packageTask = extension.getOptionPackageTestApkTask
+    (instrumentationTask, packageTask) match {
+      case (Some(instTask), Some(packTask)) =>
+        executeScreenshot.dependsOn(instTask)
+        pullScreenshots.dependsOn(packTask)
+      case _ =>
+        executeScreenshot.dependsOn(Config.defaultInstrumentationTestTask)
+        pullScreenshots.dependsOn(Config.defaultPackageTestApkTask)
+    }
+
+    executeScreenshot.dependsOn(DownloadScreenshotsTask.name)
   }
 
   private def addExtensions(project: Project): Unit = {
