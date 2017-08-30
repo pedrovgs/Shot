@@ -39,7 +39,7 @@ class ShotSpec
 
     (adb.clearScreenshots _).expects(appId.get)
 
-    shot.clearScreenshots(appId)
+    shot.removeScreenshots(appId)
   }
 
   it should "pull the screenshots using the project metadata folder and the app id if" in {
@@ -51,7 +51,7 @@ class ShotSpec
     (console.show _).expects(*)
     (adb.pullScreenshots _).expects(expectedScreenshotsFolder, appId.get)
 
-    shot.pullScreenshots(projectFolder, appId)
+    shot.downloadScreenshots(projectFolder, appId)
   }
 
   it should "configure adb path" in {
@@ -67,7 +67,7 @@ class ShotSpec
 
     (console.showError _).expects(appIdConfigError)
 
-    shot.clearScreenshots(appId)
+    shot.removeScreenshots(appId)
   }
 
   it should "show an error if the app ID is not properly configured when pulling screenshots" in {
@@ -76,6 +76,6 @@ class ShotSpec
 
     (console.showError _).expects(appIdConfigError)
 
-    shot.pullScreenshots(projectFolder, appId)
+    shot.downloadScreenshots(projectFolder, appId)
   }
 }

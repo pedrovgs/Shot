@@ -1,9 +1,9 @@
 package com.karumi.shot
 
 import com.karumi.shot.tasks.{
-  ClearScreenshotsTask,
+  RemoveScreenshotsTask,
   ExecuteScreenshotTests,
-  PullScreenshotsTask
+  DownloadScreenshotsTask
 }
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
@@ -18,13 +18,13 @@ class ShotPluginSpec extends FlatSpec with Matchers {
   }
 
   "ShotPlugin" should "have a task to clear the device screenshots" in {
-    project.getTasks.findByName(ClearScreenshotsTask.name) shouldBe a[
-      ClearScreenshotsTask]
+    project.getTasks.findByName(RemoveScreenshotsTask.name) shouldBe a[
+      RemoveScreenshotsTask]
   }
 
   it should "have a task to pull the screenshots" in {
-    project.getTasks.findByName(PullScreenshotsTask.name) shouldBe a[
-      PullScreenshotsTask]
+    project.getTasks.findByName(DownloadScreenshotsTask.name) shouldBe a[
+      DownloadScreenshotsTask]
   }
 
   it should "have a task to execute screenshot tests" in {
@@ -33,8 +33,8 @@ class ShotPluginSpec extends FlatSpec with Matchers {
   }
 
   it should "use the documented task names" in {
-    ClearScreenshotsTask.name shouldBe "clearScreenshots"
-    PullScreenshotsTask.name shouldBe "pullScreenshots"
+    RemoveScreenshotsTask.name shouldBe "removeScreenshots"
+    DownloadScreenshotsTask.name shouldBe "downloadScreenshots"
     ExecuteScreenshotTests.name shouldBe "executeScreenshotTests"
   }
 
@@ -54,7 +54,7 @@ class ShotPluginSpec extends FlatSpec with Matchers {
   }
 
   it should "configure pullScreenshots depending on packageDebugAndroidTest task" in {
-    val task = project.getTasks.findByName(PullScreenshotsTask.name)
+    val task = project.getTasks.findByName(DownloadScreenshotsTask.name)
     task.getDependsOn.contains("packageDebugAndroidTest")
   }
 

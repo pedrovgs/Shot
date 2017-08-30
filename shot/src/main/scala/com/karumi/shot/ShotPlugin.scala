@@ -4,9 +4,9 @@ import com.karumi.shot.android.Adb
 import com.karumi.shot.domain.Config
 import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsSaver}
 import com.karumi.shot.tasks.{
-  ClearScreenshotsTask,
+  RemoveScreenshotsTask,
   ExecuteScreenshotTests,
-  PullScreenshotsTask
+  DownloadScreenshotsTask
 }
 import com.karumi.shot.ui.Console
 import org.gradle.api.{Plugin, Project}
@@ -45,12 +45,12 @@ class ShotPlugin extends Plugin[Project] {
 
   private def addTasks(project: Project): Unit = {
     project.getTasks
-      .create(ClearScreenshotsTask.name, classOf[ClearScreenshotsTask])
+      .create(RemoveScreenshotsTask.name, classOf[RemoveScreenshotsTask])
     val pullScreenshots = project.getTasks
-      .create(PullScreenshotsTask.name, classOf[PullScreenshotsTask])
+      .create(DownloadScreenshotsTask.name, classOf[DownloadScreenshotsTask])
     val executeScreenshot = project.getTasks
       .create(ExecuteScreenshotTests.name, classOf[ExecuteScreenshotTests])
-    executeScreenshot.dependsOn(ClearScreenshotsTask.name)
+    executeScreenshot.dependsOn(RemoveScreenshotsTask.name)
     val extension = project.getExtensions.getByType[ShotExtension](classOf[ShotExtension])
     val instrumentationTask = extension.getOptionInstrumentationTestTask
     val packageTask = extension.getOptionPackageTestApkTask
@@ -63,7 +63,7 @@ class ShotPlugin extends Plugin[Project] {
         pullScreenshots.dependsOn(Config.defaultPackageTestApkTask)
     }
 
-    executeScreenshot.dependsOn(PullScreenshotsTask.name)
+    executeScreenshot.dependsOn(DownloadScreenshotsTask.name)
   }
 
   private def addExtensions(project: Project): Unit = {

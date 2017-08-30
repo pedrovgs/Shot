@@ -49,28 +49,28 @@ class ExecuteScreenshotTests extends ShotTask {
   }
 }
 
-object PullScreenshotsTask {
-  val name = "pullScreenshots"
+object DownloadScreenshotsTask {
+  val name = "downloadScreenshots"
 }
 
-class PullScreenshotsTask extends ShotTask {
+class DownloadScreenshotsTask extends ShotTask {
 
   setDescription(
     "Retrieves the screenshots stored into the Android device where the tests were executed.")
 
   @TaskAction
-  def pullScreenshots(): Unit = {
+  def downloadScreenshots(): Unit = {
     val projectFolder = getProject.getProjectDir.getAbsolutePath
     val appId = shotExtension.getOptionAppId
-    shot.pullScreenshots(projectFolder, appId)
+    shot.downloadScreenshots(projectFolder, appId)
   }
 }
 
-object ClearScreenshotsTask {
-  val name = "clearScreenshots"
+object RemoveScreenshotsTask {
+  val name = "removeScreenshots"
 }
 
-class ClearScreenshotsTask extends ShotTask {
+class RemoveScreenshotsTask extends ShotTask {
 
   setDescription(
     "Removes the screenshots recorded during the tests execution from the Android device where the tests were executed.")
@@ -78,6 +78,6 @@ class ClearScreenshotsTask extends ShotTask {
   @TaskAction
   def clearScreenshots(): Unit = {
     val appId = shotExtension.getOptionAppId
-    shot.clearScreenshots(appId)
+    shot.removeScreenshots(appId)
   }
 }
