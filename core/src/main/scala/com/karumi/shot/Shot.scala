@@ -72,7 +72,7 @@ class Shot(val adb: Adb,
     adb.clearScreenshots(appId)
 
   private def pullScreenshots(projectFolder: Folder, appId: AppId): Unit = {
-    val screenshotsFolder = projectFolder + Config.screenshotsFolderName
+    val screenshotsFolder = projectFolder + Config.pulledScreenshotsFolder
     adb.pullScreenshots(screenshotsFolder, appId)
   }
 
