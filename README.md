@@ -16,7 +16,7 @@ And verify your tests executing ``./gradlew executeScreenshots``
 
 If Shot discovers any error in your tests execution the Gradle plugin we will show a report as follows:
 
-![errorReport](./errorReport.png)
+![errorReport](./art/errorReport.png)
 
 **In a future PR we will generate a rich HTML report** 
 
