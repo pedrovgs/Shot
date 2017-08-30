@@ -38,6 +38,8 @@ This plugin sets up a few convenience commands you can review executing ``./grad
   }
 ```
 
+The flavor used is the one selected to execute your screenshot tests.
+
 An example could bee:
 
 ```groovy
