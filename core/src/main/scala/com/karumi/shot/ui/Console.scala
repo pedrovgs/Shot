@@ -13,6 +13,8 @@ class Console {
   def showError(message: Message): Unit =
     print(Console.RED + message + Console.RESET)
 
+  def lineBreak(): Unit = show("\n")
+
   private def print(message: Message): Unit =
     if (!message.isEmpty) {
       println(message)

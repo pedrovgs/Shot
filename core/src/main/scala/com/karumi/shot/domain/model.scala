@@ -19,9 +19,9 @@ object Config {
   val androidDependency: FilePath =
     "com.facebook.testing.screenshot:core:0.4.2"
   val screenshotsFolderName: FilePath = "/screenshots/"
-  val deviceScreenshotsFolder
+  val pulledScreenshotsFolder
     : FilePath = screenshotsFolderName + "screenshots-default/"
-  val metadataFileName: FilePath = deviceScreenshotsFolder + "metadata.xml"
+  val metadataFileName: FilePath = pulledScreenshotsFolder + "metadata.xml"
   val androidPluginName: FilePath = "com.android.application"
   val instrumentationTestTask: FilePath = "connectedAndroidTest"
   val packageTestApkTask: FilePath = "packageDebugAndroidTest"
@@ -30,6 +30,7 @@ object Config {
 
 case class Screenshot(name: String,
                       recordedScreenshotPath: String,
+                      temporalScreenshotPath: String,
                       testClass: String,
                       testName: String,
                       tilesDimension: Dimension,
@@ -38,12 +39,15 @@ case class Screenshot(name: String,
                       relativeFileNames: Seq[FilePath],
                       recordedPartsPaths: Seq[FilePath],
                       screenshotDimension: Dimension) {
-
-  val fullName: String = testClass + "_" + testName
-  val fullFileName: String = fullName + ".png"
+  val fileName: String =
+    temporalScreenshotPath.substring(
+      temporalScreenshotPath.lastIndexOf("/") + 1,
+      temporalScreenshotPath.length)
 }
 
-case class Dimension(width: Int, height: Int)
+case class Dimension(width: Int, height: Int) {
+  override def toString: FilePath = width + "x" + height
+}
 
 sealed trait ScreenshotComparisionError
 

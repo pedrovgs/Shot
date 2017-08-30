@@ -1,28 +1,32 @@
 package com.karumi.shot.xml
 
-import java.io.File
-
-import com.karumi.shot.domain.{Dimension, Screenshot}
 import com.karumi.shot.domain.model.{Folder, ScreenshotsSuite}
+import com.karumi.shot.domain.{Config, Dimension, Screenshot}
 
 import scala.xml._
 
 object ScreenshotsSuiteXmlParser {
 
   def parseScreenshots(xml: String,
+                       projectName: String,
                        screenshotsFolder: Folder,
                        temporalScreenshotsFolder: Folder): ScreenshotsSuite = {
     val xmlScreenshots = XML.loadString(xml) \ "screenshot"
     xmlScreenshots.map(
-      parseScreenshot(_, screenshotsFolder, temporalScreenshotsFolder))
+      parseScreenshot(_,
+                      projectName,
+                      screenshotsFolder,
+                      temporalScreenshotsFolder))
   }
 
   private def parseScreenshot(
       xmlNode: Node,
+      projectName: String,
       screenshotsFolder: Folder,
       temporalScreenshotsFolder: Folder): Screenshot = {
     val name = (xmlNode \ "name" head).text
     val recordedScreenshotPath = screenshotsFolder + name + ".png"
+    val temporalScreenshotPath = Config.screenshotsTemporalRootPath + projectName + "/" + name + ".png"
     val testClass = (xmlNode \ "test_class" head).text
     val testName = (xmlNode \ "test_name" head).text
     val tileWidth = (xmlNode \ "tile_width" head).text.toInt
@@ -36,6 +40,7 @@ object ScreenshotsSuiteXmlParser {
     Screenshot(
       name,
       recordedScreenshotPath,
+      temporalScreenshotPath,
       testClass,
       testName,
       tilesDimension,

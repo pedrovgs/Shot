@@ -41,7 +41,7 @@ class ScreenshotsSaver {
       screenshotsFolder.mkdirs()
     }
     screenshots.par.foreach { screenshot =>
-      val outputFile = new File(folder + screenshot.fullFileName)
+      val outputFile = new File(folder + screenshot.fileName)
       if (!outputFile.exists()) {
         outputFile.createNewFile()
       }
