@@ -44,7 +44,7 @@ An example could bee:
 
 ```groovy
   shot {
-    appId = 'YOUR_APPLICATION_ID'
+    appId = 'com.my.app'
     instrumentationTestTask = 'connectedFreeAppDebugAndroidTest'
     packageTestApkTask = 'packageFreeAppAndroidTest'
   }

@@ -24,7 +24,9 @@ class ShotPlugin extends Plugin[Project] {
     configureAdb(project)
     addAndroidTestDependency(project)
     addExtensions(project)
-    addTasks(project)
+    project.afterEvaluate { project =>
+      addTasks(project)
+    }
   }
 
   private def configureAdb(project: Project): Unit = {
