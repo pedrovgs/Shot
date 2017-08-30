@@ -27,6 +27,28 @@ Setup the Gradle plugin:
 
 This plugin sets up a few convenience commands you can review executing ``./gradlew tasks`` and reviews the ``Shot`` associated tasks:
 
+**If you are using flavors update your shot configuration inside the ``build.gradle`` file as follows:**
+
+
+```groovy
+  shot {
+    appId = 'YOUR_APPLICATION_ID'
+    instrumentationTestTask = 'connected<FlavorName><BuildTypeName>AndroidTest'
+    packageTestApkTask = 'package<FlavorName><BuildTypeName>AndroidTest'
+  }
+```
+
+An example could bee:
+
+```groovy
+  shot {
+    appId = 'YOUR_APPLICATION_ID'
+    instrumentationTestTask = 'connectedFreeAppDebugAndroidTest'
+    packageTestApkTask = 'packageFreeAppAndroidTest'
+  }
+```
+
+
 ## Writting tests
 
 This repository contains just a Gradle plugin based on the Facebook SDK already mentioned. If you need to review how to write a screenshot test we strongly recommend you to review the [official documentation](https://facebook.github.io/screenshot-tests-for-android).
