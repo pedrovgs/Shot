@@ -19,16 +19,18 @@ object Config {
   val androidDependency: FilePath =
     "com.facebook.testing.screenshot:core:0.4.2"
   val screenshotsFolderName: FilePath = "/screenshots/"
-  val temporalScreenshotsFolder
+  val pulledScreenshotsFolder
     : FilePath = screenshotsFolderName + "screenshots-default/"
-  val metadataFileName: FilePath = temporalScreenshotsFolder + "metadata.xml"
+  val metadataFileName: FilePath = pulledScreenshotsFolder + "metadata.xml"
   val androidPluginName: FilePath = "com.android.application"
   val instrumentationTestTask: FilePath = "connectedAndroidTest"
   val packageTestApkTask: FilePath = "packageDebugAndroidTest"
+  val screenshotsTemporalRootPath = "/tmp/shot/screenshot/"
 }
 
 case class Screenshot(name: String,
                       recordedScreenshotPath: String,
+                      temporalScreenshotPath: String,
                       testClass: String,
                       testName: String,
                       tilesDimension: Dimension,
@@ -36,9 +38,16 @@ case class Screenshot(name: String,
                       absoluteFileNames: Seq[FilePath],
                       relativeFileNames: Seq[FilePath],
                       recordedPartsPaths: Seq[FilePath],
-                      screenshotDimension: Dimension)
+                      screenshotDimension: Dimension) {
+  val fileName: String =
+    temporalScreenshotPath.substring(
+      temporalScreenshotPath.lastIndexOf("/") + 1,
+      temporalScreenshotPath.length)
+}
 
-case class Dimension(width: Int, height: Int)
+case class Dimension(width: Int, height: Int) {
+  override def toString: FilePath = width + "x" + height
+}
 
 sealed trait ScreenshotComparisionError
 
@@ -54,4 +63,6 @@ case class DifferentImageDimensions(screenshot: Screenshot,
     extends ScreenshotComparisionError
 
 case class ScreenshotsComparisionResult(errors: ScreenshotComparisionErrors,
-                                        screenshots: ScreenshotsSuite)
+                                        screenshots: ScreenshotsSuite) {
+  val hasErrors: Boolean = errors.nonEmpty
+}

@@ -1,16 +1,20 @@
 package com.karumi.shot.tasks
 
 import com.karumi.shot.android.Adb
-import com.karumi.shot.screenshots.ScreenshotsComparator
+import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsSaver}
 import com.karumi.shot.ui.Console
 import com.karumi.shot.{Files, Shot, ShotExtension}
-import org.gradle.api.DefaultTask
+import org.gradle.api.{DefaultTask, GradleException}
 import org.gradle.api.tasks.TaskAction
 
 abstract class ShotTask() extends DefaultTask {
 
   protected val shot: Shot =
-    new Shot(new Adb, new Files, new ScreenshotsComparator, new Console)
+    new Shot(new Adb,
+             new Files,
+             new ScreenshotsComparator,
+             new ScreenshotsSaver,
+             new Console)
   protected val shotExtension: ShotExtension =
     getProject.getExtensions.findByType(classOf[ShotExtension])
 
@@ -29,7 +33,19 @@ class ExecuteScreenshotTests extends ShotTask {
 
   @TaskAction
   def executeScreenshotTests(): Unit = {
-    val recordScreenshots = getProject.hasProperty("record")
+    val project = getProject
+    val recordScreenshots = project.hasProperty("record")
+    val projectFolder = project.getProjectDir.getAbsolutePath
+    val projectName = project.getName
+    if (recordScreenshots) {
+      shot.recordScreenshots(projectFolder, projectName)
+    } else {
+      val result = shot.verifyScreenshots(projectFolder, project.getName)
+      if (result.hasErrors) {
+        throw new GradleException(
+          "Screenshots comparision fail. Review the execution report to see what's broken your build.")
+      }
+    }
   }
 }
 

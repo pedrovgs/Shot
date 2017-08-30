@@ -13,13 +13,17 @@ class ScreenshotsSuiteXmlParserSpec
   private val anyScreenshotsFolder = "/screenshots/"
   private val anyTemporalScreenshotsFolder =
     "/screenshots/screenshots-default/"
+  private val anyProjectName = "flowup"
 
   "ScreenshotsSuiteXmlParser" should "return an empty spec if there are no screenshots" in {
     val xml = testResourceContent(
       "/screenshots-metadata/empty-screenshots-metadata.xml")
 
     val screenshots =
-      parseScreenshots(xml, anyScreenshotsFolder, anyTemporalScreenshotsFolder)
+      parseScreenshots(xml,
+                       anyProjectName,
+                       anyScreenshotsFolder,
+                       anyTemporalScreenshotsFolder)
 
     screenshots shouldBe empty
   }
@@ -30,7 +34,10 @@ class ScreenshotsSuiteXmlParserSpec
       testResourceContent("/screenshots-metadata/view-hierarchy.xml")
 
     val screenshotsWithoutSize =
-      parseScreenshots(xml, anyScreenshotsFolder, anyTemporalScreenshotsFolder)
+      parseScreenshots(xml,
+                       anyProjectName,
+                       anyScreenshotsFolder,
+                       anyTemporalScreenshotsFolder)
     val screenshots = screenshotsWithoutSize.map { screenshot =>
       parseScreenshotSize(screenshot, viewHierarchyContent)
     }
@@ -39,6 +46,7 @@ class ScreenshotsSuiteXmlParserSpec
     val firstScreenshot = screenshots.head
     firstScreenshot.name shouldBe "com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes"
     firstScreenshot.recordedScreenshotPath shouldBe "/screenshots/com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes.png"
+    firstScreenshot.temporalScreenshotPath shouldBe "/tmp/shot/screenshot/flowup/com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes.png"
     firstScreenshot.testClass shouldBe "com.karumi.screenshot.MainActivityTest"
     firstScreenshot.testName shouldBe "showsSuperHeroesIfThereAreSomeSuperHeroes"
     firstScreenshot.tilesDimension.width shouldBe 2
@@ -70,5 +78,6 @@ class ScreenshotsSuiteXmlParserSpec
     )
     firstScreenshot.screenshotDimension.width shouldBe 720
     firstScreenshot.screenshotDimension.height shouldBe 1280
+    firstScreenshot.fileName shouldBe "com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes.png"
   }
 }
