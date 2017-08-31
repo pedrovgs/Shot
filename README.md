@@ -86,14 +86,14 @@ android {
     ...
     defaultConfig {
         ...
-        testInstrumentationRunner "yourRunnerPackage..ScreenshotTestRunner"
+        testInstrumentationRunner "com.myapp.ScreenshotTestRunner"
     }
 
 ```
 
 Todo this you'll have to create a class named ``ScreenshotTestRunner`` like the following one inside your instrumentation tests source folder:
  
-```
+```java
 public class ScreenshotTestRunner extends AndroidJUnitRunner {
 
     @Override
@@ -112,7 +112,7 @@ public class ScreenshotTestRunner extends AndroidJUnitRunner {
  
 Now you are ready to use the ``Screenshot`` API from your tests:
 
-```
+```java
 @Test
 public void theActivityIsShownProperly() {
        /*
