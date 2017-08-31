@@ -125,7 +125,7 @@ public void theActivityIsShownProperly() {
 } 
 ```
 
-***You can find a complete example in this repository under the folder named ``shot-consumer`` or review [this kata](https://travis-ci.org/Karumi/KataScreenshotAndroid/builds).***
+***You can find a complete example in this repository under the folder named ``shot-consumer`` or review [this kata](https://github.com/Karumi/KataScreenshotAndroid/).***
 
 The [official documentation](https://facebook.github.io/screenshot-tests-for-android).
 
