@@ -71,8 +71,15 @@ class Shot(val adb: Adb,
   private def clearScreenshots(appId: AppId): Unit =
     adb.clearScreenshots(appId)
 
+  private def createScreenshotsFolderIfDoesNotExist(screenshotsFolder: AppId) = {
+    val folder = new File(screenshotsFolder)
+    folder.mkdirs()
+  }
+
   private def pullScreenshots(projectFolder: Folder, appId: AppId): Unit = {
     val screenshotsFolder = projectFolder + Config.pulledScreenshotsFolder
+    createScreenshotsFolderIfDoesNotExist(
+      projectFolder + Config.screenshotsFolderName)
     adb.pullScreenshots(screenshotsFolder, appId)
   }
 
