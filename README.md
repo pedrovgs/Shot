@@ -66,10 +66,69 @@ An example could be:
   }
 ```
 
+The screenshots library needs the ``WRITE_EXTERNAL_STORAGE`` permission. For an instrumentation test for a library, add this permission to the manifest of the instrumentation apk. For a test for an application, add this permission to the app under test. To grant this permission you can create an ``AndroidManifest.xml`` file inside the ``androidTest`` folder. Here you have an example:
 
-## Writing tests
+```
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="<YOUR_APP_ID>.tests"
+    android:sharedUserId="<YOUR_APP_ID>.uid">
 
-This repository contains just a Gradle plugin based on the Facebook SDK already mentioned. If you need to review how to write a screenshot test we strongly recommend you to review the [official documentation](https://facebook.github.io/screenshot-tests-for-android).
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+</manifest>
+```
+
+Remember to configure the instrumentation test runner in your ``build.gradle`` as follows:
+
+```
+android {
+    ...
+    defaultConfig {
+        ...
+        testInstrumentationRunner "yourRunnerPackage..ScreenshotTestRunner"
+    }
+
+```
+
+Todo this you'll have to create a class named ``ScreenshotTestRunner`` like the following one inside your instrumentation tests source folder:
+ 
+```
+public class ScreenshotTestRunner extends AndroidJUnitRunner {
+
+    @Override
+    public void onCreate(Bundle args) {
+        ScreenshotRunner.onCreate(this, args);
+        super.onCreate(args);
+    }
+
+    @Override
+    public void finish(int resultCode, Bundle results) {
+        ScreenshotRunner.onDestroy();
+        super.finish(resultCode, results);
+    }
+}
+```
+ 
+Now you are ready to use the ``Screenshot`` API from your tests:
+
+```
+@Test
+public void theActivityIsShownProperly() {
+       /*
+         * Take the actual screenshot. At the end of this call the screenshot
+         * is stored on the device, and the gradle plugin takes care of
+         * pulling it and displaying it to you in nice ways.
+         */
+        Screenshot.snapActivity(activity).record();
+} 
+```
+
+***You can find a complete example in this repository under the folder named ``shot-consumer`` or review [this kata](https://travis-ci.org/Karumi/KataScreenshotAndroid/builds).***
+
+The [official documentation](https://facebook.github.io/screenshot-tests-for-android).
+
+Now you are ready to record and verify your screenshot tests! 
 
 ## Recording tests
 
