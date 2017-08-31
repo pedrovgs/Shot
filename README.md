@@ -6,11 +6,11 @@ Shot is a [Gradle](https://gradle.org/) plugin that simplifies the execution of 
 
 ``Shot`` is a Gradle plugin thought to run screenshot tests for Android using the [screenshot testing Facebook SDK](http://facebook.github.io/screenshot-tests-for-android/).
 
-Record your screenshots executing ``./gradlew executeScreenshots -Precord``
+Record your screenshots executing ``./gradlew executeScreenshotTests -Precord``
 
 ![recording](./art/recording.gif)
 
-And verify your tests executing ``./gradlew executeScreenshots``
+And verify your tests executing ``./gradlew executeScreenshotTests``
 
 ![verifying](./art/verifying.gif)
 
