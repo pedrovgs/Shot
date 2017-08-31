@@ -115,6 +115,7 @@ Now you are ready to use the ``Screenshot`` API from your tests:
 ```java
 @Test
 public void theActivityIsShownProperly() {
+        Activity mainActivity = startMainActivity();
        /*
          * Take the actual screenshot. At the end of this call the screenshot
          * is stored on the device, and the gradle plugin takes care of
