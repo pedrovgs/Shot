@@ -66,7 +66,7 @@ An example could be:
   }
 ```
 
-The screenshots library needs the ``WRITE_EXTERNAL_STORAGE`` permission. For an instrumentation test for a library, add this permission to the manifest of the instrumentation apk. For a test for an application, add this permission to the app under test. To grant this permission you can create an ``AndroidManifest.xml`` file inside the ``androidTest`` folder. Here you have an example:
+The screenshots library needs the ``WRITE_EXTERNAL_STORAGE`` permission. When testing a library, add this permission to the manifest of the instrumentation apk. If you are testing an application, add this permission to the app under test. To grant this permission you can create an ``AndroidManifest.xml`` file inside the ``androidTest`` folder. Here is an example:
 
 ```
 <?xml version="1.0" encoding="utf-8"?>
@@ -91,7 +91,7 @@ android {
 
 ```
 
-Todo this you'll have to create a class named ``ScreenshotTestRunner`` like the following one inside your instrumentation tests source folder:
+In order to do this, you'll have to create a class named ``ScreenshotTestRunner``, like the following one, inside your instrumentation tests source folder:
  
 ```java
 public class ScreenshotTestRunner extends AndroidJUnitRunner {
@@ -117,8 +117,8 @@ Now you are ready to use the ``Screenshot`` API from your tests:
 public void theActivityIsShownProperly() {
         Activity mainActivity = startMainActivity();
        /*
-         * Take the actual screenshot. At the end of this call the screenshot
-         * is stored on the device, and the gradle plugin takes care of
+         * Take the actual screenshot. At the end of this call, the screenshot
+         * is stored on the device and the gradle plugin takes care of
          * pulling it and displaying it to you in nice ways.
          */
         Screenshot.snapActivity(activity).record();
