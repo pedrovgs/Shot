@@ -3,9 +3,17 @@ package com.karumi.shot
 import com.karumi.shot.android.Adb
 import com.karumi.shot.domain.Config
 import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsSaver}
-import com.karumi.shot.tasks.{DownloadScreenshotsTask, ExecuteScreenshotTests, RemoveScreenshotsTask}
+import com.karumi.shot.tasks.{
+  DownloadScreenshotsTask,
+  ExecuteScreenshotTests,
+  RemoveScreenshotsTask
+}
 import com.karumi.shot.ui.Console
-import org.gradle.api.artifacts.{Dependency, DependencyResolutionListener, ResolvableDependencies}
+import org.gradle.api.artifacts.{
+  Dependency,
+  DependencyResolutionListener,
+  ResolvableDependencies
+}
 import org.gradle.api.{Plugin, Project}
 import org.gradle.tooling.GradleConnector
 import org.gradle.tooling.model.build.BuildEnvironment
@@ -17,18 +25,19 @@ class ShotPlugin extends Plugin[Project] {
 
   private lazy val shot: Shot =
     new Shot(new Adb,
-      new Files,
-      new ScreenshotsComparator,
-      new ScreenshotsSaver,
-      new Console)
+             new Files,
+             new ScreenshotsComparator,
+             new ScreenshotsSaver,
+             new Console)
 
   override def apply(project: Project): Unit = {
     configureAdb(project)
     addExtensions(project)
     addAndroidTestDependency(project)
-    project.afterEvaluate { project => {
-      addTasks(project)
-    }
+    project.afterEvaluate { project =>
+      {
+        addTasks(project)
+      }
     }
   }
 
@@ -36,7 +45,6 @@ class ShotPlugin extends Plugin[Project] {
     val adbPath = AdbPathExtractor.extractPath(project)
     shot.configureAdbPath(adbPath)
   }
-
 
   private def addTasks(project: Project): Unit = {
     project.getTasks
@@ -67,7 +75,6 @@ class ShotPlugin extends Plugin[Project] {
     project.getExtensions.add(name, new ShotExtension())
   }
 
-
   private def isLegacyGradleVersion(gradleVersion: String): Boolean = {
     val versionNumbers = gradleVersion.split('.')
     var major = 0
@@ -82,17 +89,24 @@ class ShotPlugin extends Plugin[Project] {
 
     (major, minor) match {
       case (major, _) if major > GRADLE_MIN_MAJOR => false
-      case (major, minor) if major == GRADLE_MIN_MAJOR && minor >= GRADLE_MIN_MINOR => false
+      case (major, minor)
+          if major == GRADLE_MIN_MAJOR && minor >= GRADLE_MIN_MINOR =>
+        false
       case _ => true
     }
 
   }
 
   private def androidDependencyMode(project: Project): String = {
-    val connection = GradleConnector.newConnector.forProjectDirectory(project.getProjectDir).connect
+    val connection = GradleConnector.newConnector
+      .forProjectDirectory(project.getProjectDir)
+      .connect
 
     try {
-      val gradleVersion = connection.getModel(classOf[BuildEnvironment]).getGradle.getGradleVersion
+      val gradleVersion = connection
+        .getModel(classOf[BuildEnvironment])
+        .getGradle
+        .getGradleVersion
 
       if (isLegacyGradleVersion(gradleVersion)) {
         return Config.androidDependencyModeLegacy
@@ -107,18 +121,17 @@ class ShotPlugin extends Plugin[Project] {
 
     project.getGradle.addListener(new DependencyResolutionListener() {
 
-
-      override def beforeResolve(resolvableDependencies: ResolvableDependencies): Unit = {
+      override def beforeResolve(
+          resolvableDependencies: ResolvableDependencies): Unit = {
         var facebookDependencyHasBeenAdded = false
 
-        project.getConfigurations.forEach(
-          config => {
-            facebookDependencyHasBeenAdded |= config.getAllDependencies.toArray(new Array[Dependency](0)).exists(
-              dependency =>
-                Config.androidDependencyGroup == dependency.getGroup
-                  && Config.androidDependencyName == dependency.getName)
-          })
-
+        project.getConfigurations.forEach(config => {
+          facebookDependencyHasBeenAdded |= config.getAllDependencies
+            .toArray(new Array[Dependency](0))
+            .exists(dependency =>
+              Config.androidDependencyGroup == dependency.getGroup
+                && Config.androidDependencyName == dependency.getName)
+        })
 
         if (!facebookDependencyHasBeenAdded) {
           val dependencyMode = androidDependencyMode(project)
@@ -127,12 +140,14 @@ class ShotPlugin extends Plugin[Project] {
 
           val dependencyToAdd = dependenciesHandler.create(dependencyName)
           Option(project.getPlugins.findPlugin(Config.androidPluginName))
-            .map(_ => project.getDependencies.add(dependencyMode, dependencyToAdd))
+            .map(_ =>
+              project.getDependencies.add(dependencyMode, dependencyToAdd))
           project.getGradle.removeListener(this)
         }
       }
 
-      override def afterResolve(resolvableDependencies: ResolvableDependencies): Unit = {}
+      override def afterResolve(
+          resolvableDependencies: ResolvableDependencies): Unit = {}
     })
   }
 }

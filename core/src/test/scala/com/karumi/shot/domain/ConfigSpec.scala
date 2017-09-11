@@ -9,7 +9,11 @@ class ConfigSpec extends FlatSpec with Matchers {
   }
 
   it should "add the dependency using the androidTestCompile mode" in {
-    Config.androidDependencyMode shouldBe "androidTestCompile"
+    Config.androidDependencyModeLegacy shouldBe "androidTestCompile"
+  }
+
+  it should "add the dependency using the androidTestImplementation mode" in {
+    Config.androidDependencyMode shouldBe "androidTestImplementation"
   }
 
   it should "save the screenshots into the screenshots folder" in {
