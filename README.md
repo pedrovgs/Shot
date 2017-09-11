@@ -154,3 +154,16 @@ Once you have a bunch of screenshot tests recorded you can easily verify if the 
 ![shotTasksHelp](./art/tasksDescription.png)
 
 [karumilogo]: https://cloud.githubusercontent.com/assets/858090/11626547/e5a1dc66-9ce3-11e5-908d-537e07e82090.png
+
+## Know Issues
+
+If you include in your project a dependency to dexmaker or a library that contains a dependency to dexmaker is possible that you have an Exception ``com.android.dx.util.DexException: Multiple dex files define``. For resolve this bug you only need to include de Facebook library in your own project excluding the dexmaker libs:
+
+ ```
+   androidTestCompile ('com.facebook.testing.screenshot:core:0.4.2') {
+     exclude group: 'com.crittercism.dexmaker', module: 'dexmaker'
+     exclude group: 'com.crittercism.dexmaker', module: 'dexmaker-dx'
+   }
+ ```
+ 
+ Shot plugin autodetect if you are including screenshot facebook library in you gradle and if this is present does not include again.
