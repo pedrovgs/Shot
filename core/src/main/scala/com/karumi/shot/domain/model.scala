@@ -1,10 +1,6 @@
 package com.karumi.shot.domain
 
-import com.karumi.shot.domain.model.{
-  FilePath,
-  ScreenshotComparisionErrors,
-  ScreenshotsSuite
-}
+import com.karumi.shot.domain.model.{FilePath, ScreenshotComparisionErrors, ScreenshotsSuite}
 
 object model {
   type ScreenshotsSuite = Seq[Screenshot]
@@ -15,9 +11,12 @@ object model {
 }
 
 object Config {
-  val androidDependencyMode: FilePath = "androidTestCompile"
-  val androidDependency: FilePath =
-    "com.facebook.testing.screenshot:core:0.4.2"
+  val androidDependencyModeLegacy: FilePath = "androidTestCompile"
+  val androidDependencyMode: FilePath = "androidTestImplementation"
+  val androidDependencyGroup: String = "com.facebook.testing.screenshot"
+  val androidDependencyName: String = "core"
+  val androidDependencyVersion: String = "0.4.2"
+  val androidDependency: FilePath = s"$androidDependencyGroup:$androidDependencyName:$androidDependencyVersion"
   val screenshotsFolderName: FilePath = "/screenshots/"
   val pulledScreenshotsFolder
     : FilePath = screenshotsFolderName + "screenshots-default/"
