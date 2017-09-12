@@ -18,10 +18,12 @@ import org.gradle.api.{Plugin, Project}
 import org.gradle.tooling.GradleConnector
 import org.gradle.tooling.model.build.BuildEnvironment
 
-class ShotPlugin extends Plugin[Project] {
+object ShotPlugin {
+  private val minGradleVersionSupportedMajorNumber = 3
+  private val minGradleVersionSupportedMinorNumber = 4
+}
 
-  def GRADLE_MIN_MAJOR = 3
-  def GRADLE_MIN_MINOR = 4
+class ShotPlugin extends Plugin[Project] {
 
   private lazy val shot: Shot =
     new Shot(new Adb,
@@ -88,9 +90,12 @@ class ShotPlugin extends Plugin[Project] {
     }
 
     (major, minor) match {
-      case (major, _) if major > GRADLE_MIN_MAJOR => false
+      case (major, _)
+          if major > ShotPlugin.minGradleVersionSupportedMajorNumber =>
+        false
       case (major, minor)
-          if major == GRADLE_MIN_MAJOR && minor >= GRADLE_MIN_MINOR =>
+          if major == ShotPlugin.minGradleVersionSupportedMajorNumber
+            && minor >= ShotPlugin.minGradleVersionSupportedMinorNumber =>
         false
       case _ => true
     }
