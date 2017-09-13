@@ -157,7 +157,7 @@ Once you have a bunch of screenshot tests recorded you can easily verify if the 
 
 ## Known Issues
 
-If you include in your project a dependency to dexmaker, be it direct or indirectly, it is possible that you find yourself with an Exception ``com.android.dx.util.DexException: Multiple dex files define``. In order to fix this issue, you only need to include the Facebook library in your own project, excluding the dexmaker libs:
+If you have included in your project a dependency to related to the dexmaker and you are facing this exception: ``com.android.dx.util.DexException: Multiple dex files define``, you can customize how the facebook SDK is added to your project and exclude the dexmaker library as follows:
 
  ```
    androidTestCompile ('com.facebook.testing.screenshot:core:0.4.2') {
