@@ -50,7 +50,7 @@
                     Report generated automatically by Shot. Contains the execution result of the shot screenshots
                     verification stage.
                 </p>
-                <p>The project documentation ca be found in <a class="grey-text text-lighten-3"
+                <p>The project documentation can be found in <a class="grey-text text-lighten-3"
                                                                href="https://github.com/karumi/shot">this GitHub
                     repository.</a>
                 </p>
