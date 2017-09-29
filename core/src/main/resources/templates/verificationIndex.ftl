@@ -50,7 +50,6 @@
                 <th>Test name</th>
                 <th>Original screenshot</th>
                 <th>New screenshot</th>
-                <th>Diff</th>
             </tr>
             </thead>
             <tbody>
