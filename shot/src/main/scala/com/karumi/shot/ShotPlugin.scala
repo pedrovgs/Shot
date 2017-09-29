@@ -2,6 +2,7 @@ package com.karumi.shot
 
 import com.karumi.shot.android.Adb
 import com.karumi.shot.domain.Config
+import com.karumi.shot.reports.ExecutionReporter
 import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsSaver}
 import com.karumi.shot.tasks.{
   DownloadScreenshotsTask,
@@ -30,7 +31,8 @@ class ShotPlugin extends Plugin[Project] {
              new Files,
              new ScreenshotsComparator,
              new ScreenshotsSaver,
-             new Console)
+             new Console,
+             new ExecutionReporter)
 
   override def apply(project: Project): Unit = {
     configureAdb(project)
