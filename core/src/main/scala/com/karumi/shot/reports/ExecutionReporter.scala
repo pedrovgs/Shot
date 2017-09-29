@@ -3,7 +3,6 @@ package com.karumi.shot.reports
 import java.io.{File, FileWriter}
 import java.util
 import scala.collection.JavaConverters._
-import collection.JavaConversions._
 import org.apache.commons.io.FileUtils
 import com.karumi.shot.domain._
 import com.karumi.shot.domain.model.{
@@ -29,7 +28,7 @@ class ExecutionReporter {
                                  buildFolder: Folder) = {
     val input = generateTemplateValues(appId, comparision)
     val template = freeMarkerConfig.getTemplate("verification/index.ftl")
-    resetVerificationReportFolder()
+    resetVerificationReport()
     writeReport(buildFolder, input, template)
   }
 
@@ -44,10 +43,10 @@ class ExecutionReporter {
     writer.close()
   }
 
-  private def resetVerificationReportFolder() = {
-    val folder = new File(Config.verificationReportFolder + "/")
-    if (folder.exists()) {
-      FileUtils.deleteDirectory(folder)
+  private def resetVerificationReport() = {
+    val file = new File(Config.verificationReportFolder + "/index.html")
+    if (file.exists()) {
+      file.delete()
     }
   }
 
@@ -100,8 +99,8 @@ class ExecutionReporter {
         val isFailedTest = error.isDefined
         val testClass = screenshot.testClass
         val testName = screenshot.testName
-        val originalScreenshot = screenshot.recordedScreenshotPath
-        val newScreenshot = screenshot.temporalScreenshotPath
+        val originalScreenshot = "./images/recorded/" + screenshot.name + ".png"
+        val newScreenshot = "./images/" + screenshot.name + ".png"
         val diff = ""
         val reason = generateReasonMessage(error)
         val color = if (isFailedTest) "red-text" else "green-text"
@@ -109,9 +108,9 @@ class ExecutionReporter {
         "<tr>" +
           s"<th> <p class='$color'>Test class: $testClass</p>" +
           s"<p class='$color'>Test name: $testName</p></th>" +
-          s"<th> <img width='$width' src='file://$originalScreenshot'/></th>" +
-          s"<th> <img width='$width' src='file://$newScreenshot'/></th>" +
-          s"<th> <img width='$width' src='file://$diff'/></th>" +
+          s"<th> <img width='$width' src='$originalScreenshot'/></th>" +
+          s"<th> <img width='$width' src='$newScreenshot'/></th>" +
+          s"<th> <img width='$width' src='$diff'/></th>" +
           "</tr>"
       }
       .mkString("\n")

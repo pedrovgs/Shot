@@ -50,7 +50,13 @@ class Shot(adb: Adb,
                         projectName: String): ScreenshotsComparisionResult = {
     console.show("🔎  Comparing screenshots with previous ones.")
     val screenshots = readScreenshotsMetadata(projectFolder, projectName)
-    screenshotsSaver.saveTemporalScreenshots(screenshots, projectName)
+    screenshotsSaver.saveTemporalScreenshots(
+      screenshots,
+      projectName,
+      buildFolder + Config.verificationReportFolder + "/images/")
+    screenshotsSaver.copyRecordedScreenshotsToTheReportFolder(
+      projectFolder,
+      buildFolder + Config.verificationReportFolder + "/images/recorded/")
     val comparision = screenshotsComparator.compare(screenshots)
     if (comparision.hasErrors) {
       showErrors(comparision)

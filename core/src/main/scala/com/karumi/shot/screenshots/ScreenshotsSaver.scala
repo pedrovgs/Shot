@@ -4,6 +4,7 @@ import java.io.File
 
 import com.karumi.shot.domain.Config
 import com.karumi.shot.domain.model.{Folder, ScreenshotsSuite}
+import org.apache.commons.io.FileUtils
 
 class ScreenshotsSaver {
 
@@ -14,10 +15,20 @@ class ScreenshotsSaver {
   }
 
   def saveTemporalScreenshots(screenshots: ScreenshotsSuite,
-                              projectName: String) = {
+                              projectName: String,
+                              reportFolder: String) = {
     deleteOldTemporalScreenshots(projectName)
     saveScreenshots(screenshots,
                     Config.screenshotsTemporalRootPath + projectName + "/")
+    deleteFolder(reportFolder)
+    saveScreenshots(screenshots, reportFolder)
+  }
+  def copyRecordedScreenshotsToTheReportFolder(projectFolder: Folder,
+                                               destinyFolder: Folder) = {
+    val recordedScreenshotsFolder = projectFolder + Config.screenshotsFolderName
+    FileUtils.copyDirectory(new File(recordedScreenshotsFolder),
+                            new File(destinyFolder))
+    deleteFolder(destinyFolder)
   }
 
   private def deleteOldScreenshots(projectFolder: Folder) = {
