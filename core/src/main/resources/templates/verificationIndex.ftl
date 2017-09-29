@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-    <title> Shot verification results</title>
+    <title>Shot verification results</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
@@ -14,15 +14,6 @@
 
     main {
         flex: 1 0 auto;
-    }
-
-    .loader {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        margin: auto;
     }
 </style>
 <body>
@@ -42,7 +33,7 @@
             <tr>
                 <th>Result</th>
                 <th>Test name</th>
-                <th>Reason</th>
+                <th>Failure reason</th>
             </tr>
             </thead>
             <tbody>
@@ -96,7 +87,8 @@
     </div>
     <div class="footer-copyright">
         <div class="container">
-            © 2017 Copyright GoKarumi S.L.
+            Powered by <a href="https://karumi.com"> <img width="30px"
+                                                          src="http://static1.squarespace.com/static/56dd9af5e707eb815a7f9c86/t/56fbab3d2eeb817eecc15a0c/1502355279546/?format=1500w"/></a>
         </div>
     </div>
 </footer>

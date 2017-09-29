@@ -40,10 +40,10 @@ class ExecuteScreenshotTests extends ShotTask {
     val projectFolder = project.getProjectDir.getAbsolutePath
     val projectName = project.getName
     val buildFolder = project.getBuildDir.getAbsolutePath
+    val appId = shotExtension.getAppId
     if (recordScreenshots) {
-      shot.recordScreenshots(projectFolder, projectName)
+      shot.recordScreenshots(appId, buildFolder, projectFolder, projectName)
     } else {
-      val appId = shotExtension.getAppId
       val result = shot.verifyScreenshots(appId,
                                           buildFolder,
                                           projectFolder,

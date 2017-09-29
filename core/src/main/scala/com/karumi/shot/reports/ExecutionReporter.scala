@@ -2,14 +2,11 @@ package com.karumi.shot.reports
 
 import java.io.{File, FileWriter}
 import java.util
+
 import scala.collection.JavaConverters._
 import org.apache.commons.io.FileUtils
 import com.karumi.shot.domain._
-import com.karumi.shot.domain.model.{
-  AppId,
-  Folder,
-  ScreenshotComparisionErrors
-}
+import com.karumi.shot.domain.model.{AppId, Folder, ScreenshotComparisionErrors, ScreenshotsSuite}
 import freemarker.template.{Configuration, Template, TemplateExceptionHandler}
 
 class ExecutionReporter {
@@ -23,19 +20,31 @@ class ExecutionReporter {
     config
   }
 
+  def generateRecordReport(appId: AppId,
+                           screenshots: ScreenshotsSuite,
+                           buildFolder: Folder) = {
+    val input = generateRecordTemplateValues(appId, screenshots)
+    val template = freeMarkerConfig.getTemplate("recordIndex.ftl")
+    resetVerificationReport()
+    val reportFolder = buildFolder + Config.recordingReportFolder + "/"
+    writeReport(buildFolder, input, template, reportFolder)
+  }
+
+
   def generateVerificationReport(appId: AppId,
                                  comparision: ScreenshotsComparisionResult,
                                  buildFolder: Folder) = {
-    val input = generateTemplateValues(appId, comparision)
-    val template = freeMarkerConfig.getTemplate("verification/index.ftl")
+    val input = generateVerificationTemplateValues(appId, comparision)
+    val template = freeMarkerConfig.getTemplate("verificationIndex.ftl")
     resetVerificationReport()
-    writeReport(buildFolder, input, template)
+    val reportFolder = buildFolder + Config.verificationReportFolder + "/"
+    writeReport(buildFolder, input, template, reportFolder)
   }
 
   private def writeReport(buildFolder: Folder,
                           input: util.Map[String, String],
-                          template: Template) = {
-    val reportFolder = buildFolder + Config.verificationReportFolder + "/"
+                          template: Template,
+                          reportFolder: String) = {
     val indexFile = new File(reportFolder + "index.html")
     new File(reportFolder).mkdirs()
     val writer = new FileWriter(indexFile)
@@ -50,9 +59,38 @@ class ExecutionReporter {
     }
   }
 
-  private def generateTemplateValues(
-      appId: AppId,
-      comparision: ScreenshotsComparisionResult): util.Map[String, String] = {
+  private def generateRecordTemplateValues(
+                                            appId: AppId,
+                                            screenshots: ScreenshotsSuite): util.Map[String, String] = {
+    val title = s"Record results: $appId"
+    val numberOfTests = screenshots.size
+    val summaryResults =
+      s"$numberOfTests screenshot tests recorded."
+    val summaryTableBody = generateRecordSummaryTableBody(screenshots)
+    Map("title" -> title,
+      "summaryResult" -> summaryResults,
+      "summaryTableBody" -> summaryTableBody).asJava
+  }
+
+  private def generateRecordSummaryTableBody(screenshots: ScreenshotsSuite): String = {
+    screenshots
+      .map { screenshot: Screenshot =>
+        val testClass = screenshot.testClass
+        val testName = screenshot.testName
+        val originalScreenshot = "./images/recorded/" + screenshot.name + ".png"
+        val width = (screenshot.screenshotDimension.width * 0.2).toInt
+        "<tr>" +
+          s"<th> <p>Test class: $testClass</p>" +
+          s"<p>Test name: $testName</p></th>" +
+          s"<th> <a href='$originalScreenshot'><img width='$width' src='$originalScreenshot'/></a></th>" +
+          "</tr>"
+      }
+      .mkString("\n")
+  }
+
+  private def generateVerificationTemplateValues(
+                                                  appId: AppId,
+                                                  comparision: ScreenshotsComparisionResult): util.Map[String, String] = {
     val title = s"Verification results: $appId"
     val screenshots = comparision.screenshots
     val numberOfTests = screenshots.size
@@ -60,16 +98,16 @@ class ExecutionReporter {
     val successNumber = numberOfTests - failedNumber
     val summaryResults =
       s"$numberOfTests screenshot tests executed. $successNumber passed and $failedNumber failed."
-    val summaryTableBody = generateSummaryTableBody(comparision)
+    val summaryTableBody = generateVerificationSummaryTableBody(comparision)
     val screenshotsTableBody = generateScreenshotsTableBody(comparision)
     Map("title" -> title,
-        "summaryResult" -> summaryResults,
-        "summaryTableBody" -> summaryTableBody,
-        "screenshotsTableBody" -> screenshotsTableBody).asJava
+      "summaryResult" -> summaryResults,
+      "summaryTableBody" -> summaryTableBody,
+      "screenshotsTableBody" -> screenshotsTableBody).asJava
   }
 
-  private def generateSummaryTableBody(
-      comparision: ScreenshotsComparisionResult): String = {
+  private def generateVerificationSummaryTableBody(
+                                                    comparision: ScreenshotsComparisionResult): String = {
     val errors = comparision.errors
     comparision.screenshots
       .map { screenshot: Screenshot =>
@@ -80,10 +118,11 @@ class ExecutionReporter {
         val result = if (isFailedTest) "❌" else "✅"
         val reason = generateReasonMessage(error)
         val color = if (isFailedTest) "red-text" else "green-text"
+        val id = screenshot.name.replace(".","")
         "<tr>" +
-          s"<th>$result</th>" +
-          s"<th> <p class='$color'>Test class: $testClass</p>" +
-          s"<p class='$color'>Test name: $testName</p></th>" +
+          s"<th><a href='#$id'>$result</></th>" +
+          s"<th><a href='#$id'><p class='$color'>Test class: $testClass</p>" +
+          s"<p class='$color'>Test name: $testName</p></a></th>" +
           s"<th>$reason</th>" +
           "</tr>"
       }
@@ -91,7 +130,7 @@ class ExecutionReporter {
   }
 
   private def generateScreenshotsTableBody(
-      comparision: ScreenshotsComparisionResult): String = {
+                                            comparision: ScreenshotsComparisionResult): String = {
     val errors = comparision.errors
     comparision.screenshots
       .map { screenshot: Screenshot =>
@@ -102,13 +141,13 @@ class ExecutionReporter {
         val originalScreenshot = "./images/recorded/" + screenshot.name + ".png"
         val newScreenshot = "./images/" + screenshot.name + ".png"
         val diff = ""
-        val reason = generateReasonMessage(error)
         val color = if (isFailedTest) "red-text" else "green-text"
         val width = (screenshot.screenshotDimension.width * 0.2).toInt
+        val id = screenshot.name.replace(".","")
         "<tr>" +
-          s"<th> <p class='$color'>Test class: $testClass</p>" +
+          s"<th> <p id='#$id' class='$color'>Test class: $testClass</p>" +
           s"<p class='$color'>Test name: $testName</p></th>" +
-          s"<th> <img width='$width' src='$originalScreenshot'/></th>" +
+          s"<th> <a href='$originalScreenshot'><img width='$width' src='$originalScreenshot'/></a></th>" +
           s"<th> <img width='$width' src='$newScreenshot'/></th>" +
           s"<th> <img width='$width' src='$diff'/></th>" +
           "</tr>"
@@ -118,7 +157,7 @@ class ExecutionReporter {
 
   private def findError(screenshot: Screenshot,
                         errors: ScreenshotComparisionErrors)
-    : Option[ScreenshotComparisionError] =
+  : Option[ScreenshotComparisionError] =
     errors.find {
       case ScreenshotNotFound(error) => screenshot == error
       case DifferentImageDimensions(error, _, _) => screenshot == error
@@ -127,7 +166,7 @@ class ExecutionReporter {
     }
 
   private def generateReasonMessage(
-      error: Option[ScreenshotComparisionError]): String =
+                                     error: Option[ScreenshotComparisionError]): String =
     error
       .map {
         case ScreenshotNotFound(screenshot) =>

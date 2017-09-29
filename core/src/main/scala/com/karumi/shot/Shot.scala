@@ -35,12 +35,18 @@ class Shot(adb: Adb,
       pullScreenshots(projectFolder, applicationId)
     }
 
-  def recordScreenshots(projectFolder: Folder, projectName: String): Unit = {
+  def recordScreenshots(appId: AppId, buildFolder: Folder, projectFolder: Folder, projectName: String): Unit = {
     console.show("💾  Saving screenshots.")
     val screenshots = readScreenshotsMetadata(projectFolder, projectName)
     screenshotsSaver.saveRecordedScreenshots(projectFolder, screenshots)
+    screenshotsSaver.copyRecordedScreenshotsToTheReportFolder(
+      projectFolder,
+      buildFolder + Config.recordingReportFolder+ "/images/recorded/")
     console.show(
       "😃  Screenshots recorded and saved at: " + projectFolder + Config.screenshotsFolderName)
+    reporter.generateRecordReport(appId, screenshots, buildFolder)
+    console.show(
+      "🤓  You can review the execution report here: " + buildFolder + Config.recordingReportFolder + "/index.html")
     removeProjectTemporalScreenshotsFolder(projectFolder)
   }
 
