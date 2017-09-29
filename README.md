@@ -155,7 +155,7 @@ Once you have a bunch of screenshot tests recorded you can easily verify if the 
 
 [karumilogo]: https://cloud.githubusercontent.com/assets/858090/11626547/e5a1dc66-9ce3-11e5-908d-537e07e82090.png
 
-## Known Issues
+## Custom dependencies
 
 If you have included in your project a dependency to related to the dexmaker and you are facing this exception: ``com.android.dx.util.DexException: Multiple dex files define``, you can customize how the facebook SDK is added to your project and exclude the dexmaker library as follows:
 
