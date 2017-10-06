@@ -5,6 +5,7 @@ import java.io.File
 import com.karumi.shot.android.Adb
 import com.karumi.shot.domain._
 import com.karumi.shot.domain.model.{AppId, Folder, ScreenshotsSuite}
+import com.karumi.shot.reports.ExecutionReporter
 import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsSaver}
 import com.karumi.shot.ui.Console
 import com.karumi.shot.xml.ScreenshotsSuiteXmlParser._
@@ -15,11 +16,12 @@ object Shot {
     "🤔  Error found executing screenshot tests. The appId param is not configured properly. You should configure the appId following the plugin instructions you can find at https://github.com/karumi/shot"
 }
 
-class Shot(val adb: Adb,
-           val fileReader: Files,
-           val screenshotsComparator: ScreenshotsComparator,
-           val screenshotsSaver: ScreenshotsSaver,
-           console: Console) {
+class Shot(adb: Adb,
+           fileReader: Files,
+           screenshotsComparator: ScreenshotsComparator,
+           screenshotsSaver: ScreenshotsSaver,
+           console: Console,
+           reporter: ExecutionReporter) {
 
   import Shot._
 
@@ -33,20 +35,37 @@ class Shot(val adb: Adb,
       pullScreenshots(projectFolder, applicationId)
     }
 
-  def recordScreenshots(projectFolder: Folder, projectName: String): Unit = {
+  def recordScreenshots(appId: AppId,
+                        buildFolder: Folder,
+                        projectFolder: Folder,
+                        projectName: String): Unit = {
     console.show("💾  Saving screenshots.")
     val screenshots = readScreenshotsMetadata(projectFolder, projectName)
     screenshotsSaver.saveRecordedScreenshots(projectFolder, screenshots)
+    screenshotsSaver.copyRecordedScreenshotsToTheReportFolder(
+      projectFolder,
+      buildFolder + Config.recordingReportFolder + "/images/recorded/")
     console.show(
       "😃  Screenshots recorded and saved at: " + projectFolder + Config.screenshotsFolderName)
+    reporter.generateRecordReport(appId, screenshots, buildFolder)
+    console.show(
+      "🤓  You can review the execution report here: " + buildFolder + Config.recordingReportFolder + "/index.html")
     removeProjectTemporalScreenshotsFolder(projectFolder)
   }
 
-  def verifyScreenshots(projectFolder: Folder,
+  def verifyScreenshots(appId: AppId,
+                        buildFolder: Folder,
+                        projectFolder: Folder,
                         projectName: String): ScreenshotsComparisionResult = {
     console.show("🔎  Comparing screenshots with previous ones.")
     val screenshots = readScreenshotsMetadata(projectFolder, projectName)
-    screenshotsSaver.saveTemporalScreenshots(screenshots, projectName)
+    screenshotsSaver.saveTemporalScreenshots(
+      screenshots,
+      projectName,
+      buildFolder + Config.verificationReportFolder + "/images/")
+    screenshotsSaver.copyRecordedScreenshotsToTheReportFolder(
+      projectFolder,
+      buildFolder + Config.verificationReportFolder + "/images/recorded/")
     val comparision = screenshotsComparator.compare(screenshots)
     if (comparision.hasErrors) {
       showErrors(comparision)
@@ -54,6 +73,9 @@ class Shot(val adb: Adb,
       console.showSuccess("✅  Yeah!!! Your tests are passing.")
     }
     removeProjectTemporalScreenshotsFolder(projectFolder)
+    reporter.generateVerificationReport(appId, comparision, buildFolder)
+    console.show(
+      "🤓  You can review the execution report here: " + buildFolder + Config.verificationReportFolder + "/index.html")
     comparision
   }
 

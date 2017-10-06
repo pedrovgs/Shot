@@ -30,6 +30,9 @@ object Config {
   val screenshotsTemporalRootPath: FilePath = "/tmp/shot/screenshot/"
   val defaultInstrumentationTestTask: String = "connectedAndroidTest"
   val defaultPackageTestApkTask: String = "packageDebugAndroidTest"
+  val reportFolder: String = "/reports/shot"
+  val verificationReportFolder: String = reportFolder + "/verification"
+  val recordingReportFolder: String = reportFolder + "/record"
 }
 
 case class Screenshot(name: String,
