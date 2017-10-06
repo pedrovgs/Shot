@@ -1,5 +1,5 @@
 group 'com.karumi'
-version '0.3.0'
+version '0.3.1-SNAPSHOT'
 
 apply plugin: 'scala'
 apply plugin: 'groovy'
