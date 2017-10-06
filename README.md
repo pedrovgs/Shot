@@ -6,6 +6,11 @@ Shot is a [Gradle](https://gradle.org/) plugin that simplifies the execution of 
 
 ``Shot`` is a Gradle plugin thought to run screenshot tests for Android using the [screenshot testing Facebook SDK](http://facebook.github.io/screenshot-tests-for-android/).
 
+**Since Shot 0.3.0 a simple but powerful HTML report is generated after every verification or screenshots recording execution. Here you have an example of the [recording](./art/recordReport.png) and [verification](verificationReport.png) report generated.** 
+
+![smallVerificationReport1](./art/smallVerificationReport1.png)
+![smallVerificationReport2](./art/smallVerificationReport2.png)
+
 Record your screenshots executing ``./gradlew executeScreenshotTests -Precord``
 
 ![recording](./art/recording.gif)
@@ -17,8 +22,6 @@ And verify your tests executing ``./gradlew executeScreenshotTests``
 If Shot finds any error in your tests execution the Gradle plugin will show a report as follows:
 
 ![errorReport](./art/errorReport.png)
-
-**In a future PR we will generate a rich HTML report** 
 
 You can find the complete Facebook SDK documentation [here](https://facebook.github.io/screenshot-tests-for-android/).
 
