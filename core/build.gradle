@@ -1,5 +1,5 @@
 group 'com.karumi'
-version '1.0.0'
+version '1.0.1-SNAPSHOT'
 
 apply plugin: 'scala'
 apply plugin: 'jacoco'
