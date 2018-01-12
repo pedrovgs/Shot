@@ -171,6 +171,10 @@ If you have included in your project a dependency to related to the dexmaker and
  
 The Shot plugin automatically detects if you are including the screenshot facebook library in your project and, if it's present, it will not include it again.
 
+## iOS support
+
+If you want to apply the same testing technique on iOS you can use [Snap.swift](https://github.com/skyweb07/Snap.swift)
+
 License
 -------
 
