@@ -6,7 +6,11 @@ import com.karumi.shot.android.Adb
 import com.karumi.shot.domain._
 import com.karumi.shot.domain.model.{AppId, Folder, ScreenshotsSuite}
 import com.karumi.shot.reports.ExecutionReporter
-import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsSaver}
+import com.karumi.shot.screenshots.{
+  ScreenshotsComparator,
+  ScreenshotsDiffGenerator,
+  ScreenshotsSaver
+}
 import com.karumi.shot.ui.Console
 import com.karumi.shot.xml.ScreenshotsSuiteXmlParser._
 import org.apache.commons.io.FileUtils
@@ -19,6 +23,7 @@ object Shot {
 class Shot(adb: Adb,
            fileReader: Files,
            screenshotsComparator: ScreenshotsComparator,
+           screenshotsDiffGenerator: ScreenshotsDiffGenerator,
            screenshotsSaver: ScreenshotsSaver,
            console: Console,
            reporter: ExecutionReporter) {
@@ -59,14 +64,19 @@ class Shot(adb: Adb,
                         projectName: String): ScreenshotsComparisionResult = {
     console.show("🔎  Comparing screenshots with previous ones.")
     val screenshots = readScreenshotsMetadata(projectFolder, projectName)
+    val newScreenshotsVerificationReportFolder = buildFolder + Config.verificationReportFolder + "/images/"
     screenshotsSaver.saveTemporalScreenshots(
       screenshots,
       projectName,
-      buildFolder + Config.verificationReportFolder + "/images/")
+      newScreenshotsVerificationReportFolder)
+    val comparision = screenshotsComparator.compare(screenshots)
+    screenshotsDiffGenerator.generateDiffs(
+      comparision,
+      newScreenshotsVerificationReportFolder)
     screenshotsSaver.copyRecordedScreenshotsToTheReportFolder(
       projectFolder,
       buildFolder + Config.verificationReportFolder + "/images/recorded/")
-    val comparision = screenshotsComparator.compare(screenshots)
+
     if (comparision.hasErrors) {
       showErrors(comparision)
     } else {

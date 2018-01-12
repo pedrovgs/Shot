@@ -2,7 +2,11 @@ package com.karumi.shot.tasks
 
 import com.karumi.shot.android.Adb
 import com.karumi.shot.reports.ExecutionReporter
-import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsSaver}
+import com.karumi.shot.screenshots.{
+  ScreenshotsComparator,
+  ScreenshotsDiffGenerator,
+  ScreenshotsSaver
+}
 import com.karumi.shot.ui.Console
 import com.karumi.shot.{Files, Shot, ShotExtension}
 import org.gradle.api.{DefaultTask, GradleException}
@@ -14,6 +18,7 @@ abstract class ShotTask() extends DefaultTask {
     new Shot(new Adb,
              new Files,
              new ScreenshotsComparator,
+             new ScreenshotsDiffGenerator,
              new ScreenshotsSaver,
              new Console,
              new ExecutionReporter)
