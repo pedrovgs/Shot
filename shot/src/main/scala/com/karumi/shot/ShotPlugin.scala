@@ -3,7 +3,11 @@ package com.karumi.shot
 import com.karumi.shot.android.Adb
 import com.karumi.shot.domain.Config
 import com.karumi.shot.reports.ExecutionReporter
-import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsSaver}
+import com.karumi.shot.screenshots.{
+  ScreenshotsComparator,
+  ScreenshotsDiffGenerator,
+  ScreenshotsSaver
+}
 import com.karumi.shot.tasks.{
   DownloadScreenshotsTask,
   ExecuteScreenshotTests,
@@ -30,6 +34,7 @@ class ShotPlugin extends Plugin[Project] {
     new Shot(new Adb,
              new Files,
              new ScreenshotsComparator,
+             new ScreenshotsDiffGenerator,
              new ScreenshotsSaver,
              new Console,
              new ExecutionReporter)

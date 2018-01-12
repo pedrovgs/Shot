@@ -145,6 +145,11 @@ class ExecutionReporter {
         val testName = screenshot.testName
         val originalScreenshot = "./images/recorded/" + screenshot.name + ".png"
         val newScreenshot = "./images/" + screenshot.name + ".png"
+        val diff = if (error.exists(_.isInstanceOf[DifferentScreenshots])) {
+          "./images/diff_" + screenshot.name + ".png"
+        } else {
+          ""
+        }
         val color = if (isFailedTest) "red-text" else "green-text"
         val width = (screenshot.screenshotDimension.width * 0.2).toInt
         val id = screenshot.name.replace(".", "")
@@ -153,6 +158,7 @@ class ExecutionReporter {
           s"<p class='$color'>Test name: $testName</p></th>" +
           s"<th> <a href='$originalScreenshot'><img width='$width' src='$originalScreenshot'/></a></th>" +
           s"<th> <a href='$newScreenshot'><img width='$width' src='$newScreenshot'/></a></th>" +
+          s"<th> <a href='$diff'><img width='$width' src='$diff'/></a></th>" +
           "</tr>"
       }
       .mkString("\n")
