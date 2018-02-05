@@ -2,6 +2,8 @@ package com.karumi.shot.xml
 
 import com.karumi.shot.domain.model.{Folder, ScreenshotsSuite}
 import com.karumi.shot.domain.{Config, Dimension, Screenshot}
+import org.json4s._
+import org.json4s.native.JsonMethods._
 
 import scala.xml._
 
@@ -54,11 +56,15 @@ object ScreenshotsSuiteXmlParser {
 
   def parseScreenshotSize(screenshot: Screenshot,
                           viewHierarchyContent: String): Screenshot = {
-    val xml = XML.loadString(viewHierarchyContent)
-    val screenshotWidth = (xml \ "right" head).text.toInt
-    val screenshotHeight = (xml \ "bottom" head).text.toInt
+    val json = parse(viewHierarchyContent)
+    val JInt(screenshotLeft) = json \ "left"
+    val JInt(screenshotWidth) = json \ "width"
+    val JInt(screenshotTop) = json \ "top"
+    val JInt(screenshotHeight) = json \ "height"
     screenshot.copy(
-      screenshotDimension = Dimension(screenshotWidth, screenshotHeight))
+      screenshotDimension = Dimension(
+        screenshotLeft.toInt + screenshotWidth.toInt,
+        screenshotTop.toInt + screenshotHeight.toInt))
   }
 
 }

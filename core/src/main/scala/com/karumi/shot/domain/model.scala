@@ -19,7 +19,7 @@ object Config {
   val androidDependencyMode: FilePath = "androidTestImplementation"
   val androidDependencyGroup: String = "com.facebook.testing.screenshot"
   val androidDependencyName: String = "core"
-  val androidDependencyVersion: String = "0.4.2"
+  val androidDependencyVersion: String = "0.5.0"
   val androidDependency: FilePath =
     s"$androidDependencyGroup:$androidDependencyName:$androidDependencyVersion"
   val screenshotsFolderName: FilePath = "/screenshots/"
