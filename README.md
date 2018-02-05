@@ -163,7 +163,7 @@ Once you have a bunch of screenshot tests recorded you can easily verify if the 
 If you have included in your project a dependency to related to the dexmaker and you are facing this exception: ``com.android.dx.util.DexException: Multiple dex files define``, you can customize how the facebook SDK is added to your project and exclude the dexmaker library as follows:
 
  ```
-   androidTestCompile ('com.facebook.testing.screenshot:core:0.4.2') {
+   androidTestCompile ('com.facebook.testing.screenshot:core:0.5.0') {
      exclude group: 'com.crittercism.dexmaker', module: 'dexmaker'
      exclude group: 'com.crittercism.dexmaker', module: 'dexmaker-dx'
    }
