@@ -1,0 +1,233 @@
+{
+  "class": "com.android.internal.policy.impl.PhoneWindow.DecorView",
+  "left": 0,
+  "top": 0,
+  "width": 720,
+  "height": 1280,
+  "children": [
+    {
+      "class": "android.widget.LinearLayout",
+      "left": 0,
+      "top": 0,
+      "width": 768,
+      "height": 1280,
+      "children": [
+        {
+          "class": "android.view.ViewStub",
+          "left": 0,
+          "top": 0,
+          "width": 0,
+          "height": 0
+        },
+        {
+          "class": "android.widget.FrameLayout",
+          "left": 0,
+          "top": 50,
+          "width": 768,
+          "height": 1230,
+          "children": [
+            {
+              "class": "android.support.v7.widget.FitWindowsLinearLayout",
+              "left": 0,
+              "top": 50,
+              "width": 768,
+              "height": 1230,
+              "children": [
+                {
+                  "class": "android.support.v7.widget.ViewStubCompat",
+                  "left": 0,
+                  "top": 50,
+                  "width": 0,
+                  "height": 0
+                },
+                {
+                  "class": "android.support.v7.widget.ContentFrameLayout",
+                  "left": 0,
+                  "top": 50,
+                  "width": 768,
+                  "height": 1230,
+                  "children": [
+                    {
+                      "class": "android.widget.RelativeLayout",
+                      "left": 0,
+                      "top": 50,
+                      "width": 768,
+                      "height": 1230,
+                      "children": [
+                        {
+                          "class": "android.support.v7.widget.Toolbar",
+                          "left": 0,
+                          "top": 50,
+                          "width": 768,
+                          "height": 112,
+                          "children": [
+                            {
+                              "class": "android.widget.TextView",
+                              "left": 32,
+                              "top": 79,
+                              "width": 294,
+                              "height": 54
+                            },
+                            {
+                              "class": "android.support.v7.widget.ActionMenuView",
+                              "left": 768,
+                              "top": 50,
+                              "width": 0,
+                              "height": 112,
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "class": "android.support.v7.widget.RecyclerView",
+                          "left": 0,
+                          "top": 162,
+                          "width": 768,
+                          "height": 1118,
+                          "children": [
+                            {
+                              "class": "android.widget.RelativeLayout",
+                              "left": 0,
+                              "top": 162,
+                              "width": 768,
+                              "height": 400,
+                              "children": [
+                                {
+                                  "class": "android.support.v7.widget.AppCompatImageView",
+                                  "left": 0,
+                                  "top": 162,
+                                  "width": 768,
+                                  "height": 400
+                                },
+                                {
+                                  "class": "android.view.View",
+                                  "left": 0,
+                                  "top": 362,
+                                  "width": 768,
+                                  "height": 200
+                                },
+                                {
+                                  "class": "android.support.v7.widget.AppCompatTextView",
+                                  "left": 32,
+                                  "top": 492,
+                                  "width": 170,
+                                  "height": 38
+                                },
+                                {
+                                  "class": "android.support.v7.widget.AppCompatImageView",
+                                  "left": 0,
+                                  "top": 162,
+                                  "width": 0,
+                                  "height": 0
+                                }
+                              ]
+                            },
+                            {
+                              "class": "android.widget.RelativeLayout",
+                              "left": 0,
+                              "top": 562,
+                              "width": 768,
+                              "height": 400,
+                              "children": [
+                                {
+                                  "class": "android.support.v7.widget.AppCompatImageView",
+                                  "left": 0,
+                                  "top": 562,
+                                  "width": 768,
+                                  "height": 400
+                                },
+                                {
+                                  "class": "android.view.View",
+                                  "left": 0,
+                                  "top": 762,
+                                  "width": 768,
+                                  "height": 200
+                                },
+                                {
+                                  "class": "android.support.v7.widget.AppCompatTextView",
+                                  "left": 32,
+                                  "top": 892,
+                                  "width": 170,
+                                  "height": 38
+                                },
+                                {
+                                  "class": "android.support.v7.widget.AppCompatImageView",
+                                  "left": 0,
+                                  "top": 562,
+                                  "width": 0,
+                                  "height": 0
+                                }
+                              ]
+                            },
+                            {
+                              "class": "android.widget.RelativeLayout",
+                              "left": 0,
+                              "top": 962,
+                              "width": 768,
+                              "height": 400,
+                              "children": [
+                                {
+                                  "class": "android.support.v7.widget.AppCompatImageView",
+                                  "left": 0,
+                                  "top": 962,
+                                  "width": 768,
+                                  "height": 400
+                                },
+                                {
+                                  "class": "android.view.View",
+                                  "left": 0,
+                                  "top": 1162,
+                                  "width": 768,
+                                  "height": 200
+                                },
+                                {
+                                  "class": "android.support.v7.widget.AppCompatTextView",
+                                  "left": 32,
+                                  "top": 1292,
+                                  "width": 170,
+                                  "height": 38
+                                },
+                                {
+                                  "class": "android.support.v7.widget.AppCompatImageView",
+                                  "left": 0,
+                                  "top": 962,
+                                  "width": 0,
+                                  "height": 0
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "class": "android.support.v4.widget.ContentLoadingProgressBar",
+                          "left": 0,
+                          "top": 50,
+                          "width": 0,
+                          "height": 0
+                        },
+                        {
+                          "class": "android.support.v7.widget.AppCompatTextView",
+                          "left": 0,
+                          "top": 50,
+                          "width": 0,
+                          "height": 0
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "class": "android.view.View",
+      "left": 0,
+      "top": 0,
+      "width": 768,
+      "height": 50
+    }
+  ]
+}
