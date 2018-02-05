@@ -146,7 +146,7 @@ class ExecutionReporter {
         val originalScreenshot = "./images/recorded/" + screenshot.name + ".png"
         val newScreenshot = "./images/" + screenshot.name + ".png"
         val diff = if (error.exists(_.isInstanceOf[DifferentScreenshots])) {
-          "./images/diff_" + screenshot.name + ".png"
+          screenshot.getDiffScreenshotPath("./images/")
         } else {
           ""
         }

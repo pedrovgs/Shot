@@ -27,7 +27,7 @@ class ScreenshotsDiffGenerator {
     val originalImage = Image.fromFile(new File(originalImagePath))
     val newImage = Image.fromFile(new File(newImagePath))
     val diff = newImage.composite(new RedComposite(1d), originalImage)
-    val outputFilePath = outputFolder + s"diff_${screenshot.fileName}"
+    val outputFilePath = screenshot.getDiffScreenshotPath(outputFolder)
     diff.output(outputFilePath)
   }
 

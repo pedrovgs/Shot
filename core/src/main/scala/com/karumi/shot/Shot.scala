@@ -64,7 +64,7 @@ class Shot(adb: Adb,
       val baos = new ByteArrayOutputStream()
       ImageIO.write(bufferedImage, "png", baos)
       val encodedBase64 = Base64.getEncoder.encode(baos.toByteArray)
-      console.show(s"echo '${new String(encodedBase64, Charsets.UTF_8)}' | base64 -D > failingTest.png")
+      console.show(s"echo '${new String(encodedBase64, Charsets.UTF_8)}' | base64 -D > ${screenshot.fileName}")
     })
   }
 
