@@ -31,6 +31,10 @@ install {
     }
 }
 
+compileScala {
+    classpath = classpath.plus(files(compileGroovy.destinationDir))
+}
+
 def isReleaseBuild() {
     return VERSION_NAME.contains("SNAPSHOT") == false
 }
