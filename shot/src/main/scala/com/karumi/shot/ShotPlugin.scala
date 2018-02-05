@@ -142,7 +142,8 @@ class ShotPlugin extends Plugin[Project] {
             .toArray(new Array[Dependency](0))
             .exists(dependency =>
               Config.androidDependencyGroup == dependency.getGroup
-                && Config.androidDependencyName == dependency.getName)
+                && Config.androidDependencyName == dependency.getName
+                && Config.androidDependencyVersion == dependency.getVersion)
         })
 
         if (!facebookDependencyHasBeenAdded) {
