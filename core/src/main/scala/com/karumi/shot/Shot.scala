@@ -1,19 +1,17 @@
 package com.karumi.shot
 
-import java.io.File
+import java.io.{ByteArrayOutputStream, File, FileInputStream, InputStream}
+import java.util.Base64
+import javax.imageio.ImageIO
 
 import com.karumi.shot.android.Adb
 import com.karumi.shot.domain._
 import com.karumi.shot.domain.model.{AppId, Folder, ScreenshotsSuite}
 import com.karumi.shot.reports.ExecutionReporter
-import com.karumi.shot.screenshots.{
-  ScreenshotsComparator,
-  ScreenshotsDiffGenerator,
-  ScreenshotsSaver
-}
+import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsDiffGenerator, ScreenshotsSaver}
 import com.karumi.shot.ui.Console
 import com.karumi.shot.xml.ScreenshotsSuiteXmlParser._
-import org.apache.commons.io.FileUtils
+import org.apache.commons.io.{Charsets, FileUtils}
 
 object Shot {
   private val appIdErrorMessage =
@@ -60,6 +58,14 @@ class Shot(adb: Adb,
 
   def showBase64Error(comparision: ScreenshotsComparisionResult) = {
     console.show("echo 'BASE64' > failingTest.png")
+    comparision.screenshots.foreach( screenshot => {
+      val file = new File(screenshot.temporalScreenshotPath)
+      val bufferedImage = ImageIO.read(file)
+      val baos = new ByteArrayOutputStream()
+      ImageIO.write(bufferedImage, "png", baos)
+      val encodedBase64 = Base64.getEncoder.encode(baos.toByteArray)
+      console.show(s"echo '${new String(encodedBase64, Charsets.UTF_8)}' | base64 -D > failingTest.png")
+    })
   }
 
   def verifyScreenshots(appId: AppId,
