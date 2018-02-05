@@ -56,10 +56,11 @@ class Shot(adb: Adb,
     removeProjectTemporalScreenshotsFolder(projectFolder)
   }
 
-  def showBase64Error(comparision: ScreenshotsComparisionResult) = {
+  def showBase64Error(comparision: ScreenshotsComparisionResult,
+                      outputFolder: String) = {
     console.show("echo 'BASE64' > failingTest.png")
     comparision.screenshots.foreach( screenshot => {
-      val file = new File(screenshot.temporalScreenshotPath)
+      val file = new File(screenshot.getDiffScreenshotPath(outputFolder))
       val bufferedImage = ImageIO.read(file)
       val baos = new ByteArrayOutputStream()
       ImageIO.write(bufferedImage, "png", baos)
@@ -91,7 +92,7 @@ class Shot(adb: Adb,
     if (comparision.hasErrors) {
       showErrors(comparision)
       if (shouldPrintBase64Error) {
-        showBase64Error(comparision)
+        showBase64Error(comparision, newScreenshotsVerificationReportFolder)
       }
     } else {
       console.showSuccess("✅  Yeah!!! Your tests are passing.")
