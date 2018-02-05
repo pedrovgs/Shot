@@ -169,7 +169,9 @@ If you have included in your project a dependency to related to the dexmaker and
    }
  ```
  
-The Shot plugin automatically detects if you are including the screenshot facebook library in your project and, if it's present, it will not include it again.
+The Shot plugin automatically detects if you are including a compatible version of the screenshot facebook library in your project and, if it's present, it will not include it again.
+ 
+**Disclaimer**: The only compatible version of the facebook library is 0.5.0 right now, so if you are using any other version we highly encourage to match it with the one Shot is using to avoid problems.
 
 ## iOS support
 
