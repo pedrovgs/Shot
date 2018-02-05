@@ -2,7 +2,7 @@ package com.karumi.shot
 
 import com.karumi.shot.android.Adb
 import com.karumi.shot.domain.Config
-import com.karumi.shot.reports.ExecutionReporter
+import com.karumi.shot.reports.{ConsoleReporter, ExecutionReporter}
 import com.karumi.shot.screenshots.{
   ScreenshotsComparator,
   ScreenshotsDiffGenerator,
@@ -30,14 +30,16 @@ object ShotPlugin {
 
 class ShotPlugin extends Plugin[Project] {
 
+  private val console = new Console
   private lazy val shot: Shot =
     new Shot(new Adb,
              new Files,
              new ScreenshotsComparator,
              new ScreenshotsDiffGenerator,
              new ScreenshotsSaver,
-             new Console,
-             new ExecutionReporter)
+             console,
+             new ExecutionReporter,
+             new ConsoleReporter(console))
 
   override def apply(project: Project): Unit = {
     configureAdb(project)

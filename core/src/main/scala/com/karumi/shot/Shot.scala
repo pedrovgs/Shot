@@ -7,8 +7,12 @@ import javax.imageio.ImageIO
 import com.karumi.shot.android.Adb
 import com.karumi.shot.domain._
 import com.karumi.shot.domain.model.{AppId, Folder, ScreenshotsSuite}
-import com.karumi.shot.reports.ExecutionReporter
-import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsDiffGenerator, ScreenshotsSaver}
+import com.karumi.shot.reports.{ConsoleReporter, ExecutionReporter}
+import com.karumi.shot.screenshots.{
+  ScreenshotsComparator,
+  ScreenshotsDiffGenerator,
+  ScreenshotsSaver
+}
 import com.karumi.shot.ui.Console
 import com.karumi.shot.xml.ScreenshotsSuiteXmlParser._
 import org.apache.commons.io.{Charsets, FileUtils}
@@ -24,7 +28,8 @@ class Shot(adb: Adb,
            screenshotsDiffGenerator: ScreenshotsDiffGenerator,
            screenshotsSaver: ScreenshotsSaver,
            console: Console,
-           reporter: ExecutionReporter) {
+           reporter: ExecutionReporter,
+           consoleReporter: ConsoleReporter) {
 
   import Shot._
 
@@ -56,28 +61,12 @@ class Shot(adb: Adb,
     removeProjectTemporalScreenshotsFolder(projectFolder)
   }
 
-  def showBase64Error(comparision: ScreenshotsComparisionResult,
-                      outputFolder: String) = {
-    console.show("\uD83E\uDD16  The option printBase64 is enabled. In order to see the generated diff images, run the following commands in your terminal:")
-    console.lineBreak()
-    comparision.screenshots.foreach( screenshot => {
-      val file = new File(screenshot.getDiffScreenshotPath(outputFolder))
-      val bufferedImage = ImageIO.read(file)
-      val baos = new ByteArrayOutputStream()
-      ImageIO.write(bufferedImage, "png", baos)
-      val encodedBase64 = Base64.getEncoder.encode(baos.toByteArray)
-      console.showError(s"Test ${screenshot.fileName}")
-      console.lineBreak()
-      console.show(s"\t> echo '${new String(encodedBase64, Charsets.UTF_8)}' | base64 -D > ${screenshot.fileName}")
-      console.lineBreak()
-    })
-  }
-
-  def verifyScreenshots(appId: AppId,
-                        buildFolder: Folder,
-                        projectFolder: Folder,
-                        projectName: String,
-                        shouldPrintBase64Error: Boolean): ScreenshotsComparisionResult = {
+  def verifyScreenshots(
+      appId: AppId,
+      buildFolder: Folder,
+      projectFolder: Folder,
+      projectName: String,
+      shouldPrintBase64Error: Boolean): ScreenshotsComparisionResult = {
     console.show("🔎  Comparing screenshots with previous ones.")
     val screenshots = readScreenshotsMetadata(projectFolder, projectName)
     val newScreenshotsVerificationReportFolder = buildFolder + Config.verificationReportFolder + "/images/"
@@ -94,9 +83,10 @@ class Shot(adb: Adb,
       buildFolder + Config.verificationReportFolder + "/images/recorded/")
 
     if (comparision.hasErrors) {
-      showErrors(comparision)
+      consoleReporter.showErrors(comparision)
       if (shouldPrintBase64Error) {
-        showBase64Error(comparision, newScreenshotsVerificationReportFolder)
+        consoleReporter.showBase64Error(comparision,
+                                        newScreenshotsVerificationReportFolder)
       }
     } else {
       console.showSuccess("✅  Yeah!!! Your tests are passing.")
@@ -149,40 +139,6 @@ class Shot(adb: Adb,
         projectFolder + Config.pulledScreenshotsFolder + screenshot.viewHierarchy)
       parseScreenshotSize(screenshot, viewHierarchyContent)
     }.toList
-  }
-
-  private def showErrors(comparision: ScreenshotsComparisionResult) = {
-    console.showError(
-      "❌  Hummmm...the following screenshot tests are broken:\n")
-    comparision.errors.foreach { error =>
-      error match {
-        case ScreenshotNotFound(screenshot) =>
-          console.showError(
-            "   🔎  Recorded screenshot not found for test: " + screenshot.name)
-        case DifferentScreenshots(screenshot) =>
-          console.showError(
-            "   🤔  The application UI has been modified for test: " + screenshot.name)
-          console.showError(
-            "            💾  You can find the original screenshot here: " + screenshot.recordedScreenshotPath)
-          console.showError(
-            "            🆕  You can find the new recorded screenshot here: " + screenshot.temporalScreenshotPath)
-        case DifferentImageDimensions(screenshot,
-                                      originalDimension,
-                                      newDimension) => {
-          console.showError(
-            "   📱  The size of the screenshot taken has changed for test: " + screenshot.name)
-          console.showError(
-            "            💾  Original screenshot dimension: " + originalDimension + ". You can find the original screenshot here: " + screenshot.recordedScreenshotPath)
-          console.showError(
-            "            🆕  New recorded screenshot dimension: " + newDimension + ". You can find the new recorded screenshot here: " + screenshot.temporalScreenshotPath)
-        }
-
-        case _ =>
-          console.showError(
-            "   😞  Ups! Something went wrong while comparing your screenshots but we couldn't identify the cause. If you think you've found a bug, please open an issue at https://github.com/karumi/shot.")
-      }
-      console.lineBreak()
-    }
   }
 
   private def removeProjectTemporalScreenshotsFolder(projectFolder: Folder) = {

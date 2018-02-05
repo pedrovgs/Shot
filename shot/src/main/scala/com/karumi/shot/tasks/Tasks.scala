@@ -1,7 +1,7 @@
 package com.karumi.shot.tasks
 
 import com.karumi.shot.android.Adb
-import com.karumi.shot.reports.ExecutionReporter
+import com.karumi.shot.reports.{ConsoleReporter, ExecutionReporter}
 import com.karumi.shot.screenshots.{
   ScreenshotsComparator,
   ScreenshotsDiffGenerator,
@@ -14,14 +14,16 @@ import org.gradle.api.tasks.TaskAction
 
 abstract class ShotTask() extends DefaultTask {
 
+  private val console = new Console
   protected val shot: Shot =
     new Shot(new Adb,
              new Files,
              new ScreenshotsComparator,
              new ScreenshotsDiffGenerator,
              new ScreenshotsSaver,
-             new Console,
-             new ExecutionReporter)
+             console,
+             new ExecutionReporter,
+             new ConsoleReporter(console))
   protected val shotExtension: ShotExtension =
     getProject.getExtensions.findByType(classOf[ShotExtension])
 
@@ -42,7 +44,7 @@ class ExecuteScreenshotTests extends ShotTask {
   def executeScreenshotTests(): Unit = {
     val project = getProject
     val recordScreenshots = project.hasProperty("record")
-    val printBase64= project.hasProperty("printBase64")
+    val printBase64 = project.hasProperty("printBase64")
     val projectFolder = project.getProjectDir.getAbsolutePath
     val projectName = project.getName
     val buildFolder = project.getBuildDir.getAbsolutePath

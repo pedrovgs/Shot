@@ -51,7 +51,8 @@ case class Screenshot(name: String,
       temporalScreenshotPath.lastIndexOf("/") + 1,
       temporalScreenshotPath.length)
 
-  def getDiffScreenshotPath(basePath: String): String =  s"${basePath}diff_$fileName"
+  def getDiffScreenshotPath(basePath: String): String =
+    s"${basePath}diff_$fileName"
 
 }
 
