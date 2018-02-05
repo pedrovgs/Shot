@@ -58,14 +58,18 @@ class Shot(adb: Adb,
 
   def showBase64Error(comparision: ScreenshotsComparisionResult,
                       outputFolder: String) = {
-    console.show("echo 'BASE64' > failingTest.png")
+    console.show("\uD83E\uDD16  The option printBase64 is enabled. In order to see the generated diff images, run the following commands in your terminal:")
+    console.lineBreak()
     comparision.screenshots.foreach( screenshot => {
       val file = new File(screenshot.getDiffScreenshotPath(outputFolder))
       val bufferedImage = ImageIO.read(file)
       val baos = new ByteArrayOutputStream()
       ImageIO.write(bufferedImage, "png", baos)
       val encodedBase64 = Base64.getEncoder.encode(baos.toByteArray)
-      console.show(s"echo '${new String(encodedBase64, Charsets.UTF_8)}' | base64 -D > ${screenshot.fileName}")
+      console.showError(s"Test ${screenshot.fileName}")
+      console.lineBreak()
+      console.show(s"\t> echo '${new String(encodedBase64, Charsets.UTF_8)}' | base64 -D > ${screenshot.fileName}")
+      console.lineBreak()
     })
   }
 
