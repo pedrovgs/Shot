@@ -1,12 +1,8 @@
 package com.karumi.shot.reports
 
-import java.io.{ByteArrayOutputStream, File}
-import java.util.Base64
-import javax.imageio.ImageIO
-
+import com.karumi.shot.base64.Base64Encoder
 import com.karumi.shot.domain._
 import com.karumi.shot.ui.Console
-import org.apache.commons.io.Charsets
 
 class ConsoleReporter(console: Console) {
 
@@ -56,26 +52,14 @@ class ConsoleReporter(console: Console) {
 
   private def showScreenshotBase64Error(outputFolder: String,
                                         screenshot: Screenshot): Unit = {
-    val diffBase64UTF8: String =
-      getDiffScreenshotBase64(outputFolder, screenshot)
+    val encodedDiff: String =
+      Base64Encoder.base64FromFile(
+        screenshot.getDiffScreenshotPath(outputFolder))
 
     console.showError(s"Test ${screenshot.fileName}")
     console.lineBreak()
     console.show(
-      s"\t> echo '$diffBase64UTF8' | base64 -D > ${screenshot.fileName}")
+      s"\t> echo '$encodedDiff' | base64 -D > ${screenshot.fileName}")
     console.lineBreak()
-  }
-
-  private def getDiffScreenshotBase64(outputFolder: String,
-                                      screenshot: Screenshot): String = {
-    val diffScreenshotFile =
-      new File(screenshot.getDiffScreenshotPath(outputFolder))
-    val bufferedImage = ImageIO.read(diffScreenshotFile)
-    val outputStream = new ByteArrayOutputStream()
-    ImageIO.write(bufferedImage, "png", outputStream)
-    val diffImageBase64Encoded =
-      Base64.getEncoder.encode(outputStream.toByteArray)
-    val diffBase64UTF8 = new String(diffImageBase64Encoded, Charsets.UTF_8)
-    diffBase64UTF8
   }
 }
