@@ -9,7 +9,7 @@ class ConsoleReporter(console: Console) {
   def showBase64Error(comparision: ScreenshotsComparisionResult,
                       outputFolder: String): Unit = {
     console.show(
-      "\uD83E\uDD16  The option printBase64 is enabled. In order to see the generated diff images, run the following commands in your terminal:")
+      "🤖  The option printBase64 is enabled. In order to see the generated diff images, run the following commands in your terminal:")
     console.lineBreak()
     comparision.screenshots.foreach(screenshot => {
       showScreenshotBase64Error(outputFolder, screenshot)
