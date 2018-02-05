@@ -16,7 +16,6 @@ dependencies {
     compile 'com.sksamuel.scrimage:scrimage-core_2.12:2.1.8'
     compile 'org.freemarker:freemarker:2.3.23'
     compile 'org.json4s:json4s-native_2.12:3.5.3'
-
     testCompile 'org.scalatest:scalatest_2.12:3.0.3'
     testRuntime 'org.pegdown:pegdown:1.4.2'
     testCompile 'org.scalamock:scalamock-scalatest-support_2.12:3.5.0'
