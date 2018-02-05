@@ -140,10 +140,11 @@ class ShotPlugin extends Plugin[Project] {
         project.getConfigurations.forEach(config => {
           facebookDependencyHasBeenAdded |= config.getAllDependencies
             .toArray(new Array[Dependency](0))
-            .exists(dependency =>
-              Config.androidDependencyGroup == dependency.getGroup
-                && Config.androidDependencyName == dependency.getName
-                && Config.androidDependencyVersion == dependency.getVersion)
+            .exists(
+              dependency =>
+                Config.androidDependencyGroup == dependency.getGroup
+                  && Config.androidDependencyName == dependency.getName
+                  && Config.androidDependencyVersion == dependency.getVersion)
         })
 
         if (!facebookDependencyHasBeenAdded) {

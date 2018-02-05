@@ -62,9 +62,9 @@ object ScreenshotsSuiteXmlParser {
     val JInt(screenshotTop) = json \ "top"
     val JInt(screenshotHeight) = json \ "height"
     screenshot.copy(
-      screenshotDimension = Dimension(
-        screenshotLeft.toInt + screenshotWidth.toInt,
-        screenshotTop.toInt + screenshotHeight.toInt))
+      screenshotDimension =
+        Dimension(screenshotLeft.toInt + screenshotWidth.toInt,
+                  screenshotTop.toInt + screenshotHeight.toInt))
   }
 
 }
