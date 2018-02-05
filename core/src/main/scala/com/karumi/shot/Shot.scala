@@ -58,10 +58,15 @@ class Shot(adb: Adb,
     removeProjectTemporalScreenshotsFolder(projectFolder)
   }
 
+  def showBase64Error(comparision: ScreenshotsComparisionResult) = {
+    console.show("echo 'BASE64' > failingTest.png")
+  }
+
   def verifyScreenshots(appId: AppId,
                         buildFolder: Folder,
                         projectFolder: Folder,
-                        projectName: String): ScreenshotsComparisionResult = {
+                        projectName: String,
+                        shouldPrintBase64Error: Boolean): ScreenshotsComparisionResult = {
     console.show("🔎  Comparing screenshots with previous ones.")
     val screenshots = readScreenshotsMetadata(projectFolder, projectName)
     val newScreenshotsVerificationReportFolder = buildFolder + Config.verificationReportFolder + "/images/"
@@ -79,6 +84,9 @@ class Shot(adb: Adb,
 
     if (comparision.hasErrors) {
       showErrors(comparision)
+      if (shouldPrintBase64Error) {
+        showBase64Error(comparision)
+      }
     } else {
       console.showSuccess("✅  Yeah!!! Your tests are passing.")
     }
