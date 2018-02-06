@@ -5,27 +5,35 @@ jdk:
 env:
   global:
     - ADB_INSTALL_TIMEOUT=8 # in minutes (2 minutes by default)
+    - ANDROID_API=26
+    - EMULATOR_API=24
 
 android:
   components:
     - tools
     - build-tools-26.0.2
     - platform-tools
-    - android-26
+    - android-$ANDROID_API
+    - android-$EMULATOR_API
     - extra-android-support
     - extra-google-m2repository
     - extra-android-m2repository
-    - sys-img-armeabi-v7a-google_apis-26
+    - sys-img-armeabi-v7a-google_apis-$EMULATOR_API
+    - sys-img-armeabi-v7a-android-$EMULATOR_API
+  licenses:
+    - ".+"
 
 before_script:
+  - echo "y" | android update sdk -a --no-ui --filter android-24
+  - echo "y" | android update sdk -a --no-ui --filter sys-img-armeabi-v7a-android-$EMULATOR_API
+  - android list targets | grep -E '^id:' | awk -F '"' '{$1=""; print $2}'
   - cd shot-consumer
   - mksdcard -l e 512M sdcard.img
-  - echo no | android create avd --force --name test --target 'android-26' --abi armeabi-v7a --tag google_apis --device 'Nexus 4' --sdcard sdcard.img
+  - echo no | android create avd --force --name test --target 'android-$EMULATOR_API' --abi armeabi-v7a --device 'Nexus 4' --sdcard sdcard.img
   - emulator -avd test -skin 768x1280 -no-window &
   - cd ..
 
 script:
-  - ./gradlew checkScalafmtAll build test
   - ./gradlew install
   - cd shot-consumer
   - android-wait-for-emulator
@@ -34,4 +42,6 @@ script:
   - adb shell settings put global transition_animation_scale 0 &
   - adb shell settings put global animator_duration_scale 0 &
   - adb shell input keyevent 82 &
+  - adb wait-for-device get-serialno
+  - sleep 300
   - ./gradlew executeScreenshotTests
