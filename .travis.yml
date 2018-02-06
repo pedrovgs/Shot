@@ -27,9 +27,10 @@ before_script:
   - echo "y" | android update sdk -a --no-ui --filter android-24
   - echo "y" | android update sdk -a --no-ui --filter sys-img-armeabi-v7a-android-$EMULATOR_API
   - android list targets | grep -E '^id:' | awk -F '"' '{$1=""; print $2}'
+  - android list targets
   - cd shot-consumer
   - mksdcard -l e 512M sdcard.img
-  - echo no | android create avd --force --name test --target 'android-$EMULATOR_API' --abi armeabi-v7a --device 'Nexus 4' --sdcard sdcard.img
+  - echo no | android create avd --force --name test --target 'android-$EMULATOR_API' --abi armeabi-v7a --sdcard sdcard.img
   - emulator -avd test -skin 768x1280 -no-window &
   - cd ..
 
