@@ -32,8 +32,8 @@ class ConsoleReporter(console: Console) {
           console.showError(
             "            🆕  You can find the new recorded screenshot here: " + screenshot.temporalScreenshotPath)
         case DifferentImageDimensions(screenshot,
-                                      originalDimension,
-                                      newDimension) => {
+        originalDimension,
+        newDimension) => {
           console.showError(
             "   📱  The size of the screenshot taken has changed for test: " + screenshot.name)
           console.showError(
@@ -52,14 +52,22 @@ class ConsoleReporter(console: Console) {
 
   private def showScreenshotBase64Error(outputFolder: String,
                                         screenshot: Screenshot): Unit = {
-    val encodedDiff: String =
+    val encodedDiff: Option[String] =
       Base64Encoder.base64FromFile(
         screenshot.getDiffScreenshotPath(outputFolder))
 
     console.showError(s"Test ${screenshot.fileName}")
     console.lineBreak()
-    console.show(
-      s"\t> echo '$encodedDiff' | base64 -D > ${screenshot.fileName}")
+
+    encodedDiff match {
+      case Some(base64) =>
+        console.show(
+          s"\t> echo '$base64' | base64 -D > ${screenshot.fileName}")
+      case None =>
+        console.showError(
+          s"\t❌ Error on base64 image generation, image source not found.")
+    }
+
     console.lineBreak()
   }
 }
