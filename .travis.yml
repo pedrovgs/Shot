@@ -29,9 +29,9 @@ script:
   - ./gradlew install
   - cd shot-consumer
   - android-wait-for-emulator
-  - sleep 30
+  - sleep 300
   - adb shell settings put global window_animation_scale 0 &
   - adb shell settings put global transition_animation_scale 0 &
   - adb shell settings put global animator_duration_scale 0 &
   - adb shell input keyevent 82 &
-  - ./gradlew executeScreenshotTests -PdisablePreDex
+  - ./gradlew executeScreenshotTests
