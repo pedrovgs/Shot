@@ -30,7 +30,7 @@ before_script:
   - android list targets
   - cd shot-consumer
   - mksdcard -l e 512M sdcard.img
-  - echo no | android create avd --force --name test --target 'android-$EMULATOR_API' --abi default/armeabi-v7a --sdcard sdcard.img
+  - echo no | android create avd --force --name test --target 'android-$EMULATOR_API' --abi google_apis/armeabi-v7a --sdcard sdcard.img
   - emulator -avd test -skin 768x1280 -no-window &
   - cd ..
 
