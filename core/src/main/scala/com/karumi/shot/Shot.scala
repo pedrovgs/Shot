@@ -83,7 +83,9 @@ class Shot(adb: Adb,
       buildFolder + Config.verificationReportFolder + "/images/recorded/")
 
     if (comparision.hasErrors) {
-      consoleReporter.showErrors(comparision, shouldPrintBase64Error, newScreenshotsVerificationReportFolder)
+      consoleReporter.showErrors(comparision,
+                                 shouldPrintBase64Error,
+                                 newScreenshotsVerificationReportFolder)
     } else {
       console.showSuccess("✅  Yeah!!! Your tests are passing.")
     }
