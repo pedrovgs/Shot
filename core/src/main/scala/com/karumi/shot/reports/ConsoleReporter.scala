@@ -9,13 +9,6 @@ class ConsoleReporter(console: Console, base64Encoder: Base64Encoder) {
   def showErrors(comparision: ScreenshotsComparisionResult,
                  shouldPrintBase64Error: Boolean,
                  outputFolder: String): Unit = {
-    showErrors(comparision)
-    if (shouldPrintBase64Error) {
-      showBase64Error(comparision, outputFolder)
-    }
-  }
-
-  private def showErrors(comparision: ScreenshotsComparisionResult): Unit = {
     console.showError(
       "❌  Hummmm...the following screenshot tests are broken:\n")
     comparision.errors.foreach { error =>
@@ -30,6 +23,9 @@ class ConsoleReporter(console: Console, base64Encoder: Base64Encoder) {
             "            💾  You can find the original screenshot here: " + screenshot.recordedScreenshotPath)
           console.showError(
             "            🆕  You can find the new recorded screenshot here: " + screenshot.temporalScreenshotPath)
+          showBase64ErrorIfIsNeeded(comparision,
+                                    shouldPrintBase64Error,
+                                    outputFolder)
         case DifferentImageDimensions(screenshot,
                                       originalDimension,
                                       newDimension) => {
@@ -49,10 +45,19 @@ class ConsoleReporter(console: Console, base64Encoder: Base64Encoder) {
     }
   }
 
+  private def showBase64ErrorIfIsNeeded(
+      comparision: ScreenshotsComparisionResult,
+      shouldPrintBase64Error: Boolean,
+      outputFolder: String) = {
+    if (shouldPrintBase64Error) {
+      showBase64Error(comparision, outputFolder)
+    }
+  }
+
   private def showBase64Error(comparision: ScreenshotsComparisionResult,
                               outputFolder: String): Unit = {
     console.show(
-      "🤖  The option printBase64 is enabled. In order to see the generated diff images, run the following commands in your terminal:")
+      "\n🤖  The option printBase64 is enabled. In order to see the generated diff images, run the following commands in your terminal:")
     console.lineBreak()
     comparision.screenshots.foreach(screenshot => {
       showScreenshotBase64Error(outputFolder, screenshot)
@@ -76,7 +81,5 @@ class ConsoleReporter(console: Console, base64Encoder: Base64Encoder) {
         console.showError(
           "\t❌ Base64 image generation error, image source not found.")
     }
-
-    console.lineBreak()
   }
 }
