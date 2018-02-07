@@ -1,24 +1,13 @@
 package com.karumi.shot
 
 import com.karumi.shot.android.Adb
+import com.karumi.shot.base64.Base64Encoder
 import com.karumi.shot.domain.Config
 import com.karumi.shot.reports.{ConsoleReporter, ExecutionReporter}
-import com.karumi.shot.screenshots.{
-  ScreenshotsComparator,
-  ScreenshotsDiffGenerator,
-  ScreenshotsSaver
-}
-import com.karumi.shot.tasks.{
-  DownloadScreenshotsTask,
-  ExecuteScreenshotTests,
-  RemoveScreenshotsTask
-}
+import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsDiffGenerator, ScreenshotsSaver}
+import com.karumi.shot.tasks.{DownloadScreenshotsTask, ExecuteScreenshotTests, RemoveScreenshotsTask}
 import com.karumi.shot.ui.Console
-import org.gradle.api.artifacts.{
-  Dependency,
-  DependencyResolutionListener,
-  ResolvableDependencies
-}
+import org.gradle.api.artifacts.{Dependency, DependencyResolutionListener, ResolvableDependencies}
 import org.gradle.api.{Plugin, Project}
 import org.gradle.tooling.GradleConnector
 import org.gradle.tooling.model.build.BuildEnvironment
@@ -31,6 +20,7 @@ object ShotPlugin {
 class ShotPlugin extends Plugin[Project] {
 
   private val console = new Console
+  private val base64Encoder = new Base64Encoder
   private lazy val shot: Shot =
     new Shot(new Adb,
              new Files,
@@ -39,7 +29,7 @@ class ShotPlugin extends Plugin[Project] {
              new ScreenshotsSaver,
              console,
              new ExecutionReporter,
-             new ConsoleReporter(console))
+             new ConsoleReporter(console, base64Encoder))
 
   override def apply(project: Project): Unit = {
     configureAdb(project)

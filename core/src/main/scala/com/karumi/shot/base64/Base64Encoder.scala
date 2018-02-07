@@ -6,7 +6,7 @@ import javax.imageio.ImageIO
 
 import org.apache.commons.io.Charsets
 
-object Base64Encoder {
+class Base64Encoder {
 
   def base64FromFile(filePath: String): Option[String] = {
     var outputStream: ByteArrayOutputStream = null

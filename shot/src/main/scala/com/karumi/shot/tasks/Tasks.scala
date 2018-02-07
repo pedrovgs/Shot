@@ -1,12 +1,9 @@
 package com.karumi.shot.tasks
 
 import com.karumi.shot.android.Adb
+import com.karumi.shot.base64.Base64Encoder
 import com.karumi.shot.reports.{ConsoleReporter, ExecutionReporter}
-import com.karumi.shot.screenshots.{
-  ScreenshotsComparator,
-  ScreenshotsDiffGenerator,
-  ScreenshotsSaver
-}
+import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsDiffGenerator, ScreenshotsSaver}
 import com.karumi.shot.ui.Console
 import com.karumi.shot.{Files, Shot, ShotExtension}
 import org.gradle.api.{DefaultTask, GradleException}
@@ -15,6 +12,7 @@ import org.gradle.api.tasks.TaskAction
 abstract class ShotTask() extends DefaultTask {
 
   private val console = new Console
+  private val base64Encoder = new Base64Encoder
   protected val shot: Shot =
     new Shot(new Adb,
              new Files,
@@ -23,7 +21,7 @@ abstract class ShotTask() extends DefaultTask {
              new ScreenshotsSaver,
              console,
              new ExecutionReporter,
-             new ConsoleReporter(console))
+             new ConsoleReporter(console, base64Encoder))
   protected val shotExtension: ShotExtension =
     getProject.getExtensions.findByType(classOf[ShotExtension])
 
