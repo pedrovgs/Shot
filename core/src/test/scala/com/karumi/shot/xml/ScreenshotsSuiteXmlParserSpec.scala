@@ -31,7 +31,7 @@ class ScreenshotsSuiteXmlParserSpec
   it should "parse a regular metadata file" in {
     val xml = testResourceContent("/screenshots-metadata/metadata.xml")
     val viewHierarchyContent =
-      testResourceContent("/screenshots-metadata/view-hierarchy.xml")
+      testResourceContent("/screenshots-metadata/view-hierarchy.json")
 
     val screenshotsWithoutSize =
       parseScreenshots(xml,
@@ -51,7 +51,7 @@ class ScreenshotsSuiteXmlParserSpec
     firstScreenshot.testName shouldBe "showsSuperHeroesIfThereAreSomeSuperHeroes"
     firstScreenshot.tilesDimension.width shouldBe 2
     firstScreenshot.tilesDimension.height shouldBe 3
-    firstScreenshot.viewHierarchy shouldBe "com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_dump.xml"
+    firstScreenshot.viewHierarchy shouldBe "com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_dump.json"
     firstScreenshot.absoluteFileNames shouldBe Seq(
       "/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes.png",
       "/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_0_1.png",
