@@ -32,17 +32,16 @@ object ShotPlugin {
 class ShotPlugin extends Plugin[Project] {
 
   private val console = new Console
-  private val base64Encoder = new Base64Encoder
   private lazy val shot: Shot =
     new Shot(
       new Adb,
       new Files,
       new ScreenshotsComparator,
-      new ScreenshotsDiffGenerator,
+      new ScreenshotsDiffGenerator(new Base64Encoder),
       new ScreenshotsSaver,
       console,
       new ExecutionReporter,
-      new ConsoleReporter(console, base64Encoder)
+      new ConsoleReporter(console)
     )
 
   override def apply(project: Project): Unit = {

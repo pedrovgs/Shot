@@ -16,17 +16,16 @@ import org.gradle.api.tasks.TaskAction
 abstract class ShotTask() extends DefaultTask {
 
   private val console = new Console
-  private val base64Encoder = new Base64Encoder
   protected val shot: Shot =
     new Shot(
       new Adb,
       new Files,
       new ScreenshotsComparator,
-      new ScreenshotsDiffGenerator,
+      new ScreenshotsDiffGenerator(new Base64Encoder),
       new ScreenshotsSaver,
       console,
       new ExecutionReporter,
-      new ConsoleReporter(console, base64Encoder)
+      new ConsoleReporter(console)
     )
   protected val shotExtension: ShotExtension =
     getProject.getExtensions.findByType(classOf[ShotExtension])

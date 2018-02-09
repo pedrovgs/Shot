@@ -65,7 +65,8 @@ sealed trait ScreenshotComparisionError
 case class ScreenshotNotFound(screenshot: Screenshot)
     extends ScreenshotComparisionError
 
-case class DifferentScreenshots(screenshot: Screenshot)
+case class DifferentScreenshots(screenshot: Screenshot,
+                                base64Diff: Option[String] = None)
     extends ScreenshotComparisionError
 
 case class DifferentImageDimensions(screenshot: Screenshot,

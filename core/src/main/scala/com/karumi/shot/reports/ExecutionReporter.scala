@@ -170,7 +170,7 @@ class ExecutionReporter {
     errors.find {
       case ScreenshotNotFound(error) => screenshot == error
       case DifferentImageDimensions(error, _, _) => screenshot == error
-      case DifferentScreenshots(error) => screenshot == error
+      case DifferentScreenshots(error, _) => screenshot == error
       case _ => false
     }
 
@@ -178,11 +178,11 @@ class ExecutionReporter {
       error: Option[ScreenshotComparisionError]): String =
     error
       .map {
-        case ScreenshotNotFound(screenshot) =>
+        case ScreenshotNotFound(_) =>
           "<p class='red-text'>🔎  Recorded screenshot not found.</p>"
-        case DifferentScreenshots(screenshot) =>
+        case DifferentScreenshots(_, _) =>
           "<p class='red-text'>🤔  The application UI has been modified.</p>"
-        case DifferentImageDimensions(screenshot, _, _) =>
+        case DifferentImageDimensions(_, _, _) =>
           "<p class='red-text'>📱  The size of the screenshot taken has changed.</p>"
         case _ =>
           "<p class='red-text'>😞  Ups! Something went wrong while comparing your screenshots but we couldn't identify the cause. If you think you've found a bug, please open an issue at https://github.com/karumi/shot.</p>"

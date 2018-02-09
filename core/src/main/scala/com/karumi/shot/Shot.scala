@@ -75,16 +75,16 @@ class Shot(adb: Adb,
       projectName,
       newScreenshotsVerificationReportFolder)
     val comparision = screenshotsComparator.compare(screenshots)
-    screenshotsDiffGenerator.generateDiffs(
+    val updatedComparision = screenshotsDiffGenerator.generateDiffs(
       comparision,
-      newScreenshotsVerificationReportFolder)
+      newScreenshotsVerificationReportFolder,
+      shouldPrintBase64Error)
     screenshotsSaver.copyRecordedScreenshotsToTheReportFolder(
       projectFolder,
       buildFolder + Config.verificationReportFolder + "/images/recorded/")
 
-    if (comparision.hasErrors) {
-      consoleReporter.showErrors(comparision,
-                                 shouldPrintBase64Error,
+    if (updatedComparision.hasErrors) {
+      consoleReporter.showErrors(updatedComparision,
                                  newScreenshotsVerificationReportFolder)
     } else {
       console.showSuccess("✅  Yeah!!! Your tests are passing.")
