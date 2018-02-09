@@ -1,11 +1,13 @@
 package com.karumi.shot
 
-import java.io.File
+import java.io.{ByteArrayOutputStream, File, FileInputStream, InputStream}
+import java.util.Base64
+import javax.imageio.ImageIO
 
 import com.karumi.shot.android.Adb
 import com.karumi.shot.domain._
 import com.karumi.shot.domain.model.{AppId, Folder, ScreenshotsSuite}
-import com.karumi.shot.reports.ExecutionReporter
+import com.karumi.shot.reports.{ConsoleReporter, ExecutionReporter}
 import com.karumi.shot.screenshots.{
   ScreenshotsComparator,
   ScreenshotsDiffGenerator,
@@ -13,7 +15,7 @@ import com.karumi.shot.screenshots.{
 }
 import com.karumi.shot.ui.Console
 import com.karumi.shot.xml.ScreenshotsSuiteXmlParser._
-import org.apache.commons.io.FileUtils
+import org.apache.commons.io.{Charsets, FileUtils}
 
 object Shot {
   private val appIdErrorMessage =
@@ -26,7 +28,8 @@ class Shot(adb: Adb,
            screenshotsDiffGenerator: ScreenshotsDiffGenerator,
            screenshotsSaver: ScreenshotsSaver,
            console: Console,
-           reporter: ExecutionReporter) {
+           reporter: ExecutionReporter,
+           consoleReporter: ConsoleReporter) {
 
   import Shot._
 
@@ -58,10 +61,12 @@ class Shot(adb: Adb,
     removeProjectTemporalScreenshotsFolder(projectFolder)
   }
 
-  def verifyScreenshots(appId: AppId,
-                        buildFolder: Folder,
-                        projectFolder: Folder,
-                        projectName: String): ScreenshotsComparisionResult = {
+  def verifyScreenshots(
+      appId: AppId,
+      buildFolder: Folder,
+      projectFolder: Folder,
+      projectName: String,
+      shouldPrintBase64Error: Boolean): ScreenshotsComparisionResult = {
     console.show("🔎  Comparing screenshots with previous ones.")
     val screenshots = readScreenshotsMetadata(projectFolder, projectName)
     val newScreenshotsVerificationReportFolder = buildFolder + Config.verificationReportFolder + "/images/"
@@ -70,15 +75,17 @@ class Shot(adb: Adb,
       projectName,
       newScreenshotsVerificationReportFolder)
     val comparision = screenshotsComparator.compare(screenshots)
-    screenshotsDiffGenerator.generateDiffs(
+    val updatedComparision = screenshotsDiffGenerator.generateDiffs(
       comparision,
-      newScreenshotsVerificationReportFolder)
+      newScreenshotsVerificationReportFolder,
+      shouldPrintBase64Error)
     screenshotsSaver.copyRecordedScreenshotsToTheReportFolder(
       projectFolder,
       buildFolder + Config.verificationReportFolder + "/images/recorded/")
 
-    if (comparision.hasErrors) {
-      showErrors(comparision)
+    if (updatedComparision.hasErrors) {
+      consoleReporter.showErrors(updatedComparision,
+                                 newScreenshotsVerificationReportFolder)
     } else {
       console.showSuccess("✅  Yeah!!! Your tests are passing.")
     }
@@ -130,40 +137,6 @@ class Shot(adb: Adb,
         projectFolder + Config.pulledScreenshotsFolder + screenshot.viewHierarchy)
       parseScreenshotSize(screenshot, viewHierarchyContent)
     }.toList
-  }
-
-  private def showErrors(comparision: ScreenshotsComparisionResult) = {
-    console.showError(
-      "❌  Hummmm...the following screenshot tests are broken:\n")
-    comparision.errors.foreach { error =>
-      error match {
-        case ScreenshotNotFound(screenshot) =>
-          console.showError(
-            "   🔎  Recorded screenshot not found for test: " + screenshot.name)
-        case DifferentScreenshots(screenshot) =>
-          console.showError(
-            "   🤔  The application UI has been modified for test: " + screenshot.name)
-          console.showError(
-            "            💾  You can find the original screenshot here: " + screenshot.recordedScreenshotPath)
-          console.showError(
-            "            🆕  You can find the new recorded screenshot here: " + screenshot.temporalScreenshotPath)
-        case DifferentImageDimensions(screenshot,
-                                      originalDimension,
-                                      newDimension) => {
-          console.showError(
-            "   📱  The size of the screenshot taken has changed for test: " + screenshot.name)
-          console.showError(
-            "            💾  Original screenshot dimension: " + originalDimension + ". You can find the original screenshot here: " + screenshot.recordedScreenshotPath)
-          console.showError(
-            "            🆕  New recorded screenshot dimension: " + newDimension + ". You can find the new recorded screenshot here: " + screenshot.temporalScreenshotPath)
-        }
-
-        case _ =>
-          console.showError(
-            "   😞  Ups! Something went wrong while comparing your screenshots but we couldn't identify the cause. If you think you've found a bug, please open an issue at https://github.com/karumi/shot.")
-      }
-      console.lineBreak()
-    }
   }
 
   private def removeProjectTemporalScreenshotsFolder(projectFolder: Folder) = {
