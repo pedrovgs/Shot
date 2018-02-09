@@ -6,7 +6,7 @@ buildscript {
   }
   dependencies {
     classpath 'com.neenbedankt.gradle.plugins:android-apt:1.7'
-    classpath 'com.karumi:shot:2.0.0'
+    classpath 'com.karumi:shot:2.0.1-SNAPSHOT'
   }
 }
 
