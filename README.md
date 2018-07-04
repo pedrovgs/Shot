@@ -1,4 +1,4 @@
-# ![Karumi logo][karumilogo]Shot [![Build Status](https://www.bitrise.io/app/49910f35376e4ae2/status.svg?token=hn-6eEBV8CazPN-MsyUdHA&branch=master)](https://www.bitrise.io/app/49910f35376e4ae2)
+# ![Karumi logo][karumilogo]Shot
 
 Shot is a [Gradle](https://gradle.org/) plugin that simplifies the execution of screenshot tests using [Screenshot Tests For Android by Facebook](http://facebook.github.io/screenshot-tests-for-android/).
 
