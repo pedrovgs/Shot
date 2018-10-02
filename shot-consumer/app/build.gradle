@@ -14,12 +14,12 @@ apply plugin: 'com.android.application'
 apply plugin: 'shot'
 
 android {
-  compileSdkVersion 23
-  buildToolsVersion '26.0.2'
+  compileSdkVersion 28
+  buildToolsVersion '28.0.2'
   defaultConfig {
     applicationId 'com.karumi.screenshot'
     minSdkVersion 16
-    targetSdkVersion 23
+    targetSdkVersion 28
     versionCode 1
     versionName "1.0"
     testInstrumentationRunner 'com.karumi.screenshot.ScreenshotTestRunner'
@@ -40,8 +40,8 @@ android {
 
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
-  implementation 'com.android.support:appcompat-v7:23.1.1'
-  implementation 'com.android.support:design:23.1.1'
+  implementation 'com.android.support:appcompat-v7:28.0.0'
+  implementation 'com.android.support:design:28.0.0'
   implementation 'com.squareup.picasso:picasso:2.5.2'
   implementation 'com.jakewharton:butterknife:7.0.1'
   implementation 'com.google.dagger:dagger:2.0.2'
