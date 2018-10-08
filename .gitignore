@@ -29,3 +29,8 @@ gradle-app.setting
 
 repo/
 
+
+### Visual Studio
+
+.project
+core/
