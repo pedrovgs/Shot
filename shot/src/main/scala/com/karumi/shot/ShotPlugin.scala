@@ -89,51 +89,6 @@ class ShotPlugin extends Plugin[Project] {
     project.getExtensions.add(name, new ShotExtension())
   }
 
-  private def isLegacyGradleVersion(gradleVersion: String): Boolean = {
-    val versionNumbers = gradleVersion.split('.')
-    var major = 0
-    var minor = 0
-
-    if (versionNumbers.length > 0) {
-      major = versionNumbers(0).toInt
-    }
-    if (versionNumbers.length > 1) {
-      minor = versionNumbers(1).toInt
-    }
-
-    (major, minor) match {
-      case (major, _)
-          if major > ShotPlugin.minGradleVersionSupportedMajorNumber =>
-        false
-      case (major, minor)
-          if major == ShotPlugin.minGradleVersionSupportedMajorNumber
-            && minor >= ShotPlugin.minGradleVersionSupportedMinorNumber =>
-        false
-      case _ => true
-    }
-
-  }
-
-  private def androidDependencyMode(project: Project): String = {
-    val connection = GradleConnector.newConnector
-      .forProjectDirectory(project.getProjectDir)
-      .connect
-
-    try {
-      val gradleVersion = connection
-        .getModel(classOf[BuildEnvironment])
-        .getGradle
-        .getGradleVersion
-
-      if (isLegacyGradleVersion(gradleVersion)) {
-        return Config.androidDependencyModeLegacy
-      }
-
-    } finally connection.close()
-
-    Config.androidDependencyMode
-  }
-
   private def addAndroidTestDependency(project: Project): Unit = {
 
     project.getGradle.addListener(new DependencyResolutionListener() {
@@ -153,7 +108,7 @@ class ShotPlugin extends Plugin[Project] {
         })
 
         if (!facebookDependencyHasBeenAdded) {
-          val dependencyMode = androidDependencyMode(project)
+          val dependencyMode = Config.androidDependencyMode
           val dependencyName = Config.androidDependency
           val dependenciesHandler = project.getDependencies
 

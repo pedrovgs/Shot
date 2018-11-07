@@ -8,10 +8,6 @@ class ConfigSpec extends FlatSpec with Matchers {
     Config.androidDependency shouldBe "com.facebook.testing.screenshot:core:0.8.0"
   }
 
-  it should "add the dependency using the androidTestCompile mode" in {
-    Config.androidDependencyModeLegacy shouldBe "androidTestCompile"
-  }
-
   it should "add the dependency using the androidTestImplementation mode" in {
     Config.androidDependencyMode shouldBe "androidTestImplementation"
   }

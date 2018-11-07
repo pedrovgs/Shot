@@ -15,7 +15,6 @@ object model {
 }
 
 object Config {
-  val androidDependencyModeLegacy: FilePath = "androidTestCompile"
   val androidDependencyMode: FilePath = "androidTestImplementation"
   val androidDependencyGroup: String = "com.facebook.testing.screenshot"
   val androidDependencyName: String = "core"
