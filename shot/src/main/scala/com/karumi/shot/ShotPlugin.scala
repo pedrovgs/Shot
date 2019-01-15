@@ -61,18 +61,19 @@ class ShotPlugin extends Plugin[Project] {
   }
 
   private def addTasks(project: Project): Unit = {
+    val extension =
+      project.getExtensions.getByType[ShotExtension](classOf[ShotExtension])
     project.getTasks
       .create(RemoveScreenshotsTask.name, classOf[RemoveScreenshotsTask])
     val pullScreenshots = project.getTasks
       .create(DownloadScreenshotsTask.name, classOf[DownloadScreenshotsTask])
     val executeScreenshot = project.getTasks
       .create(ExecuteScreenshotTests.name, classOf[ExecuteScreenshotTests])
-    executeScreenshot.dependsOn(RemoveScreenshotsTask.name)
-    val extension =
-      project.getExtensions.getByType[ShotExtension](classOf[ShotExtension])
+    if (extension.runInstrumentation) {
+      executeScreenshot.dependsOn(RemoveScreenshotsTask.name)
+    }
     val instrumentationTask = extension.getOptionInstrumentationTestTask
     val packageTask = extension.getOptionPackageTestApkTask
-
     if (extension.runInstrumentation) {
       (instrumentationTask, packageTask) match {
         case (Some(instTask), Some(packTask)) =>
