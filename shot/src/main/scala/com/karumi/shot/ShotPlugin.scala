@@ -61,27 +61,31 @@ class ShotPlugin extends Plugin[Project] {
   }
 
   private def addTasks(project: Project): Unit = {
+    val extension =
+      project.getExtensions.getByType[ShotExtension](classOf[ShotExtension])
     project.getTasks
       .create(RemoveScreenshotsTask.name, classOf[RemoveScreenshotsTask])
     val pullScreenshots = project.getTasks
       .create(DownloadScreenshotsTask.name, classOf[DownloadScreenshotsTask])
     val executeScreenshot = project.getTasks
       .create(ExecuteScreenshotTests.name, classOf[ExecuteScreenshotTests])
-    executeScreenshot.dependsOn(RemoveScreenshotsTask.name)
-    val extension =
-      project.getExtensions.getByType[ShotExtension](classOf[ShotExtension])
+    if (extension.runInstrumentation) {
+      executeScreenshot.dependsOn(RemoveScreenshotsTask.name)
+    }
     val instrumentationTask = extension.getOptionInstrumentationTestTask
     val packageTask = extension.getOptionPackageTestApkTask
-    (instrumentationTask, packageTask) match {
-      case (Some(instTask), Some(packTask)) =>
-        executeScreenshot.dependsOn(instTask)
-        pullScreenshots.dependsOn(packTask)
-      case _ =>
-        executeScreenshot.dependsOn(Config.defaultInstrumentationTestTask)
-        pullScreenshots.dependsOn(Config.defaultPackageTestApkTask)
-    }
+    if (extension.runInstrumentation) {
+      (instrumentationTask, packageTask) match {
+        case (Some(instTask), Some(packTask)) =>
+          executeScreenshot.dependsOn(instTask)
+          pullScreenshots.dependsOn(packTask)
+        case _ =>
+          executeScreenshot.dependsOn(Config.defaultInstrumentationTestTask)
+          pullScreenshots.dependsOn(Config.defaultPackageTestApkTask)
+      }
 
-    executeScreenshot.dependsOn(DownloadScreenshotsTask.name)
+      executeScreenshot.dependsOn(DownloadScreenshotsTask.name)
+    }
   }
 
   private def addExtensions(project: Project): Unit = {

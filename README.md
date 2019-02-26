@@ -191,7 +191,7 @@ You can run a single test or test class, just add the `android.testInstrumentati
 If you have included in your project a dependency to related to the dexmaker and you are facing this exception: ``com.android.dx.util.DexException: Multiple dex files define``, you can customize how the facebook SDK is added to your project and exclude the dexmaker library as follows:
 
  ```groovy
-   androidTestCompile ('com.facebook.testing.screenshot:core:0.6.0') {
+   androidTestCompile ('com.facebook.testing.screenshot:core:0.8.0') {
      exclude group: 'com.crittercism.dexmaker', module: 'dexmaker'
      exclude group: 'com.crittercism.dexmaker', module: 'dexmaker-dx'
    }
@@ -199,7 +199,7 @@ If you have included in your project a dependency to related to the dexmaker and
  
 The Shot plugin automatically detects if you are including a compatible version of the screenshot facebook library in your project and, if it's present, it will not include it again.
  
-**Disclaimer**: The only compatible version of the facebook library is 0.6.0 right now, so if you are using any other version we highly encourage to match it with the one Shot is using to avoid problems.
+**Disclaimer**: The only compatible version of the facebook library is 0.8.0 right now, so if you are using any other version we highly encourage to match it with the one Shot is using to avoid problems.
 
 ## iOS support
 
