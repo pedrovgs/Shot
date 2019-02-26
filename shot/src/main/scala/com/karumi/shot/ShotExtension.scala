@@ -8,9 +8,10 @@ object ShotExtension {
 
 class ShotExtension(@BeanProperty var appId: String,
                     @BeanProperty var instrumentationTestTask: String,
-                    @BeanProperty var packageTestApkTask: String) {
+                    @BeanProperty var packageTestApkTask: String,
+                    @BeanProperty var runInstrumentation: Boolean) {
 
-  def this() = this(null, null, null)
+  def this() = this(null, null, null, true)
 
   def getOptionAppId: Option[String] = Option(getAppId)
 
