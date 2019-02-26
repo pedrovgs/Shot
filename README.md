@@ -34,7 +34,7 @@ Setup the Gradle plugin:
     // ...
     dependencies {
       // ...
-      classpath 'com.karumi:shot:2.1.1'
+      classpath 'com.karumi:shot:2.2.0'
     }
   }
   apply plugin: 'shot'
@@ -55,6 +55,15 @@ This plugin sets up a few convenience commands you can list executing ``./gradle
     packageTestApkTask = 'package<FlavorName><BuildTypeName>AndroidTest'
   }
 ```
+
+If for some reason you are running your tests on a different machine and you want to skip the instrumentation tests execution and just compare the sources remeber you can use the following shot configuration:
+
+```groovy
+  shot {
+    runInstrumentationTests = false
+  }
+```
+
 
 The flavor used is the one selected to execute your screenshot tests.
 
