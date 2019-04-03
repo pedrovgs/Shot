@@ -60,7 +60,7 @@ If for some reason you are running your tests on a different machine and you wan
 
 ```groovy
   shot {
-    runInstrumentationTests = false
+    runInstrumentation = false
   }
 ```
 
