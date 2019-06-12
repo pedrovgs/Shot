@@ -34,3 +34,7 @@ repo/
 
 .project
 core/
+
+### OSX
+
+.DS_Store

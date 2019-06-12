@@ -3,14 +3,19 @@ buildscript {
     mavenCentral()
     maven { url "https://jitpack.io" }
     maven { url uri('../../repo') }
+    jcenter()
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+    google()
   }
   dependencies {
     classpath 'com.neenbedankt.gradle.plugins:android-apt:1.7'
     classpath 'com.karumi:shot:2.2.1-SNAPSHOT'
+    classpath 'com.jaredsburrows:gradle-spoon-plugin:1.5.0'
   }
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'com.jaredsburrows.spoon'
 apply plugin: 'shot'
 
 android {
@@ -69,6 +74,7 @@ dependencies {
     exclude module: 'support-v4'
   }
   androidTestImplementation('com.android.support.test.espresso:espresso-intents:2.2.1')
+  androidTestCompile 'com.squareup.spoon:spoon-client:1.7.1'
 }
 
 configurations.all {
@@ -77,4 +83,6 @@ configurations.all {
 
 shot {
   appId = 'com.karumi.screenshot'
+  instrumentationTestTask = 'spoonDebugAndroidTest'
+  packageTestApkTask = 'packageDebugAndroidTest'
 }
