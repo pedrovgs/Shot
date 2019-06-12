@@ -15,74 +15,123 @@ buildscript {
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.jaredsburrows.spoon'
 apply plugin: 'shot'
 
 android {
-  compileSdkVersion 23
-  buildToolsVersion '26.0.2'
-  defaultConfig {
-    applicationId 'com.karumi.screenshot'
-    minSdkVersion 16
-    targetSdkVersion 23
-    versionCode 1
-    versionName "1.0"
-    testInstrumentationRunner 'com.karumi.screenshot.ScreenshotTestRunner'
-  }
-  buildTypes {
-    release {
-      minifyEnabled false
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.karumi"
+        minSdkVersion 16
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "com.karumi.TestRunner"
+        multiDexEnabled true
     }
-  }
-  lintOptions {
-    abortOnError false
-  }
-  adbOptions {
-    timeOutInMs 20 * 60 * 1000
-    installOptions "-d","-t"
-  }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
 }
 
 dependencies {
-  implementation fileTree(dir: 'libs', include: ['*.jar'])
-  implementation 'com.android.support:appcompat-v7:23.1.1'
-  implementation 'com.android.support:design:23.1.1'
-  implementation 'com.squareup.picasso:picasso:2.5.2'
-  implementation 'com.jakewharton:butterknife:7.0.1'
-  implementation 'com.google.dagger:dagger:2.0.2'
-  implementation 'org.glassfish:javax.annotation:10.0-b28'
-  annotationProcessor 'com.google.dagger:dagger-compiler:2.0.2'
-  annotationProcessor 'com.jakewharton:butterknife:7.0.1'
-  testImplementation 'com.google.dagger:dagger-compiler:2.0.2'
-  testImplementation 'junit:junit:4.12'
-  androidTestImplementation 'com.github.fabioCollini:DaggerMock:0.8.4'
-  androidTestAnnotationProcessor 'com.google.dagger:dagger-compiler:2.0.2'
-  androidTestImplementation 'com.google.dexmaker:dexmaker:1.2'
-  androidTestImplementation('com.google.dexmaker:dexmaker-mockito:1.2') {
-    exclude group: 'org.hamcrest', module: 'hamcrest-core'
-  }
-  androidTestImplementation 'com.android.support.test:runner:0.4.1'
-  androidTestImplementation 'com.android.support.test:rules:0.4.1'
-  androidTestImplementation 'org.mockito:mockito-core:1.10.19'
-  androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.1') {
-    exclude group: 'javax.inject', module: 'javax.inject'
-    exclude group: 'com.squareup', module: 'javawriter'
-  }
-  androidTestImplementation('com.android.support.test.espresso:espresso-contrib:2.2.1') {
-    exclude module: 'support-annotations'
-    exclude module: 'recyclerview-v7'
-    exclude module: 'support-v4'
-  }
-  androidTestImplementation('com.android.support.test.espresso:espresso-intents:2.2.1')
-  androidTestCompile 'com.squareup.spoon:spoon-client:1.7.1'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:23.1.1'
+    implementation 'com.android.support:design:23.1.1'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.jakewharton:butterknife:7.0.1'
+    implementation 'com.google.dagger:dagger:2.0.2'
+    implementation 'org.glassfish:javax.annotation:10.0-b28'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.0.2'
+    annotationProcessor 'com.jakewharton:butterknife:7.0.1'
+    testImplementation 'com.google.dagger:dagger-compiler:2.0.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.github.fabioCollini:DaggerMock:0.8.4'
+    androidTestAnnotationProcessor 'com.google.dagger:dagger-compiler:2.0.2'
+    androidTestImplementation 'com.google.dexmaker:dexmaker:1.2'
+    androidTestImplementation('com.google.dexmaker:dexmaker-mockito:1.2') {
+        exclude group: 'org.hamcrest', module: 'hamcrest-core'
+    }
+    androidTestImplementation 'com.android.support.test:runner:0.4.1'
+    androidTestImplementation 'com.android.support.test:rules:0.4.1'
+    androidTestImplementation 'org.mockito:mockito-core:1.10.19'
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.1') {
+        exclude group: 'javax.inject', module: 'javax.inject'
+        exclude group: 'com.squareup', module: 'javawriter'
+    }
+    androidTestImplementation('com.android.support.test.espresso:espresso-contrib:2.2.1') {
+        exclude module: 'support-annotations'
+        exclude module: 'recyclerview-v7'
+        exclude module: 'support-v4'
+    }
+    androidTestImplementation('com.android.support.test.espresso:espresso-intents:2.2.1')
+    androidTestCompile 'com.squareup.spoon:spoon-client:1.7.1'
 }
 
-configurations.all {
-  resolutionStrategy.force 'com.android.support:support-annotations:23.0.1'
+configurations {
+    ktlint
+}
+
+dependencies {
+    ktlint 'com.github.shyiko:ktlint:0.29.0'
+
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
+
+    implementation 'com.github.salomonbrys.kodein:kodein:4.1.0'
+    implementation 'com.github.salomonbrys.kodein:kodein-core:4.1.0'
+    implementation 'com.github.salomonbrys.kodein:kodein-android:4.1.0'
+    implementation 'com.github.salomonbrys.kodein:kodein-conf:4.1.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1"
+    implementation "android.arch.lifecycle:extensions:1.1.1"
+    kapt "android.arch.lifecycle:compiler:1.1.1"
+
+    testImplementation 'junit:junit:4.12'
+
+    androidTestImplementation "androidx.test:runner:1.2.0"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.2.0"
+    androidTestImplementation "androidx.test.espresso:espresso-intents:3.2.0"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:3.2.0"
+    androidTestImplementation "androidx.test:rules:1.2.0"
+    androidTestImplementation "androidx.test.ext:junit:1.1.1"
+    androidTestImplementation "asm:asm:3.3.1"
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.1.1"
+    androidTestImplementation "com.github.tmurakami:dexopener:2.0.0"
+    androidTestImplementation "org.mockito:mockito-android:2.28.2"
+    androidTestImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"
+    androidTestImplementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.0.0'
 }
 
 shot {
   appId = 'com.karumi.screenshot'
   instrumentationTestTask = 'spoonDebugAndroidTest'
-  packageTestApkTask = 'packageDebugAndroidTest'
+}
+
+task ktlint(type: JavaExec) {
+    main = "com.github.shyiko.ktlint.Main"
+    classpath = configurations.ktlint
+    args "src/**/*.kt"
+}
+
+check.dependsOn ktlint
+
+task ktlintFormat(type: JavaExec) {
+    main = "com.github.shyiko.ktlint.Main"
+    classpath = configurations.ktlint
+    args "-F", "src/**/*.kt"
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompile).all {
+    kotlinOptions.freeCompilerArgs += ["-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi"]
 }
