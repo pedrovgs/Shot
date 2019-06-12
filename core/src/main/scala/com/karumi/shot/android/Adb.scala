@@ -9,16 +9,23 @@ object Adb {
 }
 
 class Adb {
+  def devices: List[String] = {
+    executeAdbCommandWithResult("devices").split('\n').toList.drop(1).map { line =>
+      line.split('\t').toList.head
+    }
+  }
 
-  def pullScreenshots(screenshotsFolder: Folder, appId: AppId): Unit =
+  def pullScreenshots(device: String, screenshotsFolder: Folder, appId: AppId): Unit =
     executeAdbCommand(
-      "pull /sdcard/screenshots/" + appId + ".test/screenshots-default/ " + screenshotsFolder)
+      s"-s $device pull /sdcard/screenshots/$appId.test/screenshots-default/ $screenshotsFolder")
 
-  def clearScreenshots(appId: AppId): Unit =
-    executeAdbCommand(
-      "shell rm -r /sdcard/screenshots/" + appId + ".test/screenshots-default/")
+  def clearScreenshots(device: String, appId: AppId): Unit =
+    executeAdbCommand(s"-s $device shell rm -r /sdcard/screenshots/$appId.test/screenshots-default/")
 
   private def executeAdbCommand(command: String): Int =
-    (Adb.adbBinaryPath + " " + command).!
+    s"${Adb.adbBinaryPath} $command".!
+
+  private def executeAdbCommandWithResult(command: String): String =
+    s"${Adb.adbBinaryPath} $command".!!
 
 }

@@ -39,7 +39,7 @@ class Shot(adb: Adb,
 
   def downloadScreenshots(projectFolder: Folder, appId: Option[AppId]): Unit =
     executeIfAppIdIsValid(appId) { applicationId =>
-      console.show("⬇️  Pulling screenshots from your connected device!")
+      console.show("⬇️  Pulling screenshots from your connected devices!")
       pullScreenshots(projectFolder, applicationId)
     }
 
@@ -107,8 +107,9 @@ class Shot(adb: Adb,
       case None => console.showError(appIdErrorMessage)
     }
 
-  private def clearScreenshots(appId: AppId): Unit =
-    adb.clearScreenshots(appId)
+  private def clearScreenshots(appId: AppId): Unit = adb.devices.foreach { device =>
+    adb.clearScreenshots(device, appId)
+  }
 
   private def createScreenshotsFolderIfDoesNotExist(screenshotsFolder: AppId) = {
     val folder = new File(screenshotsFolder)
@@ -119,7 +120,9 @@ class Shot(adb: Adb,
     val screenshotsFolder = projectFolder + Config.pulledScreenshotsFolder
     createScreenshotsFolderIfDoesNotExist(
       projectFolder + Config.screenshotsFolderName)
-    adb.pullScreenshots(screenshotsFolder, appId)
+    adb.devices.foreach { device =>
+      adb.pullScreenshots(device, screenshotsFolder, appId)
+    }
   }
 
   private def readScreenshotsMetadata(
