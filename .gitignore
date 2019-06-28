@@ -38,3 +38,5 @@ core/
 ### OSX
 
 .DS_Store
+
+*.output

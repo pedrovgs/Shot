@@ -69,12 +69,15 @@ class ShotPlugin extends Plugin[Project] {
       .create(DownloadScreenshotsTask.name, classOf[DownloadScreenshotsTask])
     val executeScreenshot = project.getTasks
       .create(ExecuteScreenshotTests.name, classOf[ExecuteScreenshotTests])
-    val instrumentationTask = extension.getOptionInstrumentationTestTask.getOrElse(Config.defaultInstrumentationTestTask)
-    executeScreenshot.dependsOn(instrumentationTask)
-    downloadScreenshots.mustRunAfter(instrumentationTask)
-    removeScreenshots.mustRunAfter(downloadScreenshots)
-    executeScreenshot.dependsOn(downloadScreenshots)
-    executeScreenshot.dependsOn(removeScreenshots)
+    val instrumentationTask = extension.getOptionInstrumentationTestTask
+      .getOrElse(Config.defaultInstrumentationTestTask)
+    if (extension.runInstrumentation) {
+      executeScreenshot.dependsOn(instrumentationTask)
+      executeScreenshot.dependsOn(downloadScreenshots)
+      executeScreenshot.dependsOn(removeScreenshots)
+      downloadScreenshots.mustRunAfter(instrumentationTask)
+      removeScreenshots.mustRunAfter(downloadScreenshots)
+    }
   }
 
   private def addExtensions(project: Project): Unit = {

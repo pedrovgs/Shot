@@ -2,6 +2,7 @@ package com.karumi.shot
 
 import com.karumi.shot.android.Adb
 import com.karumi.shot.domain.Config
+import com.karumi.shot.domain.model.AppId
 import com.karumi.shot.mothers.AppIdMother
 import com.karumi.shot.reports.{ConsoleReporter, ExecutionReporter}
 import com.karumi.shot.screenshots.{
@@ -49,21 +50,28 @@ class ShotSpec
   }
 
   "Shot" should "should delegate screenshots cleaning to Adb" in {
-    val appId = AppIdMother.anyAppId
+    val appId: Option[AppId] = AppIdMother.anyAppId
+    val device: String = "emulator-5554"
+    (adb.devices _).expects().returns(List(device))
 
-    (adb.clearScreenshots _).expects(appId.get)
+    (adb.clearScreenshots _).expects(device, appId.get)
 
     shot.removeScreenshots(appId)
   }
 
   it should "pull the screenshots using the project metadata folder and the app id if" in {
     val appId = AppIdMother.anyAppId
+    val device = "emulator-5554"
     val projectFolder = ProjectFolderMother.anyProjectFolder
-    val expectedScreenshotsFolder = projectFolder + Config
-      .pulledScreenshotsFolder
+    val expectedScreenshotsFolder = projectFolder + Config.screenshotsFolderName
+    val expectedOriginalMetadataFile = projectFolder + Config.metadataFileName
+    val expectedRenamedFile = projectFolder + Config.metadataFileName + "_" + device
+    (adb.devices _).expects().returns(List(device))
 
     (console.show _).expects(*)
-    (adb.pullScreenshots _).expects(expectedScreenshotsFolder, appId.get)
+    (adb.pullScreenshots _)
+      .expects(device, expectedScreenshotsFolder, appId.get)
+    (files.rename _).expects(expectedOriginalMetadataFile, expectedRenamedFile)
 
     shot.downloadScreenshots(projectFolder, appId)
   }
