@@ -123,7 +123,7 @@ class Shot(adb: Adb,
     }
   }
 
-  def renameMetadataFile(projectFolder: Folder, device: String): Unit = {
+  private def renameMetadataFile(projectFolder: Folder, device: String): Unit = {
     val metadataFilePath = projectFolder + Config.metadataFileName
     val newMetadataFilePath = metadataFilePath + "_" + device
     files.rename(metadataFilePath, newMetadataFilePath)
