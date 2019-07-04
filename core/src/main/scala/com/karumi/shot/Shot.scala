@@ -1,9 +1,6 @@
 package com.karumi.shot
 
-import java.io.{ByteArrayOutputStream, File, FileInputStream, InputStream}
-import java.util.Base64
-import javax.imageio.ImageIO
-
+import java.io.File
 import com.karumi.shot.android.Adb
 import com.karumi.shot.domain._
 import com.karumi.shot.domain.model.{AppId, Folder, ScreenshotsSuite}
@@ -15,7 +12,7 @@ import com.karumi.shot.screenshots.{
 }
 import com.karumi.shot.ui.Console
 import com.karumi.shot.xml.ScreenshotsSuiteXmlParser._
-import org.apache.commons.io.{Charsets, FileUtils}
+import org.apache.commons.io.FileUtils
 
 object Shot {
   private val appIdErrorMessage =
@@ -23,7 +20,7 @@ object Shot {
 }
 
 class Shot(adb: Adb,
-           fileReader: Files,
+           files: Files,
            screenshotsComparator: ScreenshotsComparator,
            screenshotsDiffGenerator: ScreenshotsDiffGenerator,
            screenshotsSaver: ScreenshotsSaver,
@@ -39,7 +36,7 @@ class Shot(adb: Adb,
 
   def downloadScreenshots(projectFolder: Folder, appId: Option[AppId]): Unit =
     executeIfAppIdIsValid(appId) { applicationId =>
-      console.show("⬇️  Pulling screenshots from your connected device!")
+      console.show("⬇️  Pulling screenshots from your connected devices!")
       pullScreenshots(projectFolder, applicationId)
     }
 
@@ -107,8 +104,10 @@ class Shot(adb: Adb,
       case None => console.showError(appIdErrorMessage)
     }
 
-  private def clearScreenshots(appId: AppId): Unit =
-    adb.clearScreenshots(appId)
+  private def clearScreenshots(appId: AppId): Unit = adb.devices.foreach {
+    device =>
+      adb.clearScreenshots(device, appId)
+  }
 
   private def createScreenshotsFolderIfDoesNotExist(screenshotsFolder: AppId) = {
     val folder = new File(screenshotsFolder)
@@ -116,30 +115,44 @@ class Shot(adb: Adb,
   }
 
   private def pullScreenshots(projectFolder: Folder, appId: AppId): Unit = {
-    val screenshotsFolder = projectFolder + Config.pulledScreenshotsFolder
-    createScreenshotsFolderIfDoesNotExist(
-      projectFolder + Config.screenshotsFolderName)
-    adb.pullScreenshots(screenshotsFolder, appId)
+    adb.devices.foreach { device =>
+      val screenshotsFolder = projectFolder + Config.screenshotsFolderName
+      createScreenshotsFolderIfDoesNotExist(screenshotsFolder)
+      adb.pullScreenshots(device, screenshotsFolder, appId)
+      renameMetadataFile(projectFolder, device)
+    }
+  }
+
+  private def renameMetadataFile(projectFolder: Folder, device: String): Unit = {
+    val metadataFilePath = projectFolder + Config.metadataFileName
+    val newMetadataFilePath = metadataFilePath + "_" + device
+    files.rename(metadataFilePath, newMetadataFilePath)
   }
 
   private def readScreenshotsMetadata(
       projectFolder: Folder,
       projectName: String): ScreenshotsSuite = {
-    val metadataFilePath = projectFolder + Config.metadataFileName
-    val metadataFileContent = fileReader.read(metadataFilePath)
-    val screenshotSuite = parseScreenshots(
-      metadataFileContent,
-      projectName,
-      projectFolder + Config.screenshotsFolderName,
-      projectFolder + Config.pulledScreenshotsFolder)
+    val screenshotsFolder = projectFolder + Config.pulledScreenshotsFolder
+    val filesInScreenshotFolder = new java.io.File(screenshotsFolder).listFiles
+    val metadataFiles = filesInScreenshotFolder.filter(file =>
+      file.getAbsolutePath.contains(Config.metadataFileName))
+    val screenshotSuite = metadataFiles.flatMap { metadataFilePath =>
+      val metadataFileContent =
+        files.read(metadataFilePath.getAbsolutePath)
+      parseScreenshots(metadataFileContent,
+                       projectName,
+                       projectFolder + Config.screenshotsFolderName,
+                       projectFolder + Config.pulledScreenshotsFolder)
+    }
     screenshotSuite.par.map { screenshot =>
-      val viewHierarchyContent = fileReader.read(
+      val viewHierarchyContent = files.read(
         projectFolder + Config.pulledScreenshotsFolder + screenshot.viewHierarchy)
       parseScreenshotSize(screenshot, viewHierarchyContent)
     }.toList
   }
 
-  private def removeProjectTemporalScreenshotsFolder(projectFolder: Folder) = {
+  private def removeProjectTemporalScreenshotsFolder(
+      projectFolder: Folder): Unit = {
     val projectTemporalScreenshots = new File(
       projectFolder + Config.pulledScreenshotsFolder)
 
