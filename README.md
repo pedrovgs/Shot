@@ -34,7 +34,7 @@ Setup the Gradle plugin:
     // ...
     dependencies {
       // ...
-      classpath 'com.karumi:shot:2.2.0'
+      classpath 'com.karumi:shot:3.0.0'
     }
   }
   apply plugin: 'shot'
@@ -165,7 +165,7 @@ Once you have a bunch of screenshot tests recorded you can easily verify if the 
 
 ## Executing tests in multiple devices
 
-If after some time writing screenshot tests your build takes too long to run our recommendation is to run your tests in multiple devices. To do this you can use [Composer](https://github.com/gojuno/composer) and the official [Gradle Plugin they provide](https://github.com/trevjonez/composer-gradle-plugin). Composer will take all your tests and will split the test suite execution between all the connected devices. **Remember, if you are going to use more than one device all the devices should use the same Android OS and the same screen resolution and density!** 
+If after some time writing screenshot tests your build takes too long to run our recommendation is to run your tests in multiple devices. **Sharding your tests execution will split your test suite into different devices so your tests execution time will be reduced. This feature is not designed to test the UI across different platforms or screen resolutions, to do that we'd recommend you to configure the size of the screenshot taken by modifing the view height and width.** To run your tests in multiple devices you can use [Composer](https://github.com/gojuno/composer) and the official [Gradle Plugin they provide](https://github.com/trevjonez/composer-gradle-plugin). Composer will take all your tests and will split the test suite execution between all the connected devices. **Remember, if you are going to use more than one device all the devices should use the same Android OS and the same screen resolution and density!** Keep also in mind composer needs Gradle 5.4.1 to be able to run your tests using multiple devices.
 
 Once you've configured composer to run your tests you only need to update Shot to use the composer task as the instrumentation test task as follows:
 
