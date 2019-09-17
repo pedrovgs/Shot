@@ -45,11 +45,11 @@ class ShotPlugin extends Plugin[Project] {
     )
 
   override def apply(project: Project): Unit = {
-    configureAdb(project)
     addExtensions(project)
     addAndroidTestDependency(project)
     project.afterEvaluate { project =>
       {
+        configureAdb(project)
         addTasks(project)
       }
     }
