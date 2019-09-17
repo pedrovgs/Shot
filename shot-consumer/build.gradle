@@ -6,7 +6,7 @@ buildscript {
         maven { url uri('../repo') }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.1'
+        classpath 'com.android.tools.build:gradle:3.5.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.karumi:shot:3.0.2-SNAPSHOT'
     }
