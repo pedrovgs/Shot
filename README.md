@@ -34,7 +34,7 @@ Setup the Gradle plugin:
     // ...
     dependencies {
       // ...
-      classpath 'com.karumi:shot:3.0.0'
+      classpath 'com.karumi:shot:3.0.1'
     }
   }
   apply plugin: 'shot'
@@ -176,7 +176,7 @@ shot {
 }
 ```
 
-Take into account the ``instrumentationTestTask`` could be different if you use different flavors or build types. Remember also you should use Shot 3.0.0 because this feature was introduced in this release!
+Take into account the ``instrumentationTestTask`` could be different if you use different flavors or build types. Remember also you should use Shot > 3.0.0 because this feature was introduced in this release!
  
 ## CI Reporting
 
