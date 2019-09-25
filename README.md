@@ -79,12 +79,18 @@ The screenshots library needs the ``WRITE_EXTERNAL_STORAGE`` permission. When te
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="<YOUR_APP_ID>.tests"
+    package="<YOUR_APP_ID>.test"
     android:sharedUserId="<YOUR_APP_ID>.uid">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 </manifest>
+```
+
+**You'll have to add the same ``android:sharedUserId="<YOUR_APP_ID>.uid"`` configuration to your ``app/AndroidManfiest.xml`` file in order to let the testing APK write into the SDCard.**. If you don't do this, you can end up facing a weird error with this message while running your tests:
+
+```
+java.lang.RuntimeException: Failed to create the directory /sdcard/screenshots/com.example.snapshottesting.test/screenshots-default for screenshots. Is your sdcard directory read-only?
 ```
 
 Remember to configure the instrumentation test runner in your ``build.gradle`` as follows:
