@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017 Karumi.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.karumi.ui.view.SuperHeroDetailActivity"
+    >
+
+
+  <RelativeLayout
+      android:id="@+id/recycler_view"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      tools:context="com.karumi.screenshot.ui.view.MainActivity"
+      tools:showIn="@layout/main_activity"
+      >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+      <android.support.v7.widget.Toolbar
+          android:id="@+id/toolbar"
+          android:layout_width="match_parent"
+          android:layout_height="?attr/actionBarSize"
+          android:background="?attr/colorPrimary"
+          android:theme="@style/AppTheme.AppBarOverlay"
+          app:popupTheme="@style/AppTheme.PopupOverlay"
+          />
+
+      <RelativeLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          >
+
+        <ImageView
+            android:id="@+id/iv_super_hero_photo"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/super_hero_detail_header_height"
+            />
+
+        <ImageView
+            android:id="@+id/iv_avengers_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/iv_super_hero_photo"
+            android:layout_alignParentRight="true"
+            android:layout_margin="@dimen/default_margin"
+            android:src="@mipmap/ic_avengers"
+            android:visibility="gone"
+            />
+
+      </RelativeLayout>
+
+      <TextView
+          android:id="@+id/tv_super_hero_name"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="@dimen/default_margin"
+          android:layout_marginTop="@dimen/default_margin"
+          android:textColor="@android:color/white"
+          android:textSize="@dimen/title_text_size"
+          />
+
+      <TextView
+          android:id="@+id/tv_super_hero_description"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="@dimen/default_margin"
+          android:textColor="@android:color/white"
+          android:textSize="@dimen/body_text_size"
+          />
+
+    </LinearLayout>
+
+
+    <android.support.v4.widget.ContentLoadingProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        style="?android:attr/progressBarStyleLarge"
+        />
+
+    <TextView
+        android:id="@+id/tv_empty_case"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="¯\\_(ツ)_/¯"
+        android:textColor="@android:color/white"
+        android:visibility="gone"
+        />
+
+  </RelativeLayout>
+
+
+</ScrollView>
