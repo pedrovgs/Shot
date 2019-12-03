@@ -111,12 +111,24 @@ class ExecutionReporter {
         "screenshotsTableBody" -> screenshotsTableBody).asJava
   }
 
+  private def getSortedByResultScreenshots(comparison: ScreenshotsComparisionResult) = {
+    val errors = comparison.errors
+    val groupedByResult = comparison.screenshots
+    .map { screenshot: Screenshot =>
+        val error = findError(screenshot, errors)
+        (screenshot, error)
+      }
+    .groupBy { case (screenshot, error) =>
+      val isFailedTest = error.isDefined
+      !isFailedTest
+    }
+    groupedByResult(false) ++ groupedByResult(true)
+  }
+
   private def generateVerificationSummaryTableBody(
       comparision: ScreenshotsComparisionResult): String = {
-    val errors = comparision.errors
-    comparision.screenshots
-      .map { screenshot: Screenshot =>
-        val error = findError(screenshot, errors)
+    getSortedByResultScreenshots(comparision)
+      .map { case (screenshot, error) =>
         val isFailedTest = error.isDefined
         val testClass = screenshot.testClass
         val testName = screenshot.testName
@@ -136,10 +148,8 @@ class ExecutionReporter {
 
   private def generateScreenshotsTableBody(
       comparision: ScreenshotsComparisionResult): String = {
-    val errors = comparision.errors
-    comparision.screenshots
-      .map { screenshot: Screenshot =>
-        val error = findError(screenshot, errors)
+    getSortedByResultScreenshots(comparision)
+      .map { case (screenshot, error) =>
         val isFailedTest = error.isDefined
         val testClass = screenshot.testClass
         val testName = screenshot.testName
