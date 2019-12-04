@@ -117,7 +117,8 @@ class ExecutionReporter {
       .map { screenshot: Screenshot =>
         val error = findError(screenshot, comparison.errors)
         (screenshot, error)
-      }.sortBy(_._2.isEmpty)
+      }
+      .sortBy(_._2.isEmpty)
 
   private def generateVerificationSummaryTableBody(
       comparision: ScreenshotsComparisionResult): String = {
