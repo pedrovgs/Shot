@@ -112,20 +112,12 @@ class ExecutionReporter {
   }
 
   private def getSortedByResultScreenshots(
-      comparison: ScreenshotsComparisionResult) = {
-    val errors = comparison.errors
-    val groupedByResult = comparison.screenshots
+      comparison: ScreenshotsComparisionResult) =
+    comparison.screenshots
       .map { screenshot: Screenshot =>
-        val error = findError(screenshot, errors)
+        val error = findError(screenshot, comparison.errors)
         (screenshot, error)
-      }
-      .groupBy {
-        case (screenshot, error) =>
-          val isFailedTest = error.isDefined
-          !isFailedTest
-      }
-    groupedByResult(false) ++ groupedByResult(true)
-  }
+      }.sortBy(_._2.isEmpty)
 
   private def generateVerificationSummaryTableBody(
       comparision: ScreenshotsComparisionResult): String = {
