@@ -37,7 +37,7 @@ class Shot(adb: Adb,
                         projectName: String,
                         flavor: String, buildType: String): Unit = {
     console.show("💾  Saving screenshots.")
-    val screenshots = readScreenshotsMetadata(projectFolder, projectName,flavor, buildType)
+    val screenshots = readScreenshotsMetadata(projectFolder, flavor, buildType, projectName)
     screenshotsSaver.saveRecordedScreenshots(projectFolder, flavor, buildType, screenshots)
     screenshotsSaver.copyRecordedScreenshotsToTheReportFolder(
       projectFolder,
@@ -61,7 +61,7 @@ class Shot(adb: Adb,
                          projectName: String,
                          shouldPrintBase64Error: Boolean): ScreenshotsComparisionResult = {
     console.show("🔎  Comparing screenshots with previous ones.")
-    val screenshots = readScreenshotsMetadata(projectFolder, flavor, buildType,projectName)
+    val screenshots = readScreenshotsMetadata(projectFolder, flavor, buildType, projectName)
     val newScreenshotsVerificationReportFolder = buildFolder + Config.verificationReportFolder + "/images/"
     screenshotsSaver.saveTemporalScreenshots(
       screenshots,
