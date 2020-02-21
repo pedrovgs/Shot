@@ -26,17 +26,19 @@ object ScreenshotsSuiteXmlParser {
       projectName: String,
       screenshotsFolder: Folder,
       temporalScreenshotsFolder: Folder): Screenshot = {
-    val name = (xmlNode \ "name" head).text
+    val name = (xmlNode \ "name" head).text.trim
     val recordedScreenshotPath = screenshotsFolder + name + ".png"
     val temporalScreenshotPath = Config.screenshotsTemporalRootPath + projectName + "/" + name + ".png"
-    val testClass = (xmlNode \ "test_class" head).text
-    val testName = (xmlNode \ "test_name" head).text
+    val testClass = (xmlNode \ "test_class" head).text.trim
+    val testName = (xmlNode \ "test_name" head).text.trim
     val tileWidth = (xmlNode \ "tile_width" head).text.toInt
     val tileHeight = (xmlNode \ "tile_height" head).text.toInt
     val tilesDimension = Dimension(tileWidth, tileHeight)
-    val viewHierarchy = (xmlNode \ "view_hierarchy" head).text
-    val absoluteFileNames = (xmlNode \ "absolute_file_name").map(_.text)
-    val relativeFileNames = (xmlNode \ "relative_file_name").map(_.text)
+    val viewHierarchy = (xmlNode \ "view_hierarchy" head).text.trim
+    val absoluteFileNames =
+      (xmlNode \ "absolute_file_name").map(_.text.trim + ".png")
+    val relativeFileNames =
+      (xmlNode \ "relative_file_name").map(_.text.trim + ".png")
     val recordedPartsPaths =
       relativeFileNames.map(temporalScreenshotsFolder + _)
     Screenshot(
@@ -57,10 +59,11 @@ object ScreenshotsSuiteXmlParser {
   def parseScreenshotSize(screenshot: Screenshot,
                           viewHierarchyContent: String): Screenshot = {
     val json = parse(viewHierarchyContent)
-    val JInt(screenshotLeft) = json \ "left"
-    val JInt(screenshotWidth) = json \ "width"
-    val JInt(screenshotTop) = json \ "top"
-    val JInt(screenshotHeight) = json \ "height"
+    val viewHierarchyNode = json \ "viewHierarchy"
+    val JInt(screenshotLeft) = viewHierarchyNode \ "left"
+    val JInt(screenshotWidth) = viewHierarchyNode \ "width"
+    val JInt(screenshotTop) = viewHierarchyNode \ "top"
+    val JInt(screenshotHeight) = viewHierarchyNode \ "height"
     screenshot.copy(
       screenshotDimension =
         Dimension(screenshotLeft.toInt + screenshotWidth.toInt,

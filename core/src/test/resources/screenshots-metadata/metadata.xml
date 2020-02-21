@@ -1,213 +1,410 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8' ?>
 <screenshots>
     <screenshot>
         <description/>
-        <name>com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes</name>
-        <test_class>com.karumi.screenshot.MainActivityTest</test_class>
+        <name>com.karumi.ui.view.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes</name>
+        <test_class>com.karumi.ui.view.MainActivityTest</test_class>
         <test_name>showsSuperHeroesIfThereAreSomeSuperHeroes</test_name>
         <tile_width>2</tile_width>
         <tile_height>3</tile_height>
-        <view_hierarchy>com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_dump.json</view_hierarchy>
+        <view_hierarchy>com.karumi.ui.view.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_dump.json
+        </view_hierarchy>
+        <ax_issues>com.karumi.ui.view.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_issues.json</ax_issues>
         <extras/>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_0_1.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_0_1.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_0_2.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_0_2.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_1_0.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_1_0.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_1_1.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_1_1.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_1_2.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_1_2.png</relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes
+        </absolute_file_name>
+        <relative_file_name>com.karumi.ui.view.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_0_1
+        </absolute_file_name>
+        <relative_file_name>com.karumi.ui.view.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_0_1
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_0_2
+        </absolute_file_name>
+        <relative_file_name>com.karumi.ui.view.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_0_2
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_1_0
+        </absolute_file_name>
+        <relative_file_name>com.karumi.ui.view.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_1_0
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_1_1
+        </absolute_file_name>
+        <relative_file_name>com.karumi.ui.view.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_1_1
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_1_2
+        </absolute_file_name>
+        <relative_file_name>com.karumi.ui.view.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes_1_2
+        </relative_file_name>
     </screenshot>
     <screenshot>
         <description/>
-        <name>com.karumi.screenshot.MainActivityTest_doesNotShowAvengersBadgeIfASuperHeroIsNotPartOfTheAvengersTeam</name>
-        <test_class>com.karumi.screenshot.MainActivityTest</test_class>
+        <name>com.karumi.ui.view.MainActivityTest_doesNotShowAvengersBadgeIfASuperHeroIsNotPartOfTheAvengersTeam</name>
+        <test_class>com.karumi.ui.view.MainActivityTest</test_class>
         <test_name>doesNotShowAvengersBadgeIfASuperHeroIsNotPartOfTheAvengersTeam</test_name>
         <tile_width>2</tile_width>
         <tile_height>3</tile_height>
-        <view_hierarchy>com.karumi.screenshot.MainActivityTest_doesNotShowAvengersBadgeIfASuperHeroIsNotPartOfTheAvengersTeam_dump.json</view_hierarchy>
+        <view_hierarchy>
+            com.karumi.ui.view.MainActivityTest_doesNotShowAvengersBadgeIfASuperHeroIsNotPartOfTheAvengersTeam_dump.json
+        </view_hierarchy>
+        <ax_issues>
+            com.karumi.ui.view.MainActivityTest_doesNotShowAvengersBadgeIfASuperHeroIsNotPartOfTheAvengersTeam_issues.json
+        </ax_issues>
         <extras/>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_doesNotShowAvengersBadgeIfASuperHeroIsNotPartOfTheAvengersTeam.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.MainActivityTest_doesNotShowAvengersBadgeIfASuperHeroIsNotPartOfTheAvengersTeam.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_doesNotShowAvengersBadgeIfASuperHeroIsNotPartOfTheAvengersTeam_0_1.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.MainActivityTest_doesNotShowAvengersBadgeIfASuperHeroIsNotPartOfTheAvengersTeam_0_1.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_doesNotShowAvengersBadgeIfASuperHeroIsNotPartOfTheAvengersTeam_0_2.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.MainActivityTest_doesNotShowAvengersBadgeIfASuperHeroIsNotPartOfTheAvengersTeam_0_2.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_doesNotShowAvengersBadgeIfASuperHeroIsNotPartOfTheAvengersTeam_1_0.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.MainActivityTest_doesNotShowAvengersBadgeIfASuperHeroIsNotPartOfTheAvengersTeam_1_0.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_doesNotShowAvengersBadgeIfASuperHeroIsNotPartOfTheAvengersTeam_1_1.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.MainActivityTest_doesNotShowAvengersBadgeIfASuperHeroIsNotPartOfTheAvengersTeam_1_1.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_doesNotShowAvengersBadgeIfASuperHeroIsNotPartOfTheAvengersTeam_1_2.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.MainActivityTest_doesNotShowAvengersBadgeIfASuperHeroIsNotPartOfTheAvengersTeam_1_2.png</relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.MainActivityTest_doesNotShowAvengersBadgeIfASuperHeroIsNotPartOfTheAvengersTeam
+        </absolute_file_name>
+        <relative_file_name>
+            com.karumi.ui.view.MainActivityTest_doesNotShowAvengersBadgeIfASuperHeroIsNotPartOfTheAvengersTeam
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.MainActivityTest_doesNotShowAvengersBadgeIfASuperHeroIsNotPartOfTheAvengersTeam_0_1
+        </absolute_file_name>
+        <relative_file_name>
+            com.karumi.ui.view.MainActivityTest_doesNotShowAvengersBadgeIfASuperHeroIsNotPartOfTheAvengersTeam_0_1
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.MainActivityTest_doesNotShowAvengersBadgeIfASuperHeroIsNotPartOfTheAvengersTeam_0_2
+        </absolute_file_name>
+        <relative_file_name>
+            com.karumi.ui.view.MainActivityTest_doesNotShowAvengersBadgeIfASuperHeroIsNotPartOfTheAvengersTeam_0_2
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.MainActivityTest_doesNotShowAvengersBadgeIfASuperHeroIsNotPartOfTheAvengersTeam_1_0
+        </absolute_file_name>
+        <relative_file_name>
+            com.karumi.ui.view.MainActivityTest_doesNotShowAvengersBadgeIfASuperHeroIsNotPartOfTheAvengersTeam_1_0
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.MainActivityTest_doesNotShowAvengersBadgeIfASuperHeroIsNotPartOfTheAvengersTeam_1_1
+        </absolute_file_name>
+        <relative_file_name>
+            com.karumi.ui.view.MainActivityTest_doesNotShowAvengersBadgeIfASuperHeroIsNotPartOfTheAvengersTeam_1_1
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.MainActivityTest_doesNotShowAvengersBadgeIfASuperHeroIsNotPartOfTheAvengersTeam_1_2
+        </absolute_file_name>
+        <relative_file_name>
+            com.karumi.ui.view.MainActivityTest_doesNotShowAvengersBadgeIfASuperHeroIsNotPartOfTheAvengersTeam_1_2
+        </relative_file_name>
     </screenshot>
     <screenshot>
         <description/>
-        <name>com.karumi.screenshot.MainActivityTest_showsAvengersBadgeIfASuperHeroIsPartOfTheAvengersTeam</name>
-        <test_class>com.karumi.screenshot.MainActivityTest</test_class>
+        <name>com.karumi.ui.view.MainActivityTest_showsAvengersBadgeIfASuperHeroIsPartOfTheAvengersTeam</name>
+        <test_class>com.karumi.ui.view.MainActivityTest</test_class>
         <test_name>showsAvengersBadgeIfASuperHeroIsPartOfTheAvengersTeam</test_name>
         <tile_width>2</tile_width>
         <tile_height>3</tile_height>
-        <view_hierarchy>com.karumi.screenshot.MainActivityTest_showsAvengersBadgeIfASuperHeroIsPartOfTheAvengersTeam_dump.json</view_hierarchy>
+        <view_hierarchy>
+            com.karumi.ui.view.MainActivityTest_showsAvengersBadgeIfASuperHeroIsPartOfTheAvengersTeam_dump.json
+        </view_hierarchy>
+        <ax_issues>
+            com.karumi.ui.view.MainActivityTest_showsAvengersBadgeIfASuperHeroIsPartOfTheAvengersTeam_issues.json
+        </ax_issues>
         <extras/>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_showsAvengersBadgeIfASuperHeroIsPartOfTheAvengersTeam.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.MainActivityTest_showsAvengersBadgeIfASuperHeroIsPartOfTheAvengersTeam.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_showsAvengersBadgeIfASuperHeroIsPartOfTheAvengersTeam_0_1.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.MainActivityTest_showsAvengersBadgeIfASuperHeroIsPartOfTheAvengersTeam_0_1.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_showsAvengersBadgeIfASuperHeroIsPartOfTheAvengersTeam_0_2.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.MainActivityTest_showsAvengersBadgeIfASuperHeroIsPartOfTheAvengersTeam_0_2.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_showsAvengersBadgeIfASuperHeroIsPartOfTheAvengersTeam_1_0.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.MainActivityTest_showsAvengersBadgeIfASuperHeroIsPartOfTheAvengersTeam_1_0.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_showsAvengersBadgeIfASuperHeroIsPartOfTheAvengersTeam_1_1.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.MainActivityTest_showsAvengersBadgeIfASuperHeroIsPartOfTheAvengersTeam_1_1.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_showsAvengersBadgeIfASuperHeroIsPartOfTheAvengersTeam_1_2.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.MainActivityTest_showsAvengersBadgeIfASuperHeroIsPartOfTheAvengersTeam_1_2.png</relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.MainActivityTest_showsAvengersBadgeIfASuperHeroIsPartOfTheAvengersTeam
+        </absolute_file_name>
+        <relative_file_name>com.karumi.ui.view.MainActivityTest_showsAvengersBadgeIfASuperHeroIsPartOfTheAvengersTeam
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.MainActivityTest_showsAvengersBadgeIfASuperHeroIsPartOfTheAvengersTeam_0_1
+        </absolute_file_name>
+        <relative_file_name>
+            com.karumi.ui.view.MainActivityTest_showsAvengersBadgeIfASuperHeroIsPartOfTheAvengersTeam_0_1
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.MainActivityTest_showsAvengersBadgeIfASuperHeroIsPartOfTheAvengersTeam_0_2
+        </absolute_file_name>
+        <relative_file_name>
+            com.karumi.ui.view.MainActivityTest_showsAvengersBadgeIfASuperHeroIsPartOfTheAvengersTeam_0_2
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.MainActivityTest_showsAvengersBadgeIfASuperHeroIsPartOfTheAvengersTeam_1_0
+        </absolute_file_name>
+        <relative_file_name>
+            com.karumi.ui.view.MainActivityTest_showsAvengersBadgeIfASuperHeroIsPartOfTheAvengersTeam_1_0
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.MainActivityTest_showsAvengersBadgeIfASuperHeroIsPartOfTheAvengersTeam_1_1
+        </absolute_file_name>
+        <relative_file_name>
+            com.karumi.ui.view.MainActivityTest_showsAvengersBadgeIfASuperHeroIsPartOfTheAvengersTeam_1_1
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.MainActivityTest_showsAvengersBadgeIfASuperHeroIsPartOfTheAvengersTeam_1_2
+        </absolute_file_name>
+        <relative_file_name>
+            com.karumi.ui.view.MainActivityTest_showsAvengersBadgeIfASuperHeroIsPartOfTheAvengersTeam_1_2
+        </relative_file_name>
     </screenshot>
     <screenshot>
         <description/>
-        <name>com.karumi.screenshot.MainActivityTest_showsEmptyCaseIfThereAreNoSuperHeroes</name>
-        <test_class>com.karumi.screenshot.MainActivityTest</test_class>
+        <name>com.karumi.ui.view.MainActivityTest_showsEmptyCaseIfThereAreNoSuperHeroes</name>
+        <test_class>com.karumi.ui.view.MainActivityTest</test_class>
         <test_name>showsEmptyCaseIfThereAreNoSuperHeroes</test_name>
         <tile_width>2</tile_width>
         <tile_height>3</tile_height>
-        <view_hierarchy>com.karumi.screenshot.MainActivityTest_showsEmptyCaseIfThereAreNoSuperHeroes_dump.json</view_hierarchy>
+        <view_hierarchy>com.karumi.ui.view.MainActivityTest_showsEmptyCaseIfThereAreNoSuperHeroes_dump.json
+        </view_hierarchy>
+        <ax_issues>com.karumi.ui.view.MainActivityTest_showsEmptyCaseIfThereAreNoSuperHeroes_issues.json</ax_issues>
         <extras/>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_showsEmptyCaseIfThereAreNoSuperHeroes.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.MainActivityTest_showsEmptyCaseIfThereAreNoSuperHeroes.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_showsEmptyCaseIfThereAreNoSuperHeroes_0_1.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.MainActivityTest_showsEmptyCaseIfThereAreNoSuperHeroes_0_1.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_showsEmptyCaseIfThereAreNoSuperHeroes_0_2.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.MainActivityTest_showsEmptyCaseIfThereAreNoSuperHeroes_0_2.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_showsEmptyCaseIfThereAreNoSuperHeroes_1_0.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.MainActivityTest_showsEmptyCaseIfThereAreNoSuperHeroes_1_0.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_showsEmptyCaseIfThereAreNoSuperHeroes_1_1.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.MainActivityTest_showsEmptyCaseIfThereAreNoSuperHeroes_1_1.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_showsEmptyCaseIfThereAreNoSuperHeroes_1_2.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.MainActivityTest_showsEmptyCaseIfThereAreNoSuperHeroes_1_2.png</relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.MainActivityTest_showsEmptyCaseIfThereAreNoSuperHeroes
+        </absolute_file_name>
+        <relative_file_name>com.karumi.ui.view.MainActivityTest_showsEmptyCaseIfThereAreNoSuperHeroes
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.MainActivityTest_showsEmptyCaseIfThereAreNoSuperHeroes_0_1
+        </absolute_file_name>
+        <relative_file_name>com.karumi.ui.view.MainActivityTest_showsEmptyCaseIfThereAreNoSuperHeroes_0_1
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.MainActivityTest_showsEmptyCaseIfThereAreNoSuperHeroes_0_2
+        </absolute_file_name>
+        <relative_file_name>com.karumi.ui.view.MainActivityTest_showsEmptyCaseIfThereAreNoSuperHeroes_0_2
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.MainActivityTest_showsEmptyCaseIfThereAreNoSuperHeroes_1_0
+        </absolute_file_name>
+        <relative_file_name>com.karumi.ui.view.MainActivityTest_showsEmptyCaseIfThereAreNoSuperHeroes_1_0
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.MainActivityTest_showsEmptyCaseIfThereAreNoSuperHeroes_1_1
+        </absolute_file_name>
+        <relative_file_name>com.karumi.ui.view.MainActivityTest_showsEmptyCaseIfThereAreNoSuperHeroes_1_1
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.MainActivityTest_showsEmptyCaseIfThereAreNoSuperHeroes_1_2
+        </absolute_file_name>
+        <relative_file_name>com.karumi.ui.view.MainActivityTest_showsEmptyCaseIfThereAreNoSuperHeroes_1_2
+        </relative_file_name>
     </screenshot>
     <screenshot>
         <description/>
-        <name>com.karumi.screenshot.MainActivityTest_showsJustOneSuperHero</name>
-        <test_class>com.karumi.screenshot.MainActivityTest</test_class>
+        <name>com.karumi.ui.view.MainActivityTest_showsJustOneSuperHero</name>
+        <test_class>com.karumi.ui.view.MainActivityTest</test_class>
         <test_name>showsJustOneSuperHero</test_name>
         <tile_width>2</tile_width>
         <tile_height>3</tile_height>
-        <view_hierarchy>com.karumi.screenshot.MainActivityTest_showsJustOneSuperHero_dump.json</view_hierarchy>
+        <view_hierarchy>com.karumi.ui.view.MainActivityTest_showsJustOneSuperHero_dump.json</view_hierarchy>
+        <ax_issues>com.karumi.ui.view.MainActivityTest_showsJustOneSuperHero_issues.json</ax_issues>
         <extras/>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_showsJustOneSuperHero.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.MainActivityTest_showsJustOneSuperHero.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_showsJustOneSuperHero_0_1.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.MainActivityTest_showsJustOneSuperHero_0_1.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_showsJustOneSuperHero_0_2.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.MainActivityTest_showsJustOneSuperHero_0_2.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_showsJustOneSuperHero_1_0.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.MainActivityTest_showsJustOneSuperHero_1_0.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_showsJustOneSuperHero_1_1.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.MainActivityTest_showsJustOneSuperHero_1_1.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.MainActivityTest_showsJustOneSuperHero_1_2.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.MainActivityTest_showsJustOneSuperHero_1_2.png</relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.MainActivityTest_showsJustOneSuperHero
+        </absolute_file_name>
+        <relative_file_name>com.karumi.ui.view.MainActivityTest_showsJustOneSuperHero</relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.MainActivityTest_showsJustOneSuperHero_0_1
+        </absolute_file_name>
+        <relative_file_name>com.karumi.ui.view.MainActivityTest_showsJustOneSuperHero_0_1</relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.MainActivityTest_showsJustOneSuperHero_0_2
+        </absolute_file_name>
+        <relative_file_name>com.karumi.ui.view.MainActivityTest_showsJustOneSuperHero_0_2</relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.MainActivityTest_showsJustOneSuperHero_1_0
+        </absolute_file_name>
+        <relative_file_name>com.karumi.ui.view.MainActivityTest_showsJustOneSuperHero_1_0</relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.MainActivityTest_showsJustOneSuperHero_1_1
+        </absolute_file_name>
+        <relative_file_name>com.karumi.ui.view.MainActivityTest_showsJustOneSuperHero_1_1</relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.MainActivityTest_showsJustOneSuperHero_1_2
+        </absolute_file_name>
+        <relative_file_name>com.karumi.ui.view.MainActivityTest_showsJustOneSuperHero_1_2</relative_file_name>
     </screenshot>
     <screenshot>
         <description/>
-        <name>com.karumi.screenshot.SuperHeroDetailActivityTest_showsAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam</name>
-        <test_class>com.karumi.screenshot.SuperHeroDetailActivityTest</test_class>
-        <test_name>showsAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam</test_name>
+        <name>com.karumi.ui.view.SuperHeroDetailActivityTest_showsAvengersBadgeIfSuperHeroIsPartOfTheAvengersTeam</name>
+        <test_class>com.karumi.ui.view.SuperHeroDetailActivityTest</test_class>
+        <test_name>showsAvengersBadgeIfSuperHeroIsPartOfTheAvengersTeam</test_name>
         <tile_width>2</tile_width>
         <tile_height>3</tile_height>
-        <view_hierarchy>com.karumi.screenshot.SuperHeroDetailActivityTest_showsAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_dump.json</view_hierarchy>
+        <view_hierarchy>
+            com.karumi.ui.view.SuperHeroDetailActivityTest_showsAvengersBadgeIfSuperHeroIsPartOfTheAvengersTeam_dump.json
+        </view_hierarchy>
+        <ax_issues>
+            com.karumi.ui.view.SuperHeroDetailActivityTest_showsAvengersBadgeIfSuperHeroIsPartOfTheAvengersTeam_issues.json
+        </ax_issues>
         <extras/>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.SuperHeroDetailActivityTest_showsAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.SuperHeroDetailActivityTest_showsAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.SuperHeroDetailActivityTest_showsAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_0_1.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.SuperHeroDetailActivityTest_showsAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_0_1.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.SuperHeroDetailActivityTest_showsAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_0_2.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.SuperHeroDetailActivityTest_showsAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_0_2.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.SuperHeroDetailActivityTest_showsAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_1_0.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.SuperHeroDetailActivityTest_showsAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_1_0.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.SuperHeroDetailActivityTest_showsAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_1_1.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.SuperHeroDetailActivityTest_showsAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_1_1.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.SuperHeroDetailActivityTest_showsAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_1_2.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.SuperHeroDetailActivityTest_showsAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_1_2.png</relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.SuperHeroDetailActivityTest_showsAvengersBadgeIfSuperHeroIsPartOfTheAvengersTeam
+        </absolute_file_name>
+        <relative_file_name>
+            com.karumi.ui.view.SuperHeroDetailActivityTest_showsAvengersBadgeIfSuperHeroIsPartOfTheAvengersTeam
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.SuperHeroDetailActivityTest_showsAvengersBadgeIfSuperHeroIsPartOfTheAvengersTeam_0_1
+        </absolute_file_name>
+        <relative_file_name>
+            com.karumi.ui.view.SuperHeroDetailActivityTest_showsAvengersBadgeIfSuperHeroIsPartOfTheAvengersTeam_0_1
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.SuperHeroDetailActivityTest_showsAvengersBadgeIfSuperHeroIsPartOfTheAvengersTeam_0_2
+        </absolute_file_name>
+        <relative_file_name>
+            com.karumi.ui.view.SuperHeroDetailActivityTest_showsAvengersBadgeIfSuperHeroIsPartOfTheAvengersTeam_0_2
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.SuperHeroDetailActivityTest_showsAvengersBadgeIfSuperHeroIsPartOfTheAvengersTeam_1_0
+        </absolute_file_name>
+        <relative_file_name>
+            com.karumi.ui.view.SuperHeroDetailActivityTest_showsAvengersBadgeIfSuperHeroIsPartOfTheAvengersTeam_1_0
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.SuperHeroDetailActivityTest_showsAvengersBadgeIfSuperHeroIsPartOfTheAvengersTeam_1_1
+        </absolute_file_name>
+        <relative_file_name>
+            com.karumi.ui.view.SuperHeroDetailActivityTest_showsAvengersBadgeIfSuperHeroIsPartOfTheAvengersTeam_1_1
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.SuperHeroDetailActivityTest_showsAvengersBadgeIfSuperHeroIsPartOfTheAvengersTeam_1_2
+        </absolute_file_name>
+        <relative_file_name>
+            com.karumi.ui.view.SuperHeroDetailActivityTest_showsAvengersBadgeIfSuperHeroIsPartOfTheAvengersTeam_1_2
+        </relative_file_name>
     </screenshot>
     <screenshot>
         <description/>
-        <name>com.karumi.screenshot.SuperHeroDetailActivityTest_doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam</name>
-        <test_class>com.karumi.screenshot.SuperHeroDetailActivityTest</test_class>
+        <name>
+            com.karumi.ui.view.SuperHeroDetailActivityTest_doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam
+        </name>
+        <test_class>com.karumi.ui.view.SuperHeroDetailActivityTest</test_class>
         <test_name>doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam</test_name>
         <tile_width>2</tile_width>
         <tile_height>3</tile_height>
-        <view_hierarchy>com.karumi.screenshot.SuperHeroDetailActivityTest_doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_dump.json</view_hierarchy>
+        <view_hierarchy>
+            com.karumi.ui.view.SuperHeroDetailActivityTest_doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_dump.json
+        </view_hierarchy>
+        <ax_issues>
+            com.karumi.ui.view.SuperHeroDetailActivityTest_doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_issues.json
+        </ax_issues>
         <extras/>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.SuperHeroDetailActivityTest_doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.SuperHeroDetailActivityTest_doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.SuperHeroDetailActivityTest_doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_0_1.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.SuperHeroDetailActivityTest_doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_0_1.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.SuperHeroDetailActivityTest_doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_0_2.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.SuperHeroDetailActivityTest_doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_0_2.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.SuperHeroDetailActivityTest_doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_1_0.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.SuperHeroDetailActivityTest_doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_1_0.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.SuperHeroDetailActivityTest_doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_1_1.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.SuperHeroDetailActivityTest_doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_1_1.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.SuperHeroDetailActivityTest_doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_1_2.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.SuperHeroDetailActivityTest_doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_1_2.png</relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.SuperHeroDetailActivityTest_doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam
+        </absolute_file_name>
+        <relative_file_name>
+            com.karumi.ui.view.SuperHeroDetailActivityTest_doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.SuperHeroDetailActivityTest_doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_0_1
+        </absolute_file_name>
+        <relative_file_name>
+            com.karumi.ui.view.SuperHeroDetailActivityTest_doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_0_1
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.SuperHeroDetailActivityTest_doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_0_2
+        </absolute_file_name>
+        <relative_file_name>
+            com.karumi.ui.view.SuperHeroDetailActivityTest_doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_0_2
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.SuperHeroDetailActivityTest_doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_1_0
+        </absolute_file_name>
+        <relative_file_name>
+            com.karumi.ui.view.SuperHeroDetailActivityTest_doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_1_0
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.SuperHeroDetailActivityTest_doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_1_1
+        </absolute_file_name>
+        <relative_file_name>
+            com.karumi.ui.view.SuperHeroDetailActivityTest_doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_1_1
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.SuperHeroDetailActivityTest_doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_1_2
+        </absolute_file_name>
+        <relative_file_name>
+            com.karumi.ui.view.SuperHeroDetailActivityTest_doesNotShowAvengersBadgeIfSuperHeroIsNotPartOfTheAvengersTeam_1_2
+        </relative_file_name>
     </screenshot>
     <screenshot>
         <description/>
-        <name>com.karumi.screenshot.SuperHeroViewHolderTest_showsSuperHeroesWithLongNames</name>
-        <test_class>com.karumi.screenshot.SuperHeroViewHolderTest</test_class>
+        <name>com.karumi.ui.view.SuperHeroViewHolderTest_showsSuperHeroesWithLongNames</name>
+        <test_class>com.karumi.ui.view.SuperHeroViewHolderTest</test_class>
         <test_name>showsSuperHeroesWithLongNames</test_name>
         <tile_width>2</tile_width>
         <tile_height>1</tile_height>
-        <view_hierarchy>com.karumi.screenshot.SuperHeroViewHolderTest_showsSuperHeroesWithLongNames_dump.json</view_hierarchy>
+        <view_hierarchy>com.karumi.ui.view.SuperHeroViewHolderTest_showsSuperHeroesWithLongNames_dump.json
+        </view_hierarchy>
+        <ax_issues>com.karumi.ui.view.SuperHeroViewHolderTest_showsSuperHeroesWithLongNames_issues.json</ax_issues>
         <extras/>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.SuperHeroViewHolderTest_showsSuperHeroesWithLongNames.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.SuperHeroViewHolderTest_showsSuperHeroesWithLongNames.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.SuperHeroViewHolderTest_showsSuperHeroesWithLongNames_1_0.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.SuperHeroViewHolderTest_showsSuperHeroesWithLongNames_1_0.png</relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.SuperHeroViewHolderTest_showsSuperHeroesWithLongNames
+        </absolute_file_name>
+        <relative_file_name>com.karumi.ui.view.SuperHeroViewHolderTest_showsSuperHeroesWithLongNames
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.SuperHeroViewHolderTest_showsSuperHeroesWithLongNames_1_0
+        </absolute_file_name>
+        <relative_file_name>com.karumi.ui.view.SuperHeroViewHolderTest_showsSuperHeroesWithLongNames_1_0
+        </relative_file_name>
     </screenshot>
     <screenshot>
         <description/>
-        <name>com.karumi.screenshot.SuperHeroViewHolderTest_showsAnySuperHero</name>
-        <test_class>com.karumi.screenshot.SuperHeroViewHolderTest</test_class>
+        <name>com.karumi.ui.view.SuperHeroViewHolderTest_showsAnySuperHero</name>
+        <test_class>com.karumi.ui.view.SuperHeroViewHolderTest</test_class>
         <test_name>showsAnySuperHero</test_name>
         <tile_width>2</tile_width>
         <tile_height>1</tile_height>
-        <view_hierarchy>com.karumi.screenshot.SuperHeroViewHolderTest_showsAnySuperHero_dump.json</view_hierarchy>
+        <view_hierarchy>com.karumi.ui.view.SuperHeroViewHolderTest_showsAnySuperHero_dump.json</view_hierarchy>
+        <ax_issues>com.karumi.ui.view.SuperHeroViewHolderTest_showsAnySuperHero_issues.json</ax_issues>
         <extras/>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.SuperHeroViewHolderTest_showsAnySuperHero.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.SuperHeroViewHolderTest_showsAnySuperHero.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.SuperHeroViewHolderTest_showsAnySuperHero_1_0.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.SuperHeroViewHolderTest_showsAnySuperHero_1_0.png</relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.SuperHeroViewHolderTest_showsAnySuperHero
+        </absolute_file_name>
+        <relative_file_name>com.karumi.ui.view.SuperHeroViewHolderTest_showsAnySuperHero</relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.SuperHeroViewHolderTest_showsAnySuperHero_1_0
+        </absolute_file_name>
+        <relative_file_name>com.karumi.ui.view.SuperHeroViewHolderTest_showsAnySuperHero_1_0</relative_file_name>
     </screenshot>
     <screenshot>
         <description/>
-        <name>com.karumi.screenshot.SuperHeroViewHolderTest_showsAvengersBadge</name>
-        <test_class>com.karumi.screenshot.SuperHeroViewHolderTest</test_class>
+        <name>com.karumi.ui.view.SuperHeroViewHolderTest_showsAvengersBadge</name>
+        <test_class>com.karumi.ui.view.SuperHeroViewHolderTest</test_class>
         <test_name>showsAvengersBadge</test_name>
         <tile_width>2</tile_width>
         <tile_height>1</tile_height>
-        <view_hierarchy>com.karumi.screenshot.SuperHeroViewHolderTest_showsAvengersBadge_dump.json</view_hierarchy>
+        <view_hierarchy>com.karumi.ui.view.SuperHeroViewHolderTest_showsAvengersBadge_dump.json</view_hierarchy>
+        <ax_issues>com.karumi.ui.view.SuperHeroViewHolderTest_showsAvengersBadge_issues.json</ax_issues>
         <extras/>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.SuperHeroViewHolderTest_showsAvengersBadge.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.SuperHeroViewHolderTest_showsAvengersBadge.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.SuperHeroViewHolderTest_showsAvengersBadge_1_0.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.SuperHeroViewHolderTest_showsAvengersBadge_1_0.png</relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.SuperHeroViewHolderTest_showsAvengersBadge
+        </absolute_file_name>
+        <relative_file_name>com.karumi.ui.view.SuperHeroViewHolderTest_showsAvengersBadge</relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.SuperHeroViewHolderTest_showsAvengersBadge_1_0
+        </absolute_file_name>
+        <relative_file_name>com.karumi.ui.view.SuperHeroViewHolderTest_showsAvengersBadge_1_0</relative_file_name>
     </screenshot>
     <screenshot>
         <description/>
-        <name>com.karumi.screenshot.SuperHeroViewHolderTest_showsSuperHeroesWithLongDescriptions</name>
-        <test_class>com.karumi.screenshot.SuperHeroViewHolderTest</test_class>
+        <name>com.karumi.ui.view.SuperHeroViewHolderTest_showsSuperHeroesWithLongDescriptions</name>
+        <test_class>com.karumi.ui.view.SuperHeroViewHolderTest</test_class>
         <test_name>showsSuperHeroesWithLongDescriptions</test_name>
         <tile_width>2</tile_width>
         <tile_height>1</tile_height>
-        <view_hierarchy>com.karumi.screenshot.SuperHeroViewHolderTest_showsSuperHeroesWithLongDescriptions_dump.json</view_hierarchy>
+        <view_hierarchy>com.karumi.ui.view.SuperHeroViewHolderTest_showsSuperHeroesWithLongDescriptions_dump.json
+        </view_hierarchy>
+        <ax_issues>com.karumi.ui.view.SuperHeroViewHolderTest_showsSuperHeroesWithLongDescriptions_issues.json
+        </ax_issues>
         <extras/>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.SuperHeroViewHolderTest_showsSuperHeroesWithLongDescriptions.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.SuperHeroViewHolderTest_showsSuperHeroesWithLongDescriptions.png</relative_file_name>
-        <absolute_file_name>/mnt/sdcard/screenshots/com.karumi.screenshot.test/screenshots-default/com.karumi.screenshot.SuperHeroViewHolderTest_showsSuperHeroesWithLongDescriptions_1_0.png</absolute_file_name>
-        <relative_file_name>com.karumi.screenshot.SuperHeroViewHolderTest_showsSuperHeroesWithLongDescriptions_1_0.png</relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.SuperHeroViewHolderTest_showsSuperHeroesWithLongDescriptions
+        </absolute_file_name>
+        <relative_file_name>com.karumi.ui.view.SuperHeroViewHolderTest_showsSuperHeroesWithLongDescriptions
+        </relative_file_name>
+        <absolute_file_name>
+            /sdcard/screenshots/com.karumi.test/screenshots-default/com.karumi.ui.view.SuperHeroViewHolderTest_showsSuperHeroesWithLongDescriptions_1_0
+        </absolute_file_name>
+        <relative_file_name>com.karumi.ui.view.SuperHeroViewHolderTest_showsSuperHeroesWithLongDescriptions_1_0
+        </relative_file_name>
     </screenshot>
 </screenshots>
