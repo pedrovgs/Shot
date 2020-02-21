@@ -21,13 +21,13 @@ object Config {
   val androidDependencyVersion: String = "0.8.0"
   val androidDependency: FilePath =
     s"$androidDependencyGroup:$androidDependencyName:$androidDependencyVersion"
-  val screenshotsFolderName: FilePath = "/screenshots/"
-  val pulledScreenshotsFolder
-    : FilePath = screenshotsFolderName + "screenshots-default/"
-  val metadataFileName: FilePath = pulledScreenshotsFolder + "metadata.xml"
+  def screenshotsFolderName(flavor: String, buildType: String): FilePath = s"/screenshots/$flavor/$buildType/"
+  def pulledScreenshotsFolder(flavor: String, buildType: String)
+    : FilePath = screenshotsFolderName(flavor, buildType) + "screenshots-default/"
+  def metadataFileName(flavor: String, buildType: String): FilePath = pulledScreenshotsFolder(flavor, buildType) + "metadata.xml"
   val androidPluginName: FilePath = "com.android.application"
   val screenshotsTemporalRootPath: FilePath = "/tmp/shot/screenshot/"
-  val defaultInstrumentationTestTask: String = "connectedAndroidTest"
+  def defaultInstrumentationTestTask(flavor: String, buildType: String) : String = s"connected${flavor.capitalize}${buildType.capitalize}AndroidTest"
   val defaultPackageTestApkTask: String = "packageDebugAndroidTest"
   val reportFolder: String = "/reports/shot"
   val verificationReportFolder: String = reportFolder + "/verification"

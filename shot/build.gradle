@@ -9,11 +9,13 @@ apply plugin: 'scalafmt'
 
 repositories {
     mavenCentral()
+    maven { url 'https://maven.google.com' }
 }
 
 dependencies {
     compile gradleApi()
     compile localGroovy()
+    compile 'com.android.tools.build:gradle:3.3.2'
     compile project(':core')
     compile 'org.scala-lang:scala-library:2.12.1'
     testCompile 'org.scalatest:scalatest_2.12:3.0.3'

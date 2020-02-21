@@ -78,11 +78,6 @@ dependencies {
     androidTestImplementation "net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.0.0"
 }
 
-shot {
-  appId = "com.karumi"
-  instrumentationTestTask = "testDebugComposer"
-}
-
 task ktlint(type: JavaExec) {
     main = "com.github.shyiko.ktlint.Main"
     classpath = configurations.ktlint

@@ -80,7 +80,6 @@ dependencies {
 
 shot {
   appId = "com.karumi"
-  instrumentationTestTask = "testDebugComposer"
 }
 
 task ktlint(type: JavaExec) {
