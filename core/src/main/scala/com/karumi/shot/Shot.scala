@@ -1,6 +1,8 @@
 package com.karumi.shot
 
 import java.io.File
+import java.nio.file.Paths
+
 import com.karumi.shot.android.Adb
 import com.karumi.shot.domain._
 import com.karumi.shot.domain.model.{AppId, Folder, ScreenshotsSuite}
@@ -13,6 +15,7 @@ import com.karumi.shot.screenshots.{
 import com.karumi.shot.ui.Console
 import com.karumi.shot.xml.ScreenshotsSuiteXmlParser._
 import org.apache.commons.io.FileUtils
+import org.tinyzip.TinyZip
 
 object Shot {
   private val appIdErrorMessage =
@@ -119,6 +122,7 @@ class Shot(adb: Adb,
       val screenshotsFolder = projectFolder + Config.screenshotsFolderName
       createScreenshotsFolderIfDoesNotExist(screenshotsFolder)
       adb.pullScreenshots(device, screenshotsFolder, appId)
+      extractPicturesFromBundle(projectFolder + Config.pulledScreenshotsFolder)
       renameMetadataFile(projectFolder, device)
     }
   }
@@ -145,8 +149,8 @@ class Shot(adb: Adb,
                        projectFolder + Config.pulledScreenshotsFolder)
     }
     screenshotSuite.par.map { screenshot =>
-      val viewHierarchyContent = files.read(
-        projectFolder + Config.pulledScreenshotsFolder + screenshot.viewHierarchy)
+      val viewHierarchyFileName = projectFolder + Config.pulledScreenshotsFolder + screenshot.viewHierarchy
+      val viewHierarchyContent = files.read(viewHierarchyFileName)
       parseScreenshotSize(screenshot, viewHierarchyContent)
     }.toList
   }
@@ -158,6 +162,12 @@ class Shot(adb: Adb,
 
     if (projectTemporalScreenshots.exists()) {
       FileUtils.deleteDirectory(projectTemporalScreenshots)
+    }
+  }
+  private def extractPicturesFromBundle(screenshotsFolder: String): Unit = {
+    val bundleFile = s"$screenshotsFolder/screenshot_bundle.zip"
+    if (java.nio.file.Files.exists(Paths.get(bundleFile))) {
+      TinyZip.unzip(bundleFile, screenshotsFolder)
     }
   }
 }
