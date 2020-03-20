@@ -34,25 +34,26 @@ Setup the Gradle plugin:
     // ...
     dependencies {
       // ...
-      classpath 'com.karumi:shot:3.1.0'
+      classpath 'com.karumi:shot:4.0.0'
     }
   }
   apply plugin: 'shot'
-
-  shot {
-    appId = 'YOUR_APPLICATION_ID'
-  }
 ```
 
 This plugin sets up a few convenience commands you can list executing ``./gradlew tasks`` and reviewing the ``Shot`` associated tasks:
 
-**If you are using flavors update your shot configuration inside the ``build.gradle`` file as follows:**
+![shotTasksHelp](./art/tasksDescription.png)
+
+**If you are using flavors the available Shot gradle tasks will be configured based on your flavors and build types configuration.** You can find all the available shot tasks by executing ``./gradlew tasks``. For example, if you app has two flavors: ``green`` and ``blue`` the list of available Shot tasks will be:
 
 ```groovy
-  shot {
-    appId = 'YOUR_APPLICATION_ID'
-    instrumentationTestTask = 'connected<FlavorName><BuildTypeName>AndroidTest'
-  }
+executeScreenshotTests - Checks the user interface screenshot tests. If you execute this task using -Precord param the screenshot will be regenerated.
+blueDebugDownloadScreenshots - Retrieves the screenshots stored into the Android device where the tests were executed for the build BlueDebug
+blueDebugExecuteScreenshotTests - Records the user interface tests screenshots. If you execute this task using -Precord param the screenshot will be regenerated for the build BlueDebug
+blueDebugRemoveScreenshots - Removes the screenshots recorded during the tests execution from the Android device where the tests were executed for the build BlueDebug
+greenDebugDownloadScreenshots - Retrieves the screenshots stored into the Android device where the tests were executed for the build GreenDebug
+greenDebugExecuteScreenshotTests - Records the user interface tests screenshots. If you execute this task using -Precord param the screenshot will be regenerated for the build GreenDebug
+greenDebugRemoveScreenshots - Removes the screenshots recorded during the tests execution from the Android device where the tests were executed for the build GreenDebug
 ```
 
 If for some reason you are running your tests on a different machine and you want to skip the instrumentation tests execution and just compare the sources remember you can use the following shot configuration:
@@ -63,18 +64,7 @@ If for some reason you are running your tests on a different machine and you wan
   }
 ```
 
-The flavor used is the one selected to execute your screenshot tests.
-
-An example could be:
-
-```groovy
-  shot {
-    appId = 'com.my.app'
-    instrumentationTestTask = 'connectedFreeAppDebugAndroidTest'
-  }
-```
-
-The screenshots library needs the ``WRITE_EXTERNAL_STORAGE`` permission. When testing a library, add this permission to the manifest of the instrumentation apk. If you are testing an application, add this permission to the app under test. To grant this permission you can create an ``AndroidManifest.xml`` file inside the ``androidTest`` folder. Here is an example:
+Keep in mind the screenshots library needs the ``WRITE_EXTERNAL_STORAGE`` permission. When testing a library, add this permission to the manifest of the instrumentation apk. If you are testing an application, add this permission to the app under test. To grant this permission you can create an ``AndroidManifest.xml`` file inside the ``androidTest`` folder. Here is an example:
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -105,7 +95,7 @@ android {
     // ...
 ```
 
-In order to do this, you'll have to create a class named ``ScreenshotTestRunner``, like the following one, inside your instrumentation tests source folder:
+In order to do this, you will have to create a class named ``ScreenshotTestRunner``, like the following one, inside your instrumentation tests source folder:
 
 ```java
 public class ScreenshotTestRunner extends AndroidJUnitRunner {
@@ -150,6 +140,12 @@ Now you are ready to record and verify your screenshot tests!
 You can record your screenshot tests executing this command:
 
 ```shell
+./gradlew <Flavor><BuildType>ExecuteScreenshotTests -Precord
+```
+
+or
+
+```shell
 ./gradlew executeScreenshotTests -Precord
 ```
 
@@ -160,12 +156,16 @@ This will execute all your integration tests and it will pull all the generated 
 Once you have a bunch of screenshot tests recorded you can easily verify if the behaviour of your app is the correct one executing this command:
 
 ```shell
+./gradlew <Flavor><BuildType>ExecuteScreenshotTests
+```
+
+or
+
+```shell
 ./gradlew executeScreenshotTests
 ```
 
-**After executing your screenshot tests using the Gradle task ``executeScreenshotTests`` a report with all your screenshots will be generated.**
-
-![shotTasksHelp](./art/tasksDescription.png)
+**After executing your screenshot tests using the Gradle task ``<Flavor><BuildType>ExecuteScreenshotTests`` a report with all your screenshots will be generated.**
 
 [karumilogo]: https://cloud.githubusercontent.com/assets/858090/11626547/e5a1dc66-9ce3-11e5-908d-537e07e82090.png
 
@@ -177,8 +177,7 @@ Once you've configured composer to run your tests you only need to update Shot t
 
 ```groovy
 shot {
-  appId = 'YOUR_APPLICATION_ID'
-  instrumentationTestTask = "testDebugComposer"
+  useComposer = true
 }
 ```
 
@@ -186,7 +185,7 @@ Take into account the ``instrumentationTestTask`` could be different if you use 
  
 ## CI Reporting
 
-Shot generates an HTML report you can review at the end of the recording or verification build. However, if you are running Shot in a CI environment which does not support saving the reporting files generated by the build you can verify your tests using this command ``./gradlew executeScreenshotTests -PprintBase64``. This will change how Shot show comparision errors displaying a command you can copy and paste on your local terminal for every screenshot test failed.
+Shot generates an HTML report you can review at the end of the recording or verification build. However, if you are running Shot in a CI environment which does not support saving the reporting files generated by the build you can verify your tests using this command ``./gradlew debugExecuteScreenshotTests -PprintBase64``. This will change how Shot show comparision errors displaying a command you can copy and paste on your local terminal for every screenshot test failed.
 
 ## Running only some tests
 
@@ -209,19 +208,19 @@ You can run a single test or test class, just add the `android.testInstrumentati
 If you have included in your project a dependency to related to the dexmaker and you are facing this exception: ``com.android.dx.util.DexException: Multiple dex files define``, you can customize how the facebook SDK is added to your project and exclude the dexmaker library as follows:
 
  ```groovy
-   androidTestCompile ('com.facebook.testing.screenshot:core:0.8.0') {
+   androidTestCompile ('com.facebook.testing.screenshot:core:0.11.0') {
      exclude group: 'com.crittercism.dexmaker', module: 'dexmaker'
      exclude group: 'com.crittercism.dexmaker', module: 'dexmaker-dx'
    }
  ```
  
 The Shot plugin automatically detects if you are including a compatible version of the screenshot facebook library in your project and, if it's present, it will not include it again.
- 
-**Disclaimer**: The only compatible version of the facebook library is 0.8.0 right now, so if you are using any other version we highly encourage to match it with the one Shot is using to avoid problems.
+
+**Disclaimer**: The only compatible version of the facebook library is 0.12.0 and above, so if you are using any other version we highly encourage to match it with the one Shot is using to avoid problems.
 
 ## iOS support
 
-If you want to apply the same testing technique on iOS you can use [Snap.swift](https://github.com/skyweb07/Snap.swift)
+If you want to apply the same testing technique on iOS you can use [Swift Snapshot Testing](https://github.com/pointfreeco/swift-snapshot-testing)
 
 License
 -------

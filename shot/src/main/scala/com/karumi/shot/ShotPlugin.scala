@@ -6,11 +6,25 @@ import com.karumi.shot.android.Adb
 import com.karumi.shot.base64.Base64Encoder
 import com.karumi.shot.domain.Config
 import com.karumi.shot.reports.{ConsoleReporter, ExecutionReporter}
-import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsDiffGenerator, ScreenshotsSaver}
-import com.karumi.shot.tasks.{DownloadScreenshotsTask, ExecuteScreenshotTests, RemoveScreenshotsTask, ShotTask}
+import com.karumi.shot.screenshots.{
+  ScreenshotsComparator,
+  ScreenshotsDiffGenerator,
+  ScreenshotsSaver
+}
+import com.karumi.shot.tasks.{
+  DownloadScreenshotsTask,
+  ExecuteScreenshotTests,
+  ExecuteScreenshotTestsForEveryFlavor,
+  RemoveScreenshotsTask,
+  ShotTask
+}
 import com.karumi.shot.ui.Console
-import org.gradle.api.artifacts.{Dependency, DependencyResolutionListener, ResolvableDependencies}
-import org.gradle.api.{Plugin, Project}
+import org.gradle.api.artifacts.{
+  Dependency,
+  DependencyResolutionListener,
+  ResolvableDependencies
+}
+import org.gradle.api.{Plugin, Project, Task}
 
 class ShotPlugin extends Plugin[Project] {
 
@@ -30,10 +44,11 @@ class ShotPlugin extends Plugin[Project] {
   override def apply(project: Project): Unit = {
     addExtensions(project)
     addAndroidTestDependency(project)
-    project.afterEvaluate { project => {
-      configureAdb(project)
-      addTasks(project)
-    }
+    project.afterEvaluate { project =>
+      {
+        configureAdb(project)
+        addTasks(project)
+      }
     }
   }
 
@@ -43,11 +58,22 @@ class ShotPlugin extends Plugin[Project] {
   }
 
   private def addTasks(project: Project): Unit = {
-    val appExtension = project.getExtensions.getByType[AppExtension](classOf[AppExtension])
+    val appExtension =
+      project.getExtensions.getByType[AppExtension](classOf[AppExtension])
+    val baseTask = project.getTasks.create(
+      Config.defaultTaskName,
+      classOf[ExecuteScreenshotTestsForEveryFlavor])
     appExtension.getApplicationVariants.all { variant =>
       val flavor = variant.getMergedFlavor
-      val completeAppId = flavor.getApplicationId + flavor.getApplicationIdSuffix
-      addTasksFor(project, variant.getFlavorName, variant.getBuildType, completeAppId)
+      val completeAppId = flavor.getApplicationId + Option(
+        flavor.getApplicationIdSuffix).getOrElse("")
+      if (variant.getBuildType.getName != "release") {
+        addTasksFor(project,
+                    variant.getFlavorName,
+                    variant.getBuildType,
+                    completeAppId,
+                    baseTask)
+      }
     }
   }
 
@@ -56,32 +82,41 @@ class ShotPlugin extends Plugin[Project] {
     project.getExtensions.add(name, new ShotExtension())
   }
 
-  private def addTasksFor(project: Project, flavor: String, buildType: BuildType, appId: String): Unit = {
-    val instrumentationTask = Config.defaultInstrumentationTestTask(flavor, buildType.getName)
-    println("======= Adding tasks for")
-    println(s"================ ${flavor}")
-    println(s"================ ${buildType.getName}")
-    println(s"================ ${appId}")
-    println(s"instrumentation task selected = ${instrumentationTask}")
-    println("================")
+  private def addTasksFor(project: Project,
+                          flavor: String,
+                          buildType: BuildType,
+                          appId: String,
+                          baseTask: Task): Unit = {
     val extension =
       project.getExtensions.getByType[ShotExtension](classOf[ShotExtension])
+    val instrumentationTask = if (extension.useComposer) {
+      Config.composerInstrumentationTestTask(flavor, buildType.getName)
+    } else {
+      Config.defaultInstrumentationTestTask(flavor, buildType.getName)
+    }
     val tasks = project.getTasks
     val removeScreenshots = tasks
-      .create(RemoveScreenshotsTask.name(flavor, buildType), classOf[RemoveScreenshotsTask]).asInstanceOf[ShotTask]
-    removeScreenshots.setDescription(RemoveScreenshotsTask.description(flavor, buildType))
+      .create(RemoveScreenshotsTask.name(flavor, buildType),
+              classOf[RemoveScreenshotsTask])
+      .asInstanceOf[ShotTask]
+    removeScreenshots.setDescription(
+      RemoveScreenshotsTask.description(flavor, buildType))
     removeScreenshots.flavor = flavor
     removeScreenshots.buildType = buildType
     removeScreenshots.appId = appId
     val downloadScreenshots = tasks
-      .create(DownloadScreenshotsTask.name(flavor, buildType), classOf[DownloadScreenshotsTask])
-    downloadScreenshots.setDescription(DownloadScreenshotsTask.description(flavor, buildType))
+      .create(DownloadScreenshotsTask.name(flavor, buildType),
+              classOf[DownloadScreenshotsTask])
+    downloadScreenshots.setDescription(
+      DownloadScreenshotsTask.description(flavor, buildType))
     downloadScreenshots.flavor = flavor
     downloadScreenshots.buildType = buildType
     downloadScreenshots.appId = appId
     val executeScreenshot = tasks
-      .create(ExecuteScreenshotTests.name(flavor, buildType), classOf[ExecuteScreenshotTests])
-    executeScreenshot.setDescription(ExecuteScreenshotTests.description(flavor, buildType))
+      .create(ExecuteScreenshotTests.name(flavor, buildType),
+              classOf[ExecuteScreenshotTests])
+    executeScreenshot.setDescription(
+      ExecuteScreenshotTests.description(flavor, buildType))
     executeScreenshot.flavor = flavor
     executeScreenshot.buildType = buildType
     executeScreenshot.appId = appId
@@ -92,6 +127,7 @@ class ShotPlugin extends Plugin[Project] {
       downloadScreenshots.mustRunAfter(instrumentationTask)
       removeScreenshots.mustRunAfter(downloadScreenshots)
     }
+    baseTask.dependsOn(executeScreenshot)
   }
 
   private def addAndroidTestDependency(project: Project): Unit = {
@@ -99,7 +135,7 @@ class ShotPlugin extends Plugin[Project] {
     project.getGradle.addListener(new DependencyResolutionListener() {
 
       override def beforeResolve(
-                                  resolvableDependencies: ResolvableDependencies): Unit = {
+          resolvableDependencies: ResolvableDependencies): Unit = {
         var facebookDependencyHasBeenAdded = false
 
         project.getConfigurations.forEach(config => {
@@ -126,7 +162,7 @@ class ShotPlugin extends Plugin[Project] {
       }
 
       override def afterResolve(
-                                 resolvableDependencies: ResolvableDependencies): Unit = {}
+          resolvableDependencies: ResolvableDependencies): Unit = {}
     })
   }
 }

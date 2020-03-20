@@ -27,21 +27,29 @@ class ExecutionReporter {
 
   def generateRecordReport(appId: AppId,
                            screenshots: ScreenshotsSuite,
-                           buildFolder: Folder) = {
+                           buildFolder: Folder,
+                           flavor: String,
+                           buildType: String) = {
     val input = generateRecordTemplateValues(appId, screenshots)
     val template = freeMarkerConfig.getTemplate("recordIndex.ftl")
-    resetVerificationReport()
-    val reportFolder = buildFolder + Config.recordingReportFolder + "/"
+    resetVerificationReport(flavor, buildType)
+    val reportFolder = buildFolder + Config.recordingReportFolder(
+      flavor,
+      buildType) + "/"
     writeReport(buildFolder, input, template, reportFolder)
   }
 
   def generateVerificationReport(appId: AppId,
                                  comparision: ScreenshotsComparisionResult,
-                                 buildFolder: Folder) = {
+                                 buildFolder: Folder,
+                                 flavor: String,
+                                 buildType: String) = {
     val input = generateVerificationTemplateValues(appId, comparision)
     val template = freeMarkerConfig.getTemplate("verificationIndex.ftl")
-    resetVerificationReport()
-    val reportFolder = buildFolder + Config.verificationReportFolder + "/"
+    resetVerificationReport(flavor, buildType)
+    val reportFolder = buildFolder + Config.verificationReportFolder(
+      flavor,
+      buildType) + "/"
     writeReport(buildFolder, input, template, reportFolder)
   }
 
@@ -56,8 +64,9 @@ class ExecutionReporter {
     writer.close()
   }
 
-  private def resetVerificationReport() = {
-    val file = new File(Config.verificationReportFolder + "/index.html")
+  private def resetVerificationReport(flavor: String, buildType: String) = {
+    val file = new File(
+      Config.verificationReportFolder(flavor, buildType) + "/index.html")
     if (file.exists()) {
       file.delete()
     }

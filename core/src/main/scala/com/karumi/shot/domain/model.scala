@@ -15,23 +15,37 @@ object model {
 }
 
 object Config {
+
   val androidDependencyMode: FilePath = "androidTestImplementation"
   val androidDependencyGroup: String = "com.facebook.testing.screenshot"
   val androidDependencyName: String = "core"
-  val androidDependencyVersion: String = "0.8.0"
+  val androidDependencyVersion: String = "0.12.0"
   val androidDependency: FilePath =
     s"$androidDependencyGroup:$androidDependencyName:$androidDependencyVersion"
-  def screenshotsFolderName(flavor: String, buildType: String): FilePath = s"/screenshots/$flavor/$buildType/"
-  def pulledScreenshotsFolder(flavor: String, buildType: String)
-    : FilePath = screenshotsFolderName(flavor, buildType) + "screenshots-default/"
-  def metadataFileName(flavor: String, buildType: String): FilePath = pulledScreenshotsFolder(flavor, buildType) + "metadata.xml"
+  def screenshotsFolderName(flavor: String, buildType: String): FilePath =
+    if (flavor.isEmpty) {
+      s"/screenshots/$buildType/"
+    } else {
+      s"/screenshots/$flavor/$buildType/"
+    }
+  def pulledScreenshotsFolder(flavor: String, buildType: String): FilePath =
+    screenshotsFolderName(flavor, buildType) + "screenshots-default/"
+  def metadataFileName(flavor: String, buildType: String): FilePath =
+    pulledScreenshotsFolder(flavor, buildType) + "metadata.xml"
   val androidPluginName: FilePath = "com.android.application"
   val screenshotsTemporalRootPath: FilePath = "/tmp/shot/screenshot/"
-  def defaultInstrumentationTestTask(flavor: String, buildType: String) : String = s"connected${flavor.capitalize}${buildType.capitalize}AndroidTest"
+  def defaultInstrumentationTestTask(flavor: String,
+                                     buildType: String): String =
+    s"connected${flavor.capitalize}${buildType.capitalize}AndroidTest"
+  def composerInstrumentationTestTask(flavor: String, buildType: String) =
+    s"test${flavor.capitalize}${buildType.capitalize}Composer"
   val defaultPackageTestApkTask: String = "packageDebugAndroidTest"
-  val reportFolder: String = "/reports/shot"
-  val verificationReportFolder: String = reportFolder + "/verification"
-  val recordingReportFolder: String = reportFolder + "/record"
+  def reportFolder(flavor: String, buildType: String): String = "/reports/shot"
+  def verificationReportFolder(flavor: String, buildType: String): String =
+    reportFolder(flavor, buildType) + "/verification"
+  def recordingReportFolder(flavor: String, buildType: String): String =
+    reportFolder(flavor, buildType) + "/record"
+  val defaultTaskName: String = "executeScreenshotTests"
 }
 
 case class Screenshot(name: String,

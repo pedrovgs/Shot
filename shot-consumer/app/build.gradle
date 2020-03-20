@@ -79,7 +79,7 @@ dependencies {
 }
 
 shot {
-  appId = "com.karumi"
+    useComposer = true
 }
 
 task ktlint(type: JavaExec) {

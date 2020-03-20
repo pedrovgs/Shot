@@ -13,7 +13,9 @@ class ScreenshotsSaver {
                               buildType: String,
                               screenshots: ScreenshotsSuite) = {
     deleteOldScreenshots(projectFolder, flavor, buildType)
-    saveScreenshots(screenshots, projectFolder + Config.screenshotsFolderName(flavor, buildType))
+    saveScreenshots(
+      screenshots,
+      projectFolder + Config.screenshotsFolderName(flavor, buildType))
   }
 
   def saveTemporalScreenshots(screenshots: ScreenshotsSuite,
@@ -29,14 +31,18 @@ class ScreenshotsSaver {
                                                flavor: String,
                                                buildType: String,
                                                destinyFolder: Folder) = {
-    val recordedScreenshotsFolder = projectFolder + Config.screenshotsFolderName(flavor, buildType)
+    val recordedScreenshotsFolder = projectFolder + Config
+      .screenshotsFolderName(flavor, buildType)
     FileUtils.copyDirectory(new File(recordedScreenshotsFolder),
                             new File(destinyFolder))
     deleteFolder(destinyFolder)
   }
 
-  private def deleteOldScreenshots(projectFolder: Folder, flavor: String, buildType: String) = {
-    deleteFolder(projectFolder + Config.screenshotsFolderName(flavor, buildType))
+  private def deleteOldScreenshots(projectFolder: Folder,
+                                   flavor: String,
+                                   buildType: String) = {
+    deleteFolder(
+      projectFolder + Config.screenshotsFolderName(flavor, buildType))
   }
 
   private def deleteOldTemporalScreenshots(projectName: String): Unit = {

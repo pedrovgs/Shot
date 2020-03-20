@@ -6,9 +6,9 @@ object ShotExtension {
   val name = "shot"
 }
 
-class ShotExtension(@BeanProperty var runInstrumentation: Boolean) {
+class ShotExtension(@BeanProperty var runInstrumentation: Boolean,
+                    @BeanProperty var useComposer: Boolean) {
 
-  def this() = this(true)
-
+  def this() = this(true, false)
 
 }
