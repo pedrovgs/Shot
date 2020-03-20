@@ -33,8 +33,6 @@ class Shot(adb: Adb,
 
   import Shot._
 
-  final val CR_ASCII_DECIMAL = 13
-
   def configureAdbPath(adbPath: Folder): Unit = {
     Adb.adbBinaryPath = adbPath
   }
@@ -111,7 +109,6 @@ class Shot(adb: Adb,
 
   private def clearScreenshots(appId: AppId): Unit = adb.devices.foreach {
     device =>
-      if (!isCarriageReturnASCII(device))
         adb.clearScreenshots(device, appId)
   }
 
@@ -122,17 +119,14 @@ class Shot(adb: Adb,
 
   private def pullScreenshots(projectFolder: Folder, appId: AppId): Unit = {
     adb.devices.foreach { device =>
-      if (!isCarriageReturnASCII(device)) {
-        val screenshotsFolder = projectFolder + Config.screenshotsFolderName
-        createScreenshotsFolderIfDoesNotExist(screenshotsFolder)
-        adb.pullScreenshots(device, screenshotsFolder, appId)
-        extractPicturesFromBundle(projectFolder + Config.pulledScreenshotsFolder)
-        renameMetadataFile(projectFolder, device)
-      }
+      val screenshotsFolder = projectFolder + Config.screenshotsFolderName
+      createScreenshotsFolderIfDoesNotExist(screenshotsFolder)
+      adb.pullScreenshots(device, screenshotsFolder, appId)
+      extractPicturesFromBundle(projectFolder + Config.pulledScreenshotsFolder)
+      renameMetadataFile(projectFolder, device)
+
     }
   }
-
-  private def isCarriageReturnASCII(string: String) = string.charAt(0) == CR_ASCII_DECIMAL
 
   private def renameMetadataFile(projectFolder: Folder, device: String): Unit = {
     val metadataFilePath = projectFolder + Config.metadataFileName
