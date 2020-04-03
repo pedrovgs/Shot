@@ -10,16 +10,18 @@ object Adb {
 
 class Adb {
 
-  final val CR_ASCII_DECIMAL = 13
+  private final val CR_ASCII_DECIMAL = 13
 
   def devices: List[String] = {
-    executeAdbCommandWithResult("devices").split('\n').toList.drop(1).map {
-      line =>
+    executeAdbCommandWithResult("devices")
+      .split('\n')
+      .toList
+      .drop(1)
+      .map { line =>
         line.split('\t').toList.head
-    }.filter(device => !isCarriageReturnASCII(device))
+      }
+      .filter(device => !isCarriageReturnASCII(device))
   }
-
-  private def isCarriageReturnASCII(device: String): Boolean = device.charAt(0) == CR_ASCII_DECIMAL
 
   def pullScreenshots(device: String,
                       screenshotsFolder: Folder,
@@ -37,4 +39,6 @@ class Adb {
   private def executeAdbCommandWithResult(command: String): String =
     s"${Adb.adbBinaryPath} $command".!!
 
+  private def isCarriageReturnASCII(device: String): Boolean =
+    device.charAt(0) == CR_ASCII_DECIMAL
 }

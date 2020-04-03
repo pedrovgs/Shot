@@ -62,11 +62,11 @@ class Shot(adb: Adb,
   }
 
   def verifyScreenshots(
-                         appId: AppId,
-                         buildFolder: Folder,
-                         projectFolder: Folder,
-                         projectName: String,
-                         shouldPrintBase64Error: Boolean): ScreenshotsComparisionResult = {
+      appId: AppId,
+      buildFolder: Folder,
+      projectFolder: Folder,
+      projectName: String,
+      shouldPrintBase64Error: Boolean): ScreenshotsComparisionResult = {
     console.show("🔎  Comparing screenshots with previous ones.")
     val screenshots = readScreenshotsMetadata(projectFolder, projectName)
     val newScreenshotsVerificationReportFolder = buildFolder + Config.verificationReportFolder + "/images/"
@@ -85,7 +85,7 @@ class Shot(adb: Adb,
 
     if (updatedComparision.hasErrors) {
       consoleReporter.showErrors(updatedComparision,
-        newScreenshotsVerificationReportFolder)
+                                 newScreenshotsVerificationReportFolder)
     } else {
       console.showSuccess("✅  Yeah!!! Your tests are passing.")
     }
@@ -109,7 +109,7 @@ class Shot(adb: Adb,
 
   private def clearScreenshots(appId: AppId): Unit = adb.devices.foreach {
     device =>
-        adb.clearScreenshots(device, appId)
+      adb.clearScreenshots(device, appId)
   }
 
   private def createScreenshotsFolderIfDoesNotExist(screenshotsFolder: AppId) = {
@@ -135,8 +135,8 @@ class Shot(adb: Adb,
   }
 
   private def readScreenshotsMetadata(
-                                       projectFolder: Folder,
-                                       projectName: String): ScreenshotsSuite = {
+      projectFolder: Folder,
+      projectName: String): ScreenshotsSuite = {
     val screenshotsFolder = projectFolder + Config.pulledScreenshotsFolder
     val filesInScreenshotFolder = new java.io.File(screenshotsFolder).listFiles
     val metadataFiles = filesInScreenshotFolder.filter(file =>
@@ -145,9 +145,9 @@ class Shot(adb: Adb,
       val metadataFileContent =
         files.read(metadataFilePath.getAbsolutePath)
       parseScreenshots(metadataFileContent,
-        projectName,
-        projectFolder + Config.screenshotsFolderName,
-        projectFolder + Config.pulledScreenshotsFolder)
+                       projectName,
+                       projectFolder + Config.screenshotsFolderName,
+                       projectFolder + Config.pulledScreenshotsFolder)
     }
     screenshotSuite.par.map { screenshot =>
       val viewHierarchyFileName = projectFolder + Config.pulledScreenshotsFolder + screenshot.viewHierarchy
@@ -157,7 +157,7 @@ class Shot(adb: Adb,
   }
 
   private def removeProjectTemporalScreenshotsFolder(
-                                                      projectFolder: Folder): Unit = {
+      projectFolder: Folder): Unit = {
     val projectTemporalScreenshots = new File(
       projectFolder + Config.pulledScreenshotsFolder)
 
