@@ -44,7 +44,7 @@ This plugin sets up a few convenience commands you can list executing ``./gradle
 
 ![shotTasksHelp](./art/tasksDescription.png)
 
-**If you are using flavors the available Shot gradle tasks will be configured based on your flavors and build types configuration.** You can find all the available shot tasks by executing ``./gradlew tasks``. For example, if you app has two flavors: ``green`` and ``blue`` the list of available Shot tasks will be:
+**If you are using flavors the available Shot gradle tasks will be configured based on your flavors and build types configuration.** You can find all the available shot tasks by executing ``./gradlew tasks``. For example, if your app has two flavors: ``green`` and ``blue`` the list of available Shot tasks will be:
 
 ```groovy
 executeScreenshotTests - Checks the user interface screenshot tests. If you execute this task using -Precord param the screenshot will be regenerated.
