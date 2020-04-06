@@ -1,5 +1,7 @@
 package com.karumi.shot
 
+import com.android.builder.model.{BuildType, ProductFlavor}
+import com.android.build.gradle.AppExtension
 import com.karumi.shot.android.Adb
 import com.karumi.shot.base64.Base64Encoder
 import com.karumi.shot.domain.Config
@@ -12,7 +14,9 @@ import com.karumi.shot.screenshots.{
 import com.karumi.shot.tasks.{
   DownloadScreenshotsTask,
   ExecuteScreenshotTests,
-  RemoveScreenshotsTask
+  ExecuteScreenshotTestsForEveryFlavor,
+  RemoveScreenshotsTask,
+  ShotTask
 }
 import com.karumi.shot.ui.Console
 import org.gradle.api.artifacts.{
@@ -20,14 +24,7 @@ import org.gradle.api.artifacts.{
   DependencyResolutionListener,
   ResolvableDependencies
 }
-import org.gradle.api.{Plugin, Project}
-import org.gradle.tooling.GradleConnector
-import org.gradle.tooling.model.build.BuildEnvironment
-
-object ShotPlugin {
-  private val minGradleVersionSupportedMajorNumber = 3
-  private val minGradleVersionSupportedMinorNumber = 4
-}
+import org.gradle.api.{Plugin, Project, Task}
 
 class ShotPlugin extends Plugin[Project] {
 
@@ -61,16 +58,68 @@ class ShotPlugin extends Plugin[Project] {
   }
 
   private def addTasks(project: Project): Unit = {
+    val appExtension =
+      project.getExtensions.getByType[AppExtension](classOf[AppExtension])
+    val baseTask = project.getTasks.create(
+      Config.defaultTaskName,
+      classOf[ExecuteScreenshotTestsForEveryFlavor])
+    appExtension.getApplicationVariants.all { variant =>
+      val flavor = variant.getMergedFlavor
+      val completeAppId = flavor.getApplicationId + Option(
+        flavor.getApplicationIdSuffix).getOrElse("")
+      if (variant.getBuildType.getName != "release") {
+        addTasksFor(project,
+                    variant.getFlavorName,
+                    variant.getBuildType,
+                    completeAppId,
+                    baseTask)
+      }
+    }
+  }
+
+  private def addExtensions(project: Project): Unit = {
+    val name = ShotExtension.name
+    project.getExtensions.add(name, new ShotExtension())
+  }
+
+  private def addTasksFor(project: Project,
+                          flavor: String,
+                          buildType: BuildType,
+                          appId: String,
+                          baseTask: Task): Unit = {
     val extension =
       project.getExtensions.getByType[ShotExtension](classOf[ShotExtension])
-    val removeScreenshots = project.getTasks
-      .create(RemoveScreenshotsTask.name, classOf[RemoveScreenshotsTask])
-    val downloadScreenshots = project.getTasks
-      .create(DownloadScreenshotsTask.name, classOf[DownloadScreenshotsTask])
-    val executeScreenshot = project.getTasks
-      .create(ExecuteScreenshotTests.name, classOf[ExecuteScreenshotTests])
-    val instrumentationTask = extension.getOptionInstrumentationTestTask
-      .getOrElse(Config.defaultInstrumentationTestTask)
+    val instrumentationTask = if (extension.useComposer) {
+      Config.composerInstrumentationTestTask(flavor, buildType.getName)
+    } else {
+      Config.defaultInstrumentationTestTask(flavor, buildType.getName)
+    }
+    val tasks = project.getTasks
+    val removeScreenshots = tasks
+      .create(RemoveScreenshotsTask.name(flavor, buildType),
+              classOf[RemoveScreenshotsTask])
+      .asInstanceOf[ShotTask]
+    removeScreenshots.setDescription(
+      RemoveScreenshotsTask.description(flavor, buildType))
+    removeScreenshots.flavor = flavor
+    removeScreenshots.buildType = buildType
+    removeScreenshots.appId = appId
+    val downloadScreenshots = tasks
+      .create(DownloadScreenshotsTask.name(flavor, buildType),
+              classOf[DownloadScreenshotsTask])
+    downloadScreenshots.setDescription(
+      DownloadScreenshotsTask.description(flavor, buildType))
+    downloadScreenshots.flavor = flavor
+    downloadScreenshots.buildType = buildType
+    downloadScreenshots.appId = appId
+    val executeScreenshot = tasks
+      .create(ExecuteScreenshotTests.name(flavor, buildType),
+              classOf[ExecuteScreenshotTests])
+    executeScreenshot.setDescription(
+      ExecuteScreenshotTests.description(flavor, buildType))
+    executeScreenshot.flavor = flavor
+    executeScreenshot.buildType = buildType
+    executeScreenshot.appId = appId
     if (extension.runInstrumentation) {
       executeScreenshot.dependsOn(instrumentationTask)
       executeScreenshot.dependsOn(downloadScreenshots)
@@ -78,11 +127,7 @@ class ShotPlugin extends Plugin[Project] {
       downloadScreenshots.mustRunAfter(instrumentationTask)
       removeScreenshots.mustRunAfter(downloadScreenshots)
     }
-  }
-
-  private def addExtensions(project: Project): Unit = {
-    val name = ShotExtension.name
-    project.getExtensions.add(name, new ShotExtension())
+    baseTask.dependsOn(executeScreenshot)
   }
 
   private def addAndroidTestDependency(project: Project): Unit = {

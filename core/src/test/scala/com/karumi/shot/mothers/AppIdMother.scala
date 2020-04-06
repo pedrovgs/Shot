@@ -4,7 +4,6 @@ import com.karumi.shot.domain.model.AppId
 
 object AppIdMother {
 
-  val anyAppId: Option[AppId] = Some("com.karumi.shot")
-  val anyInvalidAppId: Option[AppId] = None
+  val anyAppId: AppId = "com.karumi.shot"
 
 }

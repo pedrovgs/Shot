@@ -3,7 +3,7 @@ package com.karumi.shot
 import com.karumi.shot.android.Adb
 import com.karumi.shot.domain.Config
 import com.karumi.shot.domain.model.AppId
-import com.karumi.shot.mothers.AppIdMother
+import com.karumi.shot.mothers.{AppIdMother, BuildTypeMother}
 import com.karumi.shot.reports.{ConsoleReporter, ExecutionReporter}
 import com.karumi.shot.screenshots.{
   ScreenshotsComparator,
@@ -50,11 +50,11 @@ class ShotSpec
   }
 
   "Shot" should "should delegate screenshots cleaning to Adb" in {
-    val appId: Option[AppId] = AppIdMother.anyAppId
+    val appId: AppId = AppIdMother.anyAppId
     val device: String = "emulator-5554"
     (adb.devices _).expects().returns(List(device))
 
-    (adb.clearScreenshots _).expects(device, appId.get)
+    (adb.clearScreenshots _).expects(device, appId)
 
     shot.removeScreenshots(appId)
   }
@@ -63,17 +63,26 @@ class ShotSpec
     val appId = AppIdMother.anyAppId
     val device = "emulator-5554"
     val projectFolder = ProjectFolderMother.anyProjectFolder
-    val expectedScreenshotsFolder = projectFolder + Config.screenshotsFolderName
-    val expectedOriginalMetadataFile = projectFolder + Config.metadataFileName
-    val expectedRenamedFile = projectFolder + Config.metadataFileName + "_" + device
+    val expectedScreenshotsFolder = projectFolder + Config
+      .screenshotsFolderName(BuildTypeMother.anyFlavor,
+                             BuildTypeMother.anyBuildType)
+    val expectedOriginalMetadataFile = projectFolder + Config.metadataFileName(
+      BuildTypeMother.anyFlavor,
+      BuildTypeMother.anyBuildType)
+    val expectedRenamedFile = projectFolder + Config.metadataFileName(
+      BuildTypeMother.anyFlavor,
+      BuildTypeMother.anyBuildType) + "_" + device
     (adb.devices _).expects().returns(List(device))
 
     (console.show _).expects(*)
     (adb.pullScreenshots _)
-      .expects(device, expectedScreenshotsFolder, appId.get)
+      .expects(device, expectedScreenshotsFolder, appId)
     (files.rename _).expects(expectedOriginalMetadataFile, expectedRenamedFile)
 
-    shot.downloadScreenshots(projectFolder, appId)
+    shot.downloadScreenshots(projectFolder,
+                             BuildTypeMother.anyFlavor,
+                             BuildTypeMother.anyBuildType,
+                             appId)
   }
 
   it should "configure adb path" in {
@@ -82,22 +91,5 @@ class ShotSpec
     shot.configureAdbPath(anyAdbPath)
 
     Adb.adbBinaryPath shouldBe anyAdbPath
-  }
-
-  it should "show an error if the app ID is not properly configured when cleaning screenshots" in {
-    val appId = AppIdMother.anyInvalidAppId
-
-    (console.showError _).expects(appIdConfigError)
-
-    shot.removeScreenshots(appId)
-  }
-
-  it should "show an error if the app ID is not properly configured when pulling screenshots" in {
-    val appId = AppIdMother.anyInvalidAppId
-    val projectFolder = ProjectFolderMother.anyProjectFolder
-
-    (console.showError _).expects(appIdConfigError)
-
-    shot.downloadScreenshots(projectFolder, appId)
   }
 }
