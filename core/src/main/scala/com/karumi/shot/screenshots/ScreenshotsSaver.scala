@@ -9,9 +9,13 @@ import org.apache.commons.io.FileUtils
 class ScreenshotsSaver {
 
   def saveRecordedScreenshots(projectFolder: Folder,
+                              flavor: String,
+                              buildType: String,
                               screenshots: ScreenshotsSuite) = {
-    deleteOldScreenshots(projectFolder)
-    saveScreenshots(screenshots, projectFolder + Config.screenshotsFolderName)
+    deleteOldScreenshots(projectFolder, flavor, buildType)
+    saveScreenshots(
+      screenshots,
+      projectFolder + Config.screenshotsFolderName(flavor, buildType))
   }
 
   def saveTemporalScreenshots(screenshots: ScreenshotsSuite,
@@ -24,15 +28,21 @@ class ScreenshotsSaver {
     saveScreenshots(screenshots, reportFolder)
   }
   def copyRecordedScreenshotsToTheReportFolder(projectFolder: Folder,
+                                               flavor: String,
+                                               buildType: String,
                                                destinyFolder: Folder) = {
-    val recordedScreenshotsFolder = projectFolder + Config.screenshotsFolderName
+    val recordedScreenshotsFolder = projectFolder + Config
+      .screenshotsFolderName(flavor, buildType)
     FileUtils.copyDirectory(new File(recordedScreenshotsFolder),
                             new File(destinyFolder))
     deleteFolder(destinyFolder)
   }
 
-  private def deleteOldScreenshots(projectFolder: Folder) = {
-    deleteFolder(projectFolder + Config.screenshotsFolderName)
+  private def deleteOldScreenshots(projectFolder: Folder,
+                                   flavor: String,
+                                   buildType: String) = {
+    deleteFolder(
+      projectFolder + Config.screenshotsFolderName(flavor, buildType))
   }
 
   private def deleteOldTemporalScreenshots(projectName: String): Unit = {
