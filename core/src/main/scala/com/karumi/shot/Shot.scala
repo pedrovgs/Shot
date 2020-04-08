@@ -140,6 +140,7 @@ class Shot(adb: Adb,
         buildType)
       createScreenshotsFolderIfDoesNotExist(screenshotsFolder)
       adb.pullScreenshots(device, screenshotsFolder, appId)
+
       extractPicturesFromBundle(
         projectFolder + Config.pulledScreenshotsFolder(flavor, buildType))
       renameMetadataFile(projectFolder, flavor, buildType, device)
@@ -198,6 +199,7 @@ class Shot(adb: Adb,
       FileUtils.deleteDirectory(projectTemporalScreenshots)
     }
   }
+
   private def extractPicturesFromBundle(screenshotsFolder: String): Unit = {
     val bundleFile = s"$screenshotsFolder/screenshot_bundle.zip"
     if (java.nio.file.Files.exists(Paths.get(bundleFile))) {
