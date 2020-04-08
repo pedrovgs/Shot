@@ -1,1 +1,1 @@
-include ':shot', ':core'
+include ':shot', ':core', ':shot-android'
