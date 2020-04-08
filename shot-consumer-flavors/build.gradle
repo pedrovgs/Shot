@@ -8,7 +8,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.karumi:shot:4.0.0'
+        classpath 'com.karumi:shot:4.0.1-SNAPSHOT'
     }
 }
 
@@ -17,6 +17,7 @@ allprojects {
         google()
         jcenter()
         maven { url "https://jitpack.io" }
+        maven { url uri('../../repo') }
     }
 }
 

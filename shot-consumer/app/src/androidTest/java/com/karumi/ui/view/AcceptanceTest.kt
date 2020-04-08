@@ -12,6 +12,7 @@ import com.karumi.asApp
 import org.junit.Before
 import org.junit.Rule
 import org.junit.runner.RunWith
+import com.karumi.shot.ScreenshotTest
 import org.mockito.MockitoAnnotations
 
 @LargeTest

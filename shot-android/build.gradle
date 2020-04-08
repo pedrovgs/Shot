@@ -1,6 +1,7 @@
 apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
 apply plugin: "org.jlleitschuh.gradle.ktlint"
+apply from: '../release.gradle'
 
 android {
     compileSdkVersion 29
@@ -23,6 +24,7 @@ android {
 
 repositories {
     mavenCentral()
+    mavenLocal()
     google()
     jcenter()
 }
@@ -32,4 +34,5 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation "com.facebook.testing.screenshot:core:0.12.0"
     implementation "androidx.test:runner:1.2.0"
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
 }

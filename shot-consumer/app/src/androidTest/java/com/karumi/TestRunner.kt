@@ -2,12 +2,10 @@ package com.karumi
 
 import android.app.Application
 import android.content.Context
-import android.os.Bundle
-import androidx.test.runner.AndroidJUnitRunner
-import com.facebook.testing.screenshot.ScreenshotRunner
 import com.github.tmurakami.dexopener.DexOpener
+import com.karumi.shot.ShotTestRunner
 
-class TestRunner : AndroidJUnitRunner() {
+class TestRunner : ShotTestRunner() {
     override fun newApplication(
         cl: ClassLoader?,
         className: String?,
@@ -20,15 +18,5 @@ class TestRunner : AndroidJUnitRunner() {
     override fun callApplicationOnCreate(app: Application) {
         app.asApp().kodein.mutable = true
         super.callApplicationOnCreate(app)
-    }
-
-    override fun onCreate(arguments: Bundle?) {
-        super.onCreate(arguments)
-        ScreenshotRunner.onCreate(this, arguments)
-    }
-
-    override fun finish(resultCode: Int, results: Bundle?) {
-        ScreenshotRunner.onDestroy()
-        super.finish(resultCode, results)
     }
 }

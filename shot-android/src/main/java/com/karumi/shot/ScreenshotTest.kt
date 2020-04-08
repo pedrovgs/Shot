@@ -7,6 +7,7 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.view.WindowManager
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import com.facebook.testing.screenshot.Screenshot
 import com.facebook.testing.screenshot.Screenshot.snapActivity
@@ -51,6 +52,9 @@ interface ScreenshotTest {
             compareScreenshot(window.decorView, heightInPx, widthInPx)
         }
     }
+
+    fun compareScreenshot(holder: RecyclerView.ViewHolder, heightInPx: Int, widthInPx: Int? = null) =
+        compareScreenshot(view = holder.itemView, heightInPx = heightInPx, widthInPx = widthInPx)
 
     fun compareScreenshot(view: View, heightInPx: Int? = null, widthInPx: Int? = null, name: String? = null) {
         waitForAnimationsToFinish()

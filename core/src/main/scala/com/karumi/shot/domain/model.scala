@@ -17,9 +17,9 @@ object model {
 object Config {
 
   val androidDependencyMode: FilePath = "androidTestImplementation"
-  val androidDependencyGroup: String = "com.facebook.testing.screenshot"
-  val androidDependencyName: String = "core"
-  val androidDependencyVersion: String = "0.12.0"
+  val androidDependencyGroup: String = "com.karumi"
+  val androidDependencyName: String = "shot-android"
+  val androidDependencyVersion: String = "4.0.1-SNAPSHOT"
   val androidDependency: FilePath =
     s"$androidDependencyGroup:$androidDependencyName:$androidDependencyVersion"
   def screenshotsFolderName(flavor: String, buildType: String): FilePath =
