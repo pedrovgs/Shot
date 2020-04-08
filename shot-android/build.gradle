@@ -30,4 +30,6 @@ repositories {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "com.facebook.testing.screenshot:core:0.12.0"
+    implementation "androidx.test:runner:1.2.0"
 }
