@@ -26,9 +26,9 @@ interface ScreenshotTest {
         backgroundColor: Int = android.R.color.white
     ) {
         val view = activity.findViewById<View>(android.R.id.content)
-        disableFlakyComponents(view)
 
         if (heightInPx == null && widthInPx == null) {
+            disableFlakyComponents(view)
             waitForAnimationsToFinish()
             snapActivity(activity).record()
         } else {
