@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:gravity="center_vertical"
-        android:hint="¯\\_(ツ)_/¯"
+        android:text="¯\\_(ツ)_/¯"
         android:inputType="textNoSuggestions"
         android:textColor="@android:color/white"
         android:visibility="gone"

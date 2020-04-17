@@ -16,7 +16,6 @@ class CursorActivityTest : AcceptanceTest<CursorActivity>(
     fun cursorIsNotVisibleOnScreenshot() {
         val activity = startActivity()
         onView(withId(R.id.et_cursor)).perform(click())
-        onView(withId(R.id.et_cursor)).perform(typeText("Cursor Test"))
         compareScreenshot(activity)
     }
 
