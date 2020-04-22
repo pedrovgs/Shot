@@ -9,6 +9,7 @@ import android.view.WindowManager
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.espresso.Espresso
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import com.facebook.testing.screenshot.Screenshot
 import com.facebook.testing.screenshot.Screenshot.snapActivity
@@ -19,6 +20,15 @@ interface ScreenshotTest {
 
     private val context: Context get() = getInstrumentation().targetContext
 
+    /**
+     * Function designed to be executed right before the screenshot is taken. Override it
+     * when needed to disable any view or cancel any animation before Shot takes the screenshot.
+     * You can use ``childrenViews`` extension methods in order to perform any task. Remember you might need to invoke
+     * it from the UI thread.
+     */
+    fun prepareUIForScreenshot() {
+    }
+
     fun compareScreenshot(
         activity: Activity,
         heightInPx: Int? = null,
@@ -28,8 +38,7 @@ interface ScreenshotTest {
         val view = activity.findViewById<View>(android.R.id.content)
 
         if (heightInPx == null && widthInPx == null) {
-            disableFlakyComponents(view)
-            waitForAnimationsToFinish()
+            disableFlakyComponentsAndWaitForIdle(view)
             snapActivity(activity).record()
         } else {
             runOnUi {
@@ -57,11 +66,10 @@ interface ScreenshotTest {
     }
 
     fun compareScreenshot(holder: RecyclerView.ViewHolder, heightInPx: Int, widthInPx: Int? = null) =
-        compareScreenshot(view = holder.itemView, heightInPx = heightInPx, widthInPx = widthInPx)
+            compareScreenshot(view = holder.itemView, heightInPx = heightInPx, widthInPx = widthInPx)
 
     fun compareScreenshot(view: View, heightInPx: Int? = null, widthInPx: Int? = null, name: String? = null) {
-        disableFlakyComponents(view)
-        waitForAnimationsToFinish()
+        disableFlakyComponentsAndWaitForIdle(view)
 
         val context = getInstrumentation().targetContext
         val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
@@ -85,21 +93,30 @@ interface ScreenshotTest {
                 .record()
     }
 
+    fun disableFlakyComponentsAndWaitForIdle(view: View) {
+        prepareUIForScreenshot()
+        disableAnimatedComponents(view)
+        waitForAnimationsToFinish()
+    }
+
     fun waitForAnimationsToFinish() {
         getInstrumentation().waitForIdleSync()
+        Espresso.onIdle()
     }
 
     fun runOnUi(block: () -> Unit) {
         getInstrumentation().runOnMainSync { block() }
     }
 
-    fun disableFlakyComponents(view: View) {
-        ViewUtils.getFilteredChildren(view) {
-            it is EditText
-        }.forEach {
-            if (it is EditText) {
-                runOnUi { it.isCursorVisible = false }
-            }
+    private fun disableAnimatedComponents(view: View) {
+        runOnUi {
+            hideEditTextCursors(view)
+        }
+    }
+
+    private fun hideEditTextCursors(view: View) {
+        view.childrenViews<EditText>().forEach {
+            it.isCursorVisible = false
         }
     }
 }

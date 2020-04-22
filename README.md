@@ -1,12 +1,13 @@
 # ![Karumi logo][karumilogo]Shot [![Build Status](https://app.bitrise.io/app/c7c358c5be663f7c/status.svg?token=SOM_wLR4WZScWxIYKeMV3A&branch=master)](https://app.bitrise.io/app/c7c358c5be663f7c)
 
-Shot is a [Gradle](https://gradle.org/) plugin that simplifies the execution of screenshot tests using [Screenshot Tests For Android by Facebook](http://facebook.github.io/screenshot-tests-for-android/).
+Shot is an Android project you can use to write screenshot for your apps in a simple and friendly way.
 
 ## What is this?
 
-``Shot`` is a Gradle plugin thought to run screenshot tests for Android using the [screenshot testing Facebook SDK](http://facebook.github.io/screenshot-tests-for-android/).
+``Shot`` is a Gradle plugin and a core android library thought to run screenshot tests for Android using the [screenshot testing Facebook SDK](http://facebook.github.io/screenshot-tests-for-android/) under the hood. This project provides a handy interface named ``ScreenshotTest`` and a ready to use ``ShotTestRunner`` you can use in order to simplify your tests design.
 
-**Since Shot 0.3.0 a simple but powerful HTML report is generated after every verification or screenshots recording execution. Here you have an example of the [recording](./art/recordReport.png) and [verification](./art/verificationReport.png) report generated.** 
+**Since Shot 0.3.0 a simple but powerful HTML report is generated after every verification or screenshots recording execution. Here you have an example of the [recording](./art/recordReport.png) and [verification](./art/verificationReport.png) report generated.**
+**Since Shot 4.0.0 a custom test runner and a handy interface have been added to the project in order to simplify how screenshots are recorded and verified.**
 
 ![smallVerificationReport1](./art/smallVerificationReport1.png)
 ![smallVerificationReport2](./art/smallVerificationReport2.png)
@@ -90,48 +91,33 @@ android {
     // ...
     defaultConfig {
         // ...
-        testInstrumentationRunner "com.myapp.ScreenshotTestRunner"
+        testInstrumentationRunner "com.karumi.shot.ShotTestRunner"
     }
     // ...
 ```
 
-In order to do this, you will have to create a class named ``ScreenshotTestRunner``, like the following one, inside your instrumentation tests source folder:
+We created this test runner for you extending from the Android one.
 
-```java
-public class ScreenshotTestRunner extends AndroidJUnitRunner {
+Now you are ready to use the ``ScreenshotTest`` interface from your tests:
 
-    @Override
-    public void onCreate(Bundle args) {
-        super.onCreate(args);
-        ScreenshotRunner.onCreate(this, args);
-    }
-
-    @Override
-    public void finish(int resultCode, Bundle results) {
-        ScreenshotRunner.onDestroy();
-        super.finish(resultCode, results);
+```kotlin
+class MyActivityTest: ScreenshotTest {
+    @Test
+    fun void theActivityIsShownProperly() {
+            val mainActivity = startMainActivity();
+           /*
+             * Take the actual screenshot. At the end of this call, the screenshot
+             * is stored on the device and the gradle plugin takes care of
+             * pulling it and displaying it to you in nice ways.
+             */
+            compareScreenshot(activity);
     }
 }
 ```
 
-Now you are ready to use the ``Screenshot`` API from your tests:
+***This interface is full of useful methods you can use to take your screenshots with your activities, dialogs fragments, view holders or even custom views***
 
-```java
-@Test
-public void theActivityIsShownProperly() {
-        Activity mainActivity = startMainActivity();
-       /*
-         * Take the actual screenshot. At the end of this call, the screenshot
-         * is stored on the device and the gradle plugin takes care of
-         * pulling it and displaying it to you in nice ways.
-         */
-        Screenshot.snapActivity(activity).record();
-}
-```
-
-***You can find a complete example in this repository under the folder named ``shot-consumer`` or review [this kata](https://github.com/Karumi/KataScreenshotAndroid/).***
-
-The [official documentation](https://facebook.github.io/screenshot-tests-for-android).
+You can find a complete example in this repository under the folder named ``shot-consumer`` or review [this kata](https://github.com/Karumi/KataScreenshotAndroid/).***
 
 Now you are ready to record and verify your screenshot tests! 
 
@@ -194,29 +180,14 @@ You can run a single test or test class, just add the `android.testInstrumentati
 **Running all tests in a class:**
 
 ```shell
-./gradlew executeScreenshotTests -Pandroid.testInstrumentationRunnerArguments.class=com.your.package.YourClassTest
+./gradlew <Flavor><BuildType>executeScreenshotTests -Pandroid.testInstrumentationRunnerArguments.class=com.your.package.YourClassTest
 ```
 
 **Running a single test:**
 
 ```shell
-./gradlew executeScreenshotTests -Pandroid.testInstrumentationRunnerArguments.class=com.your.package.YourClassTest#yourTest
+./gradlew <Flavor><BuildType>executeScreenshotTests -Pandroid.testInstrumentationRunnerArguments.class=com.your.package.YourClassTest#yourTest
 ```
-
-## Custom dependencies
-
-If you have included in your project a dependency to related to the dexmaker and you are facing this exception: ``com.android.dx.util.DexException: Multiple dex files define``, you can customize how the facebook SDK is added to your project and exclude the dexmaker library as follows:
-
- ```groovy
-   androidTestCompile ('com.facebook.testing.screenshot:core:0.11.0') {
-     exclude group: 'com.crittercism.dexmaker', module: 'dexmaker'
-     exclude group: 'com.crittercism.dexmaker', module: 'dexmaker-dx'
-   }
- ```
- 
-The Shot plugin automatically detects if you are including a compatible version of the screenshot facebook library in your project and, if it's present, it will not include it again.
-
-**Disclaimer**: The only compatible version of the facebook library is 0.12.0 and above, so if you are using any other version we highly encourage to match it with the one Shot is using to avoid problems.
 
 ## iOS support
 
