@@ -1,5 +1,6 @@
 package com.karumi.ui.view
 
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import com.karumi.R
@@ -8,6 +9,7 @@ import com.karumi.ui.presenter.SuperHeroesPresenter
 import com.karumi.ui.view.adapter.SuperHeroViewHolder
 import org.junit.Test
 import org.mockito.Mockito.mock
+import com.karumi.shot.ScreenshotTest
 
 class SuperHeroViewHolderTest : ScreenshotTest {
 
@@ -18,7 +20,7 @@ class SuperHeroViewHolderTest : ScreenshotTest {
 
         holder.render(superHero)
 
-        compareScreenshot(holder, R.dimen.super_hero_row_height)
+        compareScreenshot(holder)
     }
 
     @Test
@@ -28,7 +30,7 @@ class SuperHeroViewHolderTest : ScreenshotTest {
 
         holder.render(superHero)
 
-        compareScreenshot(holder, R.dimen.super_hero_row_height)
+        compareScreenshot(holder)
     }
 
     @Test
@@ -38,7 +40,7 @@ class SuperHeroViewHolderTest : ScreenshotTest {
 
         holder.render(superHero)
 
-        compareScreenshot(holder, R.dimen.super_hero_row_height)
+        compareScreenshot(holder)
     }
 
     @Test
@@ -48,7 +50,11 @@ class SuperHeroViewHolderTest : ScreenshotTest {
 
         holder.render(superHero)
 
-        compareScreenshot(holder, R.dimen.super_hero_row_height)
+        compareScreenshot(holder)
+    }
+
+    private fun compareScreenshot(holder: RecyclerView.ViewHolder) {
+        compareScreenshot(view = holder.itemView, heightInPx = holder.itemView.resources.getDimensionPixelSize(R.dimen.super_hero_row_height).toInt())
     }
 
     private fun givenASuperHeroViewHolder(): SuperHeroViewHolder {

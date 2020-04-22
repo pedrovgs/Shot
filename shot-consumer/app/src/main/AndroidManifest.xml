@@ -23,6 +23,7 @@
     </activity>
 
     <activity android:name=".ui.view.SuperHeroDetailActivity"/>
+    <activity android:name=".ui.view.CursorActivity"/>
   </application>
 
 </manifest>

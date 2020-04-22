@@ -136,10 +136,10 @@ class ShotPlugin extends Plugin[Project] {
 
       override def beforeResolve(
           resolvableDependencies: ResolvableDependencies): Unit = {
-        var facebookDependencyHasBeenAdded = false
+        var shotAndroidDependencyHasBeenAdded = false
 
         project.getConfigurations.forEach(config => {
-          facebookDependencyHasBeenAdded |= config.getAllDependencies
+          shotAndroidDependencyHasBeenAdded |= config.getAllDependencies
             .toArray(new Array[Dependency](0))
             .exists(
               dependency =>
@@ -148,7 +148,7 @@ class ShotPlugin extends Plugin[Project] {
                   && Config.androidDependencyVersion == dependency.getVersion)
         })
 
-        if (!facebookDependencyHasBeenAdded) {
+        if (!shotAndroidDependencyHasBeenAdded) {
           val dependencyMode = Config.androidDependencyMode
           val dependencyName = Config.androidDependency
           val dependenciesHandler = project.getDependencies

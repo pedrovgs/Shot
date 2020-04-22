@@ -9,6 +9,7 @@ import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.salomonbrys.kodein.Kodein
 import com.karumi.asApp
+import com.karumi.shot.ScreenshotTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.runner.RunWith
