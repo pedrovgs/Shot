@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.EditText
@@ -39,7 +40,7 @@ interface ScreenshotTest {
 
         if (heightInPx == null && widthInPx == null) {
             disableFlakyComponentsAndWaitForIdle(view)
-            snapActivity(activity).record()
+            takeActivitySnapshot(activity)
         } else {
             runOnUi {
                 view.setBackgroundResource(backgroundColor)
@@ -86,11 +87,7 @@ interface ScreenshotTest {
                     .setExactWidthPx(width)
                     .layout()
         }
-        val testName = name ?: TestNameDetector.getTestName()
-        Screenshot
-                .snap(view)
-                .setName("${TestNameDetector.getTestClass()}_$testName")
-                .record()
+        takeViewSnapshot(name, view)
     }
 
     fun disableFlakyComponentsAndWaitForIdle(view: View) {
@@ -106,6 +103,29 @@ interface ScreenshotTest {
 
     fun runOnUi(block: () -> Unit) {
         getInstrumentation().runOnMainSync { block() }
+    }
+
+    private fun takeViewSnapshot(name: String?, view: View) {
+        val testName = name ?: TestNameDetector.getTestName()
+        val snapshotName = "${TestNameDetector.getTestClass()}_$testName"
+        try {
+            Screenshot
+                    .snap(view)
+                    .setName(snapshotName)
+                    .record()
+        } catch (t: Throwable) {
+            Log.e("Shot", "Exception captured while taking screenshot for snapshot with name $snapshotName", t)
+        }
+    }
+
+    private fun takeActivitySnapshot(activity: Activity) {
+        val testName = TestNameDetector.getTestName()
+        val snapshotName = "${TestNameDetector.getTestClass()}_$testName"
+        try {
+            snapActivity(activity).record()
+        } catch (t: Throwable) {
+            Log.e("Shot", "Exception captured while taking screenshot for snapshot with name $snapshotName", t)
+        }
     }
 
     private fun disableAnimatedComponents(view: View) {
