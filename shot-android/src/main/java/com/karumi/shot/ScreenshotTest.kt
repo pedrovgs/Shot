@@ -114,7 +114,6 @@ interface ScreenshotTest {
         runOnUi {
             hideEditTextCursors(view)
             hideScrollViewBars(view)
-            hideRecyclerViewBars(view)
         }
     }
 
@@ -124,12 +123,6 @@ interface ScreenshotTest {
         }
 
         view.childrenViews<HorizontalScrollView>().forEach {
-            hideViewBars(it)
-        }
-    }
-
-    private fun hideRecyclerViewBars(view: View) {
-        view.childrenViews<RecyclerView>().forEach {
             hideViewBars(it)
         }
     }
