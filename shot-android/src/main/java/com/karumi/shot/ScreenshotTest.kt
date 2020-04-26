@@ -7,6 +7,8 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.view.WindowManager
 import android.widget.EditText
+import android.widget.HorizontalScrollView
+import android.widget.ScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso
@@ -111,7 +113,31 @@ interface ScreenshotTest {
     private fun disableAnimatedComponents(view: View) {
         runOnUi {
             hideEditTextCursors(view)
+            hideScrollViewBars(view)
+            hideRecyclerViewBars(view)
         }
+    }
+
+    private fun hideScrollViewBars(view: View) {
+        view.childrenViews<ScrollView>().forEach {
+            hideViewBars(it)
+        }
+
+        view.childrenViews<HorizontalScrollView>().forEach {
+            hideViewBars(it)
+        }
+    }
+
+    private fun hideRecyclerViewBars(view: View) {
+        view.childrenViews<RecyclerView>().forEach {
+            hideViewBars(it)
+        }
+    }
+
+    private fun hideViewBars(it: View) {
+        it.isHorizontalScrollBarEnabled = false
+        it.isVerticalScrollBarEnabled = false
+        it.overScrollMode = View.OVER_SCROLL_NEVER
     }
 
     private fun hideEditTextCursors(view: View) {
