@@ -6,6 +6,7 @@ import android.content.Context
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
+import android.view.View.INVISIBLE
 import android.view.WindowManager
 import android.widget.EditText
 import androidx.fragment.app.Fragment
@@ -20,6 +21,9 @@ import com.facebook.testing.screenshot.internal.TestNameDetector
 interface ScreenshotTest {
 
     private val context: Context get() = getInstrumentation().targetContext
+
+    val ignoredViews: List<Int>
+        get() = emptyList()
 
     /**
      * Function designed to be executed right before the screenshot is taken. Override it
@@ -67,7 +71,7 @@ interface ScreenshotTest {
     }
 
     fun compareScreenshot(holder: RecyclerView.ViewHolder, heightInPx: Int, widthInPx: Int? = null) =
-            compareScreenshot(view = holder.itemView, heightInPx = heightInPx, widthInPx = widthInPx)
+        compareScreenshot(view = holder.itemView, heightInPx = heightInPx, widthInPx = widthInPx)
 
     fun compareScreenshot(view: View, heightInPx: Int? = null, widthInPx: Int? = null, name: String? = null) {
         disableFlakyComponentsAndWaitForIdle(view)
@@ -83,9 +87,9 @@ interface ScreenshotTest {
         val heightInDp = heightInPx ?: height
         runOnUi {
             ViewHelpers.setupView(view)
-                    .setExactHeightPx(heightInDp)
-                    .setExactWidthPx(width)
-                    .layout()
+                .setExactHeightPx(heightInDp)
+                .setExactWidthPx(width)
+                .layout()
         }
         takeViewSnapshot(name, view)
     }
@@ -93,8 +97,14 @@ interface ScreenshotTest {
     fun disableFlakyComponentsAndWaitForIdle(view: View) {
         prepareUIForScreenshot()
         disableAnimatedComponents(view)
+        hideIgnoredViews(view)
         waitForAnimationsToFinish()
     }
+
+    private fun hideIgnoredViews(view: View) =
+        view.filterChildrenViews { children -> children.id in ignoredViews }.forEach { viewToIgnore ->
+            viewToIgnore.visibility = INVISIBLE
+        }
 
     fun waitForAnimationsToFinish() {
         getInstrumentation().waitForIdleSync()
@@ -110,9 +120,9 @@ interface ScreenshotTest {
         val snapshotName = "${TestNameDetector.getTestClass()}_$testName"
         try {
             Screenshot
-                    .snap(view)
-                    .setName(snapshotName)
-                    .record()
+                .snap(view)
+                .setName(snapshotName)
+                .record()
         } catch (t: Throwable) {
             Log.e("Shot", "Exception captured while taking screenshot for snapshot with name $snapshotName", t)
         }
