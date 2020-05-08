@@ -83,11 +83,9 @@ interface ScreenshotTest {
 
         val height = heightInPx ?: metrics.heightPixels
         val width = widthInPx ?: metrics.widthPixels
-
-        val heightInDp = heightInPx ?: height
         runOnUi {
             ViewHelpers.setupView(view)
-                .setExactHeightPx(heightInDp)
+                .setExactHeightPx(height)
                 .setExactWidthPx(width)
                 .layout()
         }
