@@ -38,11 +38,15 @@ android {
         release {
             minifyEnabled false
         }
+        debug {
+            applicationIdSuffix = ".releaseSuffix"
+        }
     }
     flavorDimensions "color"
     productFlavors {
         blue {
             dimension "color"
+            testApplicationId "com.test.application.id.test"
         }
         green {
             applicationIdSuffix ".green"
