@@ -93,12 +93,16 @@ class ShotPlugin extends Plugin[Project] {
                                variant: BaseVariant) = {
     val flavor = variant.getMergedFlavor
     val completeAppId = flavor.getApplicationId + Option(
-      flavor.getApplicationIdSuffix).getOrElse("")
+      flavor.getApplicationIdSuffix).getOrElse("") +
+      Option(variant.getBuildType.getApplicationIdSuffix).getOrElse("") +
+      ".test"
+    val appTestId =
+      Option(flavor.getTestApplicationId).getOrElse(completeAppId)
     if (variant.getBuildType.getName != "release") {
       addTasksFor(project,
                   variant.getFlavorName,
                   variant.getBuildType,
-                  completeAppId,
+                  appTestId,
                   baseTask)
     }
   }
