@@ -119,7 +119,27 @@ class MyActivityTest: ScreenshotTest {
 
 You can find a complete example in this repository under the folder named ``shot-consumer`` or review [this kata](https://github.com/Karumi/KataScreenshotAndroid/).***
 
-Now you are ready to record and verify your screenshot tests! 
+Now you are ready to record and verify your screenshot tests!
+
+## ScreenshotTest interface
+
+``ScreenshotTest`` interface has been designed to simplify the usage of the library. These are the features you can use:
+
+* Take a screenshot of any activity by using ``compareScreenshot(activity)``. Activity height, width and background color is configurable.
+* Take a screenshot of any fragment by using ``compareScreenshot(fragment)``. Fragment height, width and background color is configurable.
+* Take a screenshot of any dialog by using ``compareScreenshot(dialog)``. Dialog height, width and background color is configurable.
+* Take a screenshot of any view by using ``compareScreenshot(view)``. View height, width and background color is configurable.
+* Take a screenshot of any view holder by using ``compareScreenshot(holder)``. View holder height, width and background color is configurable.
+
+Before taking the screenshot, Shot performs some tasks in order to stabilize the screenshot. You can find the detail about the tasks performed in ``ScreenshotTest#disableFlakyComponentsAndWaitForIdle``:
+
+* Invokes ``disableFlakyComponentsAndWaitForIdle`` method you can override if you want to add any custom task before taking the screenshot.
+* Hides every ``EditText`` cursor.
+* Hides every ``ScrollView`` and ``HorizontalScrollView`` scrollbars.
+* Hides all the ignored views. You can specify the views you want to ignore by overriding ``viewToIgnore``.
+* Wait for animations to finish and also waits until Espresso considers the UI thread is idle. This is really interesting if you are using Espresso in your tests.
+
+**You can find examples of the usage of this interface and every feature mentioned inside the examples named ``shot-consumer`` and ``shot-consumer-flavors``.**
 
 ## Recording tests
 
