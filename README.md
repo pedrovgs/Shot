@@ -35,7 +35,7 @@ Setup the Gradle plugin:
     // ...
     dependencies {
       // ...
-      classpath 'com.karumi:shot:4.1.1'
+      classpath 'com.karumi:shot:4.2.0'
     }
   }
   apply plugin: 'shot'
