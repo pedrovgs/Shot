@@ -98,6 +98,20 @@ android {
 
 We created this test runner for you extending from the Android one.
 
+**If you want to use Shot to test your Android libraries code, you will have to configure the ``testApplicationId`` parameter as follows**
+
+```groovy
+android {
+    // ...
+    defaultConfig {
+        // ...
+        testApplicationId "<MY_TEST_APPLICATION_ID>"
+    }
+    // ...
+```
+
+Be careful and do not use the same id you are using for any other of the installed apps.
+
 Now you are ready to use the ``ScreenshotTest`` interface from your tests:
 
 ```kotlin
