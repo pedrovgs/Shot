@@ -25,14 +25,9 @@ class Adb {
 
   def pullScreenshots(device: String,
                       screenshotsFolder: Folder,
-                      appId: AppId) = {
-    println("============================>")
-    println(s"-s $device pull /sdcard/screenshots/$appId/screenshots-default/ $screenshotsFolder")
-    println("============================>")
+                      appId: AppId): Unit =
     executeAdbCommandWithResult(
-    s"-s $device pull /sdcard/screenshots/$appId/screenshots-default/ $screenshotsFolder")
-  }
-
+      s"-s $device pull /sdcard/screenshots/$appId/screenshots-default/ $screenshotsFolder")
 
   def clearScreenshots(device: String, appId: AppId): Unit =
     executeAdbCommand(

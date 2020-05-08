@@ -1,11 +1,12 @@
 package com.karumi.shot
 
 import com.android.build.gradle.api.BaseVariant
-import com.android.builder.model.BuildType
+import com.android.builder.model.{BuildType, ProductFlavor}
 import com.android.build.gradle.{AppExtension, LibraryExtension}
 import com.karumi.shot.android.Adb
 import com.karumi.shot.base64.Base64Encoder
 import com.karumi.shot.domain.Config
+import com.karumi.shot.exceptions.ShotException
 import com.karumi.shot.reports.{ConsoleReporter, ExecutionReporter}
 import com.karumi.shot.screenshots.{
   ScreenshotsComparator,
@@ -92,6 +93,7 @@ class ShotPlugin extends Plugin[Project] {
                                baseTask: ExecuteScreenshotTestsForEveryFlavor,
                                variant: BaseVariant) = {
     val flavor = variant.getMergedFlavor
+    checkIfApplicationIdIsConfigured(project, flavor)
     val completeAppId = flavor.getApplicationId + Option(
       flavor.getApplicationIdSuffix).getOrElse("") +
       Option(variant.getBuildType.getApplicationIdSuffix).getOrElse("") +
@@ -106,6 +108,13 @@ class ShotPlugin extends Plugin[Project] {
                   baseTask)
     }
   }
+
+  private def checkIfApplicationIdIsConfigured(project: Project,
+                                               flavor: ProductFlavor) =
+    if (isAnAndroidLibrary(project) && flavor.getTestApplicationId == null) {
+      throw ShotException(
+        "Your Android library needs to be configured using an testApplicationId in your build.gradle defaultConfig block.")
+    }
 
   private def addExtensions(project: Project): Unit = {
     val name = ShotExtension.name
