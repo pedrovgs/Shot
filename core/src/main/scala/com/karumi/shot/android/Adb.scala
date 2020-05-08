@@ -11,6 +11,10 @@ object Adb {
 class Adb {
 
   private final val CR_ASCII_DECIMAL = 13
+  private val logger = ProcessLogger(
+    o => println("Shot ADB output: " + o),
+    e => println(Console.RED + "Shot ADB error: " + e + Console.RESET)
+  )
 
   def devices: List[String] = {
     executeAdbCommandWithResult("devices")
@@ -34,10 +38,10 @@ class Adb {
       s"-s $device shell rm -r /sdcard/screenshots/$appId/screenshots-default/")
 
   private def executeAdbCommand(command: String): Int =
-    s"${Adb.adbBinaryPath} $command".!
+    s"${Adb.adbBinaryPath} $command" ! logger
 
   private def executeAdbCommandWithResult(command: String): String =
-    s"${Adb.adbBinaryPath} $command".!!
+    s"${Adb.adbBinaryPath} $command" !! logger
 
   private def isCarriageReturnASCII(device: String): Boolean =
     device.charAt(0) == CR_ASCII_DECIMAL
