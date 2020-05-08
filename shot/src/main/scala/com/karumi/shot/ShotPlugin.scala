@@ -1,10 +1,12 @@
 package com.karumi.shot
 
+import com.android.build.gradle.api.BaseVariant
 import com.android.builder.model.{BuildType, ProductFlavor}
-import com.android.build.gradle.AppExtension
+import com.android.build.gradle.{AppExtension, LibraryExtension}
 import com.karumi.shot.android.Adb
 import com.karumi.shot.base64.Base64Encoder
 import com.karumi.shot.domain.Config
+import com.karumi.shot.exceptions.ShotException
 import com.karumi.shot.reports.{ConsoleReporter, ExecutionReporter}
 import com.karumi.shot.screenshots.{
   ScreenshotsComparator,
@@ -58,28 +60,61 @@ class ShotPlugin extends Plugin[Project] {
   }
 
   private def addTasks(project: Project): Unit = {
+    if (isAnAndroidProject(project)) {
+      addTasksToAppModule(project)
+    } else if (isAnAndroidLibrary(project)) {
+      addTasksToLibraryModule(project)
+    }
+  }
+
+  private def addTasksToLibraryModule(project: Project) = {
+    val libraryExtension =
+      getAndroidLibraryExtension(project)
+    val baseTask = project.getTasks.create(
+      Config.defaultTaskName,
+      classOf[ExecuteScreenshotTestsForEveryFlavor])
+    libraryExtension.getLibraryVariants.all { variant =>
+      addTaskToVariant(project, baseTask, variant)
+    }
+  }
+
+  private def addTasksToAppModule(project: Project) = {
     val appExtension =
-      project.getExtensions.getByType[AppExtension](classOf[AppExtension])
+      getAndroidAppExtension(project)
     val baseTask = project.getTasks.create(
       Config.defaultTaskName,
       classOf[ExecuteScreenshotTestsForEveryFlavor])
     appExtension.getApplicationVariants.all { variant =>
-      val flavor = variant.getMergedFlavor
-      val completeAppId = flavor.getApplicationId + Option(
-        flavor.getApplicationIdSuffix).getOrElse("") +
-        Option(variant.getBuildType.getApplicationIdSuffix).getOrElse("") +
-        ".test"
-      val appTestId =
-        Option(flavor.getTestApplicationId).getOrElse(completeAppId)
-      if (variant.getBuildType.getName != "release") {
-        addTasksFor(project,
-                    variant.getFlavorName,
-                    variant.getBuildType,
-                    appTestId,
-                    baseTask)
-      }
+      addTaskToVariant(project, baseTask, variant)
     }
   }
+
+  private def addTaskToVariant(project: Project,
+                               baseTask: ExecuteScreenshotTestsForEveryFlavor,
+                               variant: BaseVariant) = {
+    val flavor = variant.getMergedFlavor
+    checkIfApplicationIdIsConfigured(project, flavor)
+    val completeAppId = flavor.getApplicationId + Option(
+      flavor.getApplicationIdSuffix).getOrElse("") +
+      Option(variant.getBuildType.getApplicationIdSuffix).getOrElse("") +
+      ".test"
+    val appTestId =
+      Option(flavor.getTestApplicationId).getOrElse(completeAppId)
+    if (variant.getBuildType.getName != "release") {
+      addTasksFor(project,
+                  variant.getFlavorName,
+                  variant.getBuildType,
+                  appTestId,
+                  baseTask)
+    }
+  }
+
+  private def checkIfApplicationIdIsConfigured(project: Project,
+                                               flavor: ProductFlavor) =
+    if (isAnAndroidLibrary(project) && flavor.getTestApplicationId == null) {
+      throw ShotException(
+        "Your Android library needs to be configured using an testApplicationId in your build.gradle defaultConfig block.")
+    }
 
   private def addExtensions(project: Project): Unit = {
     val name = ShotExtension.name
@@ -156,9 +191,7 @@ class ShotPlugin extends Plugin[Project] {
           val dependenciesHandler = project.getDependencies
 
           val dependencyToAdd = dependenciesHandler.create(dependencyName)
-          Option(project.getPlugins.findPlugin(Config.androidPluginName))
-            .map(_ =>
-              project.getDependencies.add(dependencyMode, dependencyToAdd))
+          project.getDependencies.add(dependencyMode, dependencyToAdd)
           project.getGradle.removeListener(this)
         }
       }
@@ -166,5 +199,30 @@ class ShotPlugin extends Plugin[Project] {
       override def afterResolve(
           resolvableDependencies: ResolvableDependencies): Unit = {}
     })
+  }
+
+  private def isAnAndroidLibrary(project: Project): Boolean =
+    try {
+      getAndroidLibraryExtension(project)
+      true
+    } catch {
+      case _: Throwable => false
+    }
+
+  private def isAnAndroidProject(project: Project): Boolean =
+    try {
+      getAndroidAppExtension(project)
+      true
+    } catch {
+      case _: Throwable => false
+    }
+
+  private def getAndroidLibraryExtension(project: Project) = {
+    project.getExtensions
+      .getByType[LibraryExtension](classOf[LibraryExtension])
+  }
+
+  private def getAndroidAppExtension(project: Project) = {
+    project.getExtensions.getByType[AppExtension](classOf[AppExtension])
   }
 }
