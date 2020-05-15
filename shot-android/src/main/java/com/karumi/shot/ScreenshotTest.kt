@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import com.facebook.testing.screenshot.Screenshot
-import com.facebook.testing.screenshot.Screenshot.snapActivity
 import com.facebook.testing.screenshot.ViewHelpers
 import com.facebook.testing.screenshot.internal.TestNameDetector
 
@@ -40,40 +39,47 @@ interface ScreenshotTest {
         activity: Activity,
         heightInPx: Int? = null,
         widthInPx: Int? = null,
+        name: String? = null,
         backgroundColor: Int = android.R.color.white
     ) {
         val view = activity.findViewById<View>(android.R.id.content)
 
         if (heightInPx == null && widthInPx == null) {
             disableFlakyComponentsAndWaitForIdle(view)
-            takeActivitySnapshot(activity)
+            takeActivitySnapshot(activity, name)
         } else {
             runOnUi {
                 view.setBackgroundResource(backgroundColor)
             }
-            compareScreenshot(view = view!!, heightInPx = heightInPx, widthInPx = widthInPx)
+            compareScreenshot(view = view!!, heightInPx = heightInPx, widthInPx = widthInPx, name = name)
         }
     }
 
     fun compareScreenshot(
         fragment: Fragment,
         heightInPx: Int? = null,
-        widthInPx: Int? = null
-    ) = compareScreenshot(fragment.view!!, heightInPx)
+        widthInPx: Int? = null,
+        name: String? = null
+    ) = compareScreenshot(view = fragment.view!!, heightInPx = heightInPx, name = name)
 
     fun compareScreenshot(
         dialog: Dialog,
         heightInPx: Int? = null,
-        widthInPx: Int? = null
+        widthInPx: Int? = null,
+        name: String? = null
     ) {
         val window = dialog.window
         if (window != null) {
-            compareScreenshot(window.decorView, heightInPx, widthInPx)
+            compareScreenshot(view = window.decorView, heightInPx = heightInPx, widthInPx = widthInPx, name = name)
         }
     }
 
-    fun compareScreenshot(holder: RecyclerView.ViewHolder, heightInPx: Int, widthInPx: Int? = null) =
-        compareScreenshot(view = holder.itemView, heightInPx = heightInPx, widthInPx = widthInPx)
+    fun compareScreenshot(
+        holder: RecyclerView.ViewHolder,
+        heightInPx: Int,
+        widthInPx: Int? = null,
+        name: String? = null
+    ) = compareScreenshot(view = holder.itemView, heightInPx = heightInPx, widthInPx = widthInPx, name = name)
 
     fun compareScreenshot(view: View, heightInPx: Int? = null, widthInPx: Int? = null, name: String? = null) {
         disableFlakyComponentsAndWaitForIdle(view)
@@ -128,11 +134,14 @@ interface ScreenshotTest {
         }
     }
 
-    private fun takeActivitySnapshot(activity: Activity) {
-        val testName = TestNameDetector.getTestName()
+    private fun takeActivitySnapshot(activity: Activity, name: String?) {
+        val testName = name ?: TestNameDetector.getTestName()
         val snapshotName = "${TestNameDetector.getTestClass()}_$testName"
         try {
-            snapActivity(activity).record()
+            Screenshot
+                .snapActivity(activity)
+                .setName(snapshotName)
+                .record()
         } catch (t: Throwable) {
             Log.e("Shot", "Exception captured while taking screenshot for snapshot with name $snapshotName", t)
         }

@@ -139,11 +139,11 @@ Now you are ready to record and verify your screenshot tests!
 
 ``ScreenshotTest`` interface has been designed to simplify the usage of the library. These are the features you can use:
 
-* Take a screenshot of any activity by using ``compareScreenshot(activity)``. Activity height, width and background color is configurable.
-* Take a screenshot of any fragment by using ``compareScreenshot(fragment)``. Fragment height, width and background color is configurable.
-* Take a screenshot of any dialog by using ``compareScreenshot(dialog)``. Dialog height, width and background color is configurable.
-* Take a screenshot of any view by using ``compareScreenshot(view)``. View height, width and background color is configurable.
-* Take a screenshot of any view holder by using ``compareScreenshot(holder)``. View holder height, width and background color is configurable.
+* Take a screenshot of any activity by using ``compareScreenshot(activity)``. Activity height, width, background color and screenshot name are configurable.
+* Take a screenshot of any fragment by using ``compareScreenshot(fragment)``. Fragment height, width and screenshot name are configurable.
+* Take a screenshot of any dialog by using ``compareScreenshot(dialog)``. Dialog height, width and screenshot name are configurable.
+* Take a screenshot of any view by using ``compareScreenshot(view)``. View height, width and screenshot name are configurable.
+* Take a screenshot of any view holder by using ``compareScreenshot(holder)``. View holder height, width and screenshot name are configurable.
 
 Before taking the screenshot, Shot performs some tasks in order to stabilize the screenshot. You can find the detail about the tasks performed in ``ScreenshotTest#disableFlakyComponentsAndWaitForIdle``:
 
