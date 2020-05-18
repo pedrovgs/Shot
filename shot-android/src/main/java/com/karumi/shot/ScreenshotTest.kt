@@ -107,10 +107,12 @@ interface ScreenshotTest {
         waitForAnimationsToFinish()
     }
 
-    private fun hideIgnoredViews(view: View) =
+    private fun hideIgnoredViews(view: View) = runOnUi {
         view.filterChildrenViews { children -> children.id in ignoredViews }.forEach { viewToIgnore ->
             viewToIgnore.visibility = INVISIBLE
         }
+    }
+
 
     fun waitForAnimationsToFinish() {
         getInstrumentation().waitForIdleSync()
