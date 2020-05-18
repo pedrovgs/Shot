@@ -13,7 +13,8 @@ class Adb {
   private final val CR_ASCII_DECIMAL = 13
   private val logger = ProcessLogger(
     outputMessage => println("Shot ADB output: " + outputMessage),
-    errorMessage => println(Console.RED + "Shot ADB error: " + errorMessage + Console.RESET)
+    errorMessage =>
+      println(Console.RED + "Shot ADB error: " + errorMessage + Console.RESET)
   )
 
   def devices: List[String] = {
