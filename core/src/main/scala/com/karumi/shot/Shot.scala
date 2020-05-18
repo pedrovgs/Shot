@@ -102,6 +102,11 @@ class Shot(adb: Adb,
     if (updatedComparision.hasErrors) {
       consoleReporter.showErrors(updatedComparision,
                                  newScreenshotsVerificationReportFolder)
+
+      console.showError(
+        "🤔 Do you a need a hand with your automated tests or your Android app?")
+      console.showError(
+        "   We'll be happy to help! Send us an email to hello@karumi.com\n")
     } else {
       console.showSuccess("✅  Yeah!!! Your tests are passing.")
     }
