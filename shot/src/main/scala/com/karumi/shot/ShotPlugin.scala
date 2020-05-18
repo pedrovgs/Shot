@@ -170,13 +170,11 @@ class ShotPlugin extends Plugin[Project] {
     val configs = project.getConfigurations
     val shotConfig = configs
       .create(Config.shotConfiguration)
-    shotConfig.defaultDependencies(new Action[DependencySet] {
-      override def execute(dependencies: DependencySet): Unit = {
-        val dependencyName = Config.androidDependency
-        val dependencyToAdd =
-          project.getDependencies().create(dependencyName)
-        dependencies.add(dependencyToAdd)
-      }
+    shotConfig.defaultDependencies((dependencies: DependencySet) => {
+      val dependencyName = Config.androidDependency
+      val dependencyToAdd =
+        project.getDependencies.create(dependencyName)
+      dependencies.add(dependencyToAdd)
     })
     configs.getByName(Config.androidDependencyMode).extendsFrom(shotConfig)
   }
