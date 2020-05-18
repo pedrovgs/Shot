@@ -113,7 +113,6 @@ interface ScreenshotTest {
         }
     }
 
-
     fun waitForAnimationsToFinish() {
         getInstrumentation().waitForIdleSync()
         Espresso.onIdle()
