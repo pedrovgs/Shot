@@ -21,13 +21,8 @@ import com.karumi.shot.tasks.{
   ShotTask
 }
 import com.karumi.shot.ui.Console
-import org.gradle.api.artifacts.{
-  Dependency,
-  DependencyResolutionListener,
-  ResolvableDependencies
-}
-import org.gradle.api.{Action, Plugin, Project, Task}
-import org.gradle.api.artifacts.{Configuration, DependencySet}
+import org.gradle.api.{Plugin, Project, Task}
+import org.gradle.api.artifacts.DependencySet
 
 class ShotPlugin extends Plugin[Project] {
 
