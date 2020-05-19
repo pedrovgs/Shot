@@ -21,12 +21,8 @@ import com.karumi.shot.tasks.{
   ShotTask
 }
 import com.karumi.shot.ui.Console
-import org.gradle.api.artifacts.{
-  Dependency,
-  DependencyResolutionListener,
-  ResolvableDependencies
-}
 import org.gradle.api.{Plugin, Project, Task}
+import org.gradle.api.artifacts.DependencySet
 
 class ShotPlugin extends Plugin[Project] {
 
@@ -70,9 +66,9 @@ class ShotPlugin extends Plugin[Project] {
   private def addTasksToLibraryModule(project: Project) = {
     val libraryExtension =
       getAndroidLibraryExtension(project)
-    val baseTask = project.getTasks.create(
-      Config.defaultTaskName,
-      classOf[ExecuteScreenshotTestsForEveryFlavor])
+    val baseTask =
+      project.getTasks.create(Config.defaultTaskName,
+                              classOf[ExecuteScreenshotTestsForEveryFlavor])
     libraryExtension.getLibraryVariants.all { variant =>
       addTaskToVariant(project, baseTask, variant)
     }
@@ -81,9 +77,9 @@ class ShotPlugin extends Plugin[Project] {
   private def addTasksToAppModule(project: Project) = {
     val appExtension =
       getAndroidAppExtension(project)
-    val baseTask = project.getTasks.create(
-      Config.defaultTaskName,
-      classOf[ExecuteScreenshotTestsForEveryFlavor])
+    val baseTask =
+      project.getTasks.create(Config.defaultTaskName,
+                              classOf[ExecuteScreenshotTestsForEveryFlavor])
     appExtension.getApplicationVariants.all { variant =>
       addTaskToVariant(project, baseTask, variant)
     }
@@ -95,7 +91,8 @@ class ShotPlugin extends Plugin[Project] {
     val flavor = variant.getMergedFlavor
     checkIfApplicationIdIsConfigured(project, flavor)
     val completeAppId = flavor.getApplicationId + Option(
-      flavor.getApplicationIdSuffix).getOrElse("") +
+      flavor.getApplicationIdSuffix)
+      .getOrElse("") +
       Option(variant.getBuildType.getApplicationIdSuffix).getOrElse("") +
       ".test"
     val appTestId =
@@ -170,35 +167,16 @@ class ShotPlugin extends Plugin[Project] {
   }
 
   private def addAndroidTestDependency(project: Project): Unit = {
-
-    project.getGradle.addListener(new DependencyResolutionListener() {
-
-      override def beforeResolve(
-          resolvableDependencies: ResolvableDependencies): Unit = {
-        var shotAndroidDependencyHasBeenAdded = false
-
-        project.getConfigurations.forEach(config => {
-          shotAndroidDependencyHasBeenAdded |= config.getAllDependencies
-            .toArray(new Array[Dependency](0))
-            .exists(dependency =>
-              Config.androidDependencyGroup == dependency.getGroup
-                && Config.androidDependencyName == dependency.getName)
-        })
-
-        if (!shotAndroidDependencyHasBeenAdded) {
-          val dependencyMode = Config.androidDependencyMode
-          val dependencyName = Config.androidDependency
-          val dependenciesHandler = project.getDependencies
-
-          val dependencyToAdd = dependenciesHandler.create(dependencyName)
-          project.getDependencies.add(dependencyMode, dependencyToAdd)
-          project.getGradle.removeListener(this)
-        }
-      }
-
-      override def afterResolve(
-          resolvableDependencies: ResolvableDependencies): Unit = {}
+    val configs = project.getConfigurations
+    val shotConfig = configs
+      .create(Config.shotConfiguration)
+    shotConfig.defaultDependencies((dependencies: DependencySet) => {
+      val dependencyName = Config.androidDependency
+      val dependencyToAdd =
+        project.getDependencies.create(dependencyName)
+      dependencies.add(dependencyToAdd)
     })
+    configs.getByName(Config.androidDependencyMode).extendsFrom(shotConfig)
   }
 
   private def isAnAndroidLibrary(project: Project): Boolean =

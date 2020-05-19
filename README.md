@@ -155,6 +155,18 @@ Before taking the screenshot, Shot performs some tasks in order to stabilize the
 
 **You can find examples of the usage of this interface and every feature mentioned inside the examples named ``shot-consumer`` and ``shot-consumer-flavors``.**
 
+In case you need to override the inner dependency Shot includes in your project during the plugin configuration you can do it as follows:
+
+```groovy
+dependencies {
+  ....
+  shotDependencies "com.karumi:shot-android:ANY_VERSION_YOU_WANT_TO_USE"
+  ....
+}
+```
+
+Keep in mind you'll need to use a compatible version or Shot won't work as expected.
+
 ## Recording tests
 
 You can record your screenshot tests executing this command:
