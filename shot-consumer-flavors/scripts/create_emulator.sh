@@ -7,7 +7,7 @@ fi
 
 echo "Creating a brand new SDCard..."
 rm -rf sdcard_2.img
-$ANDROID_HOME/tools/mksdcard -l e 1G sdcard_2.img
+$ANDROID_HOME/emulator/mksdcard -l e 1G sdcard_2.img
 echo "SDCard created!"
 
 echo "Downloading the image to create the emulator..."
