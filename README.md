@@ -235,6 +235,54 @@ You can run a single test or test class, just add the `android.testInstrumentati
 ./gradlew <Flavor><BuildType>executeScreenshotTests -Pandroid.testInstrumentationRunnerArguments.class=com.your.package.YourClassTest#yourTest
 ```
 
+## Development documentation
+
+Inside this repository you'll find two types of projects. The first one is all the code related to the Gradle Plugin. The second one is all the code related to the example projects we use as consumers of the Gradle Plugin and also as end to end tests. Review the following folders when developing a new feature for Shot or fixing a bug:
+
+Plugin related folders:
+
+* shot: Main Gradle Plugin module.
+* core: Gradle Plugin independent module where all the shot business logic is placed.
+* shot-android: Android library included in the project where Shot is installed automatically when the Gradle Plugin is initialized.
+
+Consumers and end to end tests folder:
+
+* shot-consumer: A simple project created to test Shot and show how the library works.
+* shot-consumer-flavors: A simple project focused on testing how the flavors feature works.
+
+When developing a feature or fixing a bug, plugin related folders are the place where most of the code will be. When writing end to end tests you should review the consumers' folders. Unit or integration tests should be added in the first group of folders using all the tooling already installed and configured for you.
+
+When talking about the IDE we should use, our recommendation is simple. We should use [IntelliJ Idea](https://www.jetbrains.com/idea/) for the Gradle Plugin related code and [Android Studio](https://developer.android.com/studio) for the consumers. Keep in mind the consumers' configuration is not linked with the root Gradle file so you won't be able to build the consumers from the root of this project using Android Studio. That's why we recommend the usage of different IDEs using different root Gradle configurations when working with this repository.
+
+### Steps to develop a feature or fix a bug:
+
+* Review our ``CONTRIBUTING.md`` file. There you'll find some general development rules.
+* Open an issue or drop a comment to explain what you'd like to implement or to fix. Communication is really important for us and we recommend dropping a comment or opening an issue before to avoid development issues.
+* Fork this repository and create a new branch where you'll develop the new feature or fix.
+* Install IntelliJ and Android Studio.
+* Import the root Gradle file configuration with IntelliJ. You will have to install the Scala plugin recommended by IntelliJ, but don't worry, as soon as you start IntelliJ you'll see a pop-up with the recommended plugin.
+* Develop the code you'd like to implement. Remember to add the unit/integration test coverage to the code you are working on.
+* Execute the Gradle task ``./gradlew uploadArchives`` from the root folder in order to update your plugin local installation.
+* Using Android Studio import ``shot-android`` or ``shot-consumer-flavors`` and write an example of the feature or fix you coded before. The example test you write will work as an end to end test.
+* Commit and push the code. Our CI configuration will ensure everything is working as expected!
+* Remember to execute ``./gradlew uploadArchives`` whenever you change the Gradle plugin code related in order to update your local repository and be able to use it from the consumers folder.
+* Once you are ready, send a PR. We will review it and help you to contribute to the official repository. Once everything is ready, we will merge it and release a new version.
+
+In case you need to start an Android emulator you have scripts inside the consumers' folder you can execute to create the emulators you'll need to run the tests :smiley:
+
+This is the list of most useful Gradle tasks you might need divided by type of project:
+
+* Plugin related tasks:
+
+    * ``./gradlew uploadArchives``: Install Shot in your local gradle repository.
+    * ``./gradlew test``: Execute all the tests related to the Gradle plugin.
+    * ``./gradlew scalafmtAll`: Review the Gradle Plugin's checkstyle.
+
+* Consumers related tasks:
+
+    * ``./gradlew executeScreenshotTests``: Execute all the screenshot tests for the associated consumer in verification mode.
+    * ``./gradlew executeScreenshotTests -Precord``: Execute all the screenshot tests for the associated consumer in record mode.
+
 ## iOS support
 
 If you want to apply the same testing technique on iOS you can use [Swift Snapshot Testing](https://github.com/pointfreeco/swift-snapshot-testing)
