@@ -9,7 +9,7 @@ buildscript {
   dependencies {
     classpath "com.neenbedankt.gradle.plugins:android-apt:1.7"
     classpath "com.karumi:shot:4.3.1-SNAPSHOT"
-    classpath "com.github.trevjonez.composer-gradle-plugin:plugin:0.12.0"
+    classpath "com.trevjonez.composer:plugin:1.0.0-rc07"
   }
 }
 

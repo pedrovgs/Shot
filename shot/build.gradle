@@ -6,7 +6,7 @@ apply plugin: 'scalafmt'
 apply from: '../release.gradle'
 
 repositories {
-    mavenCentral()
+    jcenter()
     mavenLocal()
     maven { url 'https://maven.google.com' }
 }
@@ -14,7 +14,7 @@ repositories {
 dependencies {
     compile gradleApi()
     compile localGroovy()
-    compile 'com.android.tools.build:gradle:3.3.2'
+    compile 'com.android.tools.build:gradle:4.0.0'
     compile project(':core')
     compile 'org.scala-lang:scala-library:2.12.1'
     testCompile 'org.scalatest:scalatest_2.12:3.0.3'
@@ -22,7 +22,7 @@ dependencies {
 }
 
 compileScala {
-    classpath = classpath.plus(files(compileGroovy.destinationDir))
+    classpath = classpath + files(compileGroovy.destinationDir)
 }
 
 sourceSets {
