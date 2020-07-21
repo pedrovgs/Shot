@@ -69,7 +69,7 @@ class ShotPlugin extends Plugin[Project] {
       getAndroidLibraryExtension(project)
     val baseTask =
       project.getTasks.register(Config.defaultTaskName,
-        classOf[ExecuteScreenshotTestsForEveryFlavor])
+                                classOf[ExecuteScreenshotTestsForEveryFlavor])
     libraryExtension.getLibraryVariants.all { variant =>
       addTaskToVariant(project, baseTask, variant)
     }
@@ -80,7 +80,7 @@ class ShotPlugin extends Plugin[Project] {
       getAndroidAppExtension(project)
     val baseTask =
       project.getTasks.register(Config.defaultTaskName,
-        classOf[ExecuteScreenshotTestsForEveryFlavor])
+                                classOf[ExecuteScreenshotTestsForEveryFlavor])
     appExtension.getApplicationVariants.all { variant =>
       addTaskToVariant(project, baseTask, variant)
     }
@@ -134,7 +134,7 @@ class ShotPlugin extends Plugin[Project] {
     val tasks = project.getTasks
     val removeScreenshots = tasks
       .register(RemoveScreenshotsTask.name(flavor, buildType),
-        classOf[RemoveScreenshotsTask])
+                classOf[RemoveScreenshotsTask])
 
     removeScreenshots.configure { task =>
       task.setDescription(
@@ -146,7 +146,7 @@ class ShotPlugin extends Plugin[Project] {
 
     val downloadScreenshots = tasks
       .register(DownloadScreenshotsTask.name(flavor, buildType),
-        classOf[DownloadScreenshotsTask])
+                classOf[DownloadScreenshotsTask])
     downloadScreenshots.configure { task =>
       task.setDescription(
         DownloadScreenshotsTask.description(flavor, buildType))
@@ -156,7 +156,7 @@ class ShotPlugin extends Plugin[Project] {
     }
     val executeScreenshot = tasks
       .register(ExecuteScreenshotTests.name(flavor, buildType),
-        classOf[ExecuteScreenshotTests])
+                classOf[ExecuteScreenshotTests])
     executeScreenshot.configure { task =>
       task.setDescription(
         ExecuteScreenshotTests.description(flavor, buildType))
