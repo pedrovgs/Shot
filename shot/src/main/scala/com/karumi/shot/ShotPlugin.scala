@@ -1,8 +1,8 @@
 package com.karumi.shot
 
 import com.android.build.gradle.api.BaseVariant
-import com.android.builder.model.{BuildType, ProductFlavor}
 import com.android.build.gradle.{AppExtension, LibraryExtension}
+import com.android.builder.model.{BuildType, ProductFlavor}
 import com.karumi.shot.android.Adb
 import com.karumi.shot.base64.Base64Encoder
 import com.karumi.shot.domain.Config
@@ -17,12 +17,12 @@ import com.karumi.shot.tasks.{
   DownloadScreenshotsTask,
   ExecuteScreenshotTests,
   ExecuteScreenshotTestsForEveryFlavor,
-  RemoveScreenshotsTask,
-  ShotTask
+  RemoveScreenshotsTask
 }
 import com.karumi.shot.ui.Console
-import org.gradle.api.{Plugin, Project, Task}
 import org.gradle.api.artifacts.DependencySet
+import org.gradle.api.tasks.TaskProvider
+import org.gradle.api.{Plugin, Project}
 
 class ShotPlugin extends Plugin[Project] {
 
@@ -67,8 +67,9 @@ class ShotPlugin extends Plugin[Project] {
     val libraryExtension =
       getAndroidLibraryExtension(project)
     val baseTask =
-      project.getTasks.create(Config.defaultTaskName,
-                              classOf[ExecuteScreenshotTestsForEveryFlavor])
+      project.getTasks
+        .register(Config.defaultTaskName,
+                  classOf[ExecuteScreenshotTestsForEveryFlavor])
     libraryExtension.getLibraryVariants.all { variant =>
       addTaskToVariant(project, baseTask, variant)
     }
@@ -78,16 +79,18 @@ class ShotPlugin extends Plugin[Project] {
     val appExtension =
       getAndroidAppExtension(project)
     val baseTask =
-      project.getTasks.create(Config.defaultTaskName,
-                              classOf[ExecuteScreenshotTestsForEveryFlavor])
+      project.getTasks
+        .register(Config.defaultTaskName,
+                  classOf[ExecuteScreenshotTestsForEveryFlavor])
     appExtension.getApplicationVariants.all { variant =>
       addTaskToVariant(project, baseTask, variant)
     }
   }
 
-  private def addTaskToVariant(project: Project,
-                               baseTask: ExecuteScreenshotTestsForEveryFlavor,
-                               variant: BaseVariant) = {
+  private def addTaskToVariant(
+      project: Project,
+      baseTask: TaskProvider[ExecuteScreenshotTestsForEveryFlavor],
+      variant: BaseVariant) = {
     val flavor = variant.getMergedFlavor
     checkIfApplicationIdIsConfigured(project, flavor)
     val completeAppId = flavor.getApplicationId + Option(
@@ -118,11 +121,12 @@ class ShotPlugin extends Plugin[Project] {
     project.getExtensions.add(name, new ShotExtension())
   }
 
-  private def addTasksFor(project: Project,
-                          flavor: String,
-                          buildType: BuildType,
-                          appId: String,
-                          baseTask: Task): Unit = {
+  private def addTasksFor(
+      project: Project,
+      flavor: String,
+      buildType: BuildType,
+      appId: String,
+      baseTask: TaskProvider[ExecuteScreenshotTestsForEveryFlavor]): Unit = {
     val extension =
       project.getExtensions.getByType[ShotExtension](classOf[ShotExtension])
     val instrumentationTask = if (extension.useComposer) {
@@ -132,38 +136,54 @@ class ShotPlugin extends Plugin[Project] {
     }
     val tasks = project.getTasks
     val removeScreenshots = tasks
-      .create(RemoveScreenshotsTask.name(flavor, buildType),
-              classOf[RemoveScreenshotsTask])
-      .asInstanceOf[ShotTask]
-    removeScreenshots.setDescription(
-      RemoveScreenshotsTask.description(flavor, buildType))
-    removeScreenshots.flavor = flavor
-    removeScreenshots.buildType = buildType
-    removeScreenshots.appId = appId
-    val downloadScreenshots = tasks
-      .create(DownloadScreenshotsTask.name(flavor, buildType),
-              classOf[DownloadScreenshotsTask])
-    downloadScreenshots.setDescription(
-      DownloadScreenshotsTask.description(flavor, buildType))
-    downloadScreenshots.flavor = flavor
-    downloadScreenshots.buildType = buildType
-    downloadScreenshots.appId = appId
-    val executeScreenshot = tasks
-      .create(ExecuteScreenshotTests.name(flavor, buildType),
-              classOf[ExecuteScreenshotTests])
-    executeScreenshot.setDescription(
-      ExecuteScreenshotTests.description(flavor, buildType))
-    executeScreenshot.flavor = flavor
-    executeScreenshot.buildType = buildType
-    executeScreenshot.appId = appId
-    if (extension.runInstrumentation) {
-      executeScreenshot.dependsOn(instrumentationTask)
-      executeScreenshot.dependsOn(downloadScreenshots)
-      executeScreenshot.dependsOn(removeScreenshots)
-      downloadScreenshots.mustRunAfter(instrumentationTask)
-      removeScreenshots.mustRunAfter(downloadScreenshots)
+      .register(RemoveScreenshotsTask.name(flavor, buildType),
+                classOf[RemoveScreenshotsTask])
+
+    removeScreenshots.configure { task =>
+      task.setDescription(RemoveScreenshotsTask.description(flavor, buildType))
+      task.flavor = flavor
+      task.buildType = buildType
+      task.appId = appId
     }
-    baseTask.dependsOn(executeScreenshot)
+
+    val downloadScreenshots = tasks
+      .register(DownloadScreenshotsTask.name(flavor, buildType),
+                classOf[DownloadScreenshotsTask])
+    downloadScreenshots.configure { task =>
+      task.setDescription(
+        DownloadScreenshotsTask.description(flavor, buildType))
+      task.flavor = flavor
+      task.buildType = buildType
+      task.appId = appId
+    }
+    val executeScreenshot = tasks
+      .register(ExecuteScreenshotTests.name(flavor, buildType),
+                classOf[ExecuteScreenshotTests])
+    executeScreenshot.configure { task =>
+      task.setDescription(
+        ExecuteScreenshotTests.description(flavor, buildType))
+      task.flavor = flavor
+      task.buildType = buildType
+      task.appId = appId
+    }
+
+    if (extension.runInstrumentation) {
+      executeScreenshot.configure { task =>
+        task.dependsOn(instrumentationTask)
+        task.dependsOn(downloadScreenshots)
+        task.dependsOn(removeScreenshots)
+      }
+
+      downloadScreenshots.configure { task =>
+        task.mustRunAfter(instrumentationTask)
+      }
+      removeScreenshots.configure { task =>
+        task.mustRunAfter(downloadScreenshots)
+      }
+    }
+    baseTask.configure { task =>
+      task.dependsOn(executeScreenshot)
+    }
   }
 
   private def addAndroidTestDependency(project: Project): Unit = {
