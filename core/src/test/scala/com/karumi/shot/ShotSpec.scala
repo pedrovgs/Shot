@@ -10,14 +10,10 @@ import com.karumi.shot.screenshots.{
   ScreenshotsDiffGenerator,
   ScreenshotsSaver
 }
+import com.karumi.shot.system.EnvVars
 import com.karumi.shot.ui.Console
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{BeforeAndAfter, FlatSpec, Matchers}
-
-object ShotSpec {
-  private val appIdConfigError =
-    "🤔  Error found executing screenshot tests. The appId param is not configured properly. You should configure the appId following the plugin instructions you can find at https://github.com/karumi/shot"
-}
 
 class ShotSpec
     extends FlatSpec
@@ -25,8 +21,6 @@ class ShotSpec
     with BeforeAndAfter
     with MockFactory
     with Resources {
-
-  import ShotSpec._
 
   private var shot: Shot = _
   private val adb = mock[Adb]
@@ -37,6 +31,7 @@ class ShotSpec
   private val screenshotsSaver = mock[ScreenshotsSaver]
   private val reporter = mock[ExecutionReporter]
   private val consoleReporter = mock[ConsoleReporter]
+  private val envVars = mock[EnvVars]
 
   before {
     shot = new Shot(adb,
@@ -46,20 +41,22 @@ class ShotSpec
                     screenshotsSaver,
                     console,
                     reporter,
-                    consoleReporter)
+                    consoleReporter,
+                    envVars)
   }
 
   "Shot" should "should delegate screenshots cleaning to Adb" in {
     val appId: AppId = AppIdMother.anyAppId
     val device: String = "emulator-5554"
     (adb.devices _).expects().returns(List(device))
+    (envVars.androidSerial _).expects().returns(None)
 
     (adb.clearScreenshots _).expects(device, appId)
 
     shot.removeScreenshots(appId)
   }
 
-  it should "pull the screenshots using the project metadata folder and the app id if" in {
+  it should "pull the screenshots using the project metadata folder and the app id" in {
     val appId = AppIdMother.anyAppId
     val device = "emulator-5554"
     val projectFolder = ProjectFolderMother.anyProjectFolder
@@ -73,6 +70,7 @@ class ShotSpec
       BuildTypeMother.anyFlavor,
       BuildTypeMother.anyBuildType) + "_" + device
     (adb.devices _).expects().returns(List(device))
+    (envVars.androidSerial _).expects().returns(None)
 
     (console.show _).expects(*)
     (adb.pullScreenshots _)
@@ -91,5 +89,58 @@ class ShotSpec
     shot.configureAdbPath(anyAdbPath)
 
     Adb.adbBinaryPath shouldBe anyAdbPath
+  }
+
+  it should "should delegate screenshots cleaning to Adb using the specified ANDROID_SERIAL env var" in {
+    val appId: AppId = AppIdMother.anyAppId
+    val device1: String = "emulator-5554"
+    val device2: String = "emulator-5556"
+    (adb.devices _).expects().returns(List(device1, device2))
+    (envVars.androidSerial _).expects().returns(Some(device2))
+
+    (adb.clearScreenshots _).expects(device2, appId)
+
+    shot.removeScreenshots(appId)
+  }
+
+  it should "pull the screenshots using the project metadata folder and the app id from the specified ANDROID_SERIAL env var" in {
+    val appId = AppIdMother.anyAppId
+    val device1 = "emulator-5554"
+    val device2 = "emulator-5556"
+    val projectFolder = ProjectFolderMother.anyProjectFolder
+    val expectedScreenshotsFolder = projectFolder + Config
+      .screenshotsFolderName(BuildTypeMother.anyFlavor,
+                             BuildTypeMother.anyBuildType)
+    val expectedOriginalMetadataFile = projectFolder + Config.metadataFileName(
+      BuildTypeMother.anyFlavor,
+      BuildTypeMother.anyBuildType)
+    val expectedRenamedFile = projectFolder + Config.metadataFileName(
+      BuildTypeMother.anyFlavor,
+      BuildTypeMother.anyBuildType) + "_" + device2
+    (adb.devices _).expects().returns(List(device1, device2))
+    (envVars.androidSerial _).expects().returns(Some(device2))
+
+    (console.show _).expects(*)
+    (adb.pullScreenshots _)
+      .expects(device2, expectedScreenshotsFolder, appId)
+    (files.rename _).expects(expectedOriginalMetadataFile, expectedRenamedFile)
+
+    shot.downloadScreenshots(projectFolder,
+                             BuildTypeMother.anyFlavor,
+                             BuildTypeMother.anyBuildType,
+                             appId)
+  }
+
+  it should "should delegate screenshots cleaning to Adb using the devices if ANDROID_SERIAL env var is not valid" in {
+    val appId: AppId = AppIdMother.anyAppId
+    val device1: String = "emulator-5554"
+    val device2: String = "emulator-5556"
+    (adb.devices _).expects().returns(List(device1, device2))
+    (envVars.androidSerial _).expects().returns(Some("another emulator"))
+
+    (adb.clearScreenshots _).expects(device1, appId)
+    (adb.clearScreenshots _).expects(device2, appId)
+
+    shot.removeScreenshots(appId)
   }
 }

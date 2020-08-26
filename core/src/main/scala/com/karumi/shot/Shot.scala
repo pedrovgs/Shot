@@ -12,6 +12,7 @@ import com.karumi.shot.screenshots.{
   ScreenshotsDiffGenerator,
   ScreenshotsSaver
 }
+import com.karumi.shot.system.EnvVars
 import com.karumi.shot.ui.Console
 import com.karumi.shot.xml.ScreenshotsSuiteXmlParser._
 import org.apache.commons.io.FileUtils
@@ -24,7 +25,8 @@ class Shot(adb: Adb,
            screenshotsSaver: ScreenshotsSaver,
            console: Console,
            reporter: ExecutionReporter,
-           consoleReporter: ConsoleReporter) {
+           consoleReporter: ConsoleReporter,
+           envVars: EnvVars) {
   def configureAdbPath(adbPath: Folder): Unit = {
     Adb.adbBinaryPath = adbPath
   }
@@ -125,9 +127,19 @@ class Shot(adb: Adb,
   def removeScreenshots(appId: AppId): Unit =
     clearScreenshots(appId)
 
-  private def clearScreenshots(appId: AppId): Unit = adb.devices.foreach {
-    device =>
-      adb.clearScreenshots(device, appId)
+  private def clearScreenshots(appId: AppId): Unit = forEachDevice { device =>
+    adb.clearScreenshots(device, appId)
+  }
+
+  private def forEachDevice[T](f: (String => T)) = devices.foreach(f)
+
+  private def devices(): List[String] = {
+    val allDevices = adb.devices
+    val specifiedDevice = envVars.androidSerial
+    specifiedDevice match {
+      case Some(device) if allDevices.contains(device) => List(device)
+      case _ => allDevices
+    }
   }
 
   private def createScreenshotsFolderIfDoesNotExist(screenshotsFolder: AppId) = {
@@ -138,8 +150,8 @@ class Shot(adb: Adb,
   private def pullScreenshots(projectFolder: Folder,
                               appId: AppId,
                               flavor: String,
-                              buildType: String): Unit = {
-    adb.devices.foreach { device =>
+                              buildType: String): Unit =
+    forEachDevice { device =>
       val screenshotsFolder = projectFolder + Config.screenshotsFolderName(
         flavor,
         buildType)
@@ -150,7 +162,6 @@ class Shot(adb: Adb,
         projectFolder + Config.pulledScreenshotsFolder(flavor, buildType))
       renameMetadataFile(projectFolder, flavor, buildType, device)
     }
-  }
 
   private def renameMetadataFile(projectFolder: Folder,
                                  flavor: String,
