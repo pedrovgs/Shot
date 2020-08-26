@@ -128,6 +128,7 @@ interface ScreenshotTest {
         try {
             Screenshot
                 .snap(view)
+                .setIncludeAccessibilityInfo(false)
                 .setName(snapshotName)
                 .record()
         } catch (t: Throwable) {
@@ -141,6 +142,7 @@ interface ScreenshotTest {
         try {
             Screenshot
                 .snapActivity(activity)
+                .setIncludeAccessibilityInfo(false)
                 .setName(snapshotName)
                 .record()
         } catch (t: Throwable) {
