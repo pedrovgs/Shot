@@ -117,7 +117,7 @@ Now you are ready to use the ``ScreenshotTest`` interface from your tests:
 ```kotlin
 class MyActivityTest: ScreenshotTest {
     @Test
-    fun void theActivityIsShownProperly() {
+    fun theActivityIsShownProperly() {
             val mainActivity = startMainActivity();
            /*
              * Take the actual screenshot. At the end of this call, the screenshot
