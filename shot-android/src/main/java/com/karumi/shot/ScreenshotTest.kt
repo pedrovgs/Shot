@@ -18,6 +18,8 @@ import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import com.facebook.testing.screenshot.Screenshot
 import com.facebook.testing.screenshot.ViewHelpers
 import com.facebook.testing.screenshot.internal.TestNameDetector
+import androidx.ui.test.SemanticsNodeInteraction
+import com.karumi.shot.compose.ComposeScreenshot
 
 interface ScreenshotTest {
 
@@ -100,10 +102,19 @@ interface ScreenshotTest {
         takeViewSnapshot(name, view)
     }
 
-    fun disableFlakyComponentsAndWaitForIdle(view: View) {
+    fun compareScreenshot(node: SemanticsNodeInteraction, name: String? = null) {
+        disableFlakyComponentsAndWaitForIdle()
+        val testName = name ?: TestNameDetector.getTestName()
+        val snapshotName = "${TestNameDetector.getTestClass()}_$testName"
+
+    }
+
+    fun disableFlakyComponentsAndWaitForIdle(view: View? = null) {
         prepareUIForScreenshot()
-        disableAnimatedComponents(view)
-        hideIgnoredViews(view)
+        if (view != null) {
+            disableAnimatedComponents(view)
+            hideIgnoredViews(view)
+        }
         waitForAnimationsToFinish()
     }
 

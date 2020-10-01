@@ -7,6 +7,7 @@ import androidx.ui.test.createComposeRule
 import com.karumi.shot.ScreenshotTest
 import com.karumi.shotconsumercompose.ui.ShotConsumerComposeTheme
 import org.junit.Rule
+import androidx.ui.test.onRoot
 import org.junit.Test
 
 class GreetingScreenshotTest : ScreenshotTest {
@@ -16,25 +17,32 @@ class GreetingScreenshotTest : ScreenshotTest {
 
     @Test
     fun rendersTheDefaultComponent() {
-        composeRule.setContent {
-            DefaultPreview()
-        }
+        renderComponent()
+        compareScreenshot(composeRule.onRoot())
+    }
+
+    @Test
+    fun rendersAGreetingWithAnEmptyText() {
+        renderComponent("")
+        compareScreenshot(composeRule.onRoot())
+    }
+
+    @Test
+    fun rendersAGreetingWithATextFullOfWhitespaces() {
+        renderComponent(" ".repeat(200))
+        compareScreenshot(composeRule.onRoot())
     }
 
     @Test
     fun rendersAGreetingWithAShortText() {
-        val greeting = "Hello!"
-        composeRule.setContent {
-            greetingComponent(greeting)
-        }
+        renderComponent("Hello!")
+        compareScreenshot(composeRule.onRoot())
     }
 
     @Test
     fun rendersAGreetingWithALongText() {
-        val greeting = "Hello world from the compose!".repeat(20)
-        composeRule.setContent {
-            greetingComponent(greeting)
-        }
+        renderComponent("Hello world from the compose!".repeat(20))
+        compareScreenshot(composeRule.onRoot())
     }
 
     @Composable
@@ -45,4 +53,15 @@ class GreetingScreenshotTest : ScreenshotTest {
             }
         }
     }
+
+    private fun renderComponent(greeting: String? = null) {
+        composeRule.setContent {
+            if (greeting == null) {
+                DefaultPreview()
+            } else {
+                greetingComponent(greeting)
+            }
+        }
+    }
+
 }
