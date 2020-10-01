@@ -1,0 +1,24 @@
+name: "Test shot-compose-consumer"
+on: [pull_request, push]
+env:
+  GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g -Dorg.gradle.daemon=false -Dkotlin.incremental=false"
+jobs:
+  test:
+    name: Run tests for shot-consumer-compose
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Start emulator
+        run: shot-consumer/scripts/start_emulator.sh
+      - name: Build and install Shot
+        run: ./gradlew uploadArchives
+      - name: Execute screenshot tests
+        run: ./gradlew debugExecuteScreenshotTests
+        working-directory: shot-consumer-compose
+
+
