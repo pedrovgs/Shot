@@ -16,5 +16,5 @@ jobs:
       - name: Start emulator
         run: shot-consumer/scripts/start_emulator.sh
       - name: Unit tests
-        run: shot-consumer-compose/gradlew connectedCheck
+        run: shot-consumer-compose/gradlew debugExecuteScreeshotTests
 
