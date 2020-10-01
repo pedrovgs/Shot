@@ -13,6 +13,7 @@ import com.karumi.shot.screenshots.{
   ScreenshotsDiffGenerator,
   ScreenshotsSaver
 }
+import com.karumi.shot.system.EnvVars
 import com.karumi.shot.tasks.{
   DownloadScreenshotsTask,
   ExecuteScreenshotTests,
@@ -36,7 +37,8 @@ class ShotPlugin extends Plugin[Project] {
       new ScreenshotsSaver,
       console,
       new ExecutionReporter,
-      new ConsoleReporter(console)
+      new ConsoleReporter(console),
+      new EnvVars()
     )
 
   override def apply(project: Project): Unit = {
