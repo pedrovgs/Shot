@@ -15,6 +15,8 @@ jobs:
           java-version: 1.8
       - name: Start emulator
         run: shot-consumer/scripts/start_emulator.sh
+      - name: Build and install Shot
+        run: ./gradlew uploadArchives
       - name: Execute screenshot tests
         run: ./gradlew debugExecuteScreenshotTests
         working-directory: shot-consumer-compose
