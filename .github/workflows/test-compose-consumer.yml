@@ -15,7 +15,8 @@ jobs:
           java-version: 1.8
       - name: Start emulator
         run: shot-consumer/scripts/start_emulator.sh
-      - name: Execute screenshot tests
+      - name: Move to shot-compose-consumer
         run: cd shot-consumer-compose
+      - name: Execute screenshot tests
         run: ./gradlew debugExecuteScreeshotTests
 
