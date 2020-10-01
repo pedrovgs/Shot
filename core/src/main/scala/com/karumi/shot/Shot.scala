@@ -131,7 +131,7 @@ class Shot(adb: Adb,
     adb.clearScreenshots(device, appId)
   }
 
-  private def forEachDevice[T](f: (String => T)) = devices.foreach(f)
+  private def forEachDevice[T](f: String => T): Unit = devices().foreach(f)
 
   private def devices(): List[String] = {
     val allDevices = adb.devices
