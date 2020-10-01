@@ -16,5 +16,7 @@ jobs:
       - name: Start emulator
         run: shot-consumer/scripts/start_emulator.sh
       - name: Execute screenshot tests
-        run: shot-consumer-compose/gradlew debugExecuteScreenshotTests
+        run: ./gradlew debugExecuteScreenshotTests
+        working-directory: shot-consumer-compose
+
 
