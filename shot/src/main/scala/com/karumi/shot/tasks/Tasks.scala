@@ -9,6 +9,7 @@ import com.karumi.shot.screenshots.{
   ScreenshotsDiffGenerator,
   ScreenshotsSaver
 }
+import com.karumi.shot.system.EnvVars
 import com.karumi.shot.ui.Console
 import com.karumi.shot.{Files, Shot, ShotExtension}
 import org.gradle.api.{DefaultTask, GradleException}
@@ -28,7 +29,8 @@ abstract class ShotTask extends DefaultTask {
       new ScreenshotsSaver,
       console,
       new ExecutionReporter,
-      new ConsoleReporter(console)
+      new ConsoleReporter(console),
+      new EnvVars()
     )
   protected val shotExtension: ShotExtension =
     getProject.getExtensions.findByType(classOf[ShotExtension])
