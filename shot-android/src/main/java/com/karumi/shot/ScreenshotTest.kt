@@ -19,7 +19,6 @@ import com.facebook.testing.screenshot.Screenshot
 import com.facebook.testing.screenshot.ViewHelpers
 import com.facebook.testing.screenshot.internal.TestNameDetector
 import androidx.ui.test.SemanticsNodeInteraction
-import com.karumi.shot.compose.ComposeScreenshot
 
 interface ScreenshotTest {
 
@@ -106,7 +105,6 @@ interface ScreenshotTest {
         disableFlakyComponentsAndWaitForIdle()
         val testName = name ?: TestNameDetector.getTestName()
         val snapshotName = "${TestNameDetector.getTestClass()}_$testName"
-
     }
 
     fun disableFlakyComponentsAndWaitForIdle(view: View? = null) {
