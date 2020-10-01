@@ -1,10 +1,12 @@
 name: "Test compose consumer"
 on: [pull_request, push]
+env:
+  GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g -Dorg.gradle.daemon=false -Dkotlin.incremental=false"
 jobs:
     test:
         runs-on: macos-latest
 
-        steps:
+    steps:
         - name: checkout
         uses: actions/checkout@v2
 
