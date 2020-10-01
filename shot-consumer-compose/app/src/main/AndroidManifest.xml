@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.karumi.shotconsumercompose">
+    package="com.karumi.shotconsumercompose"
+    android:sharedUserId="com.karumi.shotconsumercompose.uid">
 
     <application
         android:allowBackup="true"
