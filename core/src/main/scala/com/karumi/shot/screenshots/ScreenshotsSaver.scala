@@ -2,8 +2,9 @@ package com.karumi.shot.screenshots
 
 import java.io.File
 
-import com.karumi.shot.domain.Config
+import com.karumi.shot.domain.{Config, Dimension, Screenshot}
 import com.karumi.shot.domain.model.{Folder, ScreenshotsSuite}
+import com.sksamuel.scrimage.Image
 import org.apache.commons.io.FileUtils
 
 class ScreenshotsSaver {
@@ -27,6 +28,7 @@ class ScreenshotsSaver {
     deleteFolder(reportFolder)
     saveScreenshots(screenshots, reportFolder)
   }
+
   def copyRecordedScreenshotsToTheReportFolder(projectFolder: Folder,
                                                flavor: String,
                                                buildType: String,
@@ -36,6 +38,11 @@ class ScreenshotsSaver {
     FileUtils.copyDirectory(new File(recordedScreenshotsFolder),
                             new File(destinyFolder))
     deleteFolder(destinyFolder)
+  }
+
+  def getScreenshotDimension(screenshot: Screenshot): Dimension ={
+    val image = Image.fromFile(new File(screenshot.recordedScreenshotPath))
+    Dimension(image.width, image.height)
   }
 
   private def deleteOldScreenshots(projectFolder: Folder,

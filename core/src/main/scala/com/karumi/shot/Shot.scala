@@ -229,8 +229,9 @@ class Shot(adb: Adb,
                                              projectName: String): ScreenshotsSuite = {
     val screenshotsFolder       = projectFolder + Config.pulledScreenshotsFolder(flavor, buildType)
     val filesInScreenshotFolder = new java.io.File(screenshotsFolder).listFiles
-    val metadataFiles = filesInScreenshotFolder.filter(file => file.getAbsolutePath.contains("metadata.json"))
-    metadataFiles.flatMap { metadataFilePath =>
+    val metadataFiles =
+      filesInScreenshotFolder.filter(file => file.getAbsolutePath.contains("metadata.json"))
+    val screenshotSuite = metadataFiles.flatMap { metadataFilePath =>
       val metadataFileContent =
         files.read(metadataFilePath.getAbsolutePath)
       ScreenshotsComposeSuiteJsonParser.parseScreenshots(
@@ -240,6 +241,10 @@ class Shot(adb: Adb,
         projectFolder + Config.pulledScreenshotsFolder(flavor, buildType)
       )
     }
+    screenshotSuite.par.map { screenshot =>
+      val dimension = screenshotsSaver.getScreenshotDimension(screenshot)
+      screenshot.copy(screenshotDimension = dimension)
+    }.toList
   }
 
   private def removeProjectTemporalScreenshotsFolder(projectFolder: Folder,
