@@ -55,7 +55,7 @@ class ScreenshotSaverTest {
     fun savesTheBitmapObtainedFromTheNodeUsingTheScreenshotMetadata() {
         saver.saveScreenshot(screenshotToSave)
 
-        val file = File("/sdcard/screenshots/com.karumi.shot.test/screenshots-default/${anyScreenshotMetadata.name}.png")
+        val file = File("/sdcard/screenshots/com.karumi.shot.test/screenshots-compose-default/${anyScreenshotMetadata.name}.png")
         assertTrue(file.exists())
     }
 
@@ -68,7 +68,7 @@ class ScreenshotSaverTest {
         }
 
         assertTrue(testsMetadata.all {
-            File("/sdcard/screenshots/com.karumi.shot.test/screenshots-default/${it.data.name}.png").exists()
+            File("/sdcard/screenshots/com.karumi.shot.test/screenshots-compose-default/${it.data.name}.png").exists()
         })
     }
 
@@ -79,10 +79,23 @@ class ScreenshotSaverTest {
         saver.saveMetadata(session)
 
         val expectedContent = "{\"screenshots\":[{\"name\":\"testName\"},{\"name\":\"test2Name\"}]}"
-        val file = File("/sdcard/screenshots/com.karumi.shot.test/screenshots-default/metadata.json")
+        val file = File("/sdcard/screenshots/com.karumi.shot.test/screenshots-compose-default/metadata.json")
         val content = file.readText(Charset.defaultCharset())
         assertTrue(file.exists())
         assertEquals(expectedContent, content)
+    }
+
+    @Test
+    fun savesTheBitmapsAndTheMetadataAfterTheTestsExecution() {
+        val session = ScreenshotTestSession().add(screenshotToSave.data)
+
+        saver.saveScreenshot(screenshotToSave)
+        saver.saveMetadata(session)
+
+        val bitmapFile = File("/sdcard/screenshots/com.karumi.shot.test/screenshots-compose-default/${anyScreenshotMetadata.name}.png")
+        assertTrue(bitmapFile.exists())
+        val metadataFile = File("/sdcard/screenshots/com.karumi.shot.test/screenshots-compose-default/metadata.json")
+        assertTrue(metadataFile.exists())
     }
 
     private fun clearSdCardFiles() = File("/sdcard/screenshots/com.karumi.shot.test/").deleteRecursively()
