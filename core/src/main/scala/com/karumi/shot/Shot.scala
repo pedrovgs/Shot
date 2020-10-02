@@ -294,7 +294,10 @@ class Shot(adb: Adb,
       )
     }
     screenshotSuite.par.map { screenshot =>
-      val dimension = screenshotsSaver.getScreenshotDimension(screenshot)
+      val dimension = screenshotsSaver.getScreenshotDimension(projectFolder,
+                                                              flavor,
+                                                              buildType,
+                                                              screenshot)
       screenshot.copy(screenshotDimension = dimension)
     }.toList
   }

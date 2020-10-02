@@ -40,8 +40,14 @@ class ScreenshotsSaver {
     deleteFolder(destinyFolder)
   }
 
-  def getScreenshotDimension(screenshot: Screenshot): Dimension = {
-    val image = Image.fromFile(new File(screenshot.recordedScreenshotPath))
+  def getScreenshotDimension(projectFolder: String,
+                             flavor: String,
+                             buildType: String,
+                             screenshot: Screenshot): Dimension = {
+    val screenshotPath = projectFolder + Config.pulledScreenshotsFolder(
+      flavor,
+      buildType) + screenshot.name + ".png"
+    val image = Image.fromFile(new File(screenshotPath))
     Dimension(image.width, image.height)
   }
 
