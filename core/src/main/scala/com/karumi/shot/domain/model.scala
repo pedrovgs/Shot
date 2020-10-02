@@ -75,6 +75,7 @@ case class Screenshot(name: String,
 }
 
 case class Dimension(width: Int, height: Int) {
+  val isZero: Boolean = width == 0 && height == 0
   override def toString: FilePath = width + "x" + height
 }
 

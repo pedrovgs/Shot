@@ -13,9 +13,8 @@ object ScreenshotComposer {
       screenshot: Screenshot): Image = {
     val width = screenshot.screenshotDimension.width
     val height = screenshot.screenshotDimension.height
-    if (width == 0 || height == 0) {
-      val file = new File(screenshot.recordedScreenshotPath)
-      Image.fromFile(file)
+    if (screenshot.recordedPartsPaths.size == 1) {
+      Image.fromFile(new File(screenshot.recordedPartsPaths.head))
     } else {
       var composedImage = Image.filled(width, height, Color.Transparent)
       var partIndex = 0

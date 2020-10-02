@@ -24,7 +24,7 @@ object ScreenshotsComposeSuiteJsonParser {
         viewHierarchy = "",
         absoluteFileNames = Seq(),
         relativeFileNames = Seq(),
-        recordedPartsPaths = Seq(),
+        recordedPartsPaths = Seq(temporalScreenshotsFolder + "/" + name + ".png"),
         screenshotDimension = Dimension(0, 0)
       )
     }

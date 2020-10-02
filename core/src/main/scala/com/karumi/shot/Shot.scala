@@ -48,17 +48,10 @@ class Shot(adb: Adb,
                         buildType: String): Unit = {
     console.show("💾  Saving screenshots.")
     moveComposeScreenshotsToRegularScreenshotsFolder(projectFolder, flavor, buildType)
-    if (true) return
-    val regularScreenshotSuite: ScreenshotsSuite =
-      recordRegularScreenshots(buildFolder, projectFolder, projectName, flavor, buildType)
     val composeScreenshotSuite: ScreenshotsSuite =
       recordComposeScreenshots(buildFolder, projectFolder, projectName, flavor, buildType)
-    regularScreenshotSuite.foreach { screenshot =>
-      println(s"==========> ${screenshot.name}")
-    }
-    composeScreenshotSuite.foreach { screenshot =>
-      println(s"==========> ${screenshot.name}")
-    }
+    val regularScreenshotSuite: ScreenshotsSuite =
+      recordRegularScreenshots(buildFolder, projectFolder, projectName, flavor, buildType)
     val screenshots = regularScreenshotSuite ++ composeScreenshotSuite
     console.show(
       "😃  Screenshots recorded and saved at: " + projectFolder + Config
@@ -236,8 +229,7 @@ class Shot(adb: Adb,
                                              projectName: String): ScreenshotsSuite = {
     val screenshotsFolder       = projectFolder + Config.pulledScreenshotsFolder(flavor, buildType)
     val filesInScreenshotFolder = new java.io.File(screenshotsFolder).listFiles
-    val metadataFiles = filesInScreenshotFolder.filter(file =>
-      file.getAbsolutePath.endsWith(".json"))
+    val metadataFiles = filesInScreenshotFolder.filter(file => file.getAbsolutePath.contains("metadata.json"))
     metadataFiles.flatMap { metadataFilePath =>
       val metadataFileContent =
         files.read(metadataFilePath.getAbsolutePath)
