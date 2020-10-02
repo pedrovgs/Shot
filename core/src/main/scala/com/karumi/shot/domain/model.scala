@@ -31,7 +31,8 @@ object Config {
     }
   def pulledScreenshotsFolder(flavor: String, buildType: String): FilePath =
     screenshotsFolderName(flavor, buildType) + "screenshots-default/"
-  def pulledComposeScreenshotsFolder(flavor: String, buildType: String): FilePath =
+  def pulledComposeScreenshotsFolder(flavor: String,
+                                     buildType: String): FilePath =
     screenshotsFolderName(flavor, buildType) + "screenshots-compose-default/"
   def metadataFileName(flavor: String, buildType: String): FilePath =
     pulledScreenshotsFolder(flavor, buildType) + "metadata.xml"
