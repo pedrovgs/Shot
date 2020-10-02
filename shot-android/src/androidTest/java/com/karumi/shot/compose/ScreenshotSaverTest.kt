@@ -5,14 +5,13 @@ import android.graphics.Bitmap
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.rule.GrantPermissionRule
 import com.nhaarman.mockitokotlin2.whenever
+import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.*
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import java.io.File
+import java.nio.charset.Charset
 
 class ScreenshotSaverTest {
     companion object {
@@ -71,6 +70,19 @@ class ScreenshotSaverTest {
         assertTrue(testsMetadata.all {
             File("/sdcard/screenshots/com.karumi.shot.test/screenshots-default/${it.data.name}.png").exists()
         })
+    }
+
+    @Test
+    fun savesScreenshotTestsExecutionMetadataInAJsonFile() {
+        val session = ScreenshotTestSession().add(screenshotToSave.data).add(otherScreenshotToSave.data)
+
+        saver.saveMetadata(session)
+
+        val expectedContent = "{\"screenshots\":[{\"name\":\"testName\"},{\"name\":\"test2Name\"}]}"
+        val file = File("/sdcard/screenshots/com.karumi.shot.test/screenshots-default/metadata.json")
+        val content = file.readText(Charset.defaultCharset())
+        assertTrue(file.exists())
+        assertEquals(expectedContent, content)
     }
 
     private fun clearSdCardFiles() = File("/sdcard/screenshots/com.karumi.shot.test/").deleteRecursively()

@@ -3,6 +3,7 @@ package com.karumi.shot.compose
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.ui.test.SemanticsNodeInteraction
+import com.google.gson.annotations.SerializedName
 
 class ComposeScreenshot(
     private val session: ScreenshotTestSession,
@@ -21,4 +22,4 @@ class ComposeScreenshot(
     }
 }
 
-data class ScreenshotMetadata(val name: String)
+data class ScreenshotMetadata(@SerializedName("name") val name: String)
