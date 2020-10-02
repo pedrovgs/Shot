@@ -57,7 +57,10 @@ class ComposeScreenshotTest {
         composeScreenshot.saveScreenshot(node, data)
         composeScreenshot.saveMetadata()
 
-        val expectedSession = ScreenshotTestSession.empty.add(data).add(data).add(data)
+        val expectedSession = ScreenshotTestSession.empty
+                .add(data)
+                .add(data)
+                .add(data)
         verify(screenshotSaver).saveMetadata(expectedSession)
     }
 }
