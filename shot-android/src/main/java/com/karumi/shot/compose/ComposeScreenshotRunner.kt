@@ -14,8 +14,6 @@ class ComposeScreenshotRunner {
             )
         }
 
-        fun onDestroy() {
-            composeScreenshot.saveMetadata()
-        }
+        fun onDestroy() = composeScreenshot.saveMetadata()
     }
 }
