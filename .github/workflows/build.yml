@@ -17,6 +17,10 @@ jobs:
         run: shot-consumer/scripts/start_emulator.sh
       - name: Check code formatting
         run: ./gradlew clean checkScalaFmtAll ktlintCheck
+      - name: Shot unit tests
+        run: ./gradlew test
+      - name: Shot unit tests
+        run: ./gradlew :shot-android:connectedCheck
       - name: Build and install Shot
         run: ./gradlew uploadArchives
       - name: Execute screenshot tests for shot-consumer-compose
