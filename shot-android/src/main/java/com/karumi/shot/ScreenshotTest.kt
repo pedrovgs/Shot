@@ -3,6 +3,7 @@ package com.karumi.shot
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.os.Build
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
@@ -11,6 +12,7 @@ import android.view.WindowManager
 import android.widget.EditText
 import android.widget.HorizontalScrollView
 import android.widget.ScrollView
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso
@@ -19,6 +21,8 @@ import com.facebook.testing.screenshot.Screenshot
 import com.facebook.testing.screenshot.ViewHelpers
 import com.facebook.testing.screenshot.internal.TestNameDetector
 import androidx.ui.test.SemanticsNodeInteraction
+import com.karumi.shot.compose.ComposeScreenshotRunner
+import com.karumi.shot.compose.ScreenshotMetadata
 
 interface ScreenshotTest {
 
@@ -101,10 +105,13 @@ interface ScreenshotTest {
         takeViewSnapshot(name, view)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun compareScreenshot(node: SemanticsNodeInteraction, name: String? = null) {
         disableFlakyComponentsAndWaitForIdle()
         val testName = name ?: TestNameDetector.getTestName()
-        val snapshotName = "${TestNameDetector.getTestClass()}_$testName"
+        val screenshotName = "${TestNameDetector.getTestClass()}_$testName"
+        val data = ScreenshotMetadata(name = screenshotName)
+        ComposeScreenshotRunner.composeScreenshot.saveScreenshot(node, data)
     }
 
     fun disableFlakyComponentsAndWaitForIdle(view: View? = null) {
