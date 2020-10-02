@@ -18,8 +18,8 @@ object ScreenshotsComposeSuiteJsonParser {
         name = name,
         recordedScreenshotPath = screenshotsFolder + name + ".png",
         temporalScreenshotPath = Config.screenshotsTemporalRootPath + projectName + "/" + name + ".png",
-        testClass = "test class",
-        testName = "test name",
+        testClass = screenshot.testClassName,
+        testName = screenshot.testName,
         tilesDimension = Dimension(0, 0),
         viewHierarchy = "",
         absoluteFileNames = Seq(),
@@ -31,5 +31,5 @@ object ScreenshotsComposeSuiteJsonParser {
   }
 }
 
-case class ComposeScreenshot(name: String)
+case class ComposeScreenshot(name: String, testClassName: String, testName: String)
 case class ComposeScreenshotSuite(screenshots: List[ComposeScreenshot])

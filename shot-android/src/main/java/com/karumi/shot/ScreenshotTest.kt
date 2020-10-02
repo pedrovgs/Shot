@@ -108,9 +108,11 @@ interface ScreenshotTest {
     @RequiresApi(Build.VERSION_CODES.O)
     fun compareScreenshot(node: SemanticsNodeInteraction, name: String? = null) {
         disableFlakyComponentsAndWaitForIdle()
-        val testName = name ?: TestNameDetector.getTestName()
-        val screenshotName = "${TestNameDetector.getTestClass()}_$testName"
-        val data = ScreenshotMetadata(name = screenshotName)
+        val rawTestName = TestNameDetector.getTestName()
+        val testName = name ?: rawTestName
+        val testClassName = TestNameDetector.getTestClass()
+        val screenshotName = "${testClassName}_$testName"
+        val data = ScreenshotMetadata(name = screenshotName, testClassName = testClassName, testName = testName)
         ComposeScreenshotRunner.composeScreenshot.saveScreenshot(node, data)
     }
 

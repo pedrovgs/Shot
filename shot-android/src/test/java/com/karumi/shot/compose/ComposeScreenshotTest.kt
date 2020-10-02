@@ -13,7 +13,7 @@ import org.mockito.junit.MockitoJUnitRunner
 class ComposeScreenshotTest {
 
     companion object {
-        private val anyScreenshotMetadata: ScreenshotMetadata = ScreenshotMetadata("testName")
+        private val anyScreenshotMetadata: ScreenshotMetadata = ScreenshotMetadata("test1", "MainActivityTest", "testName1")
     }
 
     private lateinit var composeScreenshot: ComposeScreenshot
