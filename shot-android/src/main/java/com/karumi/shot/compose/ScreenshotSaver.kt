@@ -3,7 +3,6 @@ package com.karumi.shot.compose
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.ui.test.SemanticsNodeInteraction
 import java.io.File
@@ -25,7 +24,6 @@ class ScreenshotSaver(private val packageName: String, private val bitmapGenerat
     private fun createScreenshotsFolderIfDoesNotExist() {
         val folder = File(screenshotsFolder)
         if (!folder.exists()) {
-            Log.d("ScreenshotSaver", "Creating folder =====> $screenshotsFolder")
             folder.mkdirs()
         }
     }
@@ -36,11 +34,8 @@ class ScreenshotSaver(private val packageName: String, private val bitmapGenerat
 
     private fun saveScreenshotBitmap(bitmap: Bitmap, data: ScreenshotMetadata) {
         val screenshotPath = getScreenshotSdCardPath(data)
-        Log.d("ScreenshotSaver", "Saving file in =====> $screenshotPath")
         deletePreviousScreenshotIfExists(screenshotPath)
         FileOutputStream(screenshotPath).use { out ->
-            Log.d("ScreenshotSaver", "Saving file in =====> $screenshotPath")
-            Log.d("ScreenshotSaver", "Saving bitmap value =====> $bitmap")
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
         }
     }
