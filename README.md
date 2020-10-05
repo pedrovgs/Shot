@@ -4,10 +4,31 @@ Shot is an Android project you can use to write screenshot for your apps in a si
 
 ## What is this?
 
-``Shot`` is a Gradle plugin and a core android library thought to run screenshot tests for Android using the [screenshot testing Facebook SDK](http://facebook.github.io/screenshot-tests-for-android/) under the hood. This project provides a handy interface named ``ScreenshotTest`` and a ready to use ``ShotTestRunner`` you can use in order to simplify your tests design.
+``Shot`` is a Gradle plugin and a core android library thought to run screenshot tests for Android. This project provides a handy interface named ``ScreenshotTest`` and a ready to use ``ShotTestRunner`` you can use in order to write tests like these:
 
-**Since Shot 0.3.0 a simple but powerful HTML report is generated after every verification or screenshots recording execution. Here you have an example of the [recording](./art/recordReport.png) and [verification](./art/verificationReport.png) report generated.**
-**Since Shot 4.0.0 a custom test runner and a handy interface have been added to the project in order to simplify how screenshots are recorded and verified.**
+```kotlin
+class GreetingScreenshotTest : ScreenshotTest {
+
+    // If you are using regular Android views
+
+    @Test
+    fun theActivityIsShownProperly() {
+        val mainActivity = startMainActivity();
+
+        compareScreenshot(activity);
+    }
+
+    // If you are using Jetpack Compose
+
+    @Test
+    fun rendersGreetingMessageForTheSpecifiedPerson() {
+        composeRule.setContent { Greeting(greeting) }
+
+        compareScreenshot(composeRule)
+    }
+```
+
+**Since Shot 5.0.0 we provide screenshot testing support for [Jetpack Compose](https://developer.android.com/jetpack/compose).**
 
 ![smallVerificationReport1](./art/smallVerificationReport1.png)
 ![smallVerificationReport2](./art/smallVerificationReport2.png)
@@ -35,7 +56,7 @@ Setup the Gradle plugin:
     // ...
     dependencies {
       // ...
-      classpath 'com.karumi:shot:4.4.0'
+      classpath 'com.karumi:shot:5.0.0'
     }
   }
   apply plugin: 'shot'
@@ -129,6 +150,19 @@ class MyActivityTest: ScreenshotTest {
 }
 ```
 
+Since Shot 5.0.0, if you are using Jetpack Compose your tests will look like this:
+
+```kotlin
+class GreetingScreenshotTest : ScreenshotTest {
+
+    @Test
+    fun rendersGreetingMessageForTheSpecifiedPerson() {
+        composeRule.setContent { Greeting(greeting) }
+
+        compareScreenshot(composeRule)
+    }
+```
+
 ***This interface is full of useful methods you can use to take your screenshots with your activities, dialogs fragments, view holders or even custom views***
 
 You can find a complete example in this repository under the folder named ``shot-consumer`` or review [this kata](https://github.com/Karumi/KataScreenshotAndroid/).***
@@ -144,6 +178,8 @@ Now you are ready to record and verify your screenshot tests!
 * Take a screenshot of any dialog by using ``compareScreenshot(dialog)``. Dialog height, width and screenshot name are configurable.
 * Take a screenshot of any view by using ``compareScreenshot(view)``. View height, width and screenshot name are configurable.
 * Take a screenshot of any view holder by using ``compareScreenshot(holder)``. View holder height, width and screenshot name are configurable.
+* Take a screenshot of any Jetpack Component  ``compareScreenshot(composeTestRule)``. The screenshot name is configurable.
+* Take a screenshot of any SemanticInteractionNode  ``compareScreenshot(node)``. The screenshot name is configurable.
 
 Before taking the screenshot, Shot performs some tasks in order to stabilize the screenshot. You can find the detail about the tasks performed in ``ScreenshotTest#disableFlakyComponentsAndWaitForIdle``:
 
