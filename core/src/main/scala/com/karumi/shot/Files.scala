@@ -9,8 +9,14 @@ import org.apache.commons.io.FileUtils
 import scala.io.Source
 
 class Files {
-  def listFilesInFolder(folder: FilePath): util.Collection[File] =
-    FileUtils.listFiles(new File(folder), null, false)
+  def listFilesInFolder(folder: FilePath): util.Collection[File] = {
+    val file = new File(folder)
+    if (file.exists()) {
+      FileUtils.listFiles(file, null, false)
+    } else {
+      util.Collections.emptyList()
+    }
+  }
 
   def rename(origin: FilePath, target: FilePath): Unit = {
     val originFile = new File(origin)
