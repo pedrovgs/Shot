@@ -12,7 +12,7 @@ import java.io.FileOutputStream
 class ScreenshotSaver(private val packageName: String, private val bitmapGenerator: SemanticsNodeBitmapGenerator) {
 
     @SuppressLint("SdCardPath")
-    private val screenshotsFolder: String = "/sdcard/screenshots/$packageName/screenshots-default/"
+    private val screenshotsFolder: String = "/sdcard/screenshots/$packageName/screenshots-compose-default/"
     private val metadataFile: String = "$screenshotsFolder/metadata.json"
     private val gson: Gson = Gson()
 
@@ -21,7 +21,6 @@ class ScreenshotSaver(private val packageName: String, private val bitmapGenerat
         val bitmap = bitmapGenerator.generateBitmap(screenshot)
         createScreenshotsFolderIfDoesNotExist()
         saveScreenshotBitmap(bitmap, screenshot.data)
-        bitmap.recycle()
     }
 
     fun saveMetadata(session: ScreenshotTestSession) {
@@ -49,9 +48,12 @@ class ScreenshotSaver(private val packageName: String, private val bitmapGenerat
     private fun saveScreenshotBitmap(bitmap: Bitmap, data: ScreenshotMetadata) {
         val screenshotPath = getScreenshotSdCardPath(data)
         deleteFileIfExists(screenshotPath)
-        FileOutputStream(screenshotPath).use { out ->
+        createFileIfNotExists(screenshotPath)
+        val fileOutputStream = FileOutputStream(screenshotPath)
+        fileOutputStream.use { out ->
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
         }
+        fileOutputStream.close()
     }
 
     private fun deleteFileIfExists(path: String) {

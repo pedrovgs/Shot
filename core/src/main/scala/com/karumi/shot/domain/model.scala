@@ -31,8 +31,13 @@ object Config {
     }
   def pulledScreenshotsFolder(flavor: String, buildType: String): FilePath =
     screenshotsFolderName(flavor, buildType) + "screenshots-default/"
+  def pulledComposeScreenshotsFolder(flavor: String,
+                                     buildType: String): FilePath =
+    screenshotsFolderName(flavor, buildType) + "screenshots-compose-default/"
   def metadataFileName(flavor: String, buildType: String): FilePath =
     pulledScreenshotsFolder(flavor, buildType) + "metadata.xml"
+  def composeMetadataFileName(flavor: String, buildType: String): FilePath =
+    pulledComposeScreenshotsFolder(flavor, buildType) + "metadata.json"
   val androidPluginName: FilePath = "com.android.application"
   val screenshotsTemporalRootPath: FilePath = "/tmp/shot/screenshot/"
   def defaultInstrumentationTestTask(flavor: String,
@@ -71,6 +76,7 @@ case class Screenshot(name: String,
 }
 
 case class Dimension(width: Int, height: Int) {
+  val isZero: Boolean = width == 0 && height == 0
   override def toString: FilePath = width + "x" + height
 }
 

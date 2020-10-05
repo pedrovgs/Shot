@@ -17,10 +17,12 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
+import androidx.ui.test.ComposeTestRule
 import com.facebook.testing.screenshot.Screenshot
 import com.facebook.testing.screenshot.ViewHelpers
 import com.facebook.testing.screenshot.internal.TestNameDetector
 import androidx.ui.test.SemanticsNodeInteraction
+import androidx.ui.test.onRoot
 import com.karumi.shot.compose.ComposeScreenshotRunner
 import com.karumi.shot.compose.ScreenshotMetadata
 
@@ -105,12 +107,18 @@ interface ScreenshotTest {
         takeViewSnapshot(name, view)
     }
 
+    fun compareScreenshot(rule: ComposeTestRule, name: String? = null) {
+        compareScreenshot(rule.onRoot(), name)
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun compareScreenshot(node: SemanticsNodeInteraction, name: String? = null) {
         disableFlakyComponentsAndWaitForIdle()
-        val testName = name ?: TestNameDetector.getTestName()
-        val screenshotName = "${TestNameDetector.getTestClass()}_$testName"
-        val data = ScreenshotMetadata(name = screenshotName)
+        val rawTestName = TestNameDetector.getTestName()
+        val testName = name ?: rawTestName
+        val testClassName = TestNameDetector.getTestClass()
+        val screenshotName = "${testClassName}_$testName"
+        val data = ScreenshotMetadata(name = screenshotName, testClassName = testClassName, testName = testName)
         ComposeScreenshotRunner.composeScreenshot.saveScreenshot(node, data)
     }
 

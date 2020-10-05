@@ -66,16 +66,28 @@ class ShotSpec
     val expectedOriginalMetadataFile = projectFolder + Config.metadataFileName(
       BuildTypeMother.anyFlavor,
       BuildTypeMother.anyBuildType)
-    val expectedRenamedFile = projectFolder + Config.metadataFileName(
+    val expectedRenamedMetadataFile = projectFolder + Config.metadataFileName(
       BuildTypeMother.anyFlavor,
       BuildTypeMother.anyBuildType) + "_" + device
+    val expectedComposeOriginalMetadataFile = projectFolder + Config
+      .composeMetadataFileName(BuildTypeMother.anyFlavor,
+                               BuildTypeMother.anyBuildType)
+    val expectedComposeRenamedMetadataFile = projectFolder + Config
+      .composeMetadataFileName(BuildTypeMother.anyFlavor,
+                               BuildTypeMother.anyBuildType) + "_" + device
     (adb.devices _).expects().returns(List(device))
     (envVars.androidSerial _).expects().returns(None)
 
     (console.show _).expects(*)
     (adb.pullScreenshots _)
       .expects(device, expectedScreenshotsFolder, appId)
-    (files.rename _).expects(expectedOriginalMetadataFile, expectedRenamedFile)
+    (files.rename _)
+      .expects(expectedOriginalMetadataFile, expectedRenamedMetadataFile)
+      .once()
+    (files.rename _)
+      .expects(expectedComposeOriginalMetadataFile,
+               expectedComposeRenamedMetadataFile)
+      .once()
 
     shot.downloadScreenshots(projectFolder,
                              BuildTypeMother.anyFlavor,
@@ -117,6 +129,12 @@ class ShotSpec
     val expectedRenamedFile = projectFolder + Config.metadataFileName(
       BuildTypeMother.anyFlavor,
       BuildTypeMother.anyBuildType) + "_" + device2
+    val expectedComposeOriginalMetadataFile = projectFolder + Config
+      .composeMetadataFileName(BuildTypeMother.anyFlavor,
+                               BuildTypeMother.anyBuildType)
+    val expectedComposeRenamedFile = projectFolder + Config
+      .composeMetadataFileName(BuildTypeMother.anyFlavor,
+                               BuildTypeMother.anyBuildType) + "_" + device2
     (adb.devices _).expects().returns(List(device1, device2))
     (envVars.androidSerial _).expects().returns(Some(device2))
 
@@ -124,6 +142,8 @@ class ShotSpec
     (adb.pullScreenshots _)
       .expects(device2, expectedScreenshotsFolder, appId)
     (files.rename _).expects(expectedOriginalMetadataFile, expectedRenamedFile)
+    (files.rename _)
+      .expects(expectedComposeOriginalMetadataFile, expectedComposeRenamedFile)
 
     shot.downloadScreenshots(projectFolder,
                              BuildTypeMother.anyFlavor,

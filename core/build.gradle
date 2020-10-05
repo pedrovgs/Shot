@@ -17,6 +17,7 @@ dependencies {
     compile 'org.freemarker:freemarker:2.3.23'
     compile 'org.json4s:json4s-native_2.12:3.5.3'
     compile 'io.github.bitstorm:tinyzip-core:1.0.0'
+    compile 'org.json4s:json4s-jackson_2.12:3.6.10'
     testCompile 'org.scalatest:scalatest_2.12:3.0.3'
     testRuntime 'org.pegdown:pegdown:1.4.2'
     testCompile 'org.scalamock:scalamock-scalatest-support_2.12:3.5.0'

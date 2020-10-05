@@ -30,13 +30,21 @@ class Adb {
 
   def pullScreenshots(device: String,
                       screenshotsFolder: Folder,
-                      appId: AppId): Unit =
-    executeAdbCommandWithResult(
-      s"-s $device pull /sdcard/screenshots/$appId/screenshots-default/ $screenshotsFolder")
+                      appId: AppId): Unit = {
+    pullFolder("screenshots-default", device, screenshotsFolder, appId)
+    pullFolder("screenshots-compose-default", device, screenshotsFolder, appId)
+  }
 
   def clearScreenshots(device: String, appId: AppId): Unit =
     executeAdbCommand(
       s"-s $device shell rm -r /sdcard/screenshots/$appId/screenshots-default/")
+
+  private def pullFolder(folderName: String,
+                         device: String,
+                         screenshotsFolder: Folder,
+                         appId: AppId) =
+    executeAdbCommandWithResult(
+      s"-s $device pull /sdcard/screenshots/$appId/$folderName/ $screenshotsFolder")
 
   private def executeAdbCommand(command: String): Int =
     s"${Adb.adbBinaryPath} $command" ! logger

@@ -22,4 +22,4 @@ class ComposeScreenshot(
     }
 }
 
-data class ScreenshotMetadata(@SerializedName("name") val name: String)
+data class ScreenshotMetadata(@SerializedName("name") val name: String, @SerializedName("testClassName") val testClassName: String, @SerializedName("testName") val testName: String)
