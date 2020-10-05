@@ -1,4 +1,4 @@
-# ![Karumi logo][karumilogo]Shot [![Build Status](https://app.bitrise.io/app/c7c358c5be663f7c/status.svg?token=SOM_wLR4WZScWxIYKeMV3A&branch=master)](https://app.bitrise.io/app/c7c358c5be663f7c)
+# ![Karumi logo][karumilogo]Shot ![Build, lint, and test](https://github.com/Karumi/Shot/workflows/Build,%20lint,%20and%20test/badge.svg)
 
 Shot is an Android project you can use to write screenshot for your apps in a simple and friendly way.
 
