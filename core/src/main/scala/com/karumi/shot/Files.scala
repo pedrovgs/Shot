@@ -12,8 +12,12 @@ class Files {
   def listFilesInFolder(folder: FilePath): util.Collection[File] =
     FileUtils.listFiles(new File(folder), null, false)
 
-  def rename(origin: FilePath, target: FilePath): Unit =
-    FileUtils.moveFile(new File(origin), new File(target))
+  def rename(origin: FilePath, target: FilePath): Unit = {
+    val originFile = new File(origin)
+    if (originFile.exists()) {
+      FileUtils.moveFile(originFile, new File(target))
+    }
+  }
 
   def read(filePath: FilePath): String =
     Source.fromFile(filePath, "UTF8").getLines.mkString

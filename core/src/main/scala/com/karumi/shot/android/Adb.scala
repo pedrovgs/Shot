@@ -14,7 +14,8 @@ class Adb {
   private val logger = ProcessLogger(
     outputMessage => println("Shot ADB output: " + outputMessage),
     errorMessage =>
-      println(Console.RED + "Shot ADB error: " + errorMessage + Console.RESET)
+      println(
+        Console.YELLOW + "Shot ADB warning: " + errorMessage + Console.RESET)
   )
 
   def devices: List[String] = {
@@ -35,16 +36,31 @@ class Adb {
     pullFolder("screenshots-compose-default", device, screenshotsFolder, appId)
   }
 
-  def clearScreenshots(device: String, appId: AppId): Unit =
-    executeAdbCommand(
-      s"-s $device shell rm -r /sdcard/screenshots/$appId/screenshots-default/")
+  def clearScreenshots(device: String, appId: AppId): Unit = {
+    clearScreenshotsFromFolder(device, appId, "screenshots-default")
+    clearScreenshotsFromFolder(device, appId, "screenshots-compose-default")
+  }
 
   private def pullFolder(folderName: String,
                          device: String,
                          screenshotsFolder: Folder,
-                         appId: AppId) =
-    executeAdbCommandWithResult(
-      s"-s $device pull /sdcard/screenshots/$appId/$folderName/ $screenshotsFolder")
+                         appId: AppId) = {
+    val folderToPull = s"/sdcard/screenshots/$appId/$folderName/"
+    try {
+      executeAdbCommandWithResult(
+        s"-s $device pull $folderToPull $screenshotsFolder")
+    } catch {
+      case _: Throwable =>
+        println(
+          Console.YELLOW + s"Shot ADB warning: We could not pull screenshots from folder: ${folderToPull}")
+    }
+  }
+
+  private def clearScreenshotsFromFolder(device: String,
+                                         appId: AppId,
+                                         folder: AppId) =
+    executeAdbCommand(
+      s"-s $device shell rm -r /sdcard/screenshots/$appId/$folder/")
 
   private def executeAdbCommand(command: String): Int =
     s"${Adb.adbBinaryPath} $command" ! logger
