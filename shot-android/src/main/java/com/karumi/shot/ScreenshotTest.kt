@@ -17,10 +17,12 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
+import androidx.ui.test.ComposeTestRule
 import com.facebook.testing.screenshot.Screenshot
 import com.facebook.testing.screenshot.ViewHelpers
 import com.facebook.testing.screenshot.internal.TestNameDetector
 import androidx.ui.test.SemanticsNodeInteraction
+import androidx.ui.test.onRoot
 import com.karumi.shot.compose.ComposeScreenshotRunner
 import com.karumi.shot.compose.ScreenshotMetadata
 
@@ -103,6 +105,10 @@ interface ScreenshotTest {
                 .layout()
         }
         takeViewSnapshot(name, view)
+    }
+
+    fun compareScreenshot(rule: ComposeTestRule, name: String? = null) {
+        compareScreenshot(rule.onRoot(), name)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

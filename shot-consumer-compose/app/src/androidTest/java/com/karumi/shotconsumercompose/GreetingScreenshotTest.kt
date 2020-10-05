@@ -24,25 +24,25 @@ class GreetingScreenshotTest : ScreenshotTest {
     @Test
     fun rendersAGreetingWithAnEmptyText() {
         renderComponent("")
-        compareScreenshot(composeRule.onRoot())
+        compareScreenshot(composeRule)
     }
 
     @Test
     fun rendersAGreetingWithATextFullOfWhitespaces() {
         renderComponent(" ".repeat(200))
-        compareScreenshot(composeRule.onRoot())
+        compareScreenshot(composeRule)
     }
 
     @Test
     fun rendersAGreetingWithAShortText() {
         renderComponent("Hello!")
-        compareScreenshot(composeRule.onRoot())
+        compareScreenshot(composeRule)
     }
 
     @Test
     fun rendersAGreetingWithALongText() {
         renderComponent("Hello world from the compose!".repeat(20))
-        compareScreenshot(composeRule.onRoot())
+        compareScreenshot(composeRule)
     }
 
     @Composable
