@@ -86,17 +86,25 @@ class Shot(adb: Adb,
       projectName: String,
       shouldPrintBase64Error: Boolean): ScreenshotsComparisionResult = {
     console.show("🔎  Comparing screenshots with previous ones.")
-    val screenshots =
+    moveComposeScreenshotsToRegularScreenshotsFolder(projectFolder,
+                                                     flavor,
+                                                     buildType)
+    val regularScreenshots =
       readScreenshotsMetadata(projectFolder, flavor, buildType, projectName)
+    val composeScreenshots = readComposeScreenshotsMetadata(projectFolder,
+                                                            flavor,
+                                                            buildType,
+                                                            projectName)
+    val screenshots = regularScreenshots ++ composeScreenshots
     val newScreenshotsVerificationReportFolder = buildFolder + Config
       .verificationReportFolder(flavor, buildType) + "/images/"
     screenshotsSaver.saveTemporalScreenshots(
       screenshots,
       projectName,
       newScreenshotsVerificationReportFolder)
-    val comparision = screenshotsComparator.compare(screenshots)
-    val updatedComparision = screenshotsDiffGenerator.generateDiffs(
-      comparision,
+    val comparison = screenshotsComparator.compare(screenshots)
+    val updatedComparison = screenshotsDiffGenerator.generateDiffs(
+      comparison,
       newScreenshotsVerificationReportFolder,
       shouldPrintBase64Error)
     screenshotsSaver.copyRecordedScreenshotsToTheReportFolder(
@@ -106,8 +114,8 @@ class Shot(adb: Adb,
       buildFolder + Config
         .verificationReportFolder(flavor, buildType) + "/images/recorded/")
 
-    if (updatedComparision.hasErrors) {
-      consoleReporter.showErrors(updatedComparision,
+    if (updatedComparison.hasErrors) {
+      consoleReporter.showErrors(updatedComparison,
                                  newScreenshotsVerificationReportFolder)
 
       console.showError(
@@ -119,14 +127,14 @@ class Shot(adb: Adb,
     }
     removeProjectTemporalScreenshotsFolder(projectFolder, flavor, buildType)
     reporter.generateVerificationReport(appId,
-                                        comparision,
+                                        comparison,
                                         buildFolder,
                                         flavor,
                                         buildType)
     console.show(
       "🤓  You can review the execution report here: " + buildFolder + Config
         .verificationReportFolder(flavor, buildType) + "/index.html")
-    comparision
+    comparison
   }
 
   def removeScreenshots(appId: AppId): Unit =
