@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.os.Build
+import android.os.Looper
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
@@ -100,9 +101,9 @@ interface ScreenshotTest {
         val width = widthInPx ?: metrics.widthPixels
         runOnUi {
             ViewHelpers.setupView(view)
-                .setExactHeightPx(height)
-                .setExactWidthPx(width)
-                .layout()
+                    .setExactHeightPx(height)
+                    .setExactWidthPx(width)
+                    .layout()
         }
         takeViewSnapshot(name, view)
     }
@@ -128,7 +129,9 @@ interface ScreenshotTest {
             disableAnimatedComponents(view)
             hideIgnoredViews(view)
         }
-        waitForAnimationsToFinish()
+        if (notInAppMainThread()) {
+            waitForAnimationsToFinish()
+        }
     }
 
     private fun hideIgnoredViews(view: View) = runOnUi {
@@ -143,18 +146,24 @@ interface ScreenshotTest {
     }
 
     fun runOnUi(block: () -> Unit) {
-        getInstrumentation().runOnMainSync { block() }
+        if (notInAppMainThread()) {
+            getInstrumentation().runOnMainSync { block() }
+        } else {
+            block()
+        }
     }
+
+    private fun notInAppMainThread() = Looper.myLooper() != Looper.getMainLooper()
 
     private fun takeViewSnapshot(name: String?, view: View) {
         val testName = name ?: TestNameDetector.getTestName()
         val snapshotName = "${TestNameDetector.getTestClass()}_$testName"
         try {
             Screenshot
-                .snap(view)
-                .setIncludeAccessibilityInfo(false)
-                .setName(snapshotName)
-                .record()
+                    .snap(view)
+                    .setIncludeAccessibilityInfo(false)
+                    .setName(snapshotName)
+                    .record()
         } catch (t: Throwable) {
             Log.e("Shot", "Exception captured while taking screenshot for snapshot with name $snapshotName", t)
         }
@@ -165,10 +174,10 @@ interface ScreenshotTest {
         val snapshotName = "${TestNameDetector.getTestClass()}_$testName"
         try {
             Screenshot
-                .snapActivity(activity)
-                .setIncludeAccessibilityInfo(false)
-                .setName(snapshotName)
-                .record()
+                    .snapActivity(activity)
+                    .setIncludeAccessibilityInfo(false)
+                    .setName(snapshotName)
+                    .record()
         } catch (t: Throwable) {
             Log.e("Shot", "Exception captured while taking screenshot for snapshot with name $snapshotName", t)
         }
