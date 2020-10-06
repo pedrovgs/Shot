@@ -203,6 +203,23 @@ dependencies {
 
 Keep in mind you'll need to use a compatible version or Shot won't work as expected.
 
+## ActivityScenario support
+
+``ActivityTestRule`` has been deprecated and now the usage of ActivityScenario is recommended. However, Shot needs to be executed from the instrumentation thread to be able to extract all the test metadata needed to record and verify screenshots. That's why we've created an ``ActivityScenario`` extension method named ``waitForActivity``. This extension is needed get the activity instance from the instrumentation thread instead of running Shot from the app target thread. Using this extension you can write tests like this:
+
+```kotlin
+class MainActivityTest: ScreenshotTest {
+    @Test
+    fun rendersTheDefaultActivityState() {
+        val activity = ActivityScenario.launch(MainActivity::class.java)
+
+        compareScreenshot(activity)
+    }
+}
+```
+
+I hope we can find a better solution for this issue in the future.
+
 ## Recording tests
 
 You can record your screenshot tests executing this command:
