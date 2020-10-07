@@ -95,11 +95,7 @@ class ShotPlugin extends Plugin[Project] {
       variant: BaseVariant) = {
     val flavor = variant.getMergedFlavor
     checkIfApplicationIdIsConfigured(project, flavor)
-    val completeAppId = flavor.getApplicationId + Option(
-      flavor.getApplicationIdSuffix)
-      .getOrElse("") +
-      Option(variant.getBuildType.getApplicationIdSuffix).getOrElse("") +
-      ".test"
+    val completeAppId = composeCompleteAppId(variant, flavor)
     val appTestId =
       Option(flavor.getTestApplicationId).getOrElse(completeAppId)
     if (variant.getBuildType.getName != "release") {
@@ -108,6 +104,29 @@ class ShotPlugin extends Plugin[Project] {
                   variant.getBuildType,
                   appTestId,
                   baseTask)
+    }
+  }
+  /*
+   * Since the Android build tools 4.X a breaking change has been introduced and now the
+   * flavor.getApplicationIdSuffix call already contains the variant.getBuildType.getApplicationSuffixId
+   * value. To be able to support gradle versions 3.X and 4.X at the same time we need to
+   * introduce this hack. Without it, projects with 4.X will not be able to use suffixId configurations
+   * in their flavors.
+   */
+  private def composeCompleteAppId(variant: BaseVariant,
+                                   flavor: ProductFlavor) = {
+    val variantSuffix =
+      Option(variant.getBuildType.getApplicationIdSuffix).getOrElse("")
+    val testAppIdSuffix = ".test"
+    val flavorSuffix = Option(flavor.getApplicationIdSuffix).getOrElse("")
+    val appId = flavor.getApplicationId
+    val tentativeAppId = appId + flavorSuffix + variantSuffix + testAppIdSuffix
+    val appIdWithoutSuffix = appId + testAppIdSuffix
+    if (flavorSuffix.nonEmpty && tentativeAppId.contains(
+          flavorSuffix + flavorSuffix)) {
+      appIdWithoutSuffix
+    } else {
+      tentativeAppId
     }
   }
 

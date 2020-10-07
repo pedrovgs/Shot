@@ -24,7 +24,7 @@ jobs:
       - name: Build and install Shot
         run: ./gradlew uploadArchives
       - name: Execute screenshot tests for shot-consumer-compose
-        run: ./gradlew debugExecuteScreenshotTests
+        run: ./gradlew executeScreenshotTests
         working-directory: shot-consumer-compose
       - name: Execute screenshot tests for shot-consumer
         run: ./gradlew executeScreenshotTests
