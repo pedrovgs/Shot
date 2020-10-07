@@ -20,7 +20,7 @@ object Config {
   val androidDependencyMode: FilePath = "androidTestImplementation"
   val androidDependencyGroup: String = "com.karumi"
   val androidDependencyName: String = "shot-android"
-  val androidDependencyVersion: String = "5.1.2"
+  val androidDependencyVersion: String = "5.1.3-SNAPSHOT"
   val androidDependency: FilePath =
     s"$androidDependencyGroup:$androidDependencyName:$androidDependencyVersion"
   def screenshotsFolderName(flavor: String, buildType: String): FilePath =
