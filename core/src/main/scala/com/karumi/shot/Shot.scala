@@ -77,14 +77,14 @@ class Shot(adb: Adb,
     removeProjectTemporalScreenshotsFolder(projectFolder, flavor, buildType)
   }
 
-  def verifyScreenshots(
-      appId: AppId,
-      buildFolder: Folder,
-      projectFolder: Folder,
-      flavor: String,
-      buildType: String,
-      projectName: String,
-      shouldPrintBase64Error: Boolean): ScreenshotsComparisionResult = {
+  def verifyScreenshots(appId: AppId,
+                        buildFolder: Folder,
+                        projectFolder: Folder,
+                        flavor: String,
+                        buildType: String,
+                        projectName: String,
+                        shouldPrintBase64Error: Boolean,
+                        tolerance: Int): ScreenshotsComparisionResult = {
     console.show("🔎  Comparing screenshots with previous ones.")
     moveComposeScreenshotsToRegularScreenshotsFolder(projectFolder,
                                                      flavor,
@@ -102,7 +102,7 @@ class Shot(adb: Adb,
       screenshots,
       projectName,
       newScreenshotsVerificationReportFolder)
-    val comparison = screenshotsComparator.compare(screenshots)
+    val comparison = screenshotsComparator.compare(screenshots, tolerance)
     val updatedComparison = screenshotsDiffGenerator.generateDiffs(
       comparison,
       newScreenshotsVerificationReportFolder,
