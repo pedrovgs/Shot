@@ -15,7 +15,7 @@ object model {
 }
 
 object Config {
-
+  val defaultTolerance = 0
   val shotConfiguration: String = "shotDependencies"
   val androidDependencyMode: FilePath = "androidTestImplementation"
   val androidDependencyGroup: String = "com.karumi"

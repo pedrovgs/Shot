@@ -1,5 +1,6 @@
 package com.karumi.shot
 
+import com.karumi.shot.domain.Config
 import scala.beans.BeanProperty
 
 object ShotExtension {
@@ -10,6 +11,6 @@ class ShotExtension(@BeanProperty var runInstrumentation: Boolean,
                     @BeanProperty var useComposer: Boolean,
                     @BeanProperty var tolerance: Int) {
 
-  def this() = this(true, false, 100)
+  def this() = this(true, false, Config.defaultTolerance)
 
 }
