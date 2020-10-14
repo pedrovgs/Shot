@@ -36,8 +36,8 @@ jobs:
         run: ./gradlew blueDebugExecuteScreenshotTests
         working-directory: shot-consumer-flavors
       - uses: actions/upload-artifact@v2
-          if: always()
-          with:
-            name: Reports
-            path: shot-consumer-compose/app/build/reports/
+        if: always()
+        with:
+          name: Reports
+          path: shot-consumer-compose/app/build/reports/
 
