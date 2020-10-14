@@ -52,6 +52,10 @@ android {
     }
 }
 
+shot {
+    tolerance = 5
+}
+
 dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
