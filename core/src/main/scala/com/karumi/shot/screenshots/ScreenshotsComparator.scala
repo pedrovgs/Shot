@@ -52,11 +52,11 @@ class ScreenshotsComparator {
     val newScreenshotPixels = newScreenshot.pixels
     val differentPixels = oldScreenshotPixels.diff(newScreenshotPixels).length
     val percentageOfDifferentPixels = differentPixels.toFloat / oldScreenshotPixels.length.toFloat
-    val imagesAreDifferent = percentageOfDifferentPixels * 100 > tolerance
+    val imagesAreDifferent = (percentageOfDifferentPixels * 100).toInt > tolerance
     if (tolerance != 100 && imagesAreDifferent) {
       val screenshotName = screenshot.name
       println(
-        Console.YELLOW + s"Shot warning: There are some pixels changed in the screenshot named $screenshotName, but we consider the comparison correct because tolerance is configured to $tolerance and the percentage of different pixels is $percentageOfDifferentPixels" + Console.RESET)
+        Console.YELLOW + s"⚠️   Shot warning: There are some pixels changed in the screenshot named $screenshotName, but we consider the comparison correct because tolerance is configured to $tolerance and the percentage of different pixels is $percentageOfDifferentPixels" + Console.RESET)
     }
     imagesAreDifferent
   }
