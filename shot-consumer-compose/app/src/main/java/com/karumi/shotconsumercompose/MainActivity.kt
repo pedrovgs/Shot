@@ -9,6 +9,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.setContent
 import androidx.ui.tooling.preview.Preview
 import com.karumi.shotconsumercompose.ui.ShotConsumerComposeTheme
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.Box
+import androidx.compose.foundation.ScrollableColumn
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,8 +24,9 @@ class MainActivity : AppCompatActivity() {
         setContent {
             ShotConsumerComposeTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(color = MaterialTheme.colors.background) {
+                ScrollableColumn {
                     Greeting("Android")
+                    RoundedCornersBox()
                 }
             }
         }
@@ -35,4 +44,10 @@ fun DefaultPreview() {
     ShotConsumerComposeTheme {
         Greeting("Android")
     }
+}
+
+@Preview
+@Composable
+fun RoundedCornersBox() {
+    Box(Modifier.background(color = Color(0xFF4E62FD), shape = RoundedCornerShape(size = 20.dp)).width(100.dp).height(100.dp))
 }
