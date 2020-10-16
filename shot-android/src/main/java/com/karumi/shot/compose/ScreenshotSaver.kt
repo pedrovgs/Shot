@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.ui.test.SemanticsNodeInteraction
 import com.google.gson.Gson
 import java.io.File
