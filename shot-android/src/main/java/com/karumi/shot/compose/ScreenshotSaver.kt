@@ -3,7 +3,9 @@ package com.karumi.shot.compose
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.ui.test.SemanticsNodeInteraction
 import com.google.gson.Gson
 import java.io.File
@@ -18,12 +20,22 @@ class ScreenshotSaver(private val packageName: String, private val bitmapGenerat
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun saveScreenshot(screenshot: ScreenshotToSave) {
+        if (Build.VERSION.SDK_INT >= 29) {
+            Log.w("Shot", "Can't save screenshot bitmap on Android OS ${Build.VERSION.SDK_INT}")
+            return
+        }
+
         val bitmap = bitmapGenerator.generateBitmap(screenshot)
         createScreenshotsFolderIfDoesNotExist()
         saveScreenshotBitmap(bitmap, screenshot.data)
     }
 
     fun saveMetadata(session: ScreenshotTestSession) {
+        if (Build.VERSION.SDK_INT >= 29) {
+            Log.w("Shot", "Can't save metadata file on Android OS ${Build.VERSION.SDK_INT}")
+            return
+        }
+
         createScreenshotsFolderIfDoesNotExist()
         val metadata = session.getScreenshotSessionMetadata()
         val serializedMetadata = gson.toJson(metadata)
@@ -63,6 +75,9 @@ class ScreenshotSaver(private val packageName: String, private val bitmapGenerat
         }
     }
 
+    /**
+     * Creates a file at [path] using the [File] API (does not work on API 29+).
+     */
     private fun createFileIfNotExists(path: String): File {
         val file = File(path)
         if (!file.exists()) {
