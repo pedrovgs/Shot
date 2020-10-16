@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName
 class ScreenshotTestSession {
 
     companion object {
+        @Deprecated("ScreenshotTestSession is mutable and thus this instance cannot be guaranteed to be empty.")
         val empty: ScreenshotTestSession = ScreenshotTestSession()
     }
 

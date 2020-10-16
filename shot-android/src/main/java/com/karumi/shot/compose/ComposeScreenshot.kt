@@ -17,7 +17,10 @@ class ComposeScreenshot(
     }
 
     fun saveMetadata(): ScreenshotTestSession {
-        saver.saveMetadata(session)
+        // If there's nothing to save, don't attempt to at all:
+        if (session.getScreenshotSessionMetadata().screenshotsData.isNotEmpty()) {
+            saver.saveMetadata(session)
+        }
         return session
     }
 }

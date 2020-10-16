@@ -1,7 +1,7 @@
 package com.karumi.shot.compose
 
 import androidx.ui.test.SemanticsNodeInteraction
-import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.*
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -26,7 +26,7 @@ class ComposeScreenshotTest {
 
     @Before
     fun setUp() {
-        composeScreenshot = ComposeScreenshot(ScreenshotTestSession.empty, screenshotSaver)
+        composeScreenshot = ComposeScreenshot(ScreenshotTestSession(), screenshotSaver)
     }
 
     @Test
@@ -35,8 +35,8 @@ class ComposeScreenshotTest {
 
         composeScreenshot.saveScreenshot(node, data)
 
-        val expectedSession = ScreenshotTestSession.empty.add(data)
-        assertEquals(expectedSession, composeScreenshot.saveMetadata())
+        val expectedSessionMetadata = ScreenshotSessionMetadata(listOf(data))
+        assertEquals(expectedSessionMetadata, composeScreenshot.saveMetadata().getScreenshotSessionMetadata())
     }
 
     @Test
@@ -57,10 +57,20 @@ class ComposeScreenshotTest {
         composeScreenshot.saveScreenshot(node, data)
         composeScreenshot.saveMetadata()
 
-        val expectedSession = ScreenshotTestSession.empty
-                .add(data)
-                .add(data)
-                .add(data)
-        verify(screenshotSaver).saveMetadata(expectedSession)
+        val captor = argumentCaptor<ScreenshotTestSession>()
+        verify(screenshotSaver).saveMetadata(captor.capture())
+
+        val actualSession = captor.lastValue
+        val actualSessionMetadata = actualSession.getScreenshotSessionMetadata()
+        assertEquals(3, actualSessionMetadata.screenshotsData.size)
+        for (i in 0 until 3) {
+            assertEquals(data, actualSessionMetadata.screenshotsData[i])
+        }
+    }
+
+    @Test
+    fun whenNoScreenshotsWereSavedTheMetadataIsNotSaved() {
+        composeScreenshot.saveMetadata()
+        verify(screenshotSaver, never()).saveMetadata(any())
     }
 }
