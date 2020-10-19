@@ -9,7 +9,7 @@ object ShotExtension {
 
 class ShotExtension(@BeanProperty var runInstrumentation: Boolean,
                     @BeanProperty var useComposer: Boolean,
-                    @BeanProperty var tolerance: Int) {
+                    @BeanProperty var tolerance: Double) {
 
   def this() = this(true, false, Config.defaultTolerance)
 

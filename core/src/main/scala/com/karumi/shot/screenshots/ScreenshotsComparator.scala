@@ -9,7 +9,7 @@ import com.sksamuel.scrimage.Image
 class ScreenshotsComparator {
 
   def compare(screenshots: ScreenshotsSuite,
-              tolerance: Int): ScreenshotsComparisionResult = {
+              tolerance: Double): ScreenshotsComparisionResult = {
     val errors =
       screenshots.par.flatMap(compareScreenshot(_, tolerance)).toList
     ScreenshotsComparisionResult(errors, screenshots)
@@ -17,7 +17,7 @@ class ScreenshotsComparator {
 
   private def compareScreenshot(
       screenshot: Screenshot,
-      tolerance: Int): Option[ScreenshotComparisionError] = {
+      tolerance: Double): Option[ScreenshotComparisionError] = {
     val recordedScreenshotFile = new File(screenshot.recordedScreenshotPath)
     if (!recordedScreenshotFile.exists()) {
       Some(ScreenshotNotFound(screenshot))
@@ -47,7 +47,7 @@ class ScreenshotsComparator {
   private def imagesAreDifferent(screenshot: Screenshot,
                                  oldScreenshot: Image,
                                  newScreenshot: Image,
-                                 tolerance: Int) = {
+                                 tolerance: Double) = {
     if (oldScreenshot == newScreenshot) {
       false
     } else {
@@ -55,12 +55,14 @@ class ScreenshotsComparator {
       val newScreenshotPixels = newScreenshot.pixels
       val differentPixels =
         oldScreenshotPixels.diff(newScreenshotPixels).length
-      val percentageOfDifferentPixels = differentPixels.toFloat / oldScreenshotPixels.length.toFloat
-      val imagesAreDifferent = (percentageOfDifferentPixels * 100).toInt >= tolerance
-      if (tolerance != Config.defaultTolerance && imagesAreDifferent) {
+      val percentageOfDifferentPixels = differentPixels.toDouble / oldScreenshotPixels.length.toDouble
+      val percentageOutOf100 = percentageOfDifferentPixels * 100.0
+      val imagesAreDifferent = percentageOutOf100 >= tolerance
+      val imagesAreConsideredEquals = !imagesAreDifferent
+      if (imagesAreConsideredEquals && tolerance != Config.defaultTolerance) {
         val screenshotName = screenshot.name
         println(
-          Console.YELLOW + s"⚠️   Shot warning: There are some pixels changed in the screenshot named $screenshotName, but we consider the comparison correct because tolerance is configured to $tolerance and the percentage of different pixels is $percentageOfDifferentPixels" + Console.RESET)
+          Console.YELLOW + s"⚠️   Shot warning: There are some pixels changed in the screenshot named $screenshotName, but we consider the comparison correct because tolerance is configured to $tolerance % and the percentage of different pixels is $percentageOutOf100 %" + Console.RESET)
       }
       imagesAreDifferent
     }

@@ -53,7 +53,7 @@ android {
 }
 
 shot {
-    tolerance = 5
+    tolerance = 0.6 //0.6%
 }
 
 dependencies {

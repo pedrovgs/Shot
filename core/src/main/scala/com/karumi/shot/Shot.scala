@@ -84,7 +84,7 @@ class Shot(adb: Adb,
                         buildType: String,
                         projectName: String,
                         shouldPrintBase64Error: Boolean,
-                        tolerance: Int): ScreenshotsComparisionResult = {
+                        tolerance: Double): ScreenshotsComparisionResult = {
     console.show("🔎  Comparing screenshots with previous ones.")
     moveComposeScreenshotsToRegularScreenshotsFolder(projectFolder,
                                                      flavor,
