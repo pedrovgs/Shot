@@ -3,7 +3,6 @@ package com.karumi.shot.compose
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.filters.SdkSuppress
 import androidx.test.rule.GrantPermissionRule
 import com.nhaarman.mockitokotlin2.whenever
 import junit.framework.TestCase.assertEquals
@@ -52,7 +51,6 @@ class ScreenshotSaverTest {
         clearSdCardFiles()
     }
 
-    @SdkSuppress(maxSdkVersion = 28)
     @Test
     fun savesTheBitmapObtainedFromTheNodeUsingTheScreenshotMetadata() {
         saver.saveScreenshot(screenshotToSave)
@@ -61,7 +59,6 @@ class ScreenshotSaverTest {
         assertTrue(file.exists())
     }
 
-    @SdkSuppress(maxSdkVersion = 28)
     @Test
     fun savesAllTheBitmapsObtainedFromTheNodeUsingTheScreenshotMetadata() {
         val testsMetadata = listOf(screenshotToSave, otherScreenshotToSave)
@@ -75,7 +72,6 @@ class ScreenshotSaverTest {
         })
     }
 
-    @SdkSuppress(maxSdkVersion = 28)
     @Test
     fun savesScreenshotTestsExecutionMetadataInAJsonFile() {
         val session = ScreenshotTestSession().add(screenshotToSave.data).add(otherScreenshotToSave.data)
@@ -89,7 +85,6 @@ class ScreenshotSaverTest {
         assertEquals(expectedContent, content)
     }
 
-    @SdkSuppress(maxSdkVersion = 28)
     @Test
     fun savesTheBitmapsAndTheMetadataAfterTheTestsExecution() {
         val session = ScreenshotTestSession().add(screenshotToSave.data)
