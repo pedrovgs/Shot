@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.ui.test.SemanticsNodeInteraction
 import com.google.gson.Gson
 import java.io.File
@@ -29,7 +28,7 @@ class ScreenshotSaver(private val packageName: String, private val bitmapGenerat
         saveScreenshotBitmap(bitmap, screenshot.data)
     }
 
-    private fun getBitmapFromScreenshotToSave(screenshot: ScreenshotToSave) = when(screenshot.source) {
+    private fun getBitmapFromScreenshotToSave(screenshot: ScreenshotToSave) = when (screenshot.source) {
         is ScreenshotSource.Bitmap -> screenshot.source.bitmap
         is ScreenshotSource.Node -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             bitmapGenerator.generateBitmap(screenshot.source)
@@ -37,7 +36,6 @@ class ScreenshotSaver(private val packageName: String, private val bitmapGenerat
             throw IllegalArgumentException("Can't extract bitmap from node in a SDK version lower than Build.VERSION_CODES.O")
         }
     }
-
 
     fun saveMetadata(session: ScreenshotTestSession) {
         if (Build.VERSION.SDK_INT >= 29) {
@@ -101,6 +99,6 @@ class ScreenshotSaver(private val packageName: String, private val bitmapGenerat
 data class ScreenshotToSave(val source: ScreenshotSource, val data: ScreenshotMetadata)
 
 sealed class ScreenshotSource {
-    data class Node(val node: SemanticsNodeInteraction): ScreenshotSource()
-    data class Bitmap(val bitmap: android.graphics.Bitmap): ScreenshotSource()
+    data class Node(val node: SemanticsNodeInteraction) : ScreenshotSource()
+    data class Bitmap(val bitmap: android.graphics.Bitmap) : ScreenshotSource()
 }
