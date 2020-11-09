@@ -9,6 +9,7 @@ import androidx.ui.test.SemanticsNodeInteraction
 import com.google.gson.Gson
 import java.io.File
 import java.io.FileOutputStream
+import java.lang.IllegalArgumentException
 
 class ScreenshotSaver(private val packageName: String, private val bitmapGenerator: SemanticsNodeBitmapGenerator) {
 
@@ -17,17 +18,26 @@ class ScreenshotSaver(private val packageName: String, private val bitmapGenerat
     private val metadataFile: String = "$screenshotsFolder/metadata.json"
     private val gson: Gson = Gson()
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun saveScreenshot(screenshot: ScreenshotToSave) {
         if (Build.VERSION.SDK_INT >= 29) {
             Log.w("Shot", "Can't save screenshot bitmap on Android OS ${Build.VERSION.SDK_INT}")
             return
         }
 
-        val bitmap = bitmapGenerator.generateBitmap(screenshot)
+        val bitmap = getBitmapFromScreenshotToSave(screenshot)
         createScreenshotsFolderIfDoesNotExist()
         saveScreenshotBitmap(bitmap, screenshot.data)
     }
+
+    private fun getBitmapFromScreenshotToSave(screenshot: ScreenshotToSave) = when(screenshot.source) {
+        is ScreenshotSource.Bitmap -> screenshot.source.bitmap
+        is ScreenshotSource.Node -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            bitmapGenerator.generateBitmap(screenshot.source)
+        } else {
+            throw IllegalArgumentException("Can't extract bitmap from node in a SDK version lower than Build.VERSION_CODES.O")
+        }
+    }
+
 
     fun saveMetadata(session: ScreenshotTestSession) {
         if (Build.VERSION.SDK_INT >= 29) {
@@ -88,4 +98,9 @@ class ScreenshotSaver(private val packageName: String, private val bitmapGenerat
     private fun getScreenshotSdCardPath(data: ScreenshotMetadata): String = "$screenshotsFolder${data.name}.png"
 }
 
-data class ScreenshotToSave(val node: SemanticsNodeInteraction, val data: ScreenshotMetadata)
+data class ScreenshotToSave(val source: ScreenshotSource, val data: ScreenshotMetadata)
+
+sealed class ScreenshotSource {
+    data class Node(val node: SemanticsNodeInteraction): ScreenshotSource()
+    data class Bitmap(val bitmap: android.graphics.Bitmap): ScreenshotSource()
+}

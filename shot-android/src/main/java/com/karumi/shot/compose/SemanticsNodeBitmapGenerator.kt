@@ -8,5 +8,5 @@ import androidx.ui.test.captureToBitmap
 class SemanticsNodeBitmapGenerator {
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun generateBitmap(screenshot: ScreenshotToSave): Bitmap = screenshot.node.captureToBitmap()
+    fun generateBitmap(screenshot: ScreenshotSource.Node): Bitmap = screenshot.node.captureToBitmap()
 }

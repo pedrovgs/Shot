@@ -3,6 +3,7 @@ package com.karumi.shot
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.Build
 import android.os.Looper
 import android.util.DisplayMetrics
@@ -110,6 +111,16 @@ interface ScreenshotTest {
 
     fun compareScreenshot(rule: ComposeTestRule, name: String? = null) {
         compareScreenshot(rule.onRoot(), name)
+    }
+
+    fun compareScreenshot(bitmap: Bitmap, name: String? = null) {
+        disableFlakyComponentsAndWaitForIdle()
+        val rawTestName = TestNameDetector.getTestName()
+        val testName = name ?: rawTestName
+        val testClassName = TestNameDetector.getTestClass()
+        val screenshotName = "${testClassName}_$testName"
+        val data = ScreenshotMetadata(name = screenshotName, testClassName = testClassName, testName = testName)
+        ComposeScreenshotRunner.composeScreenshot.saveScreenshot(bitmap, data)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
