@@ -45,7 +45,7 @@ class ComposeScreenshotTest {
 
         composeScreenshot.saveScreenshot(node, data)
 
-        verify(screenshotSaver).saveScreenshot(ScreenshotToSave(node, data))
+        verify(screenshotSaver).saveScreenshot(ScreenshotToSave(ScreenshotSource.Node(node), data))
     }
 
     @Test

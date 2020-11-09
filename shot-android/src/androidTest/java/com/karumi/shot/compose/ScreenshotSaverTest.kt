@@ -27,19 +27,23 @@ class ScreenshotSaverTest {
     private lateinit var saver: ScreenshotSaver
 
     @Mock
+    private lateinit var node: ScreenshotSource.Node
+    @Mock
+    private lateinit var anyOtherNode: ScreenshotSource.Node
+    @Mock
     private lateinit var screenshotToSave: ScreenshotToSave
-
     @Mock
     private lateinit var otherScreenshotToSave: ScreenshotToSave
-
     @Mock
     private lateinit var nodeGenerator: SemanticsNodeBitmapGenerator
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        whenever(nodeGenerator.generateBitmap(screenshotToSave)).thenReturn(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888, true))
-        whenever(nodeGenerator.generateBitmap(otherScreenshotToSave)).thenReturn(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888, true))
+        whenever(nodeGenerator.generateBitmap(node)).thenReturn(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888, true))
+        whenever(nodeGenerator.generateBitmap(anyOtherNode)).thenReturn(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888, true))
+        whenever(screenshotToSave.source).thenReturn(node)
+        whenever(otherScreenshotToSave.source).thenReturn(anyOtherNode)
         whenever(screenshotToSave.data).thenReturn(anyScreenshotMetadata)
         whenever(otherScreenshotToSave.data).thenReturn(anyOtherScreenshotMetadata)
         val context = ApplicationProvider.getApplicationContext<Context>()
