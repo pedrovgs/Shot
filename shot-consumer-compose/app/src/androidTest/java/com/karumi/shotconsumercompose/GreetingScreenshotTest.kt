@@ -8,6 +8,7 @@ import com.karumi.shot.ScreenshotTest
 import com.karumi.shotconsumercompose.ui.ShotConsumerComposeTheme
 import org.junit.Rule
 import androidx.ui.test.onRoot
+import androidx.ui.test.captureToBitmap
 import org.junit.Test
 
 class GreetingScreenshotTest : ScreenshotTest {
@@ -43,6 +44,12 @@ class GreetingScreenshotTest : ScreenshotTest {
     fun rendersAGreetingWithALongText() {
         renderComponent("Hello world from the compose!".repeat(20))
         compareScreenshot(composeRule)
+    }
+
+    @Test
+    fun rendesAnyComponentUsingABitmapInsteadOfANode() {
+        renderComponent("Hello world from the compose!")
+        compareScreenshot(composeRule.onRoot().captureToBitmap())
     }
 
     @Composable

@@ -1,5 +1,6 @@
 package com.karumi.shot.compose
 
+import android.graphics.Bitmap
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.ui.test.SemanticsNodeInteraction
@@ -10,9 +11,14 @@ class ComposeScreenshot(
     private val saver: ScreenshotSaver
 ) {
 
+    fun saveScreenshot(bitmap: Bitmap, data: ScreenshotMetadata) {
+        saver.saveScreenshot(ScreenshotToSave(ScreenshotSource.Bitmap(bitmap), data))
+        session.add(data)
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun saveScreenshot(node: SemanticsNodeInteraction, data: ScreenshotMetadata) {
-        saver.saveScreenshot(ScreenshotToSave(node, data))
+        saver.saveScreenshot(ScreenshotToSave(ScreenshotSource.Node(node), data))
         session.add(data)
     }
 
