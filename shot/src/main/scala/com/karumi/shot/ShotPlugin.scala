@@ -1,6 +1,6 @@
 package com.karumi.shot
 
-import com.android.build.gradle.api.BaseVariant
+import com.android.build.gradle.api.{ApplicationVariant, BaseVariant}
 import com.android.build.gradle.{AppExtension, LibraryExtension}
 import com.android.builder.model.{BuildType, ProductFlavor}
 import com.karumi.shot.android.Adb
@@ -95,7 +95,7 @@ class ShotPlugin extends Plugin[Project] {
       variant: BaseVariant) = {
     val flavor = variant.getMergedFlavor
     checkIfApplicationIdIsConfigured(project, flavor)
-    val completeAppId = composeCompleteAppId(variant, flavor)
+    val completeAppId = composeCompleteAppId(variant)
     val appTestId =
       Option(flavor.getTestApplicationId).getOrElse(completeAppId)
     if (variant.getBuildType.getName != "release") {
@@ -106,29 +106,9 @@ class ShotPlugin extends Plugin[Project] {
                   baseTask)
     }
   }
-  /*
-   * Since the Android build tools 4.X a breaking change has been introduced and now the
-   * flavor.getApplicationIdSuffix call already contains the variant.getBuildType.getApplicationSuffixId
-   * value. To be able to support gradle versions 3.X and 4.X at the same time we need to
-   * introduce this hack. Without it, projects with 4.X will not be able to use suffixId configurations
-   * in their flavors.
-   */
-  private def composeCompleteAppId(variant: BaseVariant,
-                                   flavor: ProductFlavor) = {
-    val variantSuffix =
-      Option(variant.getBuildType.getApplicationIdSuffix).getOrElse("")
-    val testAppIdSuffix = ".test"
-    val flavorSuffix = Option(flavor.getApplicationIdSuffix).getOrElse("")
-    val appId = flavor.getApplicationId
-    val tentativeAppId = appId + flavorSuffix + variantSuffix + testAppIdSuffix
-    val appIdWithoutSuffix = appId + testAppIdSuffix
-    if (flavorSuffix.nonEmpty && tentativeAppId.contains(
-          flavorSuffix + flavorSuffix)) {
-      appIdWithoutSuffix
-    } else {
-      tentativeAppId
-    }
-  }
+
+  private def composeCompleteAppId(variant: BaseVariant) =
+    variant.getApplicationId + ".test"
 
   private def checkIfApplicationIdIsConfigured(project: Project,
                                                flavor: ProductFlavor) =
