@@ -290,13 +290,20 @@ You can run a single test or test class, just add the `android.testInstrumentati
 
 ## Using shot on API 29+
 
-Due to the new storage system implemented on API 29 and higher, Shot is unable to write the screenshots on the SD. Shot can't be used at the moment with apps whose ``Target SDK is >= 30`` over ``devices with API >= 30``.
+Due to the new storage system implemented on API 29 and higher, Shot has some limitations writing the screenshots on the SD. *Shot can't be used when both ``Target SDK`` and ``device API`` are API 30.*
 
 If one of those values (Target SDK or Device API) is <= 29,  Shot will work properly just adding the following parameter in the ``AndroidManifest.xml`` of the test app.
 
 ```
 <application android:requestLegacyExternalStorage="true" />
 ```
+
+The following combination should work properly using the previous flag:
+| Target SDK  | Device API  | RequestLegacyExternalStorage |
+|-------------|------------|----------------------------------|
+| 30 | 29  | true  |
+| 29 | 29  | true  |
+| 29 | 30  | true  |
 
 ## Development documentation
 
