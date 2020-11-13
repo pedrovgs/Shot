@@ -18,9 +18,9 @@ class ScreenshotSaver(private val packageName: String, private val bitmapGenerat
     private val gson: Gson = Gson()
 
     fun saveScreenshot(screenshot: ScreenshotToSave) {
-        if (Build.VERSION.SDK_INT >= 29) {
-            Log.w("Shot", "Can't save screenshot bitmap on Android OS ${Build.VERSION.SDK_INT}")
-            return
+        if (Build.VERSION.SDK_INT >= 30) {
+            Log.w("Shot", "Can't save screenshot bitmap on Android OS ${Build.VERSION.SDK_INT} on applications with Target SDK >= 30." +
+                    "If your app has Target SDK <= 29, you should add \"android:requestLegacyExternalStorage=\"true\"\" on your test manifest.")
         }
 
         val bitmap = getBitmapFromScreenshotToSave(screenshot)
@@ -38,9 +38,9 @@ class ScreenshotSaver(private val packageName: String, private val bitmapGenerat
     }
 
     fun saveMetadata(session: ScreenshotTestSession) {
-        if (Build.VERSION.SDK_INT >= 29) {
-            Log.w("Shot", "Can't save metadata file on Android OS ${Build.VERSION.SDK_INT}")
-            return
+        if (Build.VERSION.SDK_INT >= 30) {
+            Log.w("Shot", "Can't save screenshot bitmap on Android OS ${Build.VERSION.SDK_INT} on applications with Target SDK >= 30." +
+                    "If your app has Target SDK <= 29, you should add \"android:requestLegacyExternalStorage=\"true\"\" on your test manifest.")
         }
 
         createScreenshotsFolderIfDoesNotExist()
@@ -83,7 +83,14 @@ class ScreenshotSaver(private val packageName: String, private val bitmapGenerat
     }
 
     /**
-     * Creates a file at [path] using the [File] API (does not work on API 29+).
+     * Creates a file at [path] using the [File] API.
+     * When API 29+ is the target SDK or the Device API not all combinations all available.
+     * This will work with the following combinations:
+     * | APP Target SDK | Device API | requestLegacyExternalStorage (Manifest) |
+     *          30     |      29     |             true                        |
+     *          29     |      29     |             true                        |
+     *          29     |      30     |             true                        |
+     * This method can't work on apps with Target SDK >= 30 and devices with API >= 30.
      */
     private fun createFileIfNotExists(path: String): File {
         val file = File(path)
