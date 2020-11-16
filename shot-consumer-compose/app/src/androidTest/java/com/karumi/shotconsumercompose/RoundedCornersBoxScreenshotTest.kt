@@ -1,13 +1,10 @@
 package com.karumi.shotconsumercompose
 
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.runtime.Composable
-import androidx.ui.test.createComposeRule
+import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onRoot
 import com.karumi.shot.ScreenshotTest
 import com.karumi.shotconsumercompose.ui.ShotConsumerComposeTheme
 import org.junit.Rule
-import androidx.ui.test.onRoot
 import org.junit.Test
 
 class RoundedCornersBoxScreenshotTest : ScreenshotTest {

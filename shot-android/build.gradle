@@ -28,6 +28,9 @@ android {
     testOptions {
         unitTests.returnDefaultValues = true
     }
+    packagingOptions {
+        exclude "META-INF/*"
+    }
 }
 
 repositories {
@@ -45,7 +48,7 @@ dependencies {
     implementation "androidx.test:runner:1.3.0"
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     implementation "androidx.test.espresso:espresso-core:3.3.0"
-    implementation "androidx.ui:ui-test:1.0.0-alpha07"
+    implementation "androidx.compose.ui:ui-test-junit4:1.0.0-alpha07"
     implementation "com.google.code.gson:gson:2.8.6"
 
     testImplementation "junit:junit:4.13"
