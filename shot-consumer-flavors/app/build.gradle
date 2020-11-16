@@ -42,6 +42,9 @@ android {
             applicationIdSuffix = ".releaseSuffix"
         }
     }
+    packagingOptions {
+        exclude "META-INF/*"
+    }
     flavorDimensions "color"
     productFlavors {
         blue {
