@@ -10,14 +10,16 @@ import java.lang.IllegalStateException
  * extension to be able to get the activity instance from the instrumentation thread instead
  * of running Shot from the app target thread. I hope we can find a better solution in the future.
  */
-fun <A : Activity> ActivityScenario<A>.waitForActivity(): A {
-    var activity: A? = null
-    onActivity {
-        activity = it
-    }
-    return if (activity != null) {
-        activity!!
-    } else {
-        throw IllegalStateException("The activity scenario could not be initialized.")
+object ActivityScenarioUtils {
+    fun <A : Activity> ActivityScenario<A>.waitForActivity(): A {
+        var activity: A? = null
+        onActivity {
+            activity = it
+        }
+        return if (activity != null) {
+            activity!!
+        } else {
+            throw IllegalStateException("The activity scenario could not be initialized.")
+        }
     }
 }

@@ -16,7 +16,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.runner.RunWith
 import org.mockito.MockitoAnnotations
-import com.karumi.shot.waitForActivity
+import com.karumi.shot.ActivityScenarioUtils.waitForActivity
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
