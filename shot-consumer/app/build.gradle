@@ -39,6 +39,9 @@ android {
             minifyEnabled false
         }
     }
+    packagingOptions {
+        exclude "META-INF/*"
+    }
 }
 
 configurations {
