@@ -83,6 +83,7 @@ dependencies {
 
 shot {
     useComposer = true
+    showOnlyFailingTestsInReports = true
 }
 
 task ktlint(type: JavaExec) {

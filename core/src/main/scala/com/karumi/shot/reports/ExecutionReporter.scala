@@ -43,8 +43,9 @@ class ExecutionReporter {
                                  comparision: ScreenshotsComparisionResult,
                                  buildFolder: Folder,
                                  flavor: String,
-                                 buildType: String) = {
-    val input = generateVerificationTemplateValues(appId, comparision)
+                                 buildType: String,
+                                 showOnlyFailingTestsInReports: Boolean = false) = {
+    val input = generateVerificationTemplateValues(appId, comparision, showOnlyFailingTestsInReports)
     val template = freeMarkerConfig.getTemplate("verificationIndex.ftl")
     resetVerificationReport(flavor, buildType)
     val reportFolder = buildFolder + Config.verificationReportFolder(
@@ -104,7 +105,8 @@ class ExecutionReporter {
 
   private def generateVerificationTemplateValues(
       appId: AppId,
-      comparision: ScreenshotsComparisionResult): util.Map[String, String] = {
+      comparision: ScreenshotsComparisionResult,
+      showOnlyFailingTestsInReports: Boolean): util.Map[String, String] = {
     val title = s"Verification results: $appId"
     val screenshots = comparision.screenshots
     val numberOfTests = screenshots.size
@@ -112,8 +114,8 @@ class ExecutionReporter {
     val successNumber = numberOfTests - failedNumber
     val summaryResults =
       s"$numberOfTests screenshot tests executed. $successNumber passed and $failedNumber failed."
-    val summaryTableBody = generateVerificationSummaryTableBody(comparision)
-    val screenshotsTableBody = generateScreenshotsTableBody(comparision)
+    val summaryTableBody = generateVerificationSummaryTableBody(comparision, showOnlyFailingTestsInReports)
+    val screenshotsTableBody = generateScreenshotsTableBody(comparision, showOnlyFailingTestsInReports)
     Map("title" -> title,
         "summaryResult" -> summaryResults,
         "summaryTableBody" -> summaryTableBody,
@@ -130,7 +132,8 @@ class ExecutionReporter {
       .sortBy(_._2.isEmpty)
 
   private def generateVerificationSummaryTableBody(
-      comparision: ScreenshotsComparisionResult): String = {
+      comparision: ScreenshotsComparisionResult,
+      showOnlyFailingTestsInReports: Boolean): String = {
     getSortedByResultScreenshots(comparision)
       .map {
         case (screenshot, error) =>
@@ -141,18 +144,24 @@ class ExecutionReporter {
           val reason = generateReasonMessage(error)
           val color = if (isFailedTest) "red-text" else "green-text"
           val id = screenshot.name.replace(".", "")
-          "<tr>" +
-            s"<th><a href='#$id'>$result</></th>" +
-            s"<th><a href='#$id'><p class='$color'>Test class: $testClass</p>" +
-            s"<p class='$color'>Test name: $testName</p></a></th>" +
-            s"<th>$reason</th>" +
-            "</tr>"
+
+          if (showOnlyFailingTestsInReports && isFailedTest || !showOnlyFailingTestsInReports) {
+            "<tr>" +
+              s"<th><a href='#$id'>$result</></th>" +
+              s"<th><a href='#$id'><p class='$color'>Test class: $testClass</p>" +
+              s"<p class='$color'>Test name: $testName</p></a></th>" +
+              s"<th>$reason</th>" +
+              "</tr>"
+          } else {
+            ""
+          }
       }
       .mkString("\n")
   }
 
   private def generateScreenshotsTableBody(
-      comparision: ScreenshotsComparisionResult): String = {
+      comparision: ScreenshotsComparisionResult,
+      showOnlyFailingTestsInReports: Boolean): String = {
     getSortedByResultScreenshots(comparision)
       .map {
         case (screenshot, error) =>
@@ -169,13 +178,18 @@ class ExecutionReporter {
           val color = if (isFailedTest) "red-text" else "green-text"
           val width = (screenshot.screenshotDimension.width * 0.2).toInt
           val id = screenshot.name.replace(".", "")
-          "<tr>" +
-            s"<th id='$id'> <p class='$color'>Test class: $testClass</p>" +
-            s"<p class='$color'>Test name: $testName</p></th>" +
-            s"<th> <a href='$originalScreenshot'><img width='$width' src='$originalScreenshot'/></a></th>" +
-            s"<th> <a href='$newScreenshot'><img width='$width' src='$newScreenshot'/></a></th>" +
-            s"<th> <a href='$diff'><img width='$width' src='$diff'/></a></th>" +
-            "</tr>"
+
+          if (showOnlyFailingTestsInReports && isFailedTest || !showOnlyFailingTestsInReports) {
+            "<tr>" +
+              s"<th id='$id'> <p class='$color'>Test class: $testClass</p>" +
+              s"<p class='$color'>Test name: $testName</p></th>" +
+              s"<th> <a href='$originalScreenshot'><img width='$width' src='$originalScreenshot'/></a></th>" +
+              s"<th> <a href='$newScreenshot'><img width='$width' src='$newScreenshot'/></a></th>" +
+              s"<th> <a href='$diff'><img width='$width' src='$diff'/></a></th>" +
+              "</tr>"
+          } else {
+            ""
+          }
       }
       .mkString("\n")
   }

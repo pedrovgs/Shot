@@ -9,8 +9,9 @@ object ShotExtension {
 
 class ShotExtension(@BeanProperty var runInstrumentation: Boolean,
                     @BeanProperty var useComposer: Boolean,
-                    @BeanProperty var tolerance: Double) {
+                    @BeanProperty var tolerance: Double,
+                    @BeanProperty var showOnlyFailingTestsInReports: Boolean) {
 
-  def this() = this(true, false, Config.defaultTolerance)
+  def this() = this(true, false, Config.defaultTolerance, false)
 
 }

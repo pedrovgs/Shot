@@ -84,7 +84,8 @@ class Shot(adb: Adb,
                         buildType: String,
                         projectName: String,
                         shouldPrintBase64Error: Boolean,
-                        tolerance: Double): ScreenshotsComparisionResult = {
+                        tolerance: Double,
+                        showOnlyFailingTestsInReports: Boolean): ScreenshotsComparisionResult = {
     console.show("🔎  Comparing screenshots with previous ones.")
     moveComposeScreenshotsToRegularScreenshotsFolder(projectFolder,
                                                      flavor,
@@ -130,7 +131,8 @@ class Shot(adb: Adb,
                                         comparison,
                                         buildFolder,
                                         flavor,
-                                        buildType)
+                                        buildType,
+                                        showOnlyFailingTestsInReports)
     console.show(
       "🤓  You can review the execution report here: " + buildFolder + Config
         .verificationReportFolder(flavor, buildType) + "/index.html")
