@@ -39,13 +39,17 @@ class ExecutionReporter {
     writeReport(buildFolder, input, template, reportFolder)
   }
 
-  def generateVerificationReport(appId: AppId,
-                                 comparision: ScreenshotsComparisionResult,
-                                 buildFolder: Folder,
-                                 flavor: String,
-                                 buildType: String,
-                                 showOnlyFailingTestsInReports: Boolean = false) = {
-    val input = generateVerificationTemplateValues(appId, comparision, showOnlyFailingTestsInReports)
+  def generateVerificationReport(
+      appId: AppId,
+      comparision: ScreenshotsComparisionResult,
+      buildFolder: Folder,
+      flavor: String,
+      buildType: String,
+      showOnlyFailingTestsInReports: Boolean = false) = {
+    val input = generateVerificationTemplateValues(
+      appId,
+      comparision,
+      showOnlyFailingTestsInReports)
     val template = freeMarkerConfig.getTemplate("verificationIndex.ftl")
     resetVerificationReport(flavor, buildType)
     val reportFolder = buildFolder + Config.verificationReportFolder(
@@ -114,8 +118,11 @@ class ExecutionReporter {
     val successNumber = numberOfTests - failedNumber
     val summaryResults =
       s"$numberOfTests screenshot tests executed. $successNumber passed and $failedNumber failed."
-    val summaryTableBody = generateVerificationSummaryTableBody(comparision, showOnlyFailingTestsInReports)
-    val screenshotsTableBody = generateScreenshotsTableBody(comparision, showOnlyFailingTestsInReports)
+    val summaryTableBody = generateVerificationSummaryTableBody(
+      comparision,
+      showOnlyFailingTestsInReports)
+    val screenshotsTableBody =
+      generateScreenshotsTableBody(comparision, showOnlyFailingTestsInReports)
     Map("title" -> title,
         "summaryResult" -> summaryResults,
         "summaryTableBody" -> summaryTableBody,

@@ -83,7 +83,7 @@ class ExecuteScreenshotTests extends ShotTask {
                                           project.getName,
                                           printBase64,
                                           tolerance,
-        showOnlyFailingTestsInReports)
+                                          showOnlyFailingTestsInReports)
       if (result.hasErrors) {
         throw new GradleException(
           "Screenshots comparision fail. Review the execution report to see what's broken your build.")
