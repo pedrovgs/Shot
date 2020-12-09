@@ -61,6 +61,9 @@ class ExecuteScreenshotTests extends ShotTask {
       .tolerance
     val recordScreenshots = project.hasProperty("record")
     val printBase64 = project.hasProperty("printBase64")
+    val showOnlyFailingTestsInReports = project.getExtensions
+      .getByType[ShotExtension](classOf[ShotExtension])
+      .showOnlyFailingTestsInReports
     val projectFolder = project.getProjectDir.getAbsolutePath
     val projectName = project.getName
     val buildFolder = project.getBuildDir.getAbsolutePath
@@ -79,7 +82,8 @@ class ExecuteScreenshotTests extends ShotTask {
                                           buildType.getName,
                                           project.getName,
                                           printBase64,
-                                          tolerance)
+                                          tolerance,
+                                          showOnlyFailingTestsInReports)
       if (result.hasErrors) {
         throw new GradleException(
           "Screenshots comparision fail. Review the execution report to see what's broken your build.")
