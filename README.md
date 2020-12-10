@@ -26,6 +26,7 @@ class GreetingScreenshotTest : ScreenshotTest {
 
         compareScreenshot(composeRule)
     }
+}
 ```
 
 **Since Shot 5.0.0 we provide screenshot testing support for [Jetpack Compose](https://developer.android.com/jetpack/compose).**
@@ -56,7 +57,7 @@ Setup the Gradle plugin:
     // ...
     dependencies {
       // ...
-      classpath 'com.karumi:shot:5.4.0'
+      classpath 'com.karumi:shot:5.5.0'
     }
   }
   apply plugin: 'shot'
