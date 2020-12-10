@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Build
 import android.util.Log
-import androidx.ui.test.SemanticsNodeInteraction
+import androidx.compose.ui.test.SemanticsNodeInteraction
 import com.google.gson.Gson
 import java.io.File
 import java.io.FileOutputStream
