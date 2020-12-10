@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.4.12'
+    ext.kotlin_version = '1.4.21'
     repositories {
         mavenLocal()
         mavenCentral()
@@ -8,7 +8,7 @@ buildscript {
         maven { url uri('../repo') }
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:4.2.0-beta01"
+        classpath "com.android.tools.build:gradle:7.0.0-alpha01"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.karumi:shot:5.4.1-SNAPSHOT'
     }
