@@ -102,9 +102,9 @@ interface ScreenshotTest {
         val width = widthInPx ?: metrics.widthPixels
         runOnUi {
             ViewHelpers.setupView(view)
-                    .setExactHeightPx(height)
-                    .setExactWidthPx(width)
-                    .layout()
+                .setExactHeightPx(height)
+                .setExactWidthPx(width)
+                .layout()
         }
         takeViewSnapshot(name, view)
     }
@@ -171,10 +171,10 @@ interface ScreenshotTest {
         val snapshotName = "${TestNameDetector.getTestClass()}_$testName"
         try {
             Screenshot
-                    .snap(view)
-                    .setIncludeAccessibilityInfo(false)
-                    .setName(snapshotName)
-                    .record()
+                .snap(view)
+                .setIncludeAccessibilityInfo(false)
+                .setName(snapshotName)
+                .record()
         } catch (t: Throwable) {
             Log.e("Shot", "Exception captured while taking screenshot for snapshot with name $snapshotName", t)
         }
@@ -185,10 +185,10 @@ interface ScreenshotTest {
         val snapshotName = "${TestNameDetector.getTestClass()}_$testName"
         try {
             Screenshot
-                    .snapActivity(activity)
-                    .setIncludeAccessibilityInfo(false)
-                    .setName(snapshotName)
-                    .record()
+                .snapActivity(activity)
+                .setIncludeAccessibilityInfo(false)
+                .setName(snapshotName)
+                .record()
         } catch (t: Throwable) {
             Log.e("Shot", "Exception captured while taking screenshot for snapshot with name $snapshotName", t)
         }
