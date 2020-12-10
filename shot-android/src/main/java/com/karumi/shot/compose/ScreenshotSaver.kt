@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Build
 import android.util.Log
-import androidx.ui.test.SemanticsNodeInteraction
+import androidx.compose.ui.test.SemanticsNodeInteraction
 import com.google.gson.Gson
 import java.io.File
 import java.io.FileOutputStream
@@ -19,8 +19,11 @@ class ScreenshotSaver(private val packageName: String, private val bitmapGenerat
 
     fun saveScreenshot(screenshot: ScreenshotToSave) {
         if (Build.VERSION.SDK_INT >= 30) {
-            Log.w("Shot", "Can't save screenshot bitmap on Android OS ${Build.VERSION.SDK_INT} on applications with Target SDK >= 30." +
-                    "If your app has Target SDK <= 29, you should add \"android:requestLegacyExternalStorage=\"true\"\" on your test manifest.")
+            Log.w(
+                "Shot",
+                "Can't save screenshot bitmap on Android OS ${Build.VERSION.SDK_INT} on applications with Target SDK >= 30." +
+                    "If your app has Target SDK <= 29, you should add \"android:requestLegacyExternalStorage=\"true\"\" on your test manifest."
+            )
         }
 
         val bitmap = getBitmapFromScreenshotToSave(screenshot)
@@ -30,17 +33,21 @@ class ScreenshotSaver(private val packageName: String, private val bitmapGenerat
 
     private fun getBitmapFromScreenshotToSave(screenshot: ScreenshotToSave) = when (screenshot.source) {
         is ScreenshotSource.Bitmap -> screenshot.source.bitmap
-        is ScreenshotSource.Node -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            bitmapGenerator.generateBitmap(screenshot.source)
-        } else {
-            throw IllegalArgumentException("Can't extract bitmap from node in a SDK version lower than Build.VERSION_CODES.O")
-        }
+        is ScreenshotSource.Node ->
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                bitmapGenerator.generateBitmap(screenshot.source)
+            } else {
+                throw IllegalArgumentException("Can't extract bitmap from node in a SDK version lower than Build.VERSION_CODES.O")
+            }
     }
 
     fun saveMetadata(session: ScreenshotTestSession) {
         if (Build.VERSION.SDK_INT >= 30) {
-            Log.w("Shot", "Can't save screenshot bitmap on Android OS ${Build.VERSION.SDK_INT} on applications with Target SDK >= 30." +
-                    "If your app has Target SDK <= 29, you should add \"android:requestLegacyExternalStorage=\"true\"\" on your test manifest.")
+            Log.w(
+                "Shot",
+                "Can't save screenshot bitmap on Android OS ${Build.VERSION.SDK_INT} on applications with Target SDK >= 30." +
+                    "If your app has Target SDK <= 29, you should add \"android:requestLegacyExternalStorage=\"true\"\" on your test manifest."
+            )
         }
 
         createScreenshotsFolderIfDoesNotExist()

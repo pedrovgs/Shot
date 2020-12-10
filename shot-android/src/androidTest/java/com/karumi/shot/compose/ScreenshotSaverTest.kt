@@ -21,7 +21,7 @@ class ScreenshotSaverTest {
 
     @get:Rule
     var permissionRule: GrantPermissionRule =
-            GrantPermissionRule.grant(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE)
+        GrantPermissionRule.grant(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE)
 
     private lateinit var saver: ScreenshotSaver
 
@@ -71,9 +71,11 @@ class ScreenshotSaverTest {
             saver.saveScreenshot(screenshotToSave)
         }
 
-        assertTrue(testsMetadata.all {
-            File("/sdcard/screenshots/com.karumi.shot.test/screenshots-compose-default/${it.data.name}.png").exists()
-        })
+        assertTrue(
+            testsMetadata.all {
+                File("/sdcard/screenshots/com.karumi.shot.test/screenshots-compose-default/${it.data.name}.png").exists()
+            }
+        )
     }
 
     @Test

@@ -12,12 +12,12 @@ repositories {
 }
 
 dependencies {
-    compile gradleApi()
-    compile localGroovy()
-    compile 'com.android.tools.build:gradle:3.3.2'
-    compile project(':core')
-    compile 'org.scala-lang:scala-library:2.12.1'
-    testCompile 'org.scalatest:scalatest_2.12:3.0.3'
+    implementation gradleApi()
+    implementation localGroovy()
+    implementation 'com.android.tools.build:gradle:3.3.3'
+    implementation project(':core')
+    implementation 'org.scala-lang:scala-library:2.12.11'
+    testImplementation 'org.scalatest:scalatest_2.12:3.0.3'
     testRuntime 'org.pegdown:pegdown:1.4.2'
 }
 

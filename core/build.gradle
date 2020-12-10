@@ -11,16 +11,16 @@ repositories {
 }
 
 dependencies {
-    compile 'org.scala-lang:scala-library:2.12.2'
-    compile 'org.scala-lang.modules:scala-xml_2.12:1.0.6'
-    compile 'com.sksamuel.scrimage:scrimage-core_2.12:2.1.8'
-    compile 'org.freemarker:freemarker:2.3.23'
-    compile 'org.json4s:json4s-native_2.12:3.5.3'
-    compile 'io.github.bitstorm:tinyzip-core:1.0.0'
-    compile 'org.json4s:json4s-jackson_2.12:3.6.10'
-    testCompile 'org.scalatest:scalatest_2.12:3.0.3'
+    implementation 'org.scala-lang:scala-library:2.12.11'
+    implementation 'org.scala-lang.modules:scala-xml_2.12:1.0.6'
+    implementation 'com.sksamuel.scrimage:scrimage-core_2.12:2.1.8'
+    implementation 'org.freemarker:freemarker:2.3.23'
+    implementation 'org.json4s:json4s-native_2.12:3.5.3'
+    implementation 'io.github.bitstorm:tinyzip-core:1.0.0'
+    implementation 'org.json4s:json4s-jackson_2.12:3.6.10'
+    testImplementation 'org.scalatest:scalatest_2.12:3.0.3'
     testRuntime 'org.pegdown:pegdown:1.4.2'
-    testCompile 'org.scalamock:scalamock-scalatest-support_2.12:3.5.0'
+    testImplementation 'org.scalamock:scalamock-scalatest-support_2.12:3.5.0'
 }
 
 sourceSets {

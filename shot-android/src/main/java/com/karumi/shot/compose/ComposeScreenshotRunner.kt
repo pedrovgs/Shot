@@ -9,8 +9,8 @@ class ComposeScreenshotRunner {
 
         fun onCreate(instrumentation: Instrumentation) {
             composeScreenshot = ComposeScreenshot(
-                    session = ScreenshotTestSession(),
-                    saver = ScreenshotSaver(instrumentation.context.packageName, SemanticsNodeBitmapGenerator())
+                session = ScreenshotTestSession(),
+                saver = ScreenshotSaver(instrumentation.context.packageName, SemanticsNodeBitmapGenerator())
             )
         }
 

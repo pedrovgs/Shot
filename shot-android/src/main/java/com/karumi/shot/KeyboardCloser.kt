@@ -21,7 +21,7 @@ interface KeyboardCloser {
         if (focusedView != null) {
             activity.runOnUiThread {
                 val imm: InputMethodManager =
-                        activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                    activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(focusedView.windowToken, 0)
             }
         }

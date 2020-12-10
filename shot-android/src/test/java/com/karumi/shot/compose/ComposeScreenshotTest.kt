@@ -1,6 +1,6 @@
 package com.karumi.shot.compose
 
-import androidx.ui.test.SemanticsNodeInteraction
+import androidx.compose.ui.test.SemanticsNodeInteraction
 import com.nhaarman.mockito_kotlin.*
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
