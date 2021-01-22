@@ -255,6 +255,14 @@ or
 
 [karumilogo]: https://cloud.githubusercontent.com/assets/858090/11626547/e5a1dc66-9ce3-11e5-908d-537e07e82090.png
 
+## Executing tests from Android Studio
+
+Shot is a Gradle plugin and it does not integrate with AS by default. After running your tests, Shot Gradle plugin will fetch the screenshots generated during tests' execution and use them to check if your tests are passing or not. You always can run your tests from command linke as explained above. However, **if you want to run your tests from AS you can create a configuration like this**:
+
+![asConfig](./art/asConfig.png)
+
+Keep in mind the debugger may not work if use use this option. If you want to debug your tests you can run them from Android Studio as you'd do with any other instrumentation test.
+
 ## Executing tests in multiple devices
 
 If after some time writing screenshot tests your build takes too long to run our recommendation is to run your tests in multiple devices. **Sharding your tests execution will split your test suite into different devices so your tests execution time will be reduced. This feature is not designed to test the UI across different platforms or screen resolutions, to do that we'd recommend you to configure the size of the screenshot taken by modifing the view height and width.** To run your tests in multiple devices you can use [Composer](https://github.com/gojuno/composer) and the official [Gradle Plugin they provide](https://github.com/trevjonez/composer-gradle-plugin). Composer will take all your tests and will split the test suite execution between all the connected devices. **Remember, if you are going to use more than one device all the devices should use the same Android OS and the same screen resolution and density!** Keep also in mind composer needs Gradle 5.4.1 to be able to run your tests using multiple devices.
