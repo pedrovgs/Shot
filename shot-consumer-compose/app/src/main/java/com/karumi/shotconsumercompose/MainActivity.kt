@@ -21,11 +21,9 @@ class MainActivity : AppCompatActivity() {
         setContent {
             ShotConsumerComposeTheme {
                 // A surface container using the 'background' color from the theme
-                LazyColumn {
-                    item {
-                        Greeting("Android")
-                        RoundedCornersBox()
-                    }
+                Column {
+                    Greeting("Android")
+                    RoundedCornersBox()
                 }
             }
         }
