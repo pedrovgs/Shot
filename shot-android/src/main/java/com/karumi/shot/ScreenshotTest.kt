@@ -110,6 +110,7 @@ interface ScreenshotTest {
     }
 
     fun compareScreenshot(rule: ComposeTestRule, name: String? = null) {
+        rule.waitForIdle()
         compareScreenshot(rule.onRoot(), name)
     }
 
