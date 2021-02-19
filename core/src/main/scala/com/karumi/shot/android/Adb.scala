@@ -1,11 +1,16 @@
 package com.karumi.shot.android
 
+import com.karumi.shot.android.Adb.baseStoragePath
 import com.karumi.shot.domain.model.{AppId, Folder}
 
 import scala.sys.process._
 
 object Adb {
   var adbBinaryPath: String = ""
+  // To be able to support API 29+ with scoped storage we need to change
+  // the base url where the app saves our screenshots inside the device.
+  // This value is computed in runtime in shot-android AndroidStorageInfo.
+  private val baseStoragePath = "/storage/emulated/0/Download"
 }
 
 class Adb {
@@ -45,7 +50,7 @@ class Adb {
                          device: String,
                          screenshotsFolder: Folder,
                          appId: AppId) = {
-    val folderToPull = s"/sdcard/screenshots/$appId/$folderName/"
+    val folderToPull = s"${baseStoragePath}/screenshots/$appId/$folderName/"
     try {
       executeAdbCommandWithResult(
         s"-s $device pull $folderToPull $screenshotsFolder")
@@ -60,7 +65,7 @@ class Adb {
                                          appId: AppId,
                                          folder: AppId) =
     executeAdbCommand(
-      s"-s $device shell rm -r /sdcard/screenshots/$appId/$folder/")
+      s"-s $device shell rm -r $baseStoragePath/screenshots/$appId/$folder/")
 
   private def executeAdbCommand(command: String): Int =
     s"${Adb.adbBinaryPath} $command" ! logger

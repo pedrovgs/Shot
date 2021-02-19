@@ -87,15 +87,13 @@ If for some reason you are running your tests on a different machine and you wan
   }
 ```
 
-Keep in mind the screenshots library needs the ``WRITE_EXTERNAL_STORAGE`` permission. When testing a library, add this permission to the manifest of the instrumentation apk. If you are testing an application, add this permission to the app under test. To grant this permission you can create an ``AndroidManifest.xml`` file inside the ``androidTest`` folder. Here is an example:
+Create this ``AndroidManifest.xml`` file inside your ``androidTest`` folder.
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="<YOUR_APP_ID>.test"
     android:sharedUserId="<YOUR_APP_ID>.uid">
-
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 </manifest>
 ```
@@ -301,20 +299,7 @@ You can run a single test or test class, just add the `android.testInstrumentati
 
 ## Using shot on API 29+
 
-Due to the new storage system implemented on API 29 and higher, Shot has some limitations writing the screenshots on the SD. *Shot can't be used when both ``Target SDK`` and ``device API`` are API 30.*
-
-If one of those values (Target SDK or Device API) is <= 29,  Shot will work properly just adding the following parameter in the ``AndroidManifest.xml`` of the test app.
-
-```
-<application android:requestLegacyExternalStorage="true" />
-```
-
-The following combination should work properly using the previous flag:
-| Target SDK  | Device API  | RequestLegacyExternalStorage |
-|-------------|------------|----------------------------------|
-| 30 | 29  | true  |
-| 29 | 29  | true  |
-| 29 | 30  | true  |
+Since Shot 5.8.0 we provide support for devices running API >= 29. There is no need to configure ``android:requestLegacyExternalStorage="true"`` or provide any special storage permission in your test ``AndroidManifest`.
 
 ## Development documentation
 

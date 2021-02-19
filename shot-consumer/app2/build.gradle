@@ -79,7 +79,8 @@ dependencies {
     androidTestImplementation "org.mockito:mockito-android:2.28.2"
     androidTestImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
     androidTestImplementation "net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.0.0"
-    shotDependencies "com.karumi:shot-android:4.2.0"
+    // How to override shot-android inner dependency if needed
+    //shotDependencies "com.karumi:shot-android:4.2.0"
 }
 
 task ktlint(type: JavaExec) {

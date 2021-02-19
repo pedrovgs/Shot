@@ -3,8 +3,5 @@
     package="com.karumi.shotconsumercompose.test"
     android:sharedUserId="com.karumi.shotconsumercompose.uid">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
-    <application android:requestLegacyExternalStorage="true" />
 
 </manifest>

@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.rule.GrantPermissionRule
+import com.karumi.shot.AndroidStorageInfo
 import com.nhaarman.mockitokotlin2.whenever
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
@@ -59,7 +60,7 @@ class ScreenshotSaverTest {
     fun savesTheBitmapObtainedFromTheNodeUsingTheScreenshotMetadata() {
         saver.saveScreenshot(screenshotToSave)
 
-        val file = File("/sdcard/screenshots/com.karumi.shot.test/screenshots-compose-default/${anyScreenshotMetadata.name}.png")
+        val file = File("${AndroidStorageInfo.storageBaseUrl}/screenshots/com.karumi.shot.test/screenshots-compose-default/${anyScreenshotMetadata.name}.png")
         assertTrue(file.exists())
     }
 
@@ -73,7 +74,7 @@ class ScreenshotSaverTest {
 
         assertTrue(
             testsMetadata.all {
-                File("/sdcard/screenshots/com.karumi.shot.test/screenshots-compose-default/${it.data.name}.png").exists()
+                File("${AndroidStorageInfo.storageBaseUrl}/screenshots/com.karumi.shot.test/screenshots-compose-default/${it.data.name}.png").exists()
             }
         )
     }
@@ -85,7 +86,7 @@ class ScreenshotSaverTest {
         saver.saveMetadata(session)
 
         val expectedContent = "{\"screenshots\":[{\"name\":\"test1\",\"testClassName\":\"MainActivityTest\",\"testName\":\"testName1\"},{\"name\":\"test2\",\"testClassName\":\"MainActivityTest\",\"testName\":\"testName2\"}]}"
-        val file = File("/sdcard/screenshots/com.karumi.shot.test/screenshots-compose-default/metadata.json")
+        val file = File("${AndroidStorageInfo.storageBaseUrl}/screenshots/com.karumi.shot.test/screenshots-compose-default/metadata.json")
         val content = file.readText(Charset.defaultCharset())
         assertTrue(file.exists())
         assertEquals(expectedContent, content)
@@ -98,11 +99,11 @@ class ScreenshotSaverTest {
         saver.saveScreenshot(screenshotToSave)
         saver.saveMetadata(session)
 
-        val bitmapFile = File("/sdcard/screenshots/com.karumi.shot.test/screenshots-compose-default/${anyScreenshotMetadata.name}.png")
+        val bitmapFile = File("${AndroidStorageInfo.storageBaseUrl}/screenshots/com.karumi.shot.test/screenshots-compose-default/${anyScreenshotMetadata.name}.png")
         assertTrue(bitmapFile.exists())
-        val metadataFile = File("/sdcard/screenshots/com.karumi.shot.test/screenshots-compose-default/metadata.json")
+        val metadataFile = File("${AndroidStorageInfo.storageBaseUrl}/screenshots/com.karumi.shot.test/screenshots-compose-default/metadata.json")
         assertTrue(metadataFile.exists())
     }
 
-    private fun clearSdCardFiles() = File("/sdcard/screenshots/com.karumi.shot.test/").deleteRecursively()
+    private fun clearSdCardFiles() = File("${AndroidStorageInfo.storageBaseUrl}/screenshots/com.karumi.shot.test/").deleteRecursively()
 }
