@@ -2,7 +2,7 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-if ! $ANDROID_HOME/tools/android list avd | grep -q Nexus_5X_API_26; then
+if ! $ANDROID_HOME/tools/android list avd | grep -q Screenshot_Tests_API_30; then
     echo "No emulator for screenshot tests found, creating one..."
     $DIR/create_emulator.sh
 fi
@@ -13,7 +13,7 @@ if $ANDROID_HOME/platform-tools/adb devices -l | grep -q emulator; then
 fi
 
 echo "Starting emulator..."
-echo "no" | $ANDROID_HOME/emulator/emulator "-avd" "Nexus_5X_API_26" "-no-audio" "-no-boot-anim" &
+echo "no" | $ANDROID_HOME/emulator/emulator "-avd" "Screenshot_Tests_API_30" "-no-audio" "-no-boot-anim" &
 
 $DIR/wait_for_emulator.sh
 
