@@ -109,12 +109,23 @@ class Shot(adb: Adb,
       comparison,
       newScreenshotsVerificationReportFolder,
       shouldPrintBase64Error)
-    screenshotsSaver.copyRecordedScreenshotsToTheReportFolder(
-      projectFolder,
-      flavor,
-      buildType,
-      buildFolder + Config
-        .verificationReportFolder(flavor, buildType) + "/images/recorded/")
+
+    if (showOnlyFailingTestsInReports) {
+      screenshotsSaver.copyOnlyFailingRecordedScreenshotsToTheReportFolder(
+        projectFolder,
+        flavor,
+        buildType,
+        buildFolder + Config
+          .verificationReportFolder(flavor, buildType) + "/images/recorded/",
+        updatedComparison)
+    } else {
+      screenshotsSaver.copyRecordedScreenshotsToTheReportFolder(
+        projectFolder,
+        flavor,
+        buildType,
+        buildFolder + Config
+          .verificationReportFolder(flavor, buildType) + "/images/recorded/")
+    }
 
     if (updatedComparison.hasErrors) {
       consoleReporter.showErrors(updatedComparison,
