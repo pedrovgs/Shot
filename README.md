@@ -257,11 +257,15 @@ or
 
 ## Executing tests from Android Studio
 
-Shot is a Gradle plugin and it does not integrate with AS by default. After running your tests, Shot Gradle plugin will fetch the screenshots generated during tests' execution and use them to check if your tests are passing or not. You always can run your tests from command linke as explained above. However, **if you want to run your tests from AS you can create a configuration like this**:
+Shot is a Gradle plugin and it does not integrate with AS by default. After running your tests, Shot Gradle plugin will fetch the screenshots generated during tests' execution and use them to check if your tests are passing or not. You always can run your tests from command line as explained above. However, **if you want to run your tests from AS you can create a configuration like this**:
 
 ![asConfig](./art/asConfig.png)
 
-Keep in mind the debugger may not work if use use this option. If you want to debug your tests you can run them from Android Studio as you'd do with any other instrumentation test.
+Keep in mind the debugger may not work if use use this option. If you want to debug your tests you can run them from Android Studio as you'd do with any other instrumentation test and you may need to execute this command before running your test:
+
+```
+adb rm -rf /storage/emulated/0/Download/screenshots/*
+```
 
 ## Executing tests in multiple devices
 
