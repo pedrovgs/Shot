@@ -140,11 +140,8 @@ class Shot(adb: Adb,
     comparison
   }
 
-  def removeScreenshots(appId: AppId): Unit = {
-    console.show(
-      "🧹  Cleaning the device folder where the screenshots are saved.")
+  def removeScreenshots(appId: AppId): Unit =
     clearScreenshots(appId)
-  }
 
   private def moveComposeScreenshotsToRegularScreenshotsFolder(
       projectFolder: Folder,
