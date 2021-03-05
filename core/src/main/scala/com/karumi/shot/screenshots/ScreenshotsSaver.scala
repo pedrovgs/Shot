@@ -55,20 +55,13 @@ class ScreenshotsSaver {
       destinyFolder: Folder,
       updatedComparison: ScreenshotsComparisionResult): Unit = {
 
-    updatedComparison.errors.foreach {
-      case ScreenshotNotFound(screenshot) =>
-        copyFile(screenshot, destinyFolder)
-
-      case DifferentScreenshots(screenshot, base64Diff) =>
-        copyFile(screenshot, destinyFolder)
-
-      case DifferentImageDimensions(screenshot,
-                                    originalDimension,
-                                    newDimension) =>
-        copyFile(screenshot, destinyFolder)
-
-      case _ => // Nothing to do
-    }
+    updatedComparison.errors
+      .map {
+        case ScreenshotNotFound(screenshot) => screenshot
+        case DifferentScreenshots(screenshot, _) => screenshot
+        case DifferentImageDimensions(screenshot, _, _) => screenshot
+      }
+      .foreach { copyFile(_, destinyFolder) }
   }
 
   private def copyFile(screenshot: Screenshot, destinyFolder: Folder): Unit = {
