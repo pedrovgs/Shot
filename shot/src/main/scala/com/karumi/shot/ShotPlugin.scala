@@ -137,11 +137,13 @@ class ShotPlugin extends Plugin[Project] {
     }
     val tasks = project.getTasks
     val removeScreenshotsAfterExecution = tasks
-      .register(RemoveScreenshotsTask.name(flavor, buildType, beforeExecution = false),
-                classOf[RemoveScreenshotsTask])
+      .register(
+        RemoveScreenshotsTask.name(flavor, buildType, beforeExecution = false),
+        classOf[RemoveScreenshotsTask])
     val removeScreenshotsBeforeExecution = tasks
-      .register(RemoveScreenshotsTask.name(flavor, buildType, beforeExecution = true),
-                classOf[RemoveScreenshotsTask])
+      .register(
+        RemoveScreenshotsTask.name(flavor, buildType, beforeExecution = true),
+        classOf[RemoveScreenshotsTask])
 
     removeScreenshotsAfterExecution.configure { task =>
       task.setDescription(RemoveScreenshotsTask.description(flavor, buildType))
@@ -187,7 +189,9 @@ class ShotPlugin extends Plugin[Project] {
       downloadScreenshots.configure { task =>
         task.mustRunAfter(instrumentationTask)
       }
-      tasks.getByName(instrumentationTask).dependsOn(removeScreenshotsBeforeExecution)
+      tasks
+        .getByName(instrumentationTask)
+        .dependsOn(removeScreenshotsBeforeExecution)
       removeScreenshotsAfterExecution.configure { task =>
         task.mustRunAfter(downloadScreenshots)
       }

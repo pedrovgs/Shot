@@ -141,7 +141,8 @@ class Shot(adb: Adb,
   }
 
   def removeScreenshots(appId: AppId): Unit = {
-    console.show("🧹  Cleaning the device folder where the screenshots are saved.")
+    console.show(
+      "🧹  Cleaning the device folder where the screenshots are saved.")
     clearScreenshots(appId)
   }
 
