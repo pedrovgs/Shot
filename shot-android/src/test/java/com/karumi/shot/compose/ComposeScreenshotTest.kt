@@ -1,6 +1,7 @@
 package com.karumi.shot.compose
 
 import androidx.compose.ui.test.SemanticsNodeInteraction
+import com.karumi.shot.permissions.AndroidStoragePermissions
 import com.nhaarman.mockito_kotlin.*
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
@@ -24,9 +25,12 @@ class ComposeScreenshotTest {
     @Mock
     private lateinit var node: SemanticsNodeInteraction
 
+    @Mock
+    private lateinit var permissions: AndroidStoragePermissions
+
     @Before
     fun setUp() {
-        composeScreenshot = ComposeScreenshot(ScreenshotTestSession(), screenshotSaver)
+        composeScreenshot = ComposeScreenshot(ScreenshotTestSession(), screenshotSaver, permissions)
     }
 
     @Test
@@ -37,6 +41,15 @@ class ComposeScreenshotTest {
 
         val expectedSessionMetadata = ScreenshotSessionMetadata(listOf(data))
         assertEquals(expectedSessionMetadata, composeScreenshot.saveMetadata().getScreenshotSessionMetadata())
+    }
+
+    @Test
+    fun grantsStoragePermissionsWhenSavingAnyMetadata() {
+        val data = anyScreenshotMetadata
+
+        composeScreenshot.saveScreenshot(node, data)
+
+        verify(permissions).checkPermissions()
     }
 
     @Test
