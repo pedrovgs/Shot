@@ -1,5 +1,6 @@
 package com.karumi.shot
 
+import android.os.Build
 import android.os.Environment
 
 object AndroidStorageInfo {
@@ -7,6 +8,10 @@ object AndroidStorageInfo {
     // in the device we can use without handling the scoped storage API. Before using
     // this folder we used "/sdcard
     val storageBaseUrl: String by lazy {
-        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath
+        } else {
+            "/sdcard"
+        }
     }
 }

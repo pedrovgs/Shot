@@ -1,6 +1,6 @@
 package com.karumi.shot.android
 
-import com.karumi.shot.android.Adb.baseStoragePath
+import com.karumi.shot.android.Adb.baseStoragePaths
 import com.karumi.shot.domain.model.{AppId, Folder}
 
 import scala.sys.process._
@@ -10,7 +10,7 @@ object Adb {
   // To be able to support API 29+ with scoped storage we need to change
   // the base url where the app saves our screenshots inside the device.
   // This value is computed in runtime in shot-android AndroidStorageInfo.
-  private val baseStoragePath = "/storage/emulated/0/Download"
+  private val baseStoragePaths = Seq("/sdcard", "/storage/emulated/0/Download")
 }
 
 class Adb {
@@ -49,23 +49,26 @@ class Adb {
   private def pullFolder(folderName: String,
                          device: String,
                          screenshotsFolder: Folder,
-                         appId: AppId) = {
-    val folderToPull = s"${baseStoragePath}/screenshots/$appId/$folderName/"
-    try {
-      executeAdbCommandWithResult(
-        s"-s $device pull $folderToPull $screenshotsFolder")
-    } catch {
-      case _: Throwable =>
-        println(
-          Console.YELLOW + s"Shot ADB warning: We could not pull screenshots from folder: ${folderToPull}")
-    }
+                         appId: AppId) = baseStoragePaths.foreach {
+    storagePath =>
+      val folderToPull = s"${storagePath}/screenshots/$appId/$folderName/"
+      try {
+        executeAdbCommandWithResult(
+          s"-s $device pull $folderToPull $screenshotsFolder")
+      } catch {
+        case _: Throwable =>
+          println(
+            Console.YELLOW + s"Shot ADB warning: We could not pull screenshots from folder: ${folderToPull}")
+      }
   }
 
   private def clearScreenshotsFromFolder(device: String,
                                          appId: AppId,
                                          folder: AppId) =
-    executeAdbCommand(
-      s"-s $device shell rm -r $baseStoragePath/screenshots/$appId/$folder/")
+    baseStoragePaths.foreach { storagePath =>
+      executeAdbCommand(
+        s"-s $device shell rm -r $storagePath/screenshots/$appId/$folder/")
+    }
 
   private def executeAdbCommand(command: String): Int =
     s"${Adb.adbBinaryPath} $command" ! logger
