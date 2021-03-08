@@ -73,10 +73,12 @@ This plugin sets up a few convenience commands you can list executing ``./gradle
 executeScreenshotTests - Checks the user interface screenshot tests. If you execute this task using -Precord param the screenshot will be regenerated.
 blueDebugDownloadScreenshots - Retrieves the screenshots stored into the Android device where the tests were executed for the build BlueDebug
 blueDebugExecuteScreenshotTests - Records the user interface tests screenshots. If you execute this task using -Precord param the screenshot will be regenerated for the build BlueDebug
-blueDebugRemoveScreenshots - Removes the screenshots recorded during the tests execution from the Android device where the tests were executed for the build BlueDebug
+blueDebugRemoveScreenshotsBefore - Removes the screenshots recorded before the tests execution from the Android device where the tests were executed for the build BlueDebug
+blueDebugRemoveScreenshotsAfter - Removes the screenshots recorded after the tests execution from the Android device where the tests were executed for the build BlueDebug
 greenDebugDownloadScreenshots - Retrieves the screenshots stored into the Android device where the tests were executed for the build GreenDebug
 greenDebugExecuteScreenshotTests - Records the user interface tests screenshots. If you execute this task using -Precord param the screenshot will be regenerated for the build GreenDebug
-greenDebugRemoveScreenshots - Removes the screenshots recorded during the tests execution from the Android device where the tests were executed for the build GreenDebug
+greenDebugRemoveScreenshotsBefore - Removes the screenshots recorded before the tests execution from the Android device where the tests were executed for the build GreenDebug
+greenDebugRemoveScreenshotsAfter - Removes the screenshots recorded after the tests execution from the Android device where the tests were executed for the build GreenDebug
 ```
 
 If for some reason you are running your tests on a different machine and you want to skip the instrumentation tests execution and just compare the sources remember you can use the following shot configuration:
@@ -255,11 +257,15 @@ or
 
 ## Executing tests from Android Studio
 
-Shot is a Gradle plugin and it does not integrate with AS by default. After running your tests, Shot Gradle plugin will fetch the screenshots generated during tests' execution and use them to check if your tests are passing or not. You always can run your tests from command linke as explained above. However, **if you want to run your tests from AS you can create a configuration like this**:
+Shot is a Gradle plugin and it does not integrate with AS by default. After running your tests, Shot Gradle plugin will fetch the screenshots generated during tests' execution and use them to check if your tests are passing or not. You always can run your tests from command line as explained above. However, **if you want to run your tests from AS you can create a configuration like this**:
 
 ![asConfig](./art/asConfig.png)
 
-Keep in mind the debugger may not work if use use this option. If you want to debug your tests you can run them from Android Studio as you'd do with any other instrumentation test.
+Keep in mind the debugger may not work if use use this option. If you want to debug your tests you can run them from Android Studio as you'd do with any other instrumentation test and you may need to execute this command before running your test:
+
+```
+adb rm -rf /storage/emulated/0/Download/screenshots/*
+```
 
 ## Executing tests in multiple devices
 
