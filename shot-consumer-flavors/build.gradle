@@ -8,7 +8,7 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:4.2.0-beta01"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "com.karumi:shot:5.10.3-SNAPSHOT"
+        classpath "com.karumi:shot:5.10.3"
     }
 }
 
