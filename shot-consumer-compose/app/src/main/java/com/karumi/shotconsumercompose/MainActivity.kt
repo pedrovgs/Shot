@@ -1,13 +1,12 @@
 package com.karumi.shotconsumercompose
 
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.setContent
 import com.karumi.shotconsumercompose.ui.ShotConsumerComposeTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.background
@@ -21,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         setContent {
             ShotConsumerComposeTheme {
                 // A surface container using the 'background' color from the theme
-                ScrollableColumn {
+                Column {
                     Greeting("Android")
                     RoundedCornersBox()
                 }

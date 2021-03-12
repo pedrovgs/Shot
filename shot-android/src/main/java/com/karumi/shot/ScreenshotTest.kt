@@ -109,7 +109,9 @@ interface ScreenshotTest {
         takeViewSnapshot(name, view)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun compareScreenshot(rule: ComposeTestRule, name: String? = null) {
+        rule.waitForIdle()
         compareScreenshot(rule.onRoot(), name)
     }
 

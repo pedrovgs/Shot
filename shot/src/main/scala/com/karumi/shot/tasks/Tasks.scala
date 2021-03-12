@@ -113,12 +113,14 @@ class DownloadScreenshotsTask extends ShotTask {
 }
 
 object RemoveScreenshotsTask {
-  def name(flavor: String, buildType: BuildType) =
+  def name(flavor: String, buildType: BuildType, beforeExecution: Boolean) = {
+    val suffix = if (beforeExecution) "Before" else "After"
     if (flavor.isEmpty) {
-      s"${buildType.getName}RemoveScreenshots"
+      s"${buildType.getName}RemoveScreenshots${suffix}"
     } else {
-      s"${flavor}${buildType.getName.capitalize}RemoveScreenshots"
+      s"${flavor}${buildType.getName.capitalize}RemoveScreenshots${suffix}"
     }
+  }
 
   def description(flavor: String, buildType: BuildType) =
     s"Removes the screenshots recorded during the tests execution from the Android device where the tests were executed for the build ${flavor.capitalize}${buildType.getName.capitalize}"

@@ -154,7 +154,7 @@ class ExecutionReporter {
 
           if (showOnlyFailingTestsInReports && isFailedTest || !showOnlyFailingTestsInReports) {
             "<tr>" +
-              s"<th><a href='#$id'>$result</></th>" +
+              s"<th><a href='#$id'>$result</a></th>" +
               s"<th><a href='#$id'><p class='$color'>Test class: $testClass</p>" +
               s"<p class='$color'>Test name: $testName</p></a></th>" +
               s"<th>$reason</th>" +
