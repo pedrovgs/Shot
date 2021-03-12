@@ -33,7 +33,7 @@ class ScreenshotsSaver {
     deleteOldTemporalScreenshots(projectName)
     saveScreenshots(screenshots,
                     Config.screenshotsTemporalRootPath + projectName + "/")
-    deleteFolder(reportFolder)
+    deleteFile(reportFolder)
     saveScreenshots(screenshots, reportFolder)
   }
 
@@ -45,15 +45,21 @@ class ScreenshotsSaver {
       .screenshotsFolderName(flavor, buildType)
     FileUtils.copyDirectory(new File(recordedScreenshotsFolder),
                             new File(destinyFolder))
-    deleteFolder(destinyFolder)
+    deleteFile(destinyFolder)
   }
 
   def copyOnlyFailingRecordedScreenshotsToTheReportFolder(
       destinyFolder: Folder,
       screenshotsResult: ScreenshotsComparisionResult): Unit = {
-    screenshotsResult.erroredScreenshots.foreach(copyFile(_, destinyFolder))
-    deleteFolder(destinyFolder)
+    screenshotsResult.errorScreenshots.foreach(copyFile(_, destinyFolder))
+    deleteFile(destinyFolder)
   }
+
+  def removeNonFailingReferenceImages(
+      verificationReferenceImagesFolder: Folder,
+      screenshotsResult: ScreenshotsComparisionResult): Unit =
+    screenshotsResult.correctScreenshots.foreach(screenshot =>
+      deleteFile(verificationReferenceImagesFolder + screenshot.fileName))
 
   private def copyFile(screenshot: Screenshot, destinyFolder: Folder): Unit = {
     val existingScreenshot = new File(screenshot.recordedScreenshotPath)
@@ -75,15 +81,14 @@ class ScreenshotsSaver {
   private def deleteOldScreenshots(projectFolder: Folder,
                                    flavor: String,
                                    buildType: String) = {
-    deleteFolder(
-      projectFolder + Config.screenshotsFolderName(flavor, buildType))
+    deleteFile(projectFolder + Config.screenshotsFolderName(flavor, buildType))
   }
 
   private def deleteOldTemporalScreenshots(projectName: String): Unit = {
-    deleteFolder(Config.screenshotsTemporalRootPath + projectName + "/")
+    deleteFile(Config.screenshotsTemporalRootPath + projectName + "/")
   }
 
-  private def deleteFolder(path: String): Unit = {
+  private def deleteFile(path: String): Unit = {
     val folder = new File(path)
     if (folder.exists()) {
       folder.delete()

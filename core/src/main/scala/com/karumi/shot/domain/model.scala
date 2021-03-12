@@ -118,5 +118,7 @@ case class DifferentImageDimensions(screenshot: Screenshot,
 case class ScreenshotsComparisionResult(errors: ScreenshotComparisionErrors,
                                         screenshots: ScreenshotsSuite) {
   val hasErrors: Boolean = errors.nonEmpty
-  val erroredScreenshots: Seq[Screenshot] = errors.map(_.errorScreenshot)
+  val errorScreenshots: Seq[Screenshot] = errors.map(_.errorScreenshot)
+  val correctScreenshots: Seq[Screenshot] =
+    screenshots.filterNot(errorScreenshots.contains(_))
 }
