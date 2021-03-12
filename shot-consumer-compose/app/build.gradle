@@ -60,6 +60,7 @@ android {
 
 shot {
     tolerance = 0.6 //0.6%
+    showOnlyFailingTestsInReports = true
 }
 
 dependencies {

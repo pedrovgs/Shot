@@ -112,9 +112,6 @@ class Shot(adb: Adb,
 
     if (showOnlyFailingTestsInReports) {
       screenshotsSaver.copyOnlyFailingRecordedScreenshotsToTheReportFolder(
-        projectFolder,
-        flavor,
-        buildType,
         buildFolder + Config
           .verificationReportFolder(flavor, buildType) + "/images/recorded/",
         updatedComparison)

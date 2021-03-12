@@ -49,19 +49,10 @@ class ScreenshotsSaver {
   }
 
   def copyOnlyFailingRecordedScreenshotsToTheReportFolder(
-      projectFolder: Folder,
-      flavor: String,
-      buildType: String,
       destinyFolder: Folder,
-      updatedComparison: ScreenshotsComparisionResult): Unit = {
-
-    updatedComparison.errors
-      .map {
-        case ScreenshotNotFound(screenshot) => screenshot
-        case DifferentScreenshots(screenshot, _) => screenshot
-        case DifferentImageDimensions(screenshot, _, _) => screenshot
-      }
-      .foreach { copyFile(_, destinyFolder) }
+      screenshotsResult: ScreenshotsComparisionResult): Unit = {
+    screenshotsResult.erroredScreenshots.foreach(copyFile(_, destinyFolder))
+    deleteFolder(destinyFolder)
   }
 
   private def copyFile(screenshot: Screenshot, destinyFolder: Folder): Unit = {
