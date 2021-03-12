@@ -201,9 +201,9 @@ class ExecutionReporter {
       .mkString("\n")
   }
 
-  private def findError(screenshot: Screenshot,
-                        errors: ScreenshotComparisionErrors)
-    : Option[ScreenshotComparisionError] =
+  private def findError(
+      screenshot: Screenshot,
+      errors: ScreenshotComparisionErrors): Option[ScreenshotComparisonError] =
     errors.find {
       case ScreenshotNotFound(error) => screenshot == error
       case DifferentImageDimensions(error, _, _) => screenshot == error
@@ -212,7 +212,7 @@ class ExecutionReporter {
     }
 
   private def generateReasonMessage(
-      error: Option[ScreenshotComparisionError]): String =
+      error: Option[ScreenshotComparisonError]): String =
     error
       .map {
         case ScreenshotNotFound(_) =>

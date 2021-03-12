@@ -109,12 +109,25 @@ class Shot(adb: Adb,
       comparison,
       newScreenshotsVerificationReportFolder,
       shouldPrintBase64Error)
-    screenshotsSaver.copyRecordedScreenshotsToTheReportFolder(
-      projectFolder,
-      flavor,
-      buildType,
-      buildFolder + Config
-        .verificationReportFolder(flavor, buildType) + "/images/recorded/")
+
+    if (showOnlyFailingTestsInReports) {
+      val verificationReferenceImagesFolder = buildFolder + Config
+        .verificationReportFolder(flavor, buildType) + "/images/"
+      screenshotsSaver.removeNonFailingReferenceImages(
+        verificationReferenceImagesFolder,
+        comparison)
+      screenshotsSaver.copyOnlyFailingRecordedScreenshotsToTheReportFolder(
+        buildFolder + Config
+          .verificationReportFolder(flavor, buildType) + "/images/recorded/",
+        updatedComparison)
+    } else {
+      screenshotsSaver.copyRecordedScreenshotsToTheReportFolder(
+        projectFolder,
+        flavor,
+        buildType,
+        buildFolder + Config
+          .verificationReportFolder(flavor, buildType) + "/images/recorded/")
+    }
 
     if (updatedComparison.hasErrors) {
       consoleReporter.showErrors(updatedComparison,

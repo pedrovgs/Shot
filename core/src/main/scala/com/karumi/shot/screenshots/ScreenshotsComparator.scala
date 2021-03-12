@@ -17,7 +17,7 @@ class ScreenshotsComparator {
 
   private def compareScreenshot(
       screenshot: Screenshot,
-      tolerance: Double): Option[ScreenshotComparisionError] = {
+      tolerance: Double): Option[ScreenshotComparisonError] = {
     val recordedScreenshotFile = new File(screenshot.recordedScreenshotPath)
     if (!recordedScreenshotFile.exists()) {
       Some(ScreenshotNotFound(screenshot))

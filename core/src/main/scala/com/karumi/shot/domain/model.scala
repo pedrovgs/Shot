@@ -11,7 +11,7 @@ object model {
   type FilePath = String
   type Folder = String
   type AppId = String
-  type ScreenshotComparisionErrors = Seq[ScreenshotComparisionError]
+  type ScreenshotComparisionErrors = Seq[ScreenshotComparisonError]
 }
 
 object Config {
@@ -23,34 +23,47 @@ object Config {
   val androidDependencyVersion: String = "5.10.4-SNAPSHOT"
   val androidDependency: FilePath =
     s"$androidDependencyGroup:$androidDependencyName:$androidDependencyVersion"
+
   def screenshotsFolderName(flavor: String, buildType: String): FilePath =
     if (flavor.isEmpty) {
       s"/screenshots/$buildType/"
     } else {
       s"/screenshots/$flavor/$buildType/"
     }
+
   def pulledScreenshotsFolder(flavor: String, buildType: String): FilePath =
     screenshotsFolderName(flavor, buildType) + "screenshots-default/"
+
   def pulledComposeScreenshotsFolder(flavor: String,
                                      buildType: String): FilePath =
     screenshotsFolderName(flavor, buildType) + "screenshots-compose-default/"
+
   def metadataFileName(flavor: String, buildType: String): FilePath =
     pulledScreenshotsFolder(flavor, buildType) + "metadata.xml"
+
   def composeMetadataFileName(flavor: String, buildType: String): FilePath =
     pulledComposeScreenshotsFolder(flavor, buildType) + "metadata.json"
+
   val androidPluginName: FilePath = "com.android.application"
   val screenshotsTemporalRootPath: FilePath = "/tmp/shot/screenshot/"
+
   def defaultInstrumentationTestTask(flavor: String,
                                      buildType: String): String =
     s"connected${flavor.capitalize}${buildType.capitalize}AndroidTest"
+
   def composerInstrumentationTestTask(flavor: String, buildType: String) =
     s"test${flavor.capitalize}${buildType.capitalize}Composer"
+
   val defaultPackageTestApkTask: String = "packageDebugAndroidTest"
+
   def reportFolder(flavor: String, buildType: String): String = "/reports/shot"
+
   def verificationReportFolder(flavor: String, buildType: String): String =
     reportFolder(flavor, buildType) + "/verification"
+
   def recordingReportFolder(flavor: String, buildType: String): String =
     reportFolder(flavor, buildType) + "/record"
+
   val defaultTaskName: String = "executeScreenshotTests"
 }
 
@@ -77,24 +90,35 @@ case class Screenshot(name: String,
 
 case class Dimension(width: Int, height: Int) {
   val isZero: Boolean = width == 0 && height == 0
+
   override def toString: FilePath = width + "x" + height
 }
 
-sealed trait ScreenshotComparisionError
+sealed trait ScreenshotComparisonError {
+  def errorScreenshot: Screenshot =
+    this match {
+      case ScreenshotNotFound(screenshot) => screenshot
+      case DifferentScreenshots(screenshot, _) => screenshot
+      case DifferentImageDimensions(screenshot, _, _) => screenshot
+    }
+}
 
 case class ScreenshotNotFound(screenshot: Screenshot)
-    extends ScreenshotComparisionError
+    extends ScreenshotComparisonError
 
 case class DifferentScreenshots(screenshot: Screenshot,
                                 base64Diff: Option[String] = None)
-    extends ScreenshotComparisionError
+    extends ScreenshotComparisonError
 
 case class DifferentImageDimensions(screenshot: Screenshot,
                                     originalDimension: Dimension,
                                     newDimension: Dimension)
-    extends ScreenshotComparisionError
+    extends ScreenshotComparisonError
 
 case class ScreenshotsComparisionResult(errors: ScreenshotComparisionErrors,
                                         screenshots: ScreenshotsSuite) {
   val hasErrors: Boolean = errors.nonEmpty
+  val errorScreenshots: Seq[Screenshot] = errors.map(_.errorScreenshot)
+  val correctScreenshots: Seq[Screenshot] =
+    screenshots.filterNot(errorScreenshots.contains(_))
 }
