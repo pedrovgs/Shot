@@ -29,7 +29,7 @@ class GreetingScreenshotTest : ScreenshotTest {
 }
 ```
 
-**Since Shot 5.0.0 we provide screenshot testing support for [Jetpack Compose](https://developer.android.com/jetpack/compose).**
+**Since Shot 5.0.0 we provide screenshot testing support for [Jetpack Compose](https://developer.android.com/jetpack/compose).** If you are testing your components using Shot we strongly recommend you to configure your emulator using the gpu mode ``swiftshader_indirect``. This will help you to avoid rendering issues when verifying your screenshots from any CI environment.
 
 ![smallVerificationReport1](./art/smallVerificationReport1.png)
 ![smallVerificationReport2](./art/smallVerificationReport2.png)
