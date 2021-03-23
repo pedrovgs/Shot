@@ -8,7 +8,7 @@
     android:gravity="bottom"
     tools:context="com.karumi.ui.view.CursorActivity">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"

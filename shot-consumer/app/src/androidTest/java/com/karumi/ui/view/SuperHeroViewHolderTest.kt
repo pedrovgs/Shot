@@ -1,6 +1,6 @@
 package com.karumi.ui.view
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import com.karumi.R
