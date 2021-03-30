@@ -1,6 +1,6 @@
 package com.karumi.ui.presenter
 
-import android.arch.lifecycle.LifecycleObserver
+import androidx.lifecycle.LifecycleObserver
 
 class ScrollPresenter : LifecycleObserver {
 

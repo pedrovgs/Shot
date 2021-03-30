@@ -2,7 +2,7 @@ package com.karumi.ui.view
 
 import android.app.Activity
 import android.content.Intent
-import android.support.v7.widget.Toolbar
+import androidx.appcompat.widget.Toolbar
 import android.view.View
 import com.github.salomonbrys.kodein.Kodein.Module
 import com.github.salomonbrys.kodein.bind

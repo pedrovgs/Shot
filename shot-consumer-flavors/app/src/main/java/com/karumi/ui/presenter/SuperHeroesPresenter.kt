@@ -1,8 +1,8 @@
 package com.karumi.ui.presenter
 
-import android.arch.lifecycle.Lifecycle.Event.ON_RESUME
-import android.arch.lifecycle.LifecycleObserver
-import android.arch.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.Lifecycle.Event.ON_RESUME
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 import com.karumi.common.async
 import com.karumi.common.weak
 import com.karumi.domain.model.SuperHero

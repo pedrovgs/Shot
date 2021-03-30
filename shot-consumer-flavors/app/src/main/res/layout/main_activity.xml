@@ -23,7 +23,7 @@
     tools:context="com.karumi.ui.view.MainActivity"
     >
 
-  <android.support.v7.widget.Toolbar
+  <androidx.appcompat.widget.Toolbar
       android:id="@+id/toolbar"
       android:layout_width="match_parent"
       android:layout_height="?attr/actionBarSize"
@@ -31,7 +31,7 @@
       android:theme="@style/AppTheme.AppBarOverlay"
       app:popupTheme="@style/AppTheme.PopupOverlay"
       />
-  <android.support.v7.widget.RecyclerView
+  <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/recycler_view"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
@@ -40,7 +40,7 @@
       tools:showIn="@layout/main_activity"
       />
 
-  <android.support.v4.widget.ContentLoadingProgressBar
+  <androidx.core.widget.ContentLoadingProgressBar
       android:id="@+id/progress_bar"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
