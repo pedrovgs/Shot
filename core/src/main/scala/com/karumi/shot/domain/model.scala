@@ -115,8 +115,9 @@ case class DifferentImageDimensions(screenshot: Screenshot,
                                     newDimension: Dimension)
     extends ScreenshotComparisonError
 
-case class ScreenshotsComparisionResult(errors: ScreenshotComparisionErrors,
-                                        screenshots: ScreenshotsSuite) {
+case class ScreenshotsComparisionResult(
+    errors: ScreenshotComparisionErrors = Seq(),
+    screenshots: ScreenshotsSuite = Seq()) {
   val hasErrors: Boolean = errors.nonEmpty
   val errorScreenshots: Seq[Screenshot] = errors.map(_.errorScreenshot)
   val correctScreenshots: Seq[Screenshot] =

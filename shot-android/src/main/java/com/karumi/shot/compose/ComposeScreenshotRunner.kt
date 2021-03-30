@@ -6,7 +6,7 @@ import com.karumi.shot.permissions.AndroidStoragePermissions
 class ComposeScreenshotRunner {
     companion object {
 
-        lateinit var composeScreenshot: ComposeScreenshot
+        var composeScreenshot: ComposeScreenshot? = null
 
         fun onCreate(instrumentation: Instrumentation) {
             composeScreenshot = ComposeScreenshot(
@@ -16,6 +16,6 @@ class ComposeScreenshotRunner {
             )
         }
 
-        fun onDestroy() = composeScreenshot.saveMetadata()
+        fun onDestroy() = composeScreenshot?.saveMetadata()
     }
 }
