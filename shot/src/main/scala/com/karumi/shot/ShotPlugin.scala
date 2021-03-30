@@ -98,13 +98,11 @@ class ShotPlugin extends Plugin[Project] {
     val completeAppId = composeCompleteAppId(variant)
     val appTestId =
       Option(flavor.getTestApplicationId).getOrElse(completeAppId)
-    if (variant.getBuildType.getName != "release") {
-      addTasksFor(project,
-                  variant.getFlavorName,
-                  variant.getBuildType,
-                  appTestId,
-                  baseTask)
-    }
+    addTasksFor(project,
+                variant.getFlavorName,
+                variant.getBuildType,
+                appTestId,
+                baseTask)
   }
 
   private def composeCompleteAppId(variant: BaseVariant) =
@@ -130,12 +128,22 @@ class ShotPlugin extends Plugin[Project] {
       baseTask: TaskProvider[ExecuteScreenshotTestsForEveryFlavor]): Unit = {
     val extension =
       project.getExtensions.getByType[ShotExtension](classOf[ShotExtension])
-    val instrumentationTask = if (extension.useComposer) {
+    val instrumentationTaskName = if (extension.useComposer) {
       Config.composerInstrumentationTestTask(flavor, buildType.getName)
     } else {
       Config.defaultInstrumentationTestTask(flavor, buildType.getName)
     }
     val tasks = project.getTasks
+    // Some projects configure different build types and only one of them is allowed to run instrumentation tasks
+    // Based on this, we need to first check if the instrumentation task is available or not. This let us use Shot
+    // for different build types even if it is not the default one
+    val instrumentationTask = try {
+      tasks
+        .getByName(instrumentationTaskName)
+    } catch {
+      case e: Throwable => return
+    }
+
     val removeScreenshotsAfterExecution = tasks
       .register(
         RemoveScreenshotsTask.name(flavor, buildType, beforeExecution = false),
@@ -181,16 +189,15 @@ class ShotPlugin extends Plugin[Project] {
 
     if (extension.runInstrumentation) {
       executeScreenshot.configure { task =>
-        task.dependsOn(instrumentationTask)
+        task.dependsOn(instrumentationTaskName)
         task.dependsOn(downloadScreenshots)
         task.dependsOn(removeScreenshotsAfterExecution)
       }
 
       downloadScreenshots.configure { task =>
-        task.mustRunAfter(instrumentationTask)
+        task.mustRunAfter(instrumentationTaskName)
       }
-      tasks
-        .getByName(instrumentationTask)
+      instrumentationTask
         .dependsOn(removeScreenshotsBeforeExecution)
       removeScreenshotsAfterExecution.configure { task =>
         task.mustRunAfter(downloadScreenshots)
