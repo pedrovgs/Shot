@@ -29,7 +29,7 @@ class GreetingScreenshotTest : ScreenshotTest {
 }
 ```
 
-**Since Shot 5.0.0 we provide screenshot testing support for [Jetpack Compose](https://developer.android.com/jetpack/compose).**
+**Since Shot 5.0.0 we provide screenshot testing support for [Jetpack Compose](https://developer.android.com/jetpack/compose).** If you are testing your components using Shot we strongly recommend you to configure your emulator using the gpu mode ``swiftshader_indirect``. This will help you to avoid rendering issues when verifying your screenshots from any CI environment.
 
 ![smallVerificationReport1](./art/smallVerificationReport1.png)
 ![smallVerificationReport2](./art/smallVerificationReport2.png)
@@ -52,6 +52,9 @@ You can find the complete Facebook SDK documentation [here](https://facebook.git
 
 Setup the Gradle plugin:
 
+
+Modify your root ``build.gradle`` file:
+
 ```groovy
   buildscript {
     // ...
@@ -60,8 +63,27 @@ Setup the Gradle plugin:
       classpath 'com.karumi:shot:5.10.3'
     }
   }
-  apply plugin: 'shot'
 ```
+
+Apply the plugin from any of the modules configured in your project. In a simple Android app your ``app/build.gradle`` file:
+
+```groovy
+apply plugin: 'shot'
+```
+
+You will also have to configure the instrumentation test runner in your module ``build.gradle`` file as follows:
+
+```groovy
+android {
+    // ...
+    defaultConfig {
+        // ...
+        testInstrumentationRunner "com.karumi.shot.ShotTestRunner"
+    }
+    // ...
+```
+
+We created this test runner for you extending from the Android one.
 
 This plugin sets up a few convenience commands you can list executing ``./gradlew tasks`` and reviewing the ``Shot`` associated tasks:
 
@@ -105,20 +127,6 @@ Create this ``AndroidManifest.xml`` file inside your ``androidTest`` folder.
 ```
 java.lang.RuntimeException: Failed to create the directory /sdcard/screenshots/com.example.snapshottesting.test/screenshots-default for screenshots. Is your sdcard directory read-only?
 ```
-
-Remember to configure the instrumentation test runner in your ``build.gradle`` as follows:
-
-```groovy
-android {
-    // ...
-    defaultConfig {
-        // ...
-        testInstrumentationRunner "com.karumi.shot.ShotTestRunner"
-    }
-    // ...
-```
-
-We created this test runner for you extending from the Android one.
 
 **If you want to use Shot to test your Android libraries code, you will have to configure the ``testApplicationId`` parameter as follows**
 
@@ -170,6 +178,40 @@ You can find a complete example in this repository under the folder named ``shot
 
 Now you are ready to record and verify your screenshot tests!
 
+## Recording tests
+
+You can record your screenshot tests executing this command:
+
+```shell
+./gradlew <Flavor><BuildType>ExecuteScreenshotTests -Precord
+```
+
+or
+
+```shell
+./gradlew executeScreenshotTests -Precord
+```
+
+This will execute all your integration tests and it will pull all the generated screenshots into your repository so you can easily add them to the version control system.
+
+## Executing tests
+
+Once you have a bunch of screenshot tests recorded you can easily verify if the behaviour of your app is the correct one executing this command:
+
+```shell
+./gradlew <Flavor><BuildType>ExecuteScreenshotTests
+```
+
+or
+
+```shell
+./gradlew executeScreenshotTests
+```
+
+**After executing your screenshot tests using the Gradle task ``<Flavor><BuildType>ExecuteScreenshotTests`` a report with all your screenshots will be generated.**
+
+[karumilogo]: https://cloud.githubusercontent.com/assets/858090/11626547/e5a1dc66-9ce3-11e5-908d-537e07e82090.png
+
 ## ScreenshotTest interface
 
 ``ScreenshotTest`` interface has been designed to simplify the usage of the library. These are the features you can use:
@@ -220,40 +262,6 @@ class MainActivityTest: ScreenshotTest {
 ```
 
 I hope we can find a better solution for this issue in the future.
-
-## Recording tests
-
-You can record your screenshot tests executing this command:
-
-```shell
-./gradlew <Flavor><BuildType>ExecuteScreenshotTests -Precord
-```
-
-or
-
-```shell
-./gradlew executeScreenshotTests -Precord
-```
-
-This will execute all your integration tests and it will pull all the generated screenshots into your repository so you can easily add them to the version control system.
-
-## Executing tests
-
-Once you have a bunch of screenshot tests recorded you can easily verify if the behaviour of your app is the correct one executing this command:
-
-```shell
-./gradlew <Flavor><BuildType>ExecuteScreenshotTests
-```
-
-or
-
-```shell
-./gradlew executeScreenshotTests
-```
-
-**After executing your screenshot tests using the Gradle task ``<Flavor><BuildType>ExecuteScreenshotTests`` a report with all your screenshots will be generated.**
-
-[karumilogo]: https://cloud.githubusercontent.com/assets/858090/11626547/e5a1dc66-9ce3-11e5-908d-537e07e82090.png
 
 ## Executing tests from Android Studio
 
