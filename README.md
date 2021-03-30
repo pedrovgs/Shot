@@ -65,7 +65,7 @@ Modify your root ``build.gradle`` file:
   }
 ```
 
-Apply the plugin from any of the modules configured in yoru project. In a simple Andorid app your ``app/build.gradle`` file:
+Apply the plugin from any of the modules configured in your project. In a simple Android app your ``app/build.gradle`` file:
 
 ```groovy
 apply plugin: 'shot'
