@@ -8,7 +8,7 @@ apply from: '../release.gradle'
 repositories {
     mavenCentral()
     mavenLocal()
-    maven { url 'https://maven.google.com' }
+    google()
 }
 
 dependencies {
