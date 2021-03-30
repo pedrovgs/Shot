@@ -69,7 +69,7 @@ interface ScreenshotTest {
         heightInPx: Int? = null,
         widthInPx: Int? = null,
         name: String? = null
-    ) = compareScreenshot(view = fragment.view!!, heightInPx = heightInPx, name = name)
+    ) = compareScreenshot(view = fragment.requireView(), heightInPx = heightInPx, widthInPx = widthInPx, name = name)
 
     fun compareScreenshot(
         dialog: Dialog,
