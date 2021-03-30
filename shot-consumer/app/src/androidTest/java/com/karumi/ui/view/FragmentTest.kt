@@ -13,4 +13,11 @@ class FragmentTest : ScreenshotTest {
 
         compareScreenshot(fragment)
     }
+
+    @Test
+    fun customHeight() {
+        val fragment = launchFragmentInContainer<SimpleFragment>().waitForFragment()
+
+        compareScreenshot(fragment, heightInPx = 200)
+    }
 }
