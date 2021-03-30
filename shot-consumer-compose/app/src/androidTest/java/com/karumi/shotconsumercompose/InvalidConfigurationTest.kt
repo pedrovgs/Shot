@@ -17,7 +17,7 @@ class InvalidConfigurationTest : ScreenshotTest {
     @get:Rule
     val composeRule = createComposeRule()
 
-    private lateinit var composeScreenshot: ComposeScreenshot
+    private var composeScreenshot: ComposeScreenshot? = null
 
     @Before
     fun setUp() {
