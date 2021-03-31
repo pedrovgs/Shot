@@ -8,16 +8,14 @@ import com.sksamuel.scrimage.Image
 
 class ScreenshotsComparator {
 
-  def compare(screenshots: ScreenshotsSuite,
-              tolerance: Double): ScreenshotsComparisionResult = {
+  def compare(screenshots: ScreenshotsSuite, tolerance: Double): ScreenshotsComparisionResult = {
     val errors =
       screenshots.par.flatMap(compareScreenshot(_, tolerance)).toList
     ScreenshotsComparisionResult(errors, screenshots)
   }
 
-  private def compareScreenshot(
-      screenshot: Screenshot,
-      tolerance: Double): Option[ScreenshotComparisonError] = {
+  private def compareScreenshot(screenshot: Screenshot,
+                                tolerance: Double): Option[ScreenshotComparisonError] = {
     val recordedScreenshotFile = new File(screenshot.recordedScreenshotPath)
     if (!recordedScreenshotFile.exists()) {
       Some(ScreenshotNotFound(screenshot))
@@ -29,14 +27,8 @@ class ScreenshotsComparator {
         val originalDimension =
           Dimension(oldScreenshot.width, oldScreenshot.height)
         val newDimension = Dimension(newScreenshot.width, newScreenshot.height)
-        Some(
-          DifferentImageDimensions(screenshot,
-                                   originalDimension,
-                                   newDimension))
-      } else if (imagesAreDifferent(screenshot,
-                                    oldScreenshot,
-                                    newScreenshot,
-                                    tolerance)) {
+        Some(DifferentImageDimensions(screenshot, originalDimension, newDimension))
+      } else if (imagesAreDifferent(screenshot, oldScreenshot, newScreenshot, tolerance)) {
         Some(DifferentScreenshots(screenshot))
       } else {
         None
@@ -56,9 +48,9 @@ class ScreenshotsComparator {
       val differentPixels =
         oldScreenshotPixels.diff(newScreenshotPixels).length
       val percentageOfDifferentPixels = differentPixels.toDouble / oldScreenshotPixels.length.toDouble
-      val percentageOutOf100 = percentageOfDifferentPixels * 100.0
-      val imagesAreDifferent = percentageOutOf100 >= tolerance
-      val imagesAreConsideredEquals = !imagesAreDifferent
+      val percentageOutOf100          = percentageOfDifferentPixels * 100.0
+      val imagesAreDifferent          = percentageOutOf100 >= tolerance
+      val imagesAreConsideredEquals   = !imagesAreDifferent
       if (imagesAreConsideredEquals && tolerance != Config.defaultTolerance) {
         val screenshotName = screenshot.name
         println(
@@ -68,8 +60,7 @@ class ScreenshotsComparator {
     }
   }
 
-  private def haveSameDimensions(newScreenshot: Image,
-                                 recordedScreenshot: Image): Boolean =
+  private def haveSameDimensions(newScreenshot: Image, recordedScreenshot: Image): Boolean =
     newScreenshot.width == recordedScreenshot.width && newScreenshot.height == recordedScreenshot.height
 
 }

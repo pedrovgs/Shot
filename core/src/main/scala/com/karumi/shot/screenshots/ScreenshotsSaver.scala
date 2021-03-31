@@ -22,17 +22,14 @@ class ScreenshotsSaver {
                               buildType: String,
                               screenshots: ScreenshotsSuite) = {
     deleteOldScreenshots(projectFolder, flavor, buildType)
-    saveScreenshots(
-      screenshots,
-      projectFolder + Config.screenshotsFolderName(flavor, buildType))
+    saveScreenshots(screenshots, projectFolder + Config.screenshotsFolderName(flavor, buildType))
   }
 
   def saveTemporalScreenshots(screenshots: ScreenshotsSuite,
                               projectName: String,
                               reportFolder: String) = {
     deleteOldTemporalScreenshots(projectName)
-    saveScreenshots(screenshots,
-                    Config.screenshotsTemporalRootPath + projectName + "/")
+    saveScreenshots(screenshots, Config.screenshotsTemporalRootPath + projectName + "/")
     deleteFile(reportFolder)
     saveScreenshots(screenshots, reportFolder)
   }
@@ -43,8 +40,7 @@ class ScreenshotsSaver {
                                                destinyFolder: Folder) = {
     val recordedScreenshotsFolder = projectFolder + Config
       .screenshotsFolderName(flavor, buildType)
-    FileUtils.copyDirectory(new File(recordedScreenshotsFolder),
-                            new File(destinyFolder))
+    FileUtils.copyDirectory(new File(recordedScreenshotsFolder), new File(destinyFolder))
     deleteFile(destinyFolder)
   }
 
@@ -55,32 +51,26 @@ class ScreenshotsSaver {
     deleteFile(destinyFolder)
   }
 
-  def removeNonFailingReferenceImages(
-      verificationReferenceImagesFolder: Folder,
-      screenshotsResult: ScreenshotsComparisionResult): Unit =
+  def removeNonFailingReferenceImages(verificationReferenceImagesFolder: Folder,
+                                      screenshotsResult: ScreenshotsComparisionResult): Unit =
     screenshotsResult.correctScreenshots.foreach(screenshot =>
       deleteFile(verificationReferenceImagesFolder + screenshot.fileName))
 
   private def copyFile(screenshot: Screenshot, destinyFolder: Folder): Unit = {
     val existingScreenshot = new File(screenshot.recordedScreenshotPath)
-    FileUtils.copyFile(existingScreenshot,
-                       new File(destinyFolder + existingScreenshot.getName))
+    FileUtils.copyFile(existingScreenshot, new File(destinyFolder + existingScreenshot.getName))
   }
 
   def getScreenshotDimension(projectFolder: String,
                              flavor: String,
                              buildType: String,
                              screenshot: Screenshot): Dimension = {
-    val screenshotPath = projectFolder + Config.pulledScreenshotsFolder(
-      flavor,
-      buildType) + screenshot.name + ".png"
-    val image = Image.fromFile(new File(screenshotPath))
+    val screenshotPath = projectFolder + Config.pulledScreenshotsFolder(flavor, buildType) + screenshot.name + ".png"
+    val image          = Image.fromFile(new File(screenshotPath))
     Dimension(image.width, image.height)
   }
 
-  private def deleteOldScreenshots(projectFolder: Folder,
-                                   flavor: String,
-                                   buildType: String) = {
+  private def deleteOldScreenshots(projectFolder: Folder, flavor: String, buildType: String) = {
     deleteFile(projectFolder + Config.screenshotsFolderName(flavor, buildType))
   }
 

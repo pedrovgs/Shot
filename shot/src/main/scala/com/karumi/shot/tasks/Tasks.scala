@@ -16,10 +16,10 @@ import org.gradle.api.{DefaultTask, GradleException}
 import org.gradle.api.tasks.TaskAction
 
 abstract class ShotTask extends DefaultTask {
-  var appId: String = _
-  var flavor: String = _
+  var appId: String        = _
+  var flavor: String       = _
   var buildType: BuildType = _
-  private val console = new Console
+  private val console      = new Console
   protected val shot: Shot =
     new Shot(
       new Adb,
@@ -60,13 +60,13 @@ class ExecuteScreenshotTests extends ShotTask {
       .getByType[ShotExtension](classOf[ShotExtension])
       .tolerance
     val recordScreenshots = project.hasProperty("record")
-    val printBase64 = project.hasProperty("printBase64")
+    val printBase64       = project.hasProperty("printBase64")
     val showOnlyFailingTestsInReports = project.getExtensions
       .getByType[ShotExtension](classOf[ShotExtension])
       .showOnlyFailingTestsInReports
     val projectFolder = project.getProjectDir.getAbsolutePath
-    val projectName = project.getName
-    val buildFolder = project.getBuildDir.getAbsolutePath
+    val projectName   = project.getName
+    val buildFolder   = project.getBuildDir.getAbsolutePath
     if (recordScreenshots) {
       shot.recordScreenshots(appId,
                              buildFolder,
