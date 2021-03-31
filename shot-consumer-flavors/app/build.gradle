@@ -1,17 +1,17 @@
 buildscript {
-  repositories {
-    gradlePluginPortal()
-    mavenCentral()
-    maven { url "https://jitpack.io" }
-    maven { url uri("../../repo") }
-    jcenter()
-    google()
-  }
-  dependencies {
-    classpath "com.neenbedankt.gradle.plugins:android-apt:1.7"
-    classpath "com.karumi:shot:5.10.4-SNAPSHOT"
-    classpath "com.trevjonez.composer:plugin:1.0.0-rc08"
-  }
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+        maven { url uri("../../repo") }
+        jcenter()
+        google()
+    }
+    dependencies {
+        classpath "com.neenbedankt.gradle.plugins:android-apt:1.7"
+        classpath "com.karumi:shot:5.10.4-SNAPSHOT"
+        classpath "com.trevjonez.composer:plugin:1.0.0-rc08"
+    }
 }
 
 apply plugin: "com.android.application"
@@ -95,25 +95,24 @@ dependencies {
     androidTestImplementation "net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.0.0"
 }
 
-task ktlint(type: JavaExec) {
+tasks.register("ktlint", JavaExec) {
     main = "com.github.shyiko.ktlint.Main"
     classpath = configurations.ktlint
     args "src/**/*.kt"
 }
 
-check.dependsOn ktlint
+tasks.named("check") { dependsOn "ktLint" }
 
-task ktlintFormat(type: JavaExec) {
+tasks.register("ktlintFormat", JavaExec) {
     main = "com.github.shyiko.ktlint.Main"
     classpath = configurations.ktlint
     args "-F", "src/**/*.kt"
 }
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompile).all {
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompile).configureEach {
     kotlinOptions.freeCompilerArgs += ["-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi"]
 }
 
 shot {
     showOnlyFailingTestsInReports = true
 }
-

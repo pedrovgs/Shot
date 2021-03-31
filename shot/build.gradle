@@ -21,7 +21,7 @@ dependencies {
     testRuntime 'org.pegdown:pegdown:1.4.2'
 }
 
-compileScala {
+tasks.named("compileScala") {
     classpath = classpath.plus(files(compileGroovy.destinationDir))
 }
 
