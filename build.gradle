@@ -10,7 +10,7 @@ buildscript {
     ext.kotlin_version = "1.4.21"
 
     dependencies {
-        classpath "gradle.plugin.com.github.maiflai:gradle-scalatest:0.25"
+        classpath "gradle.plugin.com.github.maiflai:gradle-scalatest:0.29"
         classpath "cz.alenkacz:gradle-scalafmt:1.14.0"
         classpath "com.android.tools.build:gradle:3.4.3"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
