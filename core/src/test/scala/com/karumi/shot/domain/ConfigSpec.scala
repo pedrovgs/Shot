@@ -1,9 +1,10 @@
 package com.karumi.shot.domain
 
 import com.karumi.shot.mothers.BuildTypeMother
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec._
+import org.scalatest.matchers._
 
-class ConfigSpec extends FlatSpec with Matchers {
+class ConfigSpec extends AnyFlatSpec with should.Matchers {
 
   "Config" should "use the screenshot tests library implemented by Facebook" in {
     Config.androidDependency shouldBe "com.karumi:shot-android:5.10.4-SNAPSHOT"

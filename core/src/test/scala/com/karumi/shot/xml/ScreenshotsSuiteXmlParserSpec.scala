@@ -1,11 +1,11 @@
 package com.karumi.shot.xml
 
 import com.karumi.shot.Resources
-import com.karumi.shot.domain.Config
 import com.karumi.shot.xml.ScreenshotsSuiteXmlParser._
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec._
+import org.scalatest.matchers._
 
-class ScreenshotsSuiteXmlParserSpec extends FlatSpec with Matchers with Resources {
+class ScreenshotsSuiteXmlParserSpec extends AnyFlatSpec with should.Matchers with Resources {
 
   private val anyScreenshotsFolder = "/screenshots/"
   private val anyTemporalScreenshotsFolder =

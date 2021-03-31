@@ -13,9 +13,16 @@ import com.karumi.shot.screenshots.{
 import com.karumi.shot.system.EnvVars
 import com.karumi.shot.ui.Console
 import org.scalamock.scalatest.MockFactory
-import org.scalatest.{BeforeAndAfter, FlatSpec, Matchers}
+import org.scalatest.BeforeAndAfter
+import org.scalatest.flatspec._
+import org.scalatest.matchers._
 
-class ShotSpec extends FlatSpec with Matchers with BeforeAndAfter with MockFactory with Resources {
+class ShotSpec
+    extends AnyFlatSpec
+    with should.Matchers
+    with BeforeAndAfter
+    with MockFactory
+    with Resources {
 
   private var shot: Shot               = _
   private val adb                      = mock[Adb]
