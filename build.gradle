@@ -7,7 +7,7 @@ buildscript {
         jcenter()
     }
 
-    ext.kotlin_version = "1.4.21"
+    ext.kotlin_version = "1.4.32"
 
     dependencies {
         classpath "gradle.plugin.com.github.maiflai:gradle-scalatest:0.29"
