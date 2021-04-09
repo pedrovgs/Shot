@@ -11,7 +11,7 @@ object ScreenshotsComposeSuiteJsonParser {
                        screenshotsFolder: Folder,
                        temporalScreenshotsFolder: Folder): ScreenshotsSuite = {
     implicit val formats: DefaultFormats.type = DefaultFormats
-    val composeSuite = parse(json).extract[ComposeScreenshotSuite]
+    val composeSuite                          = parse(json).extract[ComposeScreenshotSuite]
     composeSuite.screenshots.map { screenshot =>
       val name = screenshot.name
       Screenshot(
@@ -24,15 +24,12 @@ object ScreenshotsComposeSuiteJsonParser {
         viewHierarchy = "",
         absoluteFileNames = Seq(),
         relativeFileNames = Seq(),
-        recordedPartsPaths =
-          Seq(temporalScreenshotsFolder + "/" + name + ".png"),
+        recordedPartsPaths = Seq(temporalScreenshotsFolder + "/" + name + ".png"),
         screenshotDimension = Dimension(0, 0)
       )
     }
   }
 }
 
-case class ComposeScreenshot(name: String,
-                             testClassName: String,
-                             testName: String)
+case class ComposeScreenshot(name: String, testClassName: String, testName: String)
 case class ComposeScreenshotSuite(screenshots: List[ComposeScreenshot])

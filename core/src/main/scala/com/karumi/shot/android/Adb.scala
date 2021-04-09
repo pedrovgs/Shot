@@ -18,9 +18,7 @@ class Adb {
   private final val CR_ASCII_DECIMAL = 13
   private val logger = ProcessLogger(
     outputMessage => println("Shot ADB output: " + outputMessage),
-    errorMessage =>
-      println(
-        Console.YELLOW + "Shot ADB warning: " + errorMessage + Console.RESET)
+    errorMessage => println(Console.YELLOW + "Shot ADB warning: " + errorMessage + Console.RESET)
   )
 
   def devices: List[String] = {
@@ -34,9 +32,7 @@ class Adb {
       .filter(device => !isCarriageReturnASCII(device))
   }
 
-  def pullScreenshots(device: String,
-                      screenshotsFolder: Folder,
-                      appId: AppId): Unit = {
+  def pullScreenshots(device: String, screenshotsFolder: Folder, appId: AppId): Unit = {
     pullFolder("screenshots-default", device, screenshotsFolder, appId)
     pullFolder("screenshots-compose-default", device, screenshotsFolder, appId)
   }
@@ -52,8 +48,7 @@ class Adb {
                          appId: AppId) = {
     val folderToPull = s"${baseStoragePath}/screenshots/$appId/$folderName/"
     try {
-      executeAdbCommandWithResult(
-        s"-s $device pull $folderToPull $screenshotsFolder")
+      executeAdbCommandWithResult(s"-s $device pull $folderToPull $screenshotsFolder")
     } catch {
       case _: Throwable =>
         println(
@@ -61,11 +56,8 @@ class Adb {
     }
   }
 
-  private def clearScreenshotsFromFolder(device: String,
-                                         appId: AppId,
-                                         folder: AppId) =
-    executeAdbCommand(
-      s"-s $device shell rm -r $baseStoragePath/screenshots/$appId/$folder/")
+  private def clearScreenshotsFromFolder(device: String, appId: AppId, folder: AppId) =
+    executeAdbCommand(s"-s $device shell rm -r $baseStoragePath/screenshots/$appId/$folder/")
 
   private def executeAdbCommand(command: String): Int =
     s"${Adb.adbBinaryPath} $command" ! logger

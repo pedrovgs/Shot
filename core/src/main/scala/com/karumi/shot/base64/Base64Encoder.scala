@@ -12,7 +12,7 @@ class Base64Encoder {
     var outputStream: ByteArrayOutputStream = null
     try {
       val diffScreenshotFile = new File(filePath)
-      val bufferedImage = ImageIO.read(diffScreenshotFile)
+      val bufferedImage      = ImageIO.read(diffScreenshotFile)
       outputStream = new ByteArrayOutputStream()
       ImageIO.write(bufferedImage, "png", outputStream)
       val diffImageBase64Encoded =

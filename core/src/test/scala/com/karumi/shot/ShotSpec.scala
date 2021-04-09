@@ -15,23 +15,18 @@ import com.karumi.shot.ui.Console
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{BeforeAndAfter, FlatSpec, Matchers}
 
-class ShotSpec
-    extends FlatSpec
-    with Matchers
-    with BeforeAndAfter
-    with MockFactory
-    with Resources {
+class ShotSpec extends FlatSpec with Matchers with BeforeAndAfter with MockFactory with Resources {
 
-  private var shot: Shot = _
-  private val adb = mock[Adb]
-  private val files = mock[Files]
-  private val console = mock[Console]
-  private val screenshotsComparator = mock[ScreenshotsComparator]
+  private var shot: Shot               = _
+  private val adb                      = mock[Adb]
+  private val files                    = mock[Files]
+  private val console                  = mock[Console]
+  private val screenshotsComparator    = mock[ScreenshotsComparator]
   private val screenshotsDiffGenerator = mock[ScreenshotsDiffGenerator]
-  private val screenshotsSaver = mock[ScreenshotsSaver]
-  private val reporter = mock[ExecutionReporter]
-  private val consoleReporter = mock[ConsoleReporter]
-  private val envVars = mock[EnvVars]
+  private val screenshotsSaver         = mock[ScreenshotsSaver]
+  private val reporter                 = mock[ExecutionReporter]
+  private val consoleReporter          = mock[ConsoleReporter]
+  private val envVars                  = mock[EnvVars]
 
   before {
     shot = new Shot(adb,
@@ -46,7 +41,7 @@ class ShotSpec
   }
 
   "Shot" should "should delegate screenshots cleaning to Adb" in {
-    val appId: AppId = AppIdMother.anyAppId
+    val appId: AppId   = AppIdMother.anyAppId
     val device: String = "emulator-5554"
     (adb.devices _).expects().returns(List(device))
     (envVars.androidSerial _).expects().returns(None)
@@ -57,12 +52,11 @@ class ShotSpec
   }
 
   it should "pull the screenshots using the project metadata folder and the app id" in {
-    val appId = AppIdMother.anyAppId
-    val device = "emulator-5554"
+    val appId         = AppIdMother.anyAppId
+    val device        = "emulator-5554"
     val projectFolder = ProjectFolderMother.anyProjectFolder
     val expectedScreenshotsFolder = projectFolder + Config
-      .screenshotsFolderName(BuildTypeMother.anyFlavor,
-                             BuildTypeMother.anyBuildType)
+      .screenshotsFolderName(BuildTypeMother.anyFlavor, BuildTypeMother.anyBuildType)
     val expectedOriginalMetadataFile = projectFolder + Config.metadataFileName(
       BuildTypeMother.anyFlavor,
       BuildTypeMother.anyBuildType)
@@ -70,11 +64,9 @@ class ShotSpec
       BuildTypeMother.anyFlavor,
       BuildTypeMother.anyBuildType) + "_" + device
     val expectedComposeOriginalMetadataFile = projectFolder + Config
-      .composeMetadataFileName(BuildTypeMother.anyFlavor,
-                               BuildTypeMother.anyBuildType)
+      .composeMetadataFileName(BuildTypeMother.anyFlavor, BuildTypeMother.anyBuildType)
     val expectedComposeRenamedMetadataFile = projectFolder + Config
-      .composeMetadataFileName(BuildTypeMother.anyFlavor,
-                               BuildTypeMother.anyBuildType) + "_" + device
+      .composeMetadataFileName(BuildTypeMother.anyFlavor, BuildTypeMother.anyBuildType) + "_" + device
     (adb.devices _).expects().returns(List(device))
     (envVars.androidSerial _).expects().returns(None)
 
@@ -85,8 +77,7 @@ class ShotSpec
       .expects(expectedOriginalMetadataFile, expectedRenamedMetadataFile)
       .once()
     (files.rename _)
-      .expects(expectedComposeOriginalMetadataFile,
-               expectedComposeRenamedMetadataFile)
+      .expects(expectedComposeOriginalMetadataFile, expectedComposeRenamedMetadataFile)
       .once()
 
     shot.downloadScreenshots(projectFolder,
@@ -104,7 +95,7 @@ class ShotSpec
   }
 
   it should "should delegate screenshots cleaning to Adb using the specified ANDROID_SERIAL env var" in {
-    val appId: AppId = AppIdMother.anyAppId
+    val appId: AppId    = AppIdMother.anyAppId
     val device1: String = "emulator-5554"
     val device2: String = "emulator-5556"
     (adb.devices _).expects().returns(List(device1, device2))
@@ -116,13 +107,12 @@ class ShotSpec
   }
 
   it should "pull the screenshots using the project metadata folder and the app id from the specified ANDROID_SERIAL env var" in {
-    val appId = AppIdMother.anyAppId
-    val device1 = "emulator-5554"
-    val device2 = "emulator-5556"
+    val appId         = AppIdMother.anyAppId
+    val device1       = "emulator-5554"
+    val device2       = "emulator-5556"
     val projectFolder = ProjectFolderMother.anyProjectFolder
     val expectedScreenshotsFolder = projectFolder + Config
-      .screenshotsFolderName(BuildTypeMother.anyFlavor,
-                             BuildTypeMother.anyBuildType)
+      .screenshotsFolderName(BuildTypeMother.anyFlavor, BuildTypeMother.anyBuildType)
     val expectedOriginalMetadataFile = projectFolder + Config.metadataFileName(
       BuildTypeMother.anyFlavor,
       BuildTypeMother.anyBuildType)
@@ -130,11 +120,9 @@ class ShotSpec
       BuildTypeMother.anyFlavor,
       BuildTypeMother.anyBuildType) + "_" + device2
     val expectedComposeOriginalMetadataFile = projectFolder + Config
-      .composeMetadataFileName(BuildTypeMother.anyFlavor,
-                               BuildTypeMother.anyBuildType)
+      .composeMetadataFileName(BuildTypeMother.anyFlavor, BuildTypeMother.anyBuildType)
     val expectedComposeRenamedFile = projectFolder + Config
-      .composeMetadataFileName(BuildTypeMother.anyFlavor,
-                               BuildTypeMother.anyBuildType) + "_" + device2
+      .composeMetadataFileName(BuildTypeMother.anyFlavor, BuildTypeMother.anyBuildType) + "_" + device2
     (adb.devices _).expects().returns(List(device1, device2))
     (envVars.androidSerial _).expects().returns(Some(device2))
 
@@ -152,7 +140,7 @@ class ShotSpec
   }
 
   it should "should delegate screenshots cleaning to Adb using the devices if ANDROID_SERIAL env var is not valid" in {
-    val appId: AppId = AppIdMother.anyAppId
+    val appId: AppId    = AppIdMother.anyAppId
     val device1: String = "emulator-5554"
     val device2: String = "emulator-5556"
     (adb.devices _).expects().returns(List(device1, device2))

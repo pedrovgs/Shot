@@ -5,10 +5,7 @@ import com.karumi.shot.domain.Config
 import com.karumi.shot.xml.ScreenshotsSuiteXmlParser._
 import org.scalatest.{FlatSpec, Matchers}
 
-class ScreenshotsSuiteXmlParserSpec
-    extends FlatSpec
-    with Matchers
-    with Resources {
+class ScreenshotsSuiteXmlParserSpec extends FlatSpec with Matchers with Resources {
 
   private val anyScreenshotsFolder = "/screenshots/"
   private val anyTemporalScreenshotsFolder =
@@ -16,14 +13,10 @@ class ScreenshotsSuiteXmlParserSpec
   private val anyProjectName = "flowup"
 
   "ScreenshotsSuiteXmlParser" should "return an empty spec if there are no screenshots" in {
-    val xml = testResourceContent(
-      "/screenshots-metadata/empty-screenshots-metadata.xml")
+    val xml = testResourceContent("/screenshots-metadata/empty-screenshots-metadata.xml")
 
     val screenshots =
-      parseScreenshots(xml,
-                       anyProjectName,
-                       anyScreenshotsFolder,
-                       anyTemporalScreenshotsFolder)
+      parseScreenshots(xml, anyProjectName, anyScreenshotsFolder, anyTemporalScreenshotsFolder)
 
     screenshots shouldBe empty
   }
@@ -34,10 +27,7 @@ class ScreenshotsSuiteXmlParserSpec
       testResourceContent("/screenshots-metadata/view-hierarchy.json")
 
     val screenshotsWithoutSize =
-      parseScreenshots(xml,
-                       anyProjectName,
-                       anyScreenshotsFolder,
-                       anyTemporalScreenshotsFolder)
+      parseScreenshots(xml, anyProjectName, anyScreenshotsFolder, anyTemporalScreenshotsFolder)
     val screenshots = screenshotsWithoutSize.map { screenshot =>
       parseScreenshotSize(screenshot, viewHierarchyContent)
     }

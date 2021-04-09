@@ -70,8 +70,7 @@ class ShotPlugin extends Plugin[Project] {
       getAndroidLibraryExtension(project)
     val baseTask =
       project.getTasks
-        .register(Config.defaultTaskName,
-                  classOf[ExecuteScreenshotTestsForEveryFlavor])
+        .register(Config.defaultTaskName, classOf[ExecuteScreenshotTestsForEveryFlavor])
     libraryExtension.getLibraryVariants.all { variant =>
       addTaskToVariant(project, baseTask, variant)
     }
@@ -82,36 +81,29 @@ class ShotPlugin extends Plugin[Project] {
       getAndroidAppExtension(project)
     val baseTask =
       project.getTasks
-        .register(Config.defaultTaskName,
-                  classOf[ExecuteScreenshotTestsForEveryFlavor])
+        .register(Config.defaultTaskName, classOf[ExecuteScreenshotTestsForEveryFlavor])
     appExtension.getApplicationVariants.all { variant =>
       addTaskToVariant(project, baseTask, variant)
     }
   }
 
-  private def addTaskToVariant(
-      project: Project,
-      baseTask: TaskProvider[ExecuteScreenshotTestsForEveryFlavor],
-      variant: BaseVariant) = {
+  private def addTaskToVariant(project: Project,
+                               baseTask: TaskProvider[ExecuteScreenshotTestsForEveryFlavor],
+                               variant: BaseVariant) = {
     val flavor = variant.getMergedFlavor
     checkIfApplicationIdIsConfigured(project, flavor)
     val completeAppId = composeCompleteAppId(variant)
     val appTestId =
       Option(flavor.getTestApplicationId).getOrElse(completeAppId)
     if (variant.getBuildType.getName != "release") {
-      addTasksFor(project,
-                  variant.getFlavorName,
-                  variant.getBuildType,
-                  appTestId,
-                  baseTask)
+      addTasksFor(project, variant.getFlavorName, variant.getBuildType, appTestId, baseTask)
     }
   }
 
   private def composeCompleteAppId(variant: BaseVariant) =
     variant.getApplicationId + ".test"
 
-  private def checkIfApplicationIdIsConfigured(project: Project,
-                                               flavor: ProductFlavor) =
+  private def checkIfApplicationIdIsConfigured(project: Project, flavor: ProductFlavor) =
     if (isAnAndroidLibrary(project) && flavor.getTestApplicationId == null) {
       throw ShotException(
         "Your Android library needs to be configured using an testApplicationId in your build.gradle defaultConfig block.")
@@ -122,12 +114,11 @@ class ShotPlugin extends Plugin[Project] {
     project.getExtensions.add(name, new ShotExtension())
   }
 
-  private def addTasksFor(
-      project: Project,
-      flavor: String,
-      buildType: BuildType,
-      appId: String,
-      baseTask: TaskProvider[ExecuteScreenshotTestsForEveryFlavor]): Unit = {
+  private def addTasksFor(project: Project,
+                          flavor: String,
+                          buildType: BuildType,
+                          appId: String,
+                          baseTask: TaskProvider[ExecuteScreenshotTestsForEveryFlavor]): Unit = {
     val extension =
       project.getExtensions.getByType[ShotExtension](classOf[ShotExtension])
     val instrumentationTask = if (extension.useComposer) {
@@ -137,13 +128,11 @@ class ShotPlugin extends Plugin[Project] {
     }
     val tasks = project.getTasks
     val removeScreenshotsAfterExecution = tasks
-      .register(
-        RemoveScreenshotsTask.name(flavor, buildType, beforeExecution = false),
-        classOf[RemoveScreenshotsTask])
+      .register(RemoveScreenshotsTask.name(flavor, buildType, beforeExecution = false),
+                classOf[RemoveScreenshotsTask])
     val removeScreenshotsBeforeExecution = tasks
-      .register(
-        RemoveScreenshotsTask.name(flavor, buildType, beforeExecution = true),
-        classOf[RemoveScreenshotsTask])
+      .register(RemoveScreenshotsTask.name(flavor, buildType, beforeExecution = true),
+                classOf[RemoveScreenshotsTask])
 
     removeScreenshotsAfterExecution.configure { task =>
       task.setDescription(RemoveScreenshotsTask.description(flavor, buildType))
@@ -159,21 +148,17 @@ class ShotPlugin extends Plugin[Project] {
     }
 
     val downloadScreenshots = tasks
-      .register(DownloadScreenshotsTask.name(flavor, buildType),
-                classOf[DownloadScreenshotsTask])
+      .register(DownloadScreenshotsTask.name(flavor, buildType), classOf[DownloadScreenshotsTask])
     downloadScreenshots.configure { task =>
-      task.setDescription(
-        DownloadScreenshotsTask.description(flavor, buildType))
+      task.setDescription(DownloadScreenshotsTask.description(flavor, buildType))
       task.flavor = flavor
       task.buildType = buildType
       task.appId = appId
     }
     val executeScreenshot = tasks
-      .register(ExecuteScreenshotTests.name(flavor, buildType),
-                classOf[ExecuteScreenshotTests])
+      .register(ExecuteScreenshotTests.name(flavor, buildType), classOf[ExecuteScreenshotTests])
     executeScreenshot.configure { task =>
-      task.setDescription(
-        ExecuteScreenshotTests.description(flavor, buildType))
+      task.setDescription(ExecuteScreenshotTests.description(flavor, buildType))
       task.flavor = flavor
       task.buildType = buildType
       task.appId = appId

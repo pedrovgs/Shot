@@ -11,7 +11,7 @@ buildscript {
 
     dependencies {
         classpath "gradle.plugin.com.github.maiflai:gradle-scalatest:0.25"
-        classpath "cz.alenkacz:gradle-scalafmt:1.3.5"
+        classpath "cz.alenkacz:gradle-scalafmt:1.14.0"
         classpath "com.android.tools.build:gradle:3.4.3"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jlleitschuh.gradle:ktlint-gradle:9.4.1"
