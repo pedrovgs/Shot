@@ -1,6 +1,5 @@
 package com.karumi.shot
 
-import android.R
 import android.app.Activity
 import android.graphics.Rect
 import android.os.Build
@@ -20,8 +19,7 @@ interface KeyboardCloser {
         val focusedView = activity.currentFocus
         if (focusedView != null) {
             activity.runOnUiThread {
-                val imm: InputMethodManager =
-                    activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                val imm: InputMethodManager = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(focusedView.windowToken, 0)
             }
         }
@@ -32,7 +30,7 @@ interface KeyboardCloser {
             throw IllegalStateException("We couldn't close they keyboard after 5 retries.")
         }
         closeKeyboard(activity)
-        val rootView = activity.findViewById<View>(R.id.content).rootView
+        val rootView = activity.findViewById<View>(android.R.id.content).rootView
         val measuredRect = Rect()
         rootView.rootView.getWindowVisibleDisplayFrame(measuredRect)
         val rootViewHeight = measuredRect.bottom - measuredRect.top

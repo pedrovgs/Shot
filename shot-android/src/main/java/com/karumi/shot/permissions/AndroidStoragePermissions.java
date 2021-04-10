@@ -27,9 +27,7 @@ public class AndroidStoragePermissions {
     public void checkPermissions() {
         Context testAppContext = instrumentation.getContext();
         for (String permission : REQUIRED_PERMISSIONS) {
-            if ((permission.equals(READ_PERMISSION) && Build.VERSION.SDK_INT < 16)
-                    || testAppContext.checkCallingOrSelfPermission(permission)
-                    == PackageManager.PERMISSION_GRANTED) {
+            if (testAppContext.checkCallingOrSelfPermission(permission) == PackageManager.PERMISSION_GRANTED) {
                 continue;
             }
             if (Build.VERSION.SDK_INT < 23) {
