@@ -27,6 +27,7 @@ import com.facebook.testing.screenshot.ViewHelpers
 import com.facebook.testing.screenshot.internal.TestNameDetector
 import com.karumi.shot.compose.ComposeScreenshotRunner
 import com.karumi.shot.compose.ScreenshotMetadata
+import java.lang.IllegalStateException
 
 interface ScreenshotTest {
 
@@ -122,7 +123,12 @@ interface ScreenshotTest {
         val testClassName = TestNameDetector.getTestClass()
         val screenshotName = "${testClassName}_$testName"
         val data = ScreenshotMetadata(name = screenshotName, testClassName = testClassName, testName = testName)
-        ComposeScreenshotRunner.composeScreenshot.saveScreenshot(bitmap, data)
+        val composeScreenshot = ComposeScreenshotRunner.composeScreenshot
+        if (composeScreenshot != null) {
+            composeScreenshot.saveScreenshot(bitmap, data)
+        } else {
+            throw IllegalStateException("Shot couldn't take the screenshot. Ensure your project uses ShotTestRunner as your instrumentation test runner.")
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -133,7 +139,12 @@ interface ScreenshotTest {
         val testClassName = TestNameDetector.getTestClass()
         val screenshotName = "${testClassName}_$testName"
         val data = ScreenshotMetadata(name = screenshotName, testClassName = testClassName, testName = testName)
-        ComposeScreenshotRunner.composeScreenshot.saveScreenshot(node, data)
+        val composeScreenshot = ComposeScreenshotRunner.composeScreenshot
+        if (composeScreenshot != null) {
+            composeScreenshot.saveScreenshot(node, data)
+        } else {
+            throw IllegalStateException("Shot couldn't take the screenshot. Ensure your project uses ShotTestRunner as your instrumentation test runner.")
+        }
     }
 
     fun disableFlakyComponentsAndWaitForIdle(view: View? = null) {
