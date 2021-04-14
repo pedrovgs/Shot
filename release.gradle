@@ -82,7 +82,7 @@ afterEvaluate { project ->
 
     def isAndroidProject = project.getPlugins().hasPlugin('com.android.application') || project.getPlugins().hasPlugin('com.android.library')
     if (isAndroidProject) {
-        task androidSourcesJar(type: Jar) {
+        tasks.register('androidSourcesJar', Jar) {
             classifier = 'sources'
             from android.sourceSets.main.java.srcDirs
         }
@@ -91,12 +91,12 @@ afterEvaluate { project ->
             archives androidSourcesJar
         }
     } else {
-        task javadocJar(type: Jar) {
+        tasks.register('javadocJar', Jar) {
             classifier = 'javadoc'
             from javadoc
         }
 
-        task sourcesJar(type: Jar) {
+        tasks.register('sourcesJar', Jar) {
             classifier = 'sources'
             from sourceSets.main.allSource
         }
@@ -105,5 +105,4 @@ afterEvaluate { project ->
             archives javadocJar, sourcesJar
         }
     }
-
 }

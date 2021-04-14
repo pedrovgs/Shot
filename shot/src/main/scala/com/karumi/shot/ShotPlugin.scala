@@ -1,6 +1,6 @@
 package com.karumi.shot
 
-import com.android.build.gradle.api.{ApplicationVariant, BaseVariant}
+import com.android.build.gradle.api.BaseVariant
 import com.android.build.gradle.{AppExtension, LibraryExtension}
 import com.android.builder.model.{BuildType, ProductFlavor}
 import com.karumi.shot.android.Adb
@@ -198,12 +198,15 @@ class ShotPlugin extends Plugin[Project] {
     val shotConfig = configs
       .create(Config.shotConfiguration)
     shotConfig.defaultDependencies((dependencies: DependencySet) => {
-      val dependencyName = Config.androidDependency
-      val dependencyToAdd =
-        project.getDependencies.create(dependencyName)
+      val dependencyName  = Config.androidDependency
+      val dependencyToAdd = project.getDependencies.create(dependencyName)
       dependencies.add(dependencyToAdd)
     })
-    configs.getByName(Config.androidDependencyMode).extendsFrom(shotConfig)
+    configs
+      .named(Config.androidDependencyMode)
+      .configure { config =>
+        config.extendsFrom(shotConfig)
+      }
   }
 
   private def isAnAndroidLibrary(project: Project): Boolean =
