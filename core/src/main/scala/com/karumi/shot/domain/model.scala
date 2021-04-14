@@ -1,25 +1,21 @@
 package com.karumi.shot.domain
 
-import com.karumi.shot.domain.model.{
-  FilePath,
-  ScreenshotComparisionErrors,
-  ScreenshotsSuite
-}
+import com.karumi.shot.domain.model.{FilePath, ScreenshotComparisionErrors, ScreenshotsSuite}
 
 object model {
-  type ScreenshotsSuite = Seq[Screenshot]
-  type FilePath = String
-  type Folder = String
-  type AppId = String
+  type ScreenshotsSuite            = Seq[Screenshot]
+  type FilePath                    = String
+  type Folder                      = String
+  type AppId                       = String
   type ScreenshotComparisionErrors = Seq[ScreenshotComparisonError]
 }
 
 object Config {
-  val defaultTolerance: Double = 0.0
-  val shotConfiguration: String = "shotDependencies"
-  val androidDependencyMode: FilePath = "androidTestImplementation"
-  val androidDependencyGroup: String = "com.karumi"
-  val androidDependencyName: String = "shot-android"
+  val defaultTolerance: Double         = 0.0
+  val shotConfiguration: String        = "shotDependencies"
+  val androidDependencyMode: FilePath  = "androidTestImplementation"
+  val androidDependencyGroup: String   = "com.karumi"
+  val androidDependencyName: String    = "shot-android"
   val androidDependencyVersion: String = "5.10.4-SNAPSHOT"
   val androidDependency: FilePath =
     s"$androidDependencyGroup:$androidDependencyName:$androidDependencyVersion"
@@ -34,8 +30,7 @@ object Config {
   def pulledScreenshotsFolder(flavor: String, buildType: String): FilePath =
     screenshotsFolderName(flavor, buildType) + "screenshots-default/"
 
-  def pulledComposeScreenshotsFolder(flavor: String,
-                                     buildType: String): FilePath =
+  def pulledComposeScreenshotsFolder(flavor: String, buildType: String): FilePath =
     screenshotsFolderName(flavor, buildType) + "screenshots-compose-default/"
 
   def metadataFileName(flavor: String, buildType: String): FilePath =
@@ -44,11 +39,10 @@ object Config {
   def composeMetadataFileName(flavor: String, buildType: String): FilePath =
     pulledComposeScreenshotsFolder(flavor, buildType) + "metadata.json"
 
-  val androidPluginName: FilePath = "com.android.application"
+  val androidPluginName: FilePath           = "com.android.application"
   val screenshotsTemporalRootPath: FilePath = "/tmp/shot/screenshot/"
 
-  def defaultInstrumentationTestTask(flavor: String,
-                                     buildType: String): String =
+  def defaultInstrumentationTestTask(flavor: String, buildType: String): String =
     s"connected${flavor.capitalize}${buildType.capitalize}AndroidTest"
 
   def composerInstrumentationTestTask(flavor: String, buildType: String) =
@@ -79,9 +73,8 @@ case class Screenshot(name: String,
                       recordedPartsPaths: Seq[FilePath],
                       screenshotDimension: Dimension) {
   val fileName: String =
-    temporalScreenshotPath.substring(
-      temporalScreenshotPath.lastIndexOf("/") + 1,
-      temporalScreenshotPath.length)
+    temporalScreenshotPath.substring(temporalScreenshotPath.lastIndexOf("/") + 1,
+                                     temporalScreenshotPath.length)
 
   def getDiffScreenshotPath(basePath: String): String =
     s"${basePath}diff_$fileName"
@@ -97,17 +90,15 @@ case class Dimension(width: Int, height: Int) {
 sealed trait ScreenshotComparisonError {
   def errorScreenshot: Screenshot =
     this match {
-      case ScreenshotNotFound(screenshot) => screenshot
-      case DifferentScreenshots(screenshot, _) => screenshot
+      case ScreenshotNotFound(screenshot)             => screenshot
+      case DifferentScreenshots(screenshot, _)        => screenshot
       case DifferentImageDimensions(screenshot, _, _) => screenshot
     }
 }
 
-case class ScreenshotNotFound(screenshot: Screenshot)
-    extends ScreenshotComparisonError
+case class ScreenshotNotFound(screenshot: Screenshot) extends ScreenshotComparisonError
 
-case class DifferentScreenshots(screenshot: Screenshot,
-                                base64Diff: Option[String] = None)
+case class DifferentScreenshots(screenshot: Screenshot, base64Diff: Option[String] = None)
     extends ScreenshotComparisonError
 
 case class DifferentImageDimensions(screenshot: Screenshot,
@@ -115,10 +106,9 @@ case class DifferentImageDimensions(screenshot: Screenshot,
                                     newDimension: Dimension)
     extends ScreenshotComparisonError
 
-case class ScreenshotsComparisionResult(
-    errors: ScreenshotComparisionErrors = Seq(),
-    screenshots: ScreenshotsSuite = Seq()) {
-  val hasErrors: Boolean = errors.nonEmpty
+case class ScreenshotsComparisionResult(errors: ScreenshotComparisionErrors = Seq(),
+                                        screenshots: ScreenshotsSuite = Seq()) {
+  val hasErrors: Boolean                = errors.nonEmpty
   val errorScreenshots: Seq[Screenshot] = errors.map(_.errorScreenshot)
   val correctScreenshots: Seq[Screenshot] =
     screenshots.filterNot(errorScreenshots.contains(_))

@@ -5,15 +5,12 @@ import com.karumi.shot.ui.Console
 
 class ConsoleReporter(console: Console) {
 
-  def showErrors(comparision: ScreenshotsComparisionResult,
-                 outputFolder: String): Unit = {
-    console.showError(
-      "❌  Hummmm...the following screenshot tests are broken:\n")
+  def showErrors(comparision: ScreenshotsComparisionResult, outputFolder: String): Unit = {
+    console.showError("❌  Hummmm...the following screenshot tests are broken:\n")
     comparision.errors.foreach { error =>
       error match {
         case ScreenshotNotFound(screenshot) =>
-          console.showError(
-            "   🔎  Recorded screenshot not found for test: " + screenshot.name)
+          console.showError("   🔎  Recorded screenshot not found for test: " + screenshot.name)
         case DifferentScreenshots(screenshot, base64Diff) =>
           console.showError(
             "   🤔  The application UI has been modified for test: " + screenshot.name)
@@ -22,9 +19,7 @@ class ConsoleReporter(console: Console) {
           console.showError(
             "            🆕  You can find the new recorded screenshot here: " + screenshot.temporalScreenshotPath)
           showBase64Diff(screenshot, base64Diff)
-        case DifferentImageDimensions(screenshot,
-                                      originalDimension,
-                                      newDimension) => {
+        case DifferentImageDimensions(screenshot, originalDimension, newDimension) => {
           console.showError(
             "   📱  The size of the screenshot taken has changed for test: " + screenshot.name)
           console.showError(
@@ -41,14 +36,13 @@ class ConsoleReporter(console: Console) {
     }
   }
 
-  private def showBase64Diff(screenshot: Screenshot,
-                             base64Diff: Option[String]) = base64Diff match {
-    case Some(diff) =>
-      console.showError(
-        "            🤖  The option printBase64 is enabled. In order to see the generated diff image for this failing test, run the following command in your terminal:")
-      console.showError(
-        s"            > echo '$diff' | base64 -D > ${screenshot.fileName}")
-    case _ =>
-  }
+  private def showBase64Diff(screenshot: Screenshot, base64Diff: Option[String]) =
+    base64Diff match {
+      case Some(diff) =>
+        console.showError(
+          "            🤖  The option printBase64 is enabled. In order to see the generated diff image for this failing test, run the following command in your terminal:")
+        console.showError(s"            > echo '$diff' | base64 -D > ${screenshot.fileName}")
+      case _ =>
+    }
 
 }
