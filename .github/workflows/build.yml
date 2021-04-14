@@ -35,10 +35,10 @@ jobs:
         run: ./gradlew executeScreenshotTests
         working-directory: shot-consumer
       - name: Execute screenshot tests for shot-consumer-flavors green flavor
-        run: ./gradlew greenDebugExecuteScreenshotTests
+        run: ./gradlew greenCustomBuildTypeExecuteScreenshotTests
         working-directory: shot-consumer-flavors
       - name: Execute screenshot tests for shot-consumer-flavors blue flavor
-        run: ./gradlew blueDebugExecuteScreenshotTests
+        run: ./gradlew blueCustomBuildTypeExecuteScreenshotTests
         working-directory: shot-consumer-flavors
       - uses: actions/upload-artifact@v2
         if: always()

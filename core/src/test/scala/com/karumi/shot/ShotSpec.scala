@@ -3,7 +3,7 @@ package com.karumi.shot
 import com.karumi.shot.android.Adb
 import com.karumi.shot.domain.Config
 import com.karumi.shot.domain.model.AppId
-import com.karumi.shot.mothers.{AppIdMother, BuildTypeMother}
+import com.karumi.shot.mothers.{AppIdMother, BuildTypeMother, ProjectNameMother}
 import com.karumi.shot.reports.{ConsoleReporter, ExecutionReporter}
 import com.karumi.shot.screenshots.{
   ScreenshotsComparator,
@@ -13,16 +13,12 @@ import com.karumi.shot.screenshots.{
 import com.karumi.shot.system.EnvVars
 import com.karumi.shot.ui.Console
 import org.scalamock.scalatest.MockFactory
-import org.scalatest.BeforeAndAfter
-import org.scalatest.flatspec._
-import org.scalatest.matchers._
+import org.scalatest.{BeforeAndAfter, FlatSpec, Matchers}
 
-class ShotSpec
-    extends AnyFlatSpec
-    with should.Matchers
-    with BeforeAndAfter
-    with MockFactory
-    with Resources {
+import java.io.File
+import java.util
+
+class ShotSpec extends FlatSpec with Matchers with BeforeAndAfter with MockFactory with Resources {
 
   private var shot: Shot               = _
   private val adb                      = mock[Adb]
@@ -157,5 +153,47 @@ class ShotSpec
     (adb.clearScreenshots _).expects(device2, appId)
 
     shot.removeScreenshots(appId)
+  }
+
+  it should "show a warning message if we couldn't find the compose screenshots' metadata during the verification proces" in {
+    val appId         = AppIdMother.anyAppId
+    val projectName   = ProjectNameMother.anyProjectName
+    val buildFolder   = ProjectFolderMother.anyBuildFolder
+    val projectFolder = ProjectFolderMother.anyProjectFolder
+    val flavor        = BuildTypeMother.anyFlavor
+    val buildType     = BuildTypeMother.anyBuildType
+    (files.listFilesInFolder _)
+      .expects(*)
+      .returns(new util.LinkedList[File]())
+    (console.show _).expects(*)
+    (console.showWarning _).expects(
+      "🤔 We couldn't find any screenshot. Did you configure Shot properly and added your tests to your project? https://github.com/Karumi/Shot/#getting-started")
+
+    shot.verifyScreenshots(appId,
+                           buildFolder,
+                           projectFolder,
+                           flavor,
+                           buildType,
+                           projectName,
+                           shouldPrintBase64Error = false,
+                           0d,
+                           showOnlyFailingTestsInReports = false)
+  }
+
+  it should "show a warning message if we couldn't find the compose screenshots' metadata during the record process" in {
+    val appId         = AppIdMother.anyAppId
+    val projectName   = ProjectNameMother.anyProjectName
+    val buildFolder   = ProjectFolderMother.anyBuildFolder
+    val projectFolder = ProjectFolderMother.anyProjectFolder
+    val flavor        = BuildTypeMother.anyFlavor
+    val buildType     = BuildTypeMother.anyBuildType
+    (files.listFilesInFolder _)
+      .expects(*)
+      .returns(new util.LinkedList[File]())
+    (console.show _).expects(*)
+    (console.showWarning _).expects(
+      "🤔 We couldn't find any screenshot. Did you configure Shot properly and added your tests to your project? https://github.com/Karumi/Shot/#getting-started")
+
+    shot.recordScreenshots(appId, buildFolder, projectFolder, projectName, flavor, buildType)
   }
 }

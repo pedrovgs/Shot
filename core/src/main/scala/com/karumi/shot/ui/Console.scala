@@ -10,6 +10,9 @@ class Console {
   def showSuccess(message: Message): Unit =
     print(Console.GREEN + message + Console.RESET)
 
+  def showWarning(message: Message): Unit =
+    print(Console.YELLOW + message + Console.RESET)
+
   def showError(message: Message): Unit =
     print(Console.RED + message + Console.RESET)
 
