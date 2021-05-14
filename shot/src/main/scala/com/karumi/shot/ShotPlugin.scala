@@ -87,9 +87,11 @@ class ShotPlugin extends Plugin[Project] {
     }
   }
 
-  private def addTaskToVariant(project: Project,
-                               baseTask: TaskProvider[ExecuteScreenshotTestsForEveryFlavor],
-                               variant: BaseVariant) = {
+  private def addTaskToVariant(
+      project: Project,
+      baseTask: TaskProvider[ExecuteScreenshotTestsForEveryFlavor],
+      variant: BaseVariant
+  ) = {
     val flavor = variant.getMergedFlavor
     checkIfApplicationIdIsConfigured(project, flavor)
     val completeAppId = composeCompleteAppId(variant)
@@ -104,7 +106,8 @@ class ShotPlugin extends Plugin[Project] {
   private def checkIfApplicationIdIsConfigured(project: Project, flavor: ProductFlavor) =
     if (isAnAndroidLibrary(project) && flavor.getTestApplicationId == null) {
       throw ShotException(
-        "Your Android library needs to be configured using an testApplicationId in your build.gradle defaultConfig block.")
+        "Your Android library needs to be configured using an testApplicationId in your build.gradle defaultConfig block."
+      )
     }
 
   private def addExtensions(project: Project): Unit = {
@@ -112,11 +115,13 @@ class ShotPlugin extends Plugin[Project] {
     project.getExtensions.add(name, new ShotExtension())
   }
 
-  private def addTasksFor(project: Project,
-                          flavor: String,
-                          buildType: BuildType,
-                          appId: String,
-                          baseTask: TaskProvider[ExecuteScreenshotTestsForEveryFlavor]): Unit = {
+  private def addTasksFor(
+      project: Project,
+      flavor: String,
+      buildType: BuildType,
+      appId: String,
+      baseTask: TaskProvider[ExecuteScreenshotTestsForEveryFlavor]
+  ): Unit = {
     val extension =
       project.getExtensions.getByType[ShotExtension](classOf[ShotExtension])
     val instrumentationTaskName = if (extension.useComposer) {
@@ -128,19 +133,24 @@ class ShotPlugin extends Plugin[Project] {
     // Some projects configure different build types and only one of them is allowed to run instrumentation tasks
     // Based on this, we need to first check if the instrumentation task is available or not. This let us use Shot
     // for different build types even if it is not the default one
-    val instrumentationTask = try {
-      tasks
-        .getByName(instrumentationTaskName)
-    } catch {
-      case e: Throwable => return
-    }
+    val instrumentationTask =
+      try {
+        tasks
+          .getByName(instrumentationTaskName)
+      } catch {
+        case e: Throwable => return
+      }
 
     val removeScreenshotsAfterExecution = tasks
-      .register(RemoveScreenshotsTask.name(flavor, buildType, beforeExecution = false),
-                classOf[RemoveScreenshotsTask])
+      .register(
+        RemoveScreenshotsTask.name(flavor, buildType, beforeExecution = false),
+        classOf[RemoveScreenshotsTask]
+      )
     val removeScreenshotsBeforeExecution = tasks
-      .register(RemoveScreenshotsTask.name(flavor, buildType, beforeExecution = true),
-                classOf[RemoveScreenshotsTask])
+      .register(
+        RemoveScreenshotsTask.name(flavor, buildType, beforeExecution = true),
+        classOf[RemoveScreenshotsTask]
+      )
 
     removeScreenshotsAfterExecution.configure { task =>
       task.setDescription(RemoveScreenshotsTask.description(flavor, buildType))

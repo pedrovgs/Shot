@@ -15,15 +15,24 @@ class ConfigSpec extends AnyFlatSpec with should.Matchers {
   }
 
   it should "save the screenshots into the screenshots folder" in {
-    Config.screenshotsFolderName(BuildTypeMother.anyFlavor, BuildTypeMother.anyBuildType) shouldBe s"/screenshots/${BuildTypeMother.anyFlavor}/${BuildTypeMother.anyBuildType}/"
+    Config.screenshotsFolderName(
+      BuildTypeMother.anyFlavor,
+      BuildTypeMother.anyBuildType
+    ) shouldBe s"/screenshots/${BuildTypeMother.anyFlavor}/${BuildTypeMother.anyBuildType}/"
   }
 
   it should "point at the temporal screenshots folder" in {
-    Config.pulledScreenshotsFolder(BuildTypeMother.anyFlavor, BuildTypeMother.anyBuildType) shouldBe s"/screenshots/${BuildTypeMother.anyFlavor}/${BuildTypeMother.anyBuildType}/screenshots-default/"
+    Config.pulledScreenshotsFolder(
+      BuildTypeMother.anyFlavor,
+      BuildTypeMother.anyBuildType
+    ) shouldBe s"/screenshots/${BuildTypeMother.anyFlavor}/${BuildTypeMother.anyBuildType}/screenshots-default/"
   }
 
   it should "point at the metadata folder" in {
-    Config.metadataFileName(BuildTypeMother.anyFlavor, BuildTypeMother.anyBuildType) shouldBe s"/screenshots/${BuildTypeMother.anyFlavor}/${BuildTypeMother.anyBuildType}/screenshots-default/metadata.xml"
+    Config.metadataFileName(
+      BuildTypeMother.anyFlavor,
+      BuildTypeMother.anyBuildType
+    ) shouldBe s"/screenshots/${BuildTypeMother.anyFlavor}/${BuildTypeMother.anyBuildType}/screenshots-default/metadata.xml"
   }
 
   it should "point at the tmp folder" in {

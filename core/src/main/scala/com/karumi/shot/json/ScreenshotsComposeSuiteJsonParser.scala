@@ -6,10 +6,12 @@ import org.json4s._
 import org.json4s.jackson.JsonMethods._
 
 object ScreenshotsComposeSuiteJsonParser {
-  def parseScreenshots(json: String,
-                       projectName: String,
-                       screenshotsFolder: Folder,
-                       temporalScreenshotsFolder: Folder): ScreenshotsSuite = {
+  def parseScreenshots(
+      json: String,
+      projectName: String,
+      screenshotsFolder: Folder,
+      temporalScreenshotsFolder: Folder
+  ): ScreenshotsSuite = {
     implicit val formats: DefaultFormats.type = DefaultFormats
     val composeSuite                          = parse(json).extract[ComposeScreenshotSuite]
     composeSuite.screenshots.map { screenshot =>
@@ -17,7 +19,8 @@ object ScreenshotsComposeSuiteJsonParser {
       Screenshot(
         name = name,
         recordedScreenshotPath = screenshotsFolder + name + ".png",
-        temporalScreenshotPath = Config.screenshotsTemporalRootPath + projectName + "/" + name + ".png",
+        temporalScreenshotPath =
+          Config.screenshotsTemporalRootPath + projectName + "/" + name + ".png",
         testClass = screenshot.testClassName,
         testName = screenshot.testName,
         tilesDimension = Dimension(0, 0),

@@ -10,9 +10,11 @@ import com.sksamuel.scrimage.composite.RedComposite
 
 class ScreenshotsDiffGenerator(base64Encoder: Base64Encoder) {
 
-  def generateDiffs(comparision: ScreenshotsComparisionResult,
-                    outputFolder: String,
-                    generateBase64Diff: Boolean): ScreenshotsComparisionResult = {
+  def generateDiffs(
+      comparision: ScreenshotsComparisionResult,
+      outputFolder: String,
+      generateBase64Diff: Boolean
+  ): ScreenshotsComparisionResult = {
     val updatedErrors: ScreenshotComparisionErrors =
       comparision.errors.par.map {
         case error: DifferentScreenshots =>
@@ -22,9 +24,11 @@ class ScreenshotsDiffGenerator(base64Encoder: Base64Encoder) {
     comparision.copy(errors = updatedErrors)
   }
 
-  private def generateDiff(error: DifferentScreenshots,
-                           outputFolder: String,
-                           generateBase64Diff: Boolean): DifferentScreenshots = {
+  private def generateDiff(
+      error: DifferentScreenshots,
+      outputFolder: String,
+      generateBase64Diff: Boolean
+  ): DifferentScreenshots = {
     val screenshot        = error.screenshot
     val originalImagePath = screenshot.recordedScreenshotPath
     val newImagePath      = screenshot.temporalScreenshotPath
