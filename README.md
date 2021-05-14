@@ -341,11 +341,12 @@ When talking about the IDE we should use, our recommendation is simple. We shoul
 * Fork this repository and create a new branch where you'll develop the new feature or fix.
 * Install IntelliJ and Android Studio.
 * Import the root Gradle file configuration with IntelliJ. You will have to install the Scala plugin recommended by IntelliJ, but don't worry, as soon as you start IntelliJ you'll see a pop-up with the recommended plugin.
+* Add ``RELEASE_SIGNING_ENABLED=false`` to your local properties to be able to install artifacts in your local maven repository without signing them.
 * Develop the code you'd like to implement. Remember to add the unit/integration test coverage to the code you are working on.
-* Execute the Gradle task ``./gradlew uploadArchives`` from the root folder in order to update your plugin local installation.
+* Execute the Gradle task ``./gradlew publishToMavenLocal`` from the root folder in order to update your plugin local installation.
 * Using Android Studio import ``shot-android`` or ``shot-consumer-flavors`` and write an example of the feature or fix you coded before. The example test you write will work as an end to end test.
 * Commit and push the code. Our CI configuration will ensure everything is working as expected!
-* Remember to execute ``./gradlew uploadArchives`` whenever you change the Gradle plugin code related in order to update your local repository and be able to use it from the consumers folder.
+* Remember to execute ``./gradlew publishToMavenLocal`` whenever you change the Gradle plugin code related in order to update your local repository and be able to use it from the consumers folder.
 * Once you are ready, send a PR. We will review it and help you to contribute to the official repository. Once everything is ready, we will merge it and release a new version.
 
 In case you need to start an Android emulator you have scripts inside the consumers' folder you can execute to create the emulators you'll need to run the tests :smiley:
@@ -354,7 +355,7 @@ This is the list of most useful Gradle tasks you might need divided by type of p
 
 * Plugin related tasks:
 
-    * ``./gradlew uploadArchives``: Install Shot in your local gradle repository.
+    * ``./gradlew publishToMavenLocal``: Install Shot in your local gradle repository.
     * ``./gradlew test``: Execute all the tests related to the Gradle plugin.
     * ``./gradlew scalafmtAll`: Review the Gradle Plugin's checkstyle.
 
