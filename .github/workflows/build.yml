@@ -26,6 +26,8 @@ jobs:
         run: ./gradlew test
       - name: Shot unit tests
         run: ./gradlew :shot-android:connectedCheck
+      - name: Disable artifacts signing
+        run: echo "RELEASE_SIGNING_ENABLED=false" >> gradle.properties
       - name: Build and install Shot
         run: ./gradlew publishToMavenLocal
       - name: Execute screenshot tests for shot-consumer-compose
