@@ -27,7 +27,7 @@ jobs:
       - name: Shot unit tests
         run: ./gradlew :shot-android:connectedCheck
       - name: Build and install Shot
-        run: ./gradlew uploadArchives
+        run: ./gradlew publishToMavenLocal
       - name: Execute screenshot tests for shot-consumer-compose
         run: ./gradlew executeScreenshotTests
         working-directory: shot-consumer-compose

@@ -1,15 +1,15 @@
 buildscript {
     repositories {
         gradlePluginPortal()
+        mavenLocal()
         mavenCentral()
         maven { url "https://jitpack.io" }
-        maven { url uri("../../repo") }
         jcenter()
         google()
     }
     dependencies {
         classpath "com.neenbedankt.gradle.plugins:android-apt:1.7"
-        classpath "com.karumi:shot:5.10.5-SNAPSHOT"
+        classpath "com.karumi:shot:5.10.5"
         classpath "com.trevjonez.composer:plugin:1.0.0-rc08"
     }
 }

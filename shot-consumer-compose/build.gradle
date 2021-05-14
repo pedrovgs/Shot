@@ -7,12 +7,13 @@ buildscript {
     repositories {
         google()
         jcenter()
-        maven { url uri('../repo') }
+        mavenLocal()
+        mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.0.0-alpha12'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "com.karumi:shot:5.10.5-SNAPSHOT"
+        classpath "com.karumi:shot:5.10.5"
     }
 }
 
@@ -20,7 +21,8 @@ allprojects {
     repositories {
         google()
         jcenter()
-        maven { url uri('../../repo') }
+        mavenLocal()
+        mavenCentral()
     }
 }
 

@@ -60,7 +60,7 @@ Modify your root ``build.gradle`` file:
     // ...
     dependencies {
       // ...
-      classpath 'com.karumi:shot:5.10.4'
+      classpath 'com.karumi:shot:<LATEST_RELEASE>'
     }
   }
 ```
