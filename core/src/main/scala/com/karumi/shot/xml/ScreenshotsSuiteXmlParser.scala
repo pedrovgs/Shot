@@ -9,28 +9,34 @@ import scala.xml._
 
 object ScreenshotsSuiteXmlParser {
 
-  def parseScreenshots(xml: String,
-                       projectName: String,
-                       screenshotsFolder: Folder,
-                       temporalScreenshotsFolder: Folder): ScreenshotsSuite = {
+  def parseScreenshots(
+      xml: String,
+      projectName: String,
+      screenshotsFolder: Folder,
+      temporalScreenshotsFolder: Folder
+  ): ScreenshotsSuite = {
     val xmlScreenshots = XML.loadString(xml) \ "screenshot"
     xmlScreenshots.map(
-      parseScreenshot(_, projectName, screenshotsFolder, temporalScreenshotsFolder))
+      parseScreenshot(_, projectName, screenshotsFolder, temporalScreenshotsFolder)
+    )
   }
 
-  private def parseScreenshot(xmlNode: Node,
-                              projectName: String,
-                              screenshotsFolder: Folder,
-                              temporalScreenshotsFolder: Folder): Screenshot = {
+  private def parseScreenshot(
+      xmlNode: Node,
+      projectName: String,
+      screenshotsFolder: Folder,
+      temporalScreenshotsFolder: Folder
+  ): Screenshot = {
     val name                   = (xmlNode \ "name" head).text.trim
     val recordedScreenshotPath = screenshotsFolder + name + ".png"
-    val temporalScreenshotPath = Config.screenshotsTemporalRootPath + projectName + "/" + name + ".png"
-    val testClass              = (xmlNode \ "test_class" head).text.trim
-    val testName               = (xmlNode \ "test_name" head).text.trim
-    val tileWidth              = (xmlNode \ "tile_width" head).text.toInt
-    val tileHeight             = (xmlNode \ "tile_height" head).text.toInt
-    val tilesDimension         = Dimension(tileWidth, tileHeight)
-    val viewHierarchy          = (xmlNode \ "view_hierarchy" head).text.trim
+    val temporalScreenshotPath =
+      Config.screenshotsTemporalRootPath + projectName + "/" + name + ".png"
+    val testClass      = (xmlNode \ "test_class" head).text.trim
+    val testName       = (xmlNode \ "test_name" head).text.trim
+    val tileWidth      = (xmlNode \ "tile_width" head).text.toInt
+    val tileHeight     = (xmlNode \ "tile_height" head).text.toInt
+    val tilesDimension = Dimension(tileWidth, tileHeight)
+    val viewHierarchy  = (xmlNode \ "view_hierarchy" head).text.trim
     val absoluteFileNames =
       (xmlNode \ "absolute_file_name").map(_.text.trim + ".png")
     val relativeFileNames =
@@ -60,8 +66,11 @@ object ScreenshotsSuiteXmlParser {
     val JInt(screenshotTop)    = viewHierarchyNode \ "top"
     val JInt(screenshotHeight) = viewHierarchyNode \ "height"
     screenshot.copy(
-      screenshotDimension = Dimension(screenshotLeft.toInt + screenshotWidth.toInt,
-                                      screenshotTop.toInt + screenshotHeight.toInt))
+      screenshotDimension = Dimension(
+        screenshotLeft.toInt + screenshotWidth.toInt,
+        screenshotTop.toInt + screenshotHeight.toInt
+      )
+    )
   }
 
 }

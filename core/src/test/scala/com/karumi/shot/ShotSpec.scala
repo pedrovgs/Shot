@@ -38,15 +38,17 @@ class ShotSpec
   private val envVars                  = mock[EnvVars]
 
   before {
-    shot = new Shot(adb,
-                    files,
-                    screenshotsComparator,
-                    screenshotsDiffGenerator,
-                    screenshotsSaver,
-                    console,
-                    reporter,
-                    consoleReporter,
-                    envVars)
+    shot = new Shot(
+      adb,
+      files,
+      screenshotsComparator,
+      screenshotsDiffGenerator,
+      screenshotsSaver,
+      console,
+      reporter,
+      consoleReporter,
+      envVars
+    )
   }
 
   "Shot" should "should delegate screenshots cleaning to Adb" in {
@@ -68,14 +70,19 @@ class ShotSpec
       .screenshotsFolderName(BuildTypeMother.anyFlavor, BuildTypeMother.anyBuildType)
     val expectedOriginalMetadataFile = projectFolder + Config.metadataFileName(
       BuildTypeMother.anyFlavor,
-      BuildTypeMother.anyBuildType)
+      BuildTypeMother.anyBuildType
+    )
     val expectedRenamedMetadataFile = projectFolder + Config.metadataFileName(
       BuildTypeMother.anyFlavor,
-      BuildTypeMother.anyBuildType) + "_" + device
+      BuildTypeMother.anyBuildType
+    ) + "_" + device
     val expectedComposeOriginalMetadataFile = projectFolder + Config
       .composeMetadataFileName(BuildTypeMother.anyFlavor, BuildTypeMother.anyBuildType)
     val expectedComposeRenamedMetadataFile = projectFolder + Config
-      .composeMetadataFileName(BuildTypeMother.anyFlavor, BuildTypeMother.anyBuildType) + "_" + device
+      .composeMetadataFileName(
+        BuildTypeMother.anyFlavor,
+        BuildTypeMother.anyBuildType
+      ) + "_" + device
     (adb.devices _).expects().returns(List(device))
     (envVars.androidSerial _).expects().returns(None)
 
@@ -89,10 +96,12 @@ class ShotSpec
       .expects(expectedComposeOriginalMetadataFile, expectedComposeRenamedMetadataFile)
       .once()
 
-    shot.downloadScreenshots(projectFolder,
-                             BuildTypeMother.anyFlavor,
-                             BuildTypeMother.anyBuildType,
-                             appId)
+    shot.downloadScreenshots(
+      projectFolder,
+      BuildTypeMother.anyFlavor,
+      BuildTypeMother.anyBuildType,
+      appId
+    )
   }
 
   it should "configure adb path" in {
@@ -124,14 +133,19 @@ class ShotSpec
       .screenshotsFolderName(BuildTypeMother.anyFlavor, BuildTypeMother.anyBuildType)
     val expectedOriginalMetadataFile = projectFolder + Config.metadataFileName(
       BuildTypeMother.anyFlavor,
-      BuildTypeMother.anyBuildType)
+      BuildTypeMother.anyBuildType
+    )
     val expectedRenamedFile = projectFolder + Config.metadataFileName(
       BuildTypeMother.anyFlavor,
-      BuildTypeMother.anyBuildType) + "_" + device2
+      BuildTypeMother.anyBuildType
+    ) + "_" + device2
     val expectedComposeOriginalMetadataFile = projectFolder + Config
       .composeMetadataFileName(BuildTypeMother.anyFlavor, BuildTypeMother.anyBuildType)
     val expectedComposeRenamedFile = projectFolder + Config
-      .composeMetadataFileName(BuildTypeMother.anyFlavor, BuildTypeMother.anyBuildType) + "_" + device2
+      .composeMetadataFileName(
+        BuildTypeMother.anyFlavor,
+        BuildTypeMother.anyBuildType
+      ) + "_" + device2
     (adb.devices _).expects().returns(List(device1, device2))
     (envVars.androidSerial _).expects().returns(Some(device2))
 
@@ -142,10 +156,12 @@ class ShotSpec
     (files.rename _)
       .expects(expectedComposeOriginalMetadataFile, expectedComposeRenamedFile)
 
-    shot.downloadScreenshots(projectFolder,
-                             BuildTypeMother.anyFlavor,
-                             BuildTypeMother.anyBuildType,
-                             appId)
+    shot.downloadScreenshots(
+      projectFolder,
+      BuildTypeMother.anyFlavor,
+      BuildTypeMother.anyBuildType,
+      appId
+    )
   }
 
   it should "should delegate screenshots cleaning to Adb using the devices if ANDROID_SERIAL env var is not valid" in {
@@ -173,17 +189,20 @@ class ShotSpec
       .returns(new util.LinkedList[File]())
     (console.show _).expects(*)
     (console.showWarning _).expects(
-      "🤔 We couldn't find any screenshot. Did you configure Shot properly and added your tests to your project? https://github.com/Karumi/Shot/#getting-started")
+      "🤔 We couldn't find any screenshot. Did you configure Shot properly and added your tests to your project? https://github.com/Karumi/Shot/#getting-started"
+    )
 
-    shot.verifyScreenshots(appId,
-                           buildFolder,
-                           projectFolder,
-                           flavor,
-                           buildType,
-                           projectName,
-                           shouldPrintBase64Error = false,
-                           0d,
-                           showOnlyFailingTestsInReports = false)
+    shot.verifyScreenshots(
+      appId,
+      buildFolder,
+      projectFolder,
+      flavor,
+      buildType,
+      projectName,
+      shouldPrintBase64Error = false,
+      0d,
+      showOnlyFailingTestsInReports = false
+    )
   }
 
   it should "show a warning message if we couldn't find the compose screenshots' metadata during the record process" in {
@@ -198,7 +217,8 @@ class ShotSpec
       .returns(new util.LinkedList[File]())
     (console.show _).expects(*)
     (console.showWarning _).expects(
-      "🤔 We couldn't find any screenshot. Did you configure Shot properly and added your tests to your project? https://github.com/Karumi/Shot/#getting-started")
+      "🤔 We couldn't find any screenshot. Did you configure Shot properly and added your tests to your project? https://github.com/Karumi/Shot/#getting-started"
+    )
 
     shot.recordScreenshots(appId, buildFolder, projectFolder, projectName, flavor, buildType)
   }

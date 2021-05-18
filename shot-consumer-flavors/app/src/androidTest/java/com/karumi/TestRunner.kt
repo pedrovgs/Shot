@@ -2,9 +2,6 @@ package com.karumi
 
 import android.app.Application
 import android.content.Context
-import android.os.Bundle
-import androidx.test.runner.AndroidJUnitRunner
-import com.facebook.testing.screenshot.ScreenshotRunner
 import com.github.tmurakami.dexopener.DexOpener
 import com.karumi.shot.ShotTestRunner
 

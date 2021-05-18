@@ -17,8 +17,10 @@ object ScreenshotComposer {
     } else {
       var composedImage = Image.filled(width, height, Color.Transparent)
       var partIndex     = 0
-      for (x <- 0 until screenshot.tilesDimension.width;
-           y <- 0 until screenshot.tilesDimension.height) {
+      for (
+        x <- 0 until screenshot.tilesDimension.width;
+        y <- 0 until screenshot.tilesDimension.height
+      ) {
         val partFile  = new File(screenshot.recordedPartsPaths(partIndex))
         val part      = Image.fromFile(partFile).awt
         val xPosition = x * tileSize

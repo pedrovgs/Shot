@@ -42,17 +42,20 @@ class Adb {
     clearScreenshotsFromFolder(device, appId, "screenshots-compose-default")
   }
 
-  private def pullFolder(folderName: String,
-                         device: String,
-                         screenshotsFolder: Folder,
-                         appId: AppId) = {
+  private def pullFolder(
+      folderName: String,
+      device: String,
+      screenshotsFolder: Folder,
+      appId: AppId
+  ) = {
     val folderToPull = s"${baseStoragePath}/screenshots/$appId/$folderName/"
     try {
       executeAdbCommandWithResult(s"-s $device pull $folderToPull $screenshotsFolder")
     } catch {
       case _: Throwable =>
         println(
-          Console.YELLOW + s"Shot ADB warning: We could not pull screenshots from folder: ${folderToPull}")
+          Console.YELLOW + s"Shot ADB warning: We could not pull screenshots from folder: ${folderToPull}"
+        )
     }
   }
 

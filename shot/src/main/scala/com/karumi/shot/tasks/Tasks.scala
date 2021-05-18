@@ -68,25 +68,30 @@ class ExecuteScreenshotTests extends ShotTask {
     val projectName   = project.getName
     val buildFolder   = project.getBuildDir.getAbsolutePath
     if (recordScreenshots) {
-      shot.recordScreenshots(appId,
-                             buildFolder,
-                             projectFolder,
-                             projectName,
-                             flavor,
-                             buildType.getName)
+      shot.recordScreenshots(
+        appId,
+        buildFolder,
+        projectFolder,
+        projectName,
+        flavor,
+        buildType.getName
+      )
     } else {
-      val result = shot.verifyScreenshots(appId,
-                                          buildFolder,
-                                          projectFolder,
-                                          flavor,
-                                          buildType.getName,
-                                          project.getName,
-                                          printBase64,
-                                          tolerance,
-                                          showOnlyFailingTestsInReports)
+      val result = shot.verifyScreenshots(
+        appId,
+        buildFolder,
+        projectFolder,
+        flavor,
+        buildType.getName,
+        project.getName,
+        printBase64,
+        tolerance,
+        showOnlyFailingTestsInReports
+      )
       if (result.hasErrors) {
         throw new GradleException(
-          "Screenshots comparision fail. Review the execution report to see what's broken your build.")
+          "Screenshots comparision fail. Review the execution report to see what's broken your build."
+        )
       }
     }
   }
@@ -136,5 +141,6 @@ object ExecuteScreenshotTestsForEveryFlavor {
 }
 class ExecuteScreenshotTestsForEveryFlavor extends ShotTask {
   setDescription(
-    "Checks the user interface screenshot tests. If you execute this task using -Precord param the screenshot will be regenerated.")
+    "Checks the user interface screenshot tests. If you execute this task using -Precord param the screenshot will be regenerated."
+  )
 }

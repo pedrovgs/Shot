@@ -4,7 +4,7 @@ apply plugin: 'scala'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.maiflai.scalatest'
 apply plugin: 'scalafmt'
-apply from: '../release.gradle'
+apply plugin: "com.vanniktech.maven.publish"
 
 repositories {
     mavenCentral()
