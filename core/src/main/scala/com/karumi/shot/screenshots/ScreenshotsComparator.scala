@@ -15,9 +15,9 @@ class ScreenshotsComparator {
   }
 
   private def compareScreenshot(
-      screenshot: Screenshot,
-      tolerance: Double
-  ): Option[ScreenshotComparisonError] = {
+                                 screenshot: Screenshot,
+                                 tolerance: Double
+                               ): Option[ScreenshotComparisonError] = {
     val recordedScreenshotFile = new File(screenshot.recordedScreenshotPath)
     if (!recordedScreenshotFile.exists()) {
       Some(ScreenshotNotFound(screenshot))
@@ -39,23 +39,23 @@ class ScreenshotsComparator {
   }
 
   private def imagesAreDifferent(
-      screenshot: Screenshot,
-      oldScreenshot: Image,
-      newScreenshot: Image,
-      tolerance: Double
-  ) = {
+                                  screenshot: Screenshot,
+                                  oldScreenshot: Image,
+                                  newScreenshot: Image,
+                                  tolerance: Double
+                                ) = {
     if (oldScreenshot == newScreenshot) {
       false
     } else {
       val oldScreenshotPixels = oldScreenshot.pixels
       val newScreenshotPixels = newScreenshot.pixels
+
       val differentPixels =
-        oldScreenshotPixels.diff(newScreenshotPixels).length
-      val percentageOfDifferentPixels =
-        differentPixels.toDouble / oldScreenshotPixels.length.toDouble
-      val percentageOutOf100        = percentageOfDifferentPixels * 100.0
-      val imagesAreDifferent        = percentageOutOf100 >= tolerance
-      val imagesAreConsideredEquals = !imagesAreDifferent
+        oldScreenshotPixels.zip(newScreenshotPixels).filter { case (a, b) => a != b }
+      val percentageOfDifferentPixels = differentPixels.length. toDouble / oldScreenshotPixels.length.toDouble
+      val percentageOutOf100          = percentageOfDifferentPixels * 100.0
+      val imagesAreDifferent          = percentageOutOf100 >= tolerance
+      val imagesAreConsideredEquals   = !imagesAreDifferent
       if (imagesAreConsideredEquals && tolerance != Config.defaultTolerance) {
         val screenshotName = screenshot.name
         println(

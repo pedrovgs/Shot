@@ -357,7 +357,7 @@ This is the list of most useful Gradle tasks you might need divided by type of p
 
     * ``./gradlew publishToMavenLocal``: Install Shot in your local gradle repository.
     * ``./gradlew test``: Execute all the tests related to the Gradle plugin.
-    * ``./gradlew scalafmtAll`: Review the Gradle Plugin's checkstyle.
+    * ``./gradlew scalafmtAll``: Review the Gradle Plugin's checkstyle.
 
 * Consumers related tasks:
 
