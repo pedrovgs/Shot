@@ -181,8 +181,8 @@ class ShotPlugin extends Plugin[Project] {
       task.buildType = buildType
       task.appId = appId
     }
-
-    if (extension.runInstrumentation) {
+    val shouldSkipInstrumentationTests = project.hasProperty("skipInstrumentationTests")
+    if (extension.runInstrumentation && !shouldSkipInstrumentationTests) {
       executeScreenshot.configure { task =>
         task.dependsOn(instrumentationTaskName)
         task.dependsOn(downloadScreenshots)

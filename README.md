@@ -111,6 +111,8 @@ If for some reason you are running your tests on a different machine and you wan
   }
 ```
 
+You can also run your tests from command line with the param ``-PskipInstrumentationTests`` if you don't want to config shot from your build.gradle file.
+
 Create this ``AndroidManifest.xml`` file inside your ``androidTest`` folder.
 
 ```xml
