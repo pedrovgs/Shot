@@ -222,7 +222,7 @@ class ShotPlugin extends Plugin[Project] {
 
   private def runInstrumentation(project: Project, extension: ShotExtension): Boolean = {
     val property = project.findProperty("runInstrumentation").asInstanceOf[String]
-    
+
     if (property != null) {
       if (Try(property.toBoolean).getOrElse(null) == null) {
         throw ShotException("runInstrumentation value must be true|false")
