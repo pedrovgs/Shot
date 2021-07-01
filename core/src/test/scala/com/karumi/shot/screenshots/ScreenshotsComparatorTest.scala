@@ -14,17 +14,19 @@ class ScreenshotsComparatorTest extends AnyFlatSpec with should.Matchers with Re
 
   it should "not match image with same pixels but different order" in {
     val comparator = new ScreenshotsComparator()
-    val screenshot = Screenshot("test",
-                                sampleImage,
-                                sampleImageScrambled,
-                                "SomeClass",
-                                "ShoudFail",
-                                Dimension(768, 1280),
-                                null,
-                                null,
-                                null,
-                                List(sampleImageScrambled),
-                                Dimension(768, 1280))
+    val screenshot = Screenshot(
+      "test",
+      sampleImage,
+      sampleImageScrambled,
+      "SomeClass",
+      "ShoudFail",
+      Dimension(768, 1280),
+      null,
+      null,
+      null,
+      List(sampleImageScrambled),
+      Dimension(768, 1280)
+    )
     val suite: ScreenshotsSuite = List(screenshot)
 
     val result = comparator.compare(suite, 0.01)
