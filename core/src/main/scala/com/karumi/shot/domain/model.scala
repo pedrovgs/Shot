@@ -16,7 +16,7 @@ object Config {
   val androidDependencyMode: FilePath  = "androidTestImplementation"
   val androidDependencyGroup: String   = "com.karumi"
   val androidDependencyName: String    = "shot-android"
-  val androidDependencyVersion: String = "5.10.5"
+  val androidDependencyVersion: String = "5.10.6"
   val androidDependency: FilePath =
     s"$androidDependencyGroup:$androidDependencyName:$androidDependencyVersion"
 
