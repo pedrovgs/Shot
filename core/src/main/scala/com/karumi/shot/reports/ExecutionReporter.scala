@@ -1,23 +1,13 @@
 package com.karumi.shot.reports
 
 import java.io.{File, FileWriter}
-import java.util
 
-import scala.collection.JavaConverters._
-import org.apache.commons.io.FileUtils
 import com.karumi.shot.domain._
 import com.karumi.shot.domain.model.{AppId, Folder, ScreenshotComparisionErrors, ScreenshotsSuite}
-import freemarker.template.{Configuration, Template, TemplateExceptionHandler}
+import com.karumi.shot.templates.RecordIndexTemplate.recordIndexTemplate
+import com.karumi.shot.templates.VerificationIndexTemplate.verificationIndexTemplate
 
 class ExecutionReporter {
-
-  private val freeMarkerConfig: Configuration = {
-    val config = new Configuration(Configuration.VERSION_2_3_23)
-    config.setClassForTemplateLoading(getClass, "/templates/")
-    config.setDefaultEncoding("UTF-8")
-    config.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER)
-    config
-  }
 
   def generateRecordReport(
       appId: AppId,
@@ -26,11 +16,10 @@ class ExecutionReporter {
       flavor: String,
       buildType: String
   ) = {
-    val input    = generateRecordTemplateValues(appId, screenshots)
-    val template = freeMarkerConfig.getTemplate("recordIndex.ftl")
+    val reportFileContents = populateRecordTemplate(appId, screenshots)
     resetVerificationReport(flavor, buildType)
     val reportFolder = buildFolder + Config.recordingReportFolder(flavor, buildType) + "/"
-    writeReport(buildFolder, input, template, reportFolder)
+    writeReport(reportFileContents, reportFolder)
   }
 
   def generateVerificationReport(
@@ -41,24 +30,21 @@ class ExecutionReporter {
       buildType: String,
       showOnlyFailingTestsInReports: Boolean = false
   ) = {
-    val input =
-      generateVerificationTemplateValues(appId, comparision, showOnlyFailingTestsInReports)
-    val template = freeMarkerConfig.getTemplate("verificationIndex.ftl")
+    val reportFileContents =
+      populateVerificationTemplate(appId, comparision, showOnlyFailingTestsInReports)
     resetVerificationReport(flavor, buildType)
     val reportFolder = buildFolder + Config.verificationReportFolder(flavor, buildType) + "/"
-    writeReport(buildFolder, input, template, reportFolder)
+    writeReport(reportFileContents, reportFolder)
   }
 
   private def writeReport(
-      buildFolder: Folder,
-      input: util.Map[String, String],
-      template: Template,
+      fileContents: String,
       reportFolder: String
   ) = {
     val indexFile = new File(reportFolder + "index.html")
     new File(reportFolder).mkdirs()
     val writer = new FileWriter(indexFile)
-    template.process(input, writer)
+    writer.write(fileContents)
     writer.close()
   }
 
@@ -69,20 +55,20 @@ class ExecutionReporter {
     }
   }
 
-  private def generateRecordTemplateValues(
+  private def populateRecordTemplate(
       appId: AppId,
       screenshots: ScreenshotsSuite
-  ): util.Map[String, String] = {
+  ): String = {
     val title         = s"Record results: $appId"
     val numberOfTests = screenshots.size
     val summaryResults =
       s"$numberOfTests screenshot tests recorded."
     val summaryTableBody = generateRecordSummaryTableBody(screenshots)
-    Map(
-      "title"            -> title,
-      "summaryResult"    -> summaryResults,
-      "summaryTableBody" -> summaryTableBody
-    ).asJava
+    recordIndexTemplate(
+      title            = title,
+      summaryResult    = summaryResults,
+      summaryTableBody = summaryTableBody
+    )
   }
 
   private def generateRecordSummaryTableBody(screenshots: ScreenshotsSuite): String = {
@@ -101,11 +87,11 @@ class ExecutionReporter {
       .mkString("\n")
   }
 
-  private def generateVerificationTemplateValues(
+  private def populateVerificationTemplate(
       appId: AppId,
       comparision: ScreenshotsComparisionResult,
       showOnlyFailingTestsInReports: Boolean
-  ): util.Map[String, String] = {
+  ): String = {
     val title         = s"Verification results: $appId"
     val screenshots   = comparision.screenshots
     val numberOfTests = screenshots.size
@@ -117,12 +103,12 @@ class ExecutionReporter {
       generateVerificationSummaryTableBody(comparision, showOnlyFailingTestsInReports)
     val screenshotsTableBody =
       generateScreenshotsTableBody(comparision, showOnlyFailingTestsInReports)
-    Map(
-      "title"                -> title,
-      "summaryResult"        -> summaryResults,
-      "summaryTableBody"     -> summaryTableBody,
-      "screenshotsTableBody" -> screenshotsTableBody
-    ).asJava
+    verificationIndexTemplate(
+      title                = title,
+      summaryResult        = summaryResults,
+      summaryTableBody     = summaryTableBody,
+      screenshotsTableBody = screenshotsTableBody
+    )
   }
 
   private def getSortedByResultScreenshots(comparison: ScreenshotsComparisionResult) =
@@ -161,7 +147,7 @@ class ExecutionReporter {
       .mkString("\n")
   }
 
-  private def generateScreenshotsTableBody(
+    private def generateScreenshotsTableBody(
       comparision: ScreenshotsComparisionResult,
       showOnlyFailingTestsInReports: Boolean
   ): String = {

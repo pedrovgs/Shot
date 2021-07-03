@@ -1,3 +1,14 @@
+package com.karumi.shot.templates
+
+object VerificationIndexTemplate {
+  def verificationIndexTemplate(
+      title: String,
+      summaryResult: String,
+      summaryTableBody: String,
+      screenshotsTableBody: String
+  ): String = {
+    // language=HTML
+    s"""
 <!doctype html>
 <html>
 <head>
@@ -19,7 +30,7 @@
 <body>
 <nav>
     <div class="nav-wrapper indigo darken-3">
-        <a href="#" class="brand-logo left">${title}</a>
+        <a href="#" class="brand-logo left">$title</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
             <li><a href="https://github.com/karumi/shot">Shot Documentation</a></li>
         </ul>
@@ -29,7 +40,7 @@
     <div class="section">
         <table class="highlight responsive-table">
             <thead>
-            <h5 class="indigo-text darken-3">Shot verification results: ${summaryResult}</h5>
+            <h5 class="indigo-text darken-3">Shot verification results: $summaryResult</h5>
             <tr>
                 <th>Result</th>
                 <th>Test name</th>
@@ -37,7 +48,7 @@
             </tr>
             </thead>
             <tbody>
-            ${summaryTableBody}
+            $summaryTableBody
             </tbody>
         </table>
     </div>
@@ -54,7 +65,7 @@
             </tr>
             </thead>
             <tbody>
-            ${screenshotsTableBody}
+            $screenshotsTableBody
             </tbody>
         </table>
     </div>
@@ -95,3 +106,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 </body>
 </html>
+"""
+  }
+}
