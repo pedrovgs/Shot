@@ -65,8 +65,8 @@ class ExecutionReporter {
       s"$numberOfTests screenshot tests recorded."
     val summaryTableBody = generateRecordSummaryTableBody(screenshots)
     recordIndexTemplate(
-      title            = title,
-      summaryResult    = summaryResults,
+      title = title,
+      summaryResult = summaryResults,
       summaryTableBody = summaryTableBody
     )
   }
@@ -104,9 +104,9 @@ class ExecutionReporter {
     val screenshotsTableBody =
       generateScreenshotsTableBody(comparision, showOnlyFailingTestsInReports)
     verificationIndexTemplate(
-      title                = title,
-      summaryResult        = summaryResults,
-      summaryTableBody     = summaryTableBody,
+      title = title,
+      summaryResult = summaryResults,
+      summaryTableBody = summaryTableBody,
       screenshotsTableBody = screenshotsTableBody
     )
   }
@@ -147,7 +147,7 @@ class ExecutionReporter {
       .mkString("\n")
   }
 
-    private def generateScreenshotsTableBody(
+  private def generateScreenshotsTableBody(
       comparision: ScreenshotsComparisionResult,
       showOnlyFailingTestsInReports: Boolean
   ): String = {
