@@ -25,6 +25,7 @@ import org.gradle.api.artifacts.DependencySet
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.{Plugin, Project}
 
+import scala.util.Try
 class ShotPlugin extends Plugin[Project] {
 
   private val console = new Console
@@ -182,7 +183,7 @@ class ShotPlugin extends Plugin[Project] {
       task.appId = appId
     }
 
-    if (extension.runInstrumentation) {
+    if (runInstrumentation(project, extension)) {
       executeScreenshot.configure { task =>
         task.dependsOn(instrumentationTaskName)
         task.dependsOn(downloadScreenshots)
@@ -217,6 +218,20 @@ class ShotPlugin extends Plugin[Project] {
       .configure { config =>
         config.extendsFrom(shotConfig)
       }
+  }
+
+  private def runInstrumentation(project: Project, extension: ShotExtension): Boolean = {
+    val property = project.findProperty("runInstrumentation").asInstanceOf[String]
+
+    if (property != null) {
+      if (Try(property.toBoolean).getOrElse(null) == null) {
+        throw ShotException("runInstrumentation value must be true|false")
+      }
+
+      return property.toBoolean
+    }
+
+    extension.runInstrumentation
   }
 
   private def isAnAndroidLibrary(project: Project): Boolean =
