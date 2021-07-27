@@ -29,7 +29,7 @@ import com.karumi.shot.compose.ComposeScreenshotRunner
 import com.karumi.shot.compose.ScreenshotMetadata
 import java.lang.IllegalStateException
 
-interface ScreenshotTest {
+interface ScreenshotTest : FocusCleaner {
 
     private val context: Context get() = getInstrumentation().targetContext
 
@@ -55,6 +55,7 @@ interface ScreenshotTest {
         val view = activity.findViewById<View>(android.R.id.content)
 
         if (heightInPx == null && widthInPx == null) {
+            setFocusOnTargetView(view)
             disableFlakyComponentsAndWaitForIdle(view)
             takeActivitySnapshot(activity, name)
         } else {
@@ -92,6 +93,7 @@ interface ScreenshotTest {
     ) = compareScreenshot(view = holder.itemView, heightInPx = heightInPx, widthInPx = widthInPx, name = name)
 
     fun compareScreenshot(view: View, heightInPx: Int? = null, widthInPx: Int? = null, name: String? = null) {
+        setFocusOnTargetView(view)
         disableFlakyComponentsAndWaitForIdle(view)
 
         val context = getInstrumentation().targetContext
