@@ -11,9 +11,10 @@ class ShotExtension(
     @BeanProperty var runInstrumentation: Boolean,
     @BeanProperty var useComposer: Boolean,
     @BeanProperty var tolerance: Double,
-    @BeanProperty var showOnlyFailingTestsInReports: Boolean
+    @BeanProperty var showOnlyFailingTestsInReports: Boolean,
+    @BeanProperty var applicationId: String
 ) {
 
-  def this() = this(true, false, Config.defaultTolerance, false)
+  def this() = this(true, false, Config.defaultTolerance, false, "")
 
 }

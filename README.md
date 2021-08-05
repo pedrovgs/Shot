@@ -140,6 +140,16 @@ android {
     // ...
 ```
 
+**If you are using AGP 7.X in your Android library you may need to configure the applicationId as part of the Shot extension configuration as follows:**
+
+```groovy
+shot {
+  applicationId = "com.myapp"
+}
+```
+
+AGP introduced a bug in 7.0.1-alpha4 we are not able to fix without this workaround for now. In the future, once AGP fixes the bug, we will remove this extension property.
+
 Be careful and do not use the same id you are using for any other of the installed apps.
 
 Now you are ready to use the ``ScreenshotTest`` interface from your tests:
