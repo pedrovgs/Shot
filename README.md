@@ -178,6 +178,20 @@ You can find a complete example in this repository under the folder named ``shot
 
 Now you are ready to record and verify your screenshot tests!
 
+## Using shot on API 28+
+If you want to use Shot on devices running API >= 28, you will have to enable access to non-SDK interfaces.  
+Execute the following commands:  
+
+For Android 9 (API level 28)
+```shell
+adb shell settings put global hidden_api_policy_pre_p_apps 1
+adb shell settings put global hidden_api_policy_p_apps 1
+```
+For Android 10 (API level 29) or higher
+```shell
+adb shell settings put global hidden_api_policy 1
+```
+
 ## Recording tests
 
 You can record your screenshot tests executing this command:
