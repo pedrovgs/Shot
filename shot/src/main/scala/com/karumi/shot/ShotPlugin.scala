@@ -95,14 +95,27 @@ class ShotPlugin extends Plugin[Project] {
   ) = {
     val flavor = variant.getMergedFlavor
     checkIfApplicationIdIsConfigured(project, flavor)
-    val completeAppId = composeCompleteAppId(variant)
+    val completeAppId = composeCompleteAppId(project, variant)
     val appTestId =
       Option(flavor.getTestApplicationId).getOrElse(completeAppId)
     addTasksFor(project, variant.getFlavorName, variant.getBuildType, appTestId, baseTask)
   }
 
-  private def composeCompleteAppId(variant: BaseVariant) =
-    variant.getApplicationId + ".test"
+  private def composeCompleteAppId(project: Project, variant: BaseVariant): String = {
+    val appId = try {
+      variant.getApplicationId
+    } catch {
+      case _: Throwable =>
+        console.showWarning("Error found trying to get applicationId from library module. We will use the extension applicationId param as a workaround.")
+        console.showWarning("More information about this AGP7.0.1 bug can be found here: https://github.com/Karumi/Shot/issues/247")
+        val extension = project.getExtensions.getByType[ShotExtension](classOf[ShotExtension])
+        val extensionAppIdValue = extension.applicationId
+        console.showWarning(s"Extension applicationId value read = $extensionAppIdValue")
+        extensionAppIdValue
+    }
+    appId + ".test"
+  }
+
 
   private def checkIfApplicationIdIsConfigured(project: Project, flavor: ProductFlavor) =
     if (isAnAndroidLibrary(project) && flavor.getTestApplicationId == null) {

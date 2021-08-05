@@ -42,6 +42,9 @@ jobs:
       - name: Execute screenshot tests for shot-consumer-flavors blue flavor
         run: ./gradlew blueCustomBuildTypeExecuteScreenshotTests
         working-directory: shot-consumer-flavors
+      - name: Execute screenshot tests for shot-consumer-compose
+        run: ./gradlew executeScreenshotTests
+        working-directory: shot-consumer-library
       - uses: actions/upload-artifact@v2
         if: always()
         with:
