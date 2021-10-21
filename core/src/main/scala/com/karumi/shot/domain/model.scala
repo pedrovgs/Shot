@@ -20,6 +20,7 @@ object Config {
   val androidDependency: FilePath =
     s"$androidDependencyGroup:$androidDependencyName:$androidDependencyVersion"
 
+  @Deprecated
   def screenshotsFolderName(flavor: String, buildType: String): FilePath =
     if (flavor.isEmpty) {
       s"/screenshots/$buildType/"
@@ -27,15 +28,19 @@ object Config {
       s"/screenshots/$flavor/$buildType/"
     }
 
+  @Deprecated
   def pulledScreenshotsFolder(flavor: String, buildType: String): FilePath =
     screenshotsFolderName(flavor, buildType) + "screenshots-default/"
 
+  @Deprecated
   def pulledComposeScreenshotsFolder(flavor: String, buildType: String): FilePath =
     screenshotsFolderName(flavor, buildType) + "screenshots-compose-default/"
 
+  @Deprecated
   def metadataFileName(flavor: String, buildType: String): FilePath =
     pulledScreenshotsFolder(flavor, buildType) + "metadata.xml"
 
+  @Deprecated
   def composeMetadataFileName(flavor: String, buildType: String): FilePath =
     pulledComposeScreenshotsFolder(flavor, buildType) + "metadata.json"
 
@@ -50,11 +55,14 @@ object Config {
 
   val defaultPackageTestApkTask: String = "packageDebugAndroidTest"
 
+  @Deprecated
   def reportFolder(flavor: String, buildType: String): String = "/reports/shot"
 
+  @Deprecated
   def verificationReportFolder(flavor: String, buildType: String): String =
     reportFolder(flavor, buildType) + "/verification"
 
+  @Deprecated
   def recordingReportFolder(flavor: String, buildType: String): String =
     reportFolder(flavor, buildType) + "/record"
 
