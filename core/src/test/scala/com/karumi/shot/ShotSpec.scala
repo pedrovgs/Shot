@@ -2,13 +2,9 @@ package com.karumi.shot
 
 import com.karumi.shot.android.Adb
 import com.karumi.shot.domain.model.AppId
-import com.karumi.shot.mothers.{AppIdMother, BuildTypeMother, ProjectNameMother}
+import com.karumi.shot.mothers.{AppIdMother, ProjectFolderMother, ProjectNameMother}
 import com.karumi.shot.reports.{ConsoleReporter, ExecutionReporter}
-import com.karumi.shot.screenshots.{
-  ScreenshotsComparator,
-  ScreenshotsDiffGenerator,
-  ScreenshotsSaver
-}
+import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsDiffGenerator, ScreenshotsSaver}
 import com.karumi.shot.system.EnvVars
 import com.karumi.shot.ui.Console
 import org.scalamock.scalatest.MockFactory
@@ -64,16 +60,15 @@ class ShotSpec
   }
 
   it should "pull the screenshots using the project metadata folder and the app id" in {
-    val appId         = AppIdMother.anyAppId
-    val device        = "emulator-5554"
-    val projectFolder = ProjectFolderMother.anyProjectFolder
+    val appId  = AppIdMother.anyAppId
+    val device = "emulator-5554"
 
     (adb.devices _).expects().returns(List(device))
     (envVars.androidSerial _).expects().returns(None)
 
     (console.show _).expects(*)
     (adb.pullScreenshots _)
-      .expects(device, "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/", appId)
+      .expects(device, "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/", appId)
     (files.rename _)
       .expects(
         "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/screenshots-default/metadata.xml",
@@ -88,10 +83,8 @@ class ShotSpec
       .once()
 
     shot.downloadScreenshots(
-      projectFolder,
-      BuildTypeMother.anyFlavor,
-      BuildTypeMother.anyBuildType,
-      appId
+      appId,
+      ProjectFolderMother.anyShotFolder
     )
   }
 
@@ -117,10 +110,9 @@ class ShotSpec
   }
 
   it should "pull the screenshots using the project metadata folder and the app id from the specified ANDROID_SERIAL env var" in {
-    val appId         = AppIdMother.anyAppId
-    val device1       = "emulator-5554"
-    val device2       = "emulator-5556"
-    val projectFolder = ProjectFolderMother.anyProjectFolder
+    val appId   = AppIdMother.anyAppId
+    val device1 = "emulator-5554"
+    val device2 = "emulator-5556"
 
     (adb.devices _).expects().returns(List(device1, device2))
     (envVars.androidSerial _).expects().returns(Some(device2))
@@ -139,10 +131,8 @@ class ShotSpec
       )
 
     shot.downloadScreenshots(
-      projectFolder,
-      BuildTypeMother.anyFlavor,
-      BuildTypeMother.anyBuildType,
-      appId
+      appId,
+      ProjectFolderMother.anyShotFolder
     )
   }
 
@@ -161,12 +151,7 @@ class ShotSpec
   }
 
   it should "show a warning message if we couldn't find the compose screenshots' metadata during the verification proces" in {
-    val appId         = AppIdMother.anyAppId
-    val projectName   = ProjectNameMother.anyProjectName
-    val buildFolder   = ProjectFolderMother.anyBuildFolder
-    val projectFolder = ProjectFolderMother.anyProjectFolder
-    val flavor        = BuildTypeMother.anyFlavor
-    val buildType     = BuildTypeMother.anyBuildType
+    val appId = AppIdMother.anyAppId
 
     (files.listFilesInFolder _)
       .expects(*)
@@ -178,11 +163,8 @@ class ShotSpec
 
     shot.verifyScreenshots(
       appId,
-      buildFolder,
-      projectFolder,
-      flavor,
-      buildType,
-      projectName,
+      ProjectFolderMother.anyShotFolder,
+      ProjectNameMother.anyProjectName,
       shouldPrintBase64Error = false,
       0d,
       showOnlyFailingTestsInReports = false
@@ -190,12 +172,7 @@ class ShotSpec
   }
 
   it should "show a warning message if we couldn't find the compose screenshots' metadata during the record process" in {
-    val appId         = AppIdMother.anyAppId
-    val projectName   = ProjectNameMother.anyProjectName
-    val buildFolder   = ProjectFolderMother.anyBuildFolder
-    val projectFolder = ProjectFolderMother.anyProjectFolder
-    val flavor        = BuildTypeMother.anyFlavor
-    val buildType     = BuildTypeMother.anyBuildType
+    val appId = AppIdMother.anyAppId
 
     (files.listFilesInFolder _)
       .expects(*)
@@ -205,6 +182,8 @@ class ShotSpec
       "🤔 We couldn't find any screenshot. Did you configure Shot properly and added your tests to your project? https://github.com/Karumi/Shot/#getting-started"
     )
 
-    shot.recordScreenshots(appId, buildFolder, projectFolder, projectName, flavor, buildType)
+    shot.recordScreenshots(appId,
+                           ProjectFolderMother.anyShotFolder,
+                           ProjectNameMother.anyProjectName)
   }
 }

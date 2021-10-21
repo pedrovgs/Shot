@@ -1,30 +1,19 @@
 package com.karumi.shot.screenshots
 
 import java.io.File
-
-import com.karumi.shot.domain.{
-  Config,
-  DifferentImageDimensions,
-  DifferentScreenshots,
-  Dimension,
-  Screenshot,
-  ScreenshotNotFound,
-  ScreenshotsComparisionResult
-}
-import com.karumi.shot.domain.model.{Folder, ScreenshotsSuite}
+import com.karumi.shot.domain.{Config, DifferentImageDimensions, DifferentScreenshots, Dimension, Screenshot, ScreenshotNotFound, ScreenshotsComparisionResult, ShotFolder}
+import com.karumi.shot.domain.model.{FilePath, Folder, ScreenshotsSuite}
 import com.sksamuel.scrimage.Image
 import org.apache.commons.io.FileUtils
 
 class ScreenshotsSaver {
 
   def saveRecordedScreenshots(
-      projectFolder: Folder,
-      flavor: String,
-      buildType: String,
+      to:FilePath,
       screenshots: ScreenshotsSuite
   ) = {
-    deleteOldScreenshots(projectFolder, flavor, buildType)
-    saveScreenshots(screenshots, projectFolder + Config.screenshotsFolderName(flavor, buildType))
+    deleteFile(to)
+    saveScreenshots(screenshots, to)
   }
 
   def saveTemporalScreenshots(
@@ -39,15 +28,11 @@ class ScreenshotsSaver {
   }
 
   def copyRecordedScreenshotsToTheReportFolder(
-      projectFolder: Folder,
-      flavor: String,
-      buildType: String,
-      destinyFolder: Folder
+      from:FilePath,
+      to:FilePath
   ) = {
-    val recordedScreenshotsFolder = projectFolder + Config
-      .screenshotsFolderName(flavor, buildType)
-    FileUtils.copyDirectory(new File(recordedScreenshotsFolder), new File(destinyFolder))
-    deleteFile(destinyFolder)
+    FileUtils.copyDirectory(new File(from), new File(to))
+    deleteFile(to)
   }
 
   def copyOnlyFailingRecordedScreenshotsToTheReportFolder(
@@ -72,19 +57,12 @@ class ScreenshotsSaver {
   }
 
   def getScreenshotDimension(
-      projectFolder: String,
-      flavor: String,
-      buildType: String,
+      shotFolder: ShotFolder,
       screenshot: Screenshot
   ): Dimension = {
-    val screenshotPath =
-      projectFolder + Config.pulledScreenshotsFolder(flavor, buildType) + screenshot.name + ".png"
+    val screenshotPath = shotFolder.screenshotsFolder() + screenshot.name + ".png"
     val image = Image.fromFile(new File(screenshotPath))
     Dimension(image.width, image.height)
-  }
-
-  private def deleteOldScreenshots(projectFolder: Folder, flavor: String, buildType: String) = {
-    deleteFile(projectFolder + Config.screenshotsFolderName(flavor, buildType))
   }
 
   private def deleteOldTemporalScreenshots(projectName: String): Unit = {
@@ -103,7 +81,7 @@ class ScreenshotsSaver {
     if (!screenshotsFolder.exists()) {
       screenshotsFolder.mkdirs()
     }
-    screenshots.par.foreach { screenshot =>
+    screenshots.foreach { screenshot =>
       val outputFile = new File(folder + screenshot.fileName)
       if (!outputFile.exists()) {
         outputFile.createNewFile()

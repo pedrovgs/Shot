@@ -1,6 +1,5 @@
 package com.karumi.shot.domain
 
-import com.karumi.shot.mothers.BuildTypeMother
 import org.scalatest.flatspec._
 import org.scalatest.matchers._
 
@@ -14,29 +13,18 @@ class ConfigSpec extends AnyFlatSpec with should.Matchers {
     Config.androidDependencyMode shouldBe "androidTestImplementation"
   }
 
-  it should "save the screenshots into the screenshots folder" in {
-    Config.screenshotsFolderName(
-      BuildTypeMother.anyFlavor,
-      BuildTypeMother.anyBuildType
-    ) shouldBe s"/screenshots/${BuildTypeMother.anyFlavor}/${BuildTypeMother.anyBuildType}/"
-  }
-
-  it should "point at the temporal screenshots folder" in {
-    Config.pulledScreenshotsFolder(
-      BuildTypeMother.anyFlavor,
-      BuildTypeMother.anyBuildType
-    ) shouldBe s"/screenshots/${BuildTypeMother.anyFlavor}/${BuildTypeMother.anyBuildType}/screenshots-default/"
-  }
-
-  it should "point at the metadata folder" in {
-    Config.metadataFileName(
-      BuildTypeMother.anyFlavor,
-      BuildTypeMother.anyBuildType
-    ) shouldBe s"/screenshots/${BuildTypeMother.anyFlavor}/${BuildTypeMother.anyBuildType}/screenshots-default/metadata.xml"
-  }
-
   it should "point at the tmp folder" in {
     Config.screenshotsTemporalRootPath shouldBe "/tmp/shot/screenshot/"
+  }
+
+  it should "have instrumentation test task with flavor" in {
+    Config.defaultInstrumentationTestTask(Some("green"), "debug") shouldBe "connectedGreenDebugAndroidTest"
+    Config.composerInstrumentationTestTask(Some("green"), "debug") shouldBe "testGreenDebugComposer"
+  }
+
+  it should "have instrumentation test task without flavor" in {
+    Config.defaultInstrumentationTestTask(None, "debug") shouldBe "connectedDebugAndroidTest"
+    Config.composerInstrumentationTestTask(None, "debug") shouldBe "testDebugComposer"
   }
 
 }

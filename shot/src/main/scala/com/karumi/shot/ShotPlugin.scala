@@ -8,18 +8,9 @@ import com.karumi.shot.base64.Base64Encoder
 import com.karumi.shot.domain.Config
 import com.karumi.shot.exceptions.ShotException
 import com.karumi.shot.reports.{ConsoleReporter, ExecutionReporter}
-import com.karumi.shot.screenshots.{
-  ScreenshotsComparator,
-  ScreenshotsDiffGenerator,
-  ScreenshotsSaver
-}
+import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsDiffGenerator, ScreenshotsSaver}
 import com.karumi.shot.system.EnvVars
-import com.karumi.shot.tasks.{
-  DownloadScreenshotsTask,
-  ExecuteScreenshotTests,
-  ExecuteScreenshotTestsForEveryFlavor,
-  RemoveScreenshotsTask
-}
+import com.karumi.shot.tasks.{DownloadScreenshotsTask, ExecuteScreenshotTests, ExecuteScreenshotTestsForEveryFlavor, RemoveScreenshotsTask}
 import com.karumi.shot.ui.Console
 import org.gradle.api.artifacts.DependencySet
 import org.gradle.api.tasks.TaskProvider
@@ -96,9 +87,9 @@ class ShotPlugin extends Plugin[Project] {
     val flavor = variant.getMergedFlavor
     checkIfApplicationIdIsConfigured(project, flavor)
     val completeAppId = composeCompleteAppId(project, variant)
-    val appTestId =
-      Option(flavor.getTestApplicationId).getOrElse(completeAppId)
-    addTasksFor(project, variant.getFlavorName, variant.getBuildType, appTestId, baseTask)
+    val appTestId = Option(flavor.getTestApplicationId).getOrElse(completeAppId)
+    val flavorName = if (variant.getFlavorName.nonEmpty) Some(variant.getFlavorName) else None
+    addTasksFor(project, flavorName, variant.getBuildType, appTestId, baseTask)
   }
 
   private def composeCompleteAppId(project: Project, variant: BaseVariant): String = {
@@ -135,13 +126,12 @@ class ShotPlugin extends Plugin[Project] {
 
   private def addTasksFor(
       project: Project,
-      flavor: String,
+      flavor: Option[String],
       buildType: BuildType,
       appId: String,
       baseTask: TaskProvider[ExecuteScreenshotTestsForEveryFlavor]
   ): Unit = {
-    val extension =
-      project.getExtensions.getByType[ShotExtension](classOf[ShotExtension])
+    val extension = project.getExtensions.getByType[ShotExtension](classOf[ShotExtension])
     val instrumentationTaskName = if (extension.useComposer) {
       Config.composerInstrumentationTestTask(flavor, buildType.getName)
     } else {

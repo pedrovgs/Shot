@@ -12,28 +12,23 @@ class ExecutionReporter {
   def generateRecordReport(
       appId: AppId,
       screenshots: ScreenshotsSuite,
-      buildFolder: Folder,
-      flavor: String,
-      buildType: String
+      shotFolder: ShotFolder
   ) = {
     val reportFileContents = populateRecordTemplate(appId, screenshots)
-    resetVerificationReport(flavor, buildType)
-    val reportFolder = buildFolder + Config.recordingReportFolder(flavor, buildType) + "/"
+    resetVerificationReport(shotFolder)
+    val reportFolder = shotFolder.recordingReportFolder()
     writeReport(reportFileContents, reportFolder)
   }
 
   def generateVerificationReport(
       appId: AppId,
       comparision: ScreenshotsComparisionResult,
-      buildFolder: Folder,
-      flavor: String,
-      buildType: String,
+      shotFolder: ShotFolder,
       showOnlyFailingTestsInReports: Boolean = false
   ) = {
-    val reportFileContents =
-      populateVerificationTemplate(appId, comparision, showOnlyFailingTestsInReports)
-    resetVerificationReport(flavor, buildType)
-    val reportFolder = buildFolder + Config.verificationReportFolder(flavor, buildType) + "/"
+    val reportFileContents = populateVerificationTemplate(appId, comparision, showOnlyFailingTestsInReports)
+    resetVerificationReport(shotFolder)
+    val reportFolder = shotFolder.verificationReportFolder()
     writeReport(reportFileContents, reportFolder)
   }
 
@@ -48,8 +43,8 @@ class ExecutionReporter {
     writer.close()
   }
 
-  private def resetVerificationReport(flavor: String, buildType: String) = {
-    val file = new File(Config.verificationReportFolder(flavor, buildType) + "/index.html")
+  private def resetVerificationReport(shotFolder: ShotFolder) = {
+    val file = new File(shotFolder.reportFolder() + "index.html")
     if (file.exists()) {
       file.delete()
     }
