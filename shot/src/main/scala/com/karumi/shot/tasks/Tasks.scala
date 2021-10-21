@@ -38,7 +38,8 @@ abstract class ShotTask extends DefaultTask {
       project.getProjectDir.getAbsolutePath,
       project.getBuildDir.getAbsolutePath,
       buildType.getName,
-      flavor
+      flavor,
+      if (project.hasProperty("directorySuffix")) Some(project.property("directorySuffix").toString) else None
     )
   }
 

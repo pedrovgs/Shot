@@ -71,14 +71,14 @@ class ShotSpec
       .expects(device, "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/", appId)
     (files.rename _)
       .expects(
-        "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/screenshots-default/metadata.xml",
-        "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/screenshots-default/metadata.xml_emulator-5554"
+        "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/screenshots-default/metadata.xml",
+        "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/screenshots-default/metadata.xml_emulator-5554"
       )
       .once()
     (files.rename _)
       .expects(
-        "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/screenshots-compose-default/metadata.json",
-        "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/screenshots-compose-default/metadata.json_emulator-5554"
+        "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/screenshots-compose-default/metadata.json",
+        "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/screenshots-compose-default/metadata.json_emulator-5554"
       )
       .once()
 
@@ -119,15 +119,15 @@ class ShotSpec
 
     (console.show _).expects(*)
     (adb.pullScreenshots _)
-      .expects(device2, "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/", appId)
+      .expects(device2, "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/", appId)
     (files.rename _).expects(
-      "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/screenshots-default/metadata.xml",
-      "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/screenshots-default/metadata.xml_emulator-5556"
+      "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/screenshots-default/metadata.xml",
+      "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/screenshots-default/metadata.xml_emulator-5556"
     )
     (files.rename _)
       .expects(
-        "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/screenshots-compose-default/metadata.json",
-        "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/screenshots-compose-default/metadata.json_emulator-5556"
+        "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/screenshots-compose-default/metadata.json",
+        "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/screenshots-compose-default/metadata.json_emulator-5556"
       )
 
     shot.downloadScreenshots(

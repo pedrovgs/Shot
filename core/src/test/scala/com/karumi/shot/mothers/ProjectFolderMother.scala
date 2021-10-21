@@ -8,10 +8,12 @@ object ProjectFolderMother {
   val anyBuildFolder     = "/User/pedro/projects/KarumiApp/app/build"
   val anyBuildType       = "debug"
   val anyFlavor          = "green"
+  val anyDirectorySuffix = "Api26"
 
   val anyShotFolder: ShotFolder = ShotFolder(anyProjectFolder,
                                              anyBuildFolder,
                                              anyBuildType,
-                                             Some(anyFlavor))
+                                             Some(anyFlavor),
+                                             Some(anyDirectorySuffix))
 
 }
