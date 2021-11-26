@@ -256,7 +256,7 @@ class Shot(
       adb.pullScreenshots(device, screenshotsFolder, appId)
 
       extractPicturesFromBundle(projectFolder + Config.pulledScreenshotsFolder(flavor, buildType))
-      renameMetadataFile(projectFolder, device, Config.metadataFileName(flavor, buildType))
+      renameMetadataFile(projectFolder, device, Config.metadataFilePath(flavor, buildType))
       renameMetadataFile(projectFolder, device, Config.composeMetadataFileName(flavor, buildType))
     }
 
@@ -281,7 +281,7 @@ class Shot(
     if (folder.exists()) {
       val filesInScreenshotFolder = folder.listFiles
       val metadataFiles = filesInScreenshotFolder.filter(file =>
-        file.getAbsolutePath.contains(Config.metadataFileName(flavor, buildType))
+        file.getAbsolutePath.contains(Config.metadataFileName())
       )
       val screenshotSuite = metadataFiles.flatMap { metadataFilePath =>
         val metadataFileContent =

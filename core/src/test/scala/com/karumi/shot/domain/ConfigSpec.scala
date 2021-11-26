@@ -29,7 +29,7 @@ class ConfigSpec extends AnyFlatSpec with should.Matchers {
   }
 
   it should "point at the metadata folder" in {
-    Config.metadataFileName(
+    Config.metadataFilePath(
       BuildTypeMother.anyFlavor,
       BuildTypeMother.anyBuildType
     ) shouldBe s"/screenshots/${BuildTypeMother.anyFlavor}/${BuildTypeMother.anyBuildType}/screenshots-default/metadata.xml"

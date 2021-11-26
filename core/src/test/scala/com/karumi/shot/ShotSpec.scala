@@ -68,11 +68,11 @@ class ShotSpec
     val projectFolder = ProjectFolderMother.anyProjectFolder
     val expectedScreenshotsFolder = projectFolder + Config
       .screenshotsFolderName(BuildTypeMother.anyFlavor, BuildTypeMother.anyBuildType)
-    val expectedOriginalMetadataFile = projectFolder + Config.metadataFileName(
+    val expectedOriginalMetadataFile = projectFolder + Config.metadataFilePath(
       BuildTypeMother.anyFlavor,
       BuildTypeMother.anyBuildType
     )
-    val expectedRenamedMetadataFile = projectFolder + Config.metadataFileName(
+    val expectedRenamedMetadataFile = projectFolder + Config.metadataFilePath(
       BuildTypeMother.anyFlavor,
       BuildTypeMother.anyBuildType
     ) + "_" + device
@@ -131,11 +131,11 @@ class ShotSpec
     val projectFolder = ProjectFolderMother.anyProjectFolder
     val expectedScreenshotsFolder = projectFolder + Config
       .screenshotsFolderName(BuildTypeMother.anyFlavor, BuildTypeMother.anyBuildType)
-    val expectedOriginalMetadataFile = projectFolder + Config.metadataFileName(
+    val expectedOriginalMetadataFile = projectFolder + Config.metadataFilePath(
       BuildTypeMother.anyFlavor,
       BuildTypeMother.anyBuildType
     )
-    val expectedRenamedFile = projectFolder + Config.metadataFileName(
+    val expectedRenamedFile = projectFolder + Config.metadataFilePath(
       BuildTypeMother.anyFlavor,
       BuildTypeMother.anyBuildType
     ) + "_" + device2
