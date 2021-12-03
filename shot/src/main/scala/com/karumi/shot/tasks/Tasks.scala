@@ -55,6 +55,7 @@ class ExecuteScreenshotTests extends ShotTask {
 
   @TaskAction
   def executeScreenshotTests(): Unit = {
+    val system = System.getProperty("os.name")
     val project = getProject
     val tolerance = project.getExtensions
       .getByType[ShotExtension](classOf[ShotExtension])
@@ -69,6 +70,7 @@ class ExecuteScreenshotTests extends ShotTask {
     val buildFolder   = project.getBuildDir.getAbsolutePath
     if (recordScreenshots) {
       shot.recordScreenshots(
+        system,
         appId,
         buildFolder,
         projectFolder,
@@ -78,6 +80,7 @@ class ExecuteScreenshotTests extends ShotTask {
       )
     } else {
       val result = shot.verifyScreenshots(
+        system,
         appId,
         buildFolder,
         projectFolder,

@@ -10,6 +10,7 @@ import scala.xml._
 object ScreenshotsSuiteXmlParser {
 
   def parseScreenshots(
+      os: String,
       xml: String,
       projectName: String,
       screenshotsFolder: Folder,
@@ -17,11 +18,12 @@ object ScreenshotsSuiteXmlParser {
   ): ScreenshotsSuite = {
     val xmlScreenshots = XML.loadString(xml) \ "screenshot"
     xmlScreenshots.map(
-      parseScreenshot(_, projectName, screenshotsFolder, temporalScreenshotsFolder)
+      parseScreenshot(os, _, projectName, screenshotsFolder, temporalScreenshotsFolder)
     )
   }
 
   private def parseScreenshot(
+      os: String,
       xmlNode: Node,
       projectName: String,
       screenshotsFolder: Folder,
@@ -30,7 +32,7 @@ object ScreenshotsSuiteXmlParser {
     val name                   = (xmlNode \ "name" head).text.trim
     val recordedScreenshotPath = screenshotsFolder + name + ".png"
     val temporalScreenshotPath =
-      Config.screenshotsTemporalRootPath + projectName + "/" + name + ".png"
+      Config.screenshotsTemporalRootPath(os) + projectName + "/" + name + ".png"
     val testClass      = (xmlNode \ "test_class" head).text.trim
     val testName       = (xmlNode \ "test_name" head).text.trim
     val tileWidth      = (xmlNode \ "tile_width" head).text.toInt

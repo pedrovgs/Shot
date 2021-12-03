@@ -7,6 +7,7 @@ import org.json4s.jackson.JsonMethods._
 
 object ScreenshotsComposeSuiteJsonParser {
   def parseScreenshots(
+      os: String,
       json: String,
       projectName: String,
       screenshotsFolder: Folder,
@@ -20,7 +21,7 @@ object ScreenshotsComposeSuiteJsonParser {
         name = name,
         recordedScreenshotPath = screenshotsFolder + name + ".png",
         temporalScreenshotPath =
-          Config.screenshotsTemporalRootPath + projectName + "/" + name + ".png",
+          Config.screenshotsTemporalRootPath(os) + projectName + "/" + name + ".png",
         testClass = screenshot.testClassName,
         testName = screenshot.testName,
         tilesDimension = Dimension(0, 0),

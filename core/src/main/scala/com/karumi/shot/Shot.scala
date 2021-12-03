@@ -45,6 +45,7 @@ class Shot(
   }
 
   def recordScreenshots(
+      os: String,
       appId: AppId,
       buildFolder: Folder,
       projectFolder: Folder,
@@ -55,9 +56,9 @@ class Shot(
     console.show("💾  Saving screenshots.")
     moveComposeScreenshotsToRegularScreenshotsFolder(projectFolder, flavor, buildType)
     val composeScreenshotSuite =
-      recordComposeScreenshots(buildFolder, projectFolder, projectName, flavor, buildType)
+      recordComposeScreenshots(os, buildFolder, projectFolder, projectName, flavor, buildType)
     val regularScreenshotSuite =
-      recordRegularScreenshots(buildFolder, projectFolder, projectName, flavor, buildType)
+      recordRegularScreenshots(os, buildFolder, projectFolder, projectName, flavor, buildType)
     if (regularScreenshotSuite.isEmpty && composeScreenshotSuite.isEmpty) {
       console.showWarning(
         "🤔 We couldn't find any screenshot. Did you configure Shot properly and added your tests to your project? https://github.com/Karumi/Shot/#getting-started"
@@ -78,6 +79,7 @@ class Shot(
   }
 
   def verifyScreenshots(
+      os: String,
       appId: AppId,
       buildFolder: Folder,
       projectFolder: Folder,
@@ -91,9 +93,9 @@ class Shot(
     console.show("🔎  Comparing screenshots with previous ones.")
     moveComposeScreenshotsToRegularScreenshotsFolder(projectFolder, flavor, buildType)
     val regularScreenshots =
-      readScreenshotsMetadata(projectFolder, flavor, buildType, projectName)
+      readScreenshotsMetadata(os, projectFolder, flavor, buildType, projectName)
     val composeScreenshots =
-      readComposeScreenshotsMetadata(projectFolder, flavor, buildType, projectName)
+      readComposeScreenshotsMetadata(os, projectFolder, flavor, buildType, projectName)
     if (regularScreenshots.isEmpty && composeScreenshots.isEmpty) {
       console.showWarning(
         "🤔 We couldn't find any screenshot. Did you configure Shot properly and added your tests to your project? https://github.com/Karumi/Shot/#getting-started"
@@ -104,6 +106,7 @@ class Shot(
       val newScreenshotsVerificationReportFolder = buildFolder + Config
         .verificationReportFolder(flavor, buildType) + "/images/"
       screenshotsSaver.saveTemporalScreenshots(
+        os,
         screenshots,
         projectName,
         newScreenshotsVerificationReportFolder
@@ -183,13 +186,14 @@ class Shot(
   }
 
   private def recordRegularScreenshots(
+      os: String,
       buildFolder: Folder,
       projectFolder: Folder,
       projectName: String,
       flavor: String,
       buildType: String
   ) = {
-    readScreenshotsMetadata(projectFolder, flavor, buildType, projectName)
+    readScreenshotsMetadata(os, projectFolder, flavor, buildType, projectName)
       .map { screenshots =>
         screenshotsSaver.saveRecordedScreenshots(projectFolder, flavor, buildType, screenshots)
         screenshotsSaver.copyRecordedScreenshotsToTheReportFolder(
@@ -204,13 +208,14 @@ class Shot(
   }
 
   private def recordComposeScreenshots(
+      os: String,
       buildFolder: Folder,
       projectFolder: Folder,
       projectName: String,
       flavor: String,
       buildType: String
   ) = {
-    readComposeScreenshotsMetadata(projectFolder, flavor, buildType, projectName).map {
+    readComposeScreenshotsMetadata(os, projectFolder, flavor, buildType, projectName).map {
       screenshots =>
         screenshotsSaver.saveRecordedScreenshots(projectFolder, flavor, buildType, screenshots)
         screenshotsSaver.copyRecordedScreenshotsToTheReportFolder(
@@ -271,6 +276,7 @@ class Shot(
   }
 
   private def readScreenshotsMetadata(
+      os: String,
       projectFolder: Folder,
       flavor: String,
       buildType: String,
@@ -287,6 +293,7 @@ class Shot(
         val metadataFileContent =
           files.read(metadataFilePath.getAbsolutePath)
         parseScreenshots(
+          os,
           metadataFileContent,
           projectName,
           projectFolder + Config.screenshotsFolderName(flavor, buildType),
@@ -306,6 +313,7 @@ class Shot(
   }
 
   private def readComposeScreenshotsMetadata(
+      os: String,
       projectFolder: Folder,
       flavor: String,
       buildType: String,
@@ -321,6 +329,7 @@ class Shot(
         val metadataFileContent =
           files.read(metadataFilePath.getAbsolutePath)
         ScreenshotsComposeSuiteJsonParser.parseScreenshots(
+          os,
           metadataFileContent,
           projectName,
           projectFolder + Config.screenshotsFolderName(flavor, buildType),

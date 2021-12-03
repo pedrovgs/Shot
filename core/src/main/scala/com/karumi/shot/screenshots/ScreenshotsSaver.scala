@@ -28,12 +28,13 @@ class ScreenshotsSaver {
   }
 
   def saveTemporalScreenshots(
+      os: String,
       screenshots: ScreenshotsSuite,
       projectName: String,
       reportFolder: String
   ) = {
-    deleteOldTemporalScreenshots(projectName)
-    saveScreenshots(screenshots, Config.screenshotsTemporalRootPath + projectName + "/")
+    deleteOldTemporalScreenshots(os, projectName)
+    saveScreenshots(screenshots, Config.screenshotsTemporalRootPath(os) + projectName + "/")
     deleteFile(reportFolder)
     saveScreenshots(screenshots, reportFolder)
   }
@@ -87,8 +88,8 @@ class ScreenshotsSaver {
     deleteFile(projectFolder + Config.screenshotsFolderName(flavor, buildType))
   }
 
-  private def deleteOldTemporalScreenshots(projectName: String): Unit = {
-    deleteFile(Config.screenshotsTemporalRootPath + projectName + "/")
+  private def deleteOldTemporalScreenshots(os: String, projectName: String): Unit = {
+    deleteFile(Config.screenshotsTemporalRootPath(os) + projectName + "/")
   }
 
   private def deleteFile(path: String): Unit = {

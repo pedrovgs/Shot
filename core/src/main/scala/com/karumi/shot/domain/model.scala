@@ -20,8 +20,6 @@ object Config {
   val androidDependency: FilePath =
     s"$androidDependencyGroup:$androidDependencyName:$androidDependencyVersion"
 
-  private val isWindows: Boolean = System.getProperty("os.name").startsWith("Windows")
-
   def screenshotsFolderName(flavor: String, buildType: String): FilePath =
     if (flavor.isEmpty) {
       s"/screenshots/$buildType/"
@@ -44,7 +42,8 @@ object Config {
     pulledComposeScreenshotsFolder(flavor, buildType) + "metadata.json"
 
   val androidPluginName: FilePath           = "com.android.application"
-  val screenshotsTemporalRootPath: FilePath = if (isWindows) {
+
+  def screenshotsTemporalRootPath(os: String): FilePath = if (os.startsWith("Windows")) {
     System.getenv("localappdata") + "\\Temp\\screenshots\\"
   } else {
     "/tmp/shot/screenshot/"

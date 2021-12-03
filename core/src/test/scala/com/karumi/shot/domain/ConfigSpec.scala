@@ -36,7 +36,11 @@ class ConfigSpec extends AnyFlatSpec with should.Matchers {
   }
 
   it should "point at the tmp folder" in {
-    Config.screenshotsTemporalRootPath shouldBe "/tmp/shot/screenshot/"
+    Config.screenshotsTemporalRootPath("Linux") shouldBe "/tmp/shot/screenshot/"
+  }
+
+  it should "point at the tmp windows' folder" in {
+    Config.screenshotsTemporalRootPath("Windows") endsWith  "\\Temp\\screenshots\\"
   }
 
 }

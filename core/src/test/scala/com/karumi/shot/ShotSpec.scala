@@ -3,19 +3,16 @@ package com.karumi.shot
 import com.karumi.shot.android.Adb
 import com.karumi.shot.domain.Config
 import com.karumi.shot.domain.model.AppId
-import com.karumi.shot.mothers.{AppIdMother, BuildTypeMother, ProjectNameMother}
+import com.karumi.shot.mothers.{AppIdMother, BuildTypeMother, ProjectNameMother, SystemMother}
 import com.karumi.shot.reports.{ConsoleReporter, ExecutionReporter}
-import com.karumi.shot.screenshots.{
-  ScreenshotsComparator,
-  ScreenshotsDiffGenerator,
-  ScreenshotsSaver
-}
+import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsDiffGenerator, ScreenshotsSaver}
 import com.karumi.shot.system.EnvVars
 import com.karumi.shot.ui.Console
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.BeforeAndAfter
 import org.scalatest.flatspec._
 import org.scalatest.matchers._
+
 import java.io.File
 import java.util
 
@@ -178,6 +175,7 @@ class ShotSpec
   }
 
   it should "show a warning message if we couldn't find the compose screenshots' metadata during the verification proces" in {
+    val os            = SystemMother.anySystem
     val appId         = AppIdMother.anyAppId
     val projectName   = ProjectNameMother.anyProjectName
     val buildFolder   = ProjectFolderMother.anyBuildFolder
@@ -193,6 +191,7 @@ class ShotSpec
     )
 
     shot.verifyScreenshots(
+      os,
       appId,
       buildFolder,
       projectFolder,
@@ -206,6 +205,7 @@ class ShotSpec
   }
 
   it should "show a warning message if we couldn't find the compose screenshots' metadata during the record process" in {
+    val os            = SystemMother.anySystem
     val appId         = AppIdMother.anyAppId
     val projectName   = ProjectNameMother.anyProjectName
     val buildFolder   = ProjectFolderMother.anyBuildFolder
@@ -220,6 +220,6 @@ class ShotSpec
       "🤔 We couldn't find any screenshot. Did you configure Shot properly and added your tests to your project? https://github.com/Karumi/Shot/#getting-started"
     )
 
-    shot.recordScreenshots(appId, buildFolder, projectFolder, projectName, flavor, buildType)
+    shot.recordScreenshots(os, appId, buildFolder, projectFolder, projectName, flavor, buildType)
   }
 }
