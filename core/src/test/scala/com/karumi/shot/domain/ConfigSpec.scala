@@ -35,6 +35,10 @@ class ConfigSpec extends AnyFlatSpec with should.Matchers {
     ) shouldBe s"/screenshots/${BuildTypeMother.anyFlavor}/${BuildTypeMother.anyBuildType}/screenshots-default/metadata.xml"
   }
 
+  it should "return metadata file name" in {
+    Config.metadataFileName() shouldBe "metadata.xml"
+  }
+
   it should "point at the tmp folder" in {
     Config.screenshotsTemporalRootPath("Linux") shouldBe "/tmp/shot/screenshot/"
   }
