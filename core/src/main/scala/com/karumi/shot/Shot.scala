@@ -46,7 +46,7 @@ class Shot(
   ): Unit = {
     console.show("💾  Saving screenshots.")
     moveComposeScreenshotsToRegularScreenshotsFolder(shotFolder)
-    val composeScreenshotSuite = recordComposeScreenshots(shotFolder, projectName)
+    val composeScreenshotSuite = recordComposeScreenshots(shotFolder)
     val regularScreenshotSuite = recordRegularScreenshots(shotFolder, projectName)
     if (regularScreenshotSuite.isEmpty && composeScreenshotSuite.isEmpty) {
       console.showWarning(
@@ -73,8 +73,8 @@ class Shot(
   ): ScreenshotsComparisionResult = {
     console.show("🔎  Comparing screenshots with previous ones.")
     moveComposeScreenshotsToRegularScreenshotsFolder(shotFolder)
-    val regularScreenshots = readScreenshotsMetadata(shotFolder, projectName)
-    val composeScreenshots = readComposeScreenshotsMetadata(projectName, shotFolder)
+    val regularScreenshots = readScreenshotsMetadata(shotFolder)
+    val composeScreenshots = readComposeScreenshotsMetadata(shotFolder)
     if (regularScreenshots.isEmpty && composeScreenshots.isEmpty) {
       console.showWarning(
         "🤔 We couldn't find any screenshot. Did you configure Shot properly and added your tests to your project? https://github.com/Karumi/Shot/#getting-started"
@@ -86,7 +86,8 @@ class Shot(
       screenshotsSaver.saveTemporalScreenshots(
         screenshots,
         projectName,
-        newScreenshotsVerificationReportFolder
+        newScreenshotsVerificationReportFolder,
+        shotFolder
       )
       val comparison = screenshotsComparator.compare(screenshots, tolerance)
       val updatedComparison = screenshotsDiffGenerator.generateDiffs(
@@ -154,7 +155,7 @@ class Shot(
   }
 
   private def recordRegularScreenshots(shotFolder: ShotFolder, projectName: String) = {
-    readScreenshotsMetadata(shotFolder, projectName)
+    readScreenshotsMetadata(shotFolder)
       .map { screenshots =>
         screenshotsSaver.saveRecordedScreenshots(shotFolder.screenshotsFolder(), screenshots)
         screenshotsSaver.copyRecordedScreenshotsToTheReportFolder(
@@ -166,10 +167,9 @@ class Shot(
   }
 
   private def recordComposeScreenshots(
-      shotFolder: ShotFolder,
-      projectName: String
+      shotFolder: ShotFolder
   ) = {
-    readComposeScreenshotsMetadata(projectName, shotFolder).map { screenshots =>
+    readComposeScreenshotsMetadata(shotFolder).map { screenshots =>
       screenshotsSaver.saveRecordedScreenshots(shotFolder.screenshotsFolder(), screenshots)
       screenshotsSaver.copyRecordedScreenshotsToTheReportFolder(
         shotFolder.screenshotsFolder(),
@@ -214,9 +214,8 @@ class Shot(
     }
 
   private def readScreenshotsMetadata(
-      shotFolder: ShotFolder,
-      projectName: String
-  ): Option[ScreenshotsSuite] = {
+      shotFolder: ShotFolder
+   ): Option[ScreenshotsSuite] = {
     val screenshotsFolder = shotFolder.pulledScreenshotsFolder()
     val folder            = new File(screenshotsFolder)
     if (folder.exists()) {
@@ -227,9 +226,9 @@ class Shot(
         val metadataFileContent = files.read(metadataFilePath.getAbsolutePath)
         parseScreenshots(
           metadataFileContent,
-          projectName,
           shotFolder.screenshotsFolder(),
-          shotFolder.pulledScreenshotsFolder()
+          shotFolder.pulledScreenshotsFolder(),
+          shotFolder.screenshotsTemporalBuildPath()
         )
       }
       val suite = screenshotSuite.par.map { screenshot =>
@@ -244,7 +243,6 @@ class Shot(
   }
 
   private def readComposeScreenshotsMetadata(
-      projectName: String,
       shotFolder: ShotFolder
   ): Option[ScreenshotsSuite] = {
     val screenshotsFolder = shotFolder.pulledScreenshotsFolder()
@@ -257,9 +255,9 @@ class Shot(
         val metadataFileContent = files.read(metadataFilePath.getAbsolutePath)
         ScreenshotsComposeSuiteJsonParser.parseScreenshots(
           metadataFileContent,
-          projectName,
           shotFolder.screenshotsFolder(),
-          shotFolder.pulledScreenshotsFolder()
+          shotFolder.pulledScreenshotsFolder(),
+          shotFolder.screenshotsTemporalBuildPath()
         )
       }
       val suite = screenshotSuite.map { screenshot =>

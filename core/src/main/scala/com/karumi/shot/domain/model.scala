@@ -21,7 +21,6 @@ object Config {
     s"$androidDependencyGroup:$androidDependencyName:$androidDependencyVersion"
 
   val androidPluginName: FilePath           = "com.android.application"
-  val screenshotsTemporalRootPath: FilePath = "/tmp/shot/screenshot/"
 
   def defaultInstrumentationTestTask(flavor: Option[String], buildType: String): String =
     s"connected${flavor.getOrElse("").capitalize}${buildType.capitalize}AndroidTest"

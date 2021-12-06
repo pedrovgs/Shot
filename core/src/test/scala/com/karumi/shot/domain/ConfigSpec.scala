@@ -13,10 +13,6 @@ class ConfigSpec extends AnyFlatSpec with should.Matchers {
     Config.androidDependencyMode shouldBe "androidTestImplementation"
   }
 
-  it should "point at the tmp folder" in {
-    Config.screenshotsTemporalRootPath shouldBe "/tmp/shot/screenshot/"
-  }
-
   it should "have instrumentation test task with flavor" in {
     Config.defaultInstrumentationTestTask(
       Some("green"),

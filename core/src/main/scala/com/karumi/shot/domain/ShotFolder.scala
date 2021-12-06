@@ -48,4 +48,5 @@ case class ShotFolder(
     s"${reportFolder()}record/"
   }
 
+  def screenshotsTemporalBuildPath(): FilePath = s"$buildFolderPath/tmp/shot/screenshot/"
 }
