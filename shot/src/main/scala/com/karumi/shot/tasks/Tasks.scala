@@ -36,7 +36,7 @@ abstract class ShotTask extends DefaultTask {
   protected val shotExtension: ShotExtension =
     getProject.getExtensions.findByType(classOf[ShotExtension])
 
-  protected def getShotFolder(): ShotFolder = {
+  protected def shotFolder: ShotFolder = {
     val project = getProject
     ShotFolder(
       project.getProjectDir.getAbsolutePath,
@@ -84,13 +84,13 @@ class ExecuteScreenshotTests extends ShotTask {
     if (recordScreenshots) {
       shot.recordScreenshots(
         appId,
-        getShotFolder(),
+        shotFolder,
         project.getName
       )
     } else {
       val result = shot.verifyScreenshots(
         appId,
-        getShotFolder(),
+        shotFolder,
         project.getName,
         printBase64,
         tolerance,
@@ -117,7 +117,7 @@ object DownloadScreenshotsTask {
 class DownloadScreenshotsTask extends ShotTask {
   @TaskAction
   def downloadScreenshots(): Unit = {
-    shot.downloadScreenshots(appId, getShotFolder())
+    shot.downloadScreenshots(appId, shotFolder)
   }
 }
 
