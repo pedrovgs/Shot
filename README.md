@@ -103,6 +103,9 @@ greenDebugRemoveScreenshotsBefore - Removes the screenshots recorded before the 
 greenDebugRemoveScreenshotsAfter - Removes the screenshots recorded after the tests execution from the Android device where the tests were executed for the build GreenDebug
 ```
 
+You can specify a directory suffix where screenshot & report will be saved (`{FLAVOR}/{BUILD_TYPE}/{DIRECTORY_SUFFIX}`) :  
+`./gradlew executeScreenshotTests -PdirectorySuffix=Api26`
+
 If for some reason you are running your tests on a different machine and you want to skip the instrumentation tests execution and just compare the sources remember you can use the following shot configuration:
 
 ```groovy

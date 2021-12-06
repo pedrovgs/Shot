@@ -20,43 +20,16 @@ object Config {
   val androidDependency: FilePath =
     s"$androidDependencyGroup:$androidDependencyName:$androidDependencyVersion"
 
-  def screenshotsFolderName(flavor: String, buildType: String): FilePath =
-    if (flavor.isEmpty) {
-      s"/screenshots/$buildType/"
-    } else {
-      s"/screenshots/$flavor/$buildType/"
-    }
-
-  def pulledScreenshotsFolder(flavor: String, buildType: String): FilePath =
-    screenshotsFolderName(flavor, buildType) + "screenshots-default/"
-
-  def pulledComposeScreenshotsFolder(flavor: String, buildType: String): FilePath =
-    screenshotsFolderName(flavor, buildType) + "screenshots-compose-default/"
-
-  def metadataFileName(flavor: String, buildType: String): FilePath =
-    pulledScreenshotsFolder(flavor, buildType) + "metadata.xml"
-
-  def composeMetadataFileName(flavor: String, buildType: String): FilePath =
-    pulledComposeScreenshotsFolder(flavor, buildType) + "metadata.json"
-
   val androidPluginName: FilePath           = "com.android.application"
   val screenshotsTemporalRootPath: FilePath = "/tmp/shot/screenshot/"
 
-  def defaultInstrumentationTestTask(flavor: String, buildType: String): String =
-    s"connected${flavor.capitalize}${buildType.capitalize}AndroidTest"
+  def defaultInstrumentationTestTask(flavor: Option[String], buildType: String): String =
+    s"connected${flavor.getOrElse("").capitalize}${buildType.capitalize}AndroidTest"
 
-  def composerInstrumentationTestTask(flavor: String, buildType: String) =
-    s"test${flavor.capitalize}${buildType.capitalize}Composer"
+  def composerInstrumentationTestTask(flavor: Option[String], buildType: String) =
+    s"test${flavor.getOrElse("").capitalize}${buildType.capitalize}Composer"
 
   val defaultPackageTestApkTask: String = "packageDebugAndroidTest"
-
-  def reportFolder(flavor: String, buildType: String): String = "/reports/shot"
-
-  def verificationReportFolder(flavor: String, buildType: String): String =
-    reportFolder(flavor, buildType) + "/verification"
-
-  def recordingReportFolder(flavor: String, buildType: String): String =
-    reportFolder(flavor, buildType) + "/record"
 
   val defaultTaskName: String = "executeScreenshotTests"
 }
