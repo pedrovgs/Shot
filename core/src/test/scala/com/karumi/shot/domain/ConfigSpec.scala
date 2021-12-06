@@ -6,7 +6,7 @@ import org.scalatest.matchers._
 class ConfigSpec extends AnyFlatSpec with should.Matchers {
 
   "Config" should "use the screenshot tests library implemented by Facebook" in {
-    Config.androidDependency shouldBe "com.karumi:shot-android:5.11.2"
+    Config.androidDependency shouldBe "com.karumi:shot-android:5.12.0"
   }
 
   it should "add the dependency using the androidTestImplementation mode" in {
