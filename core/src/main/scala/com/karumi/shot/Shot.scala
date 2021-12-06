@@ -1,8 +1,5 @@
 package com.karumi.shot
 
-import java.io.File
-import java.nio.file.Paths
-
 import com.karumi.shot.android.Adb
 import com.karumi.shot.domain._
 import com.karumi.shot.domain.model.{AppId, Folder, ScreenshotsSuite}
@@ -19,6 +16,9 @@ import com.karumi.shot.xml.ScreenshotsSuiteXmlParser._
 import org.apache.commons.io.FileUtils
 import org.tinyzip.TinyZip
 
+import java.io.File
+import java.nio.file.Paths
+
 class Shot(
     adb: Adb,
     files: Files,
@@ -34,79 +34,56 @@ class Shot(
     Adb.adbBinaryPath = adbPath
   }
 
-  def downloadScreenshots(
-      projectFolder: Folder,
-      flavor: String,
-      buildType: String,
-      appId: AppId
-  ): Unit = {
+  def downloadScreenshots(appId: AppId, shotFolder: ShotFolder): Unit = {
     console.show("⬇️  Pulling screenshots from your connected devices!")
-    pullScreenshots(projectFolder, appId, flavor, buildType)
+    pullScreenshots(appId, shotFolder)
   }
 
   def recordScreenshots(
-      os: String,
       appId: AppId,
-      buildFolder: Folder,
-      projectFolder: Folder,
-      projectName: String,
-      flavor: String,
-      buildType: String
+      shotFolder: ShotFolder,
+      projectName: String
   ): Unit = {
     console.show("💾  Saving screenshots.")
-    moveComposeScreenshotsToRegularScreenshotsFolder(projectFolder, flavor, buildType)
-    val composeScreenshotSuite =
-      recordComposeScreenshots(os, buildFolder, projectFolder, projectName, flavor, buildType)
-    val regularScreenshotSuite =
-      recordRegularScreenshots(os, buildFolder, projectFolder, projectName, flavor, buildType)
+    moveComposeScreenshotsToRegularScreenshotsFolder(shotFolder)
+    val composeScreenshotSuite = recordComposeScreenshots(shotFolder, projectName)
+    val regularScreenshotSuite = recordRegularScreenshots(shotFolder, projectName)
     if (regularScreenshotSuite.isEmpty && composeScreenshotSuite.isEmpty) {
       console.showWarning(
         "🤔 We couldn't find any screenshot. Did you configure Shot properly and added your tests to your project? https://github.com/Karumi/Shot/#getting-started"
       )
     } else {
       val screenshots = regularScreenshotSuite.get ++ composeScreenshotSuite.get
+      console.show("😃  Screenshots recorded and saved at: " + shotFolder.screenshotsFolder())
+      reporter.generateRecordReport(appId, screenshots, shotFolder)
       console.show(
-        "😃  Screenshots recorded and saved at: " + projectFolder + Config
-          .screenshotsFolderName(flavor, buildType)
+        "🤓  You can review the execution report here: " + shotFolder.reportFolder() + "index.html"
       )
-      reporter.generateRecordReport(appId, screenshots, buildFolder, flavor, buildType)
-      console.show(
-        "🤓  You can review the execution report here: " + buildFolder + Config
-          .recordingReportFolder(flavor, buildType) + "/index.html"
-      )
-      removeProjectTemporalScreenshotsFolder(projectFolder, flavor, buildType)
+      removeProjectTemporalScreenshotsFolder(shotFolder)
     }
   }
 
   def verifyScreenshots(
-      os: String,
       appId: AppId,
-      buildFolder: Folder,
-      projectFolder: Folder,
-      flavor: String,
-      buildType: String,
+      shotFolder: ShotFolder,
       projectName: String,
       shouldPrintBase64Error: Boolean,
       tolerance: Double,
       showOnlyFailingTestsInReports: Boolean
   ): ScreenshotsComparisionResult = {
     console.show("🔎  Comparing screenshots with previous ones.")
-    moveComposeScreenshotsToRegularScreenshotsFolder(projectFolder, flavor, buildType)
-    val regularScreenshots =
-      readScreenshotsMetadata(os, projectFolder, flavor, buildType, projectName)
-    val composeScreenshots =
-      readComposeScreenshotsMetadata(os, projectFolder, flavor, buildType, projectName)
+    moveComposeScreenshotsToRegularScreenshotsFolder(shotFolder)
+    val regularScreenshots = readScreenshotsMetadata(shotFolder, projectName)
+    val composeScreenshots = readComposeScreenshotsMetadata(projectName, shotFolder)
     if (regularScreenshots.isEmpty && composeScreenshots.isEmpty) {
       console.showWarning(
         "🤔 We couldn't find any screenshot. Did you configure Shot properly and added your tests to your project? https://github.com/Karumi/Shot/#getting-started"
       )
       ScreenshotsComparisionResult()
     } else {
-      val screenshots = regularScreenshots.get ++ composeScreenshots.get
-      val newScreenshotsVerificationReportFolder = buildFolder + Config
-        .verificationReportFolder(flavor, buildType) + "/images/"
+      val screenshots                            = regularScreenshots.get ++ composeScreenshots.get
+      val newScreenshotsVerificationReportFolder = shotFolder.verificationReportFolder() + "images/"
       screenshotsSaver.saveTemporalScreenshots(
-        os,
         screenshots,
         projectName,
         newScreenshotsVerificationReportFolder
@@ -119,24 +96,19 @@ class Shot(
       )
 
       if (showOnlyFailingTestsInReports) {
-        val verificationReferenceImagesFolder = buildFolder + Config
-          .verificationReportFolder(flavor, buildType) + "/images/"
+        val verificationReferenceImagesFolder = shotFolder.verificationReportFolder() + "images/"
         screenshotsSaver.removeNonFailingReferenceImages(
           verificationReferenceImagesFolder,
           comparison
         )
         screenshotsSaver.copyOnlyFailingRecordedScreenshotsToTheReportFolder(
-          buildFolder + Config
-            .verificationReportFolder(flavor, buildType) + "/images/recorded/",
+          shotFolder.verificationReportFolder() + "images/recorded/",
           updatedComparison
         )
       } else {
         screenshotsSaver.copyRecordedScreenshotsToTheReportFolder(
-          projectFolder,
-          flavor,
-          buildType,
-          buildFolder + Config
-            .verificationReportFolder(flavor, buildType) + "/images/recorded/"
+          shotFolder.screenshotsFolder(),
+          shotFolder.verificationReportFolder() + "images/recorded/"
         )
       }
 
@@ -148,18 +120,16 @@ class Shot(
       } else {
         console.showSuccess("✅  Yeah!!! Your tests are passing.")
       }
-      removeProjectTemporalScreenshotsFolder(projectFolder, flavor, buildType)
+      removeProjectTemporalScreenshotsFolder(shotFolder)
       reporter.generateVerificationReport(
         appId,
         comparison,
-        buildFolder,
-        flavor,
-        buildType,
+        shotFolder,
         showOnlyFailingTestsInReports
       )
       console.show(
-        "🤓  You can review the execution report here: " + buildFolder + Config
-          .verificationReportFolder(flavor, buildType) + "/index.html"
+        "🤓  You can review the execution report here: " + shotFolder
+          .verificationReportFolder() + "index.html"
       )
       comparison
     }
@@ -169,63 +139,43 @@ class Shot(
     clearScreenshots(appId)
 
   private def moveComposeScreenshotsToRegularScreenshotsFolder(
-      projectFolder: Folder,
-      flavor: String,
-      buildType: String
+      shotFolder: ShotFolder
   ): Unit = {
-    val composeFolder = projectFolder + Config.pulledComposeScreenshotsFolder(flavor, buildType)
+    val composeFolder = shotFolder.pulledComposeScreenshotsFolder()
     files.listFilesInFolder(composeFolder).forEach { file: File =>
       val rawFilePath = file.getAbsolutePath
       val newFilePath =
         rawFilePath.replace(
-          Config.pulledComposeScreenshotsFolder(flavor, buildType),
-          Config.pulledScreenshotsFolder(flavor, buildType)
+          shotFolder.pulledComposeScreenshotsFolder(),
+          shotFolder.pulledScreenshotsFolder()
         )
       files.rename(rawFilePath, newFilePath)
     }
   }
 
-  private def recordRegularScreenshots(
-      os: String,
-      buildFolder: Folder,
-      projectFolder: Folder,
-      projectName: String,
-      flavor: String,
-      buildType: String
-  ) = {
-    readScreenshotsMetadata(os, projectFolder, flavor, buildType, projectName)
+  private def recordRegularScreenshots(shotFolder: ShotFolder, projectName: String) = {
+    readScreenshotsMetadata(shotFolder, projectName)
       .map { screenshots =>
-        screenshotsSaver.saveRecordedScreenshots(projectFolder, flavor, buildType, screenshots)
+        screenshotsSaver.saveRecordedScreenshots(shotFolder.screenshotsFolder(), screenshots)
         screenshotsSaver.copyRecordedScreenshotsToTheReportFolder(
-          projectFolder,
-          flavor,
-          buildType,
-          buildFolder + Config
-            .recordingReportFolder(flavor, buildType) + "/images/recorded/"
+          shotFolder.screenshotsFolder(),
+          shotFolder.recordingReportFolder() + "images/recorded/"
         )
         screenshots
       }
   }
 
   private def recordComposeScreenshots(
-      os: String,
-      buildFolder: Folder,
-      projectFolder: Folder,
-      projectName: String,
-      flavor: String,
-      buildType: String
+      shotFolder: ShotFolder,
+      projectName: String
   ) = {
-    readComposeScreenshotsMetadata(os, projectFolder, flavor, buildType, projectName).map {
-      screenshots =>
-        screenshotsSaver.saveRecordedScreenshots(projectFolder, flavor, buildType, screenshots)
-        screenshotsSaver.copyRecordedScreenshotsToTheReportFolder(
-          projectFolder,
-          flavor,
-          buildType,
-          buildFolder + Config
-            .recordingReportFolder(flavor, buildType) + "/images/recorded/"
-        )
-        screenshots
+    readComposeScreenshotsMetadata(projectName, shotFolder).map { screenshots =>
+      screenshotsSaver.saveRecordedScreenshots(shotFolder.screenshotsFolder(), screenshots)
+      screenshotsSaver.copyRecordedScreenshotsToTheReportFolder(
+        shotFolder.screenshotsFolder(),
+        shotFolder.recordingReportFolder() + "images/recorded/"
+      )
+      screenshots
     }
   }
 
@@ -250,60 +200,41 @@ class Shot(
   }
 
   private def pullScreenshots(
-      projectFolder: Folder,
       appId: AppId,
-      flavor: String,
-      buildType: String
+      shotFolder: ShotFolder
   ): Unit =
     forEachDevice { device =>
-      val screenshotsFolder = projectFolder + Config.screenshotsFolderName(flavor, buildType)
+      val screenshotsFolder = shotFolder.screenshotsFolder()
       createScreenshotsFolderIfDoesNotExist(screenshotsFolder)
       adb.pullScreenshots(device, screenshotsFolder, appId)
 
-      extractPicturesFromBundle(projectFolder + Config.pulledScreenshotsFolder(flavor, buildType))
-      renameMetadataFile(projectFolder, device, Config.metadataFilePath(flavor, buildType))
-      renameMetadataFile(projectFolder, device, Config.composeMetadataFileName(flavor, buildType))
+      extractPicturesFromBundle(shotFolder.pulledScreenshotsFolder())
+      files.rename(shotFolder.metadataFile(), s"${shotFolder.metadataFile()}_$device")
+      files.rename(shotFolder.composeMetadataFile(), s"${shotFolder.composeMetadataFile()}_$device")
     }
 
-  private def renameMetadataFile(
-      projectFolder: Folder,
-      device: String,
-      metadataFileName: String
-  ): Unit = {
-    val metadataFilePath    = projectFolder + metadataFileName
-    val newMetadataFilePath = metadataFilePath + "_" + device
-    files.rename(metadataFilePath, newMetadataFilePath)
-  }
-
   private def readScreenshotsMetadata(
-      os: String,
-      projectFolder: Folder,
-      flavor: String,
-      buildType: String,
+      shotFolder: ShotFolder,
       projectName: String
   ): Option[ScreenshotsSuite] = {
-    val screenshotsFolder = projectFolder + Config.pulledScreenshotsFolder(flavor, buildType)
+    val screenshotsFolder = shotFolder.pulledScreenshotsFolder()
     val folder            = new File(screenshotsFolder)
     if (folder.exists()) {
       val filesInScreenshotFolder = folder.listFiles
-      val metadataFiles = filesInScreenshotFolder.filter(file =>
-        file.getAbsolutePath.contains(Config.metadataFileName())
-      )
+      val metadataFiles =
+        filesInScreenshotFolder.filter(file => file.getAbsolutePath.contains("metadata.xml"))
       val screenshotSuite = metadataFiles.flatMap { metadataFilePath =>
-        val metadataFileContent =
-          files.read(metadataFilePath.getAbsolutePath)
+        val metadataFileContent = files.read(metadataFilePath.getAbsolutePath)
         parseScreenshots(
-          os,
           metadataFileContent,
           projectName,
-          projectFolder + Config.screenshotsFolderName(flavor, buildType),
-          projectFolder + Config.pulledScreenshotsFolder(flavor, buildType)
+          shotFolder.screenshotsFolder(),
+          shotFolder.pulledScreenshotsFolder()
         )
       }
       val suite = screenshotSuite.par.map { screenshot =>
-        val viewHierarchyFileName = projectFolder + Config
-          .pulledScreenshotsFolder(flavor, buildType) + screenshot.viewHierarchy
-        val viewHierarchyContent = files.read(viewHierarchyFileName)
+        val viewHierarchyFileName = shotFolder.pulledScreenshotsFolder() + screenshot.viewHierarchy
+        val viewHierarchyContent  = files.read(viewHierarchyFileName)
         parseScreenshotSize(screenshot, viewHierarchyContent)
       }.toList
       Some(suite)
@@ -313,32 +244,27 @@ class Shot(
   }
 
   private def readComposeScreenshotsMetadata(
-      os: String,
-      projectFolder: Folder,
-      flavor: String,
-      buildType: String,
-      projectName: String
+      projectName: String,
+      shotFolder: ShotFolder
   ): Option[ScreenshotsSuite] = {
-    val screenshotsFolder = projectFolder + Config.pulledScreenshotsFolder(flavor, buildType)
+    val screenshotsFolder = shotFolder.pulledScreenshotsFolder()
     val folder            = new File(screenshotsFolder)
     if (folder.exists()) {
       val filesInScreenshotFolder = folder.listFiles
       val metadataFiles =
         filesInScreenshotFolder.filter(file => file.getAbsolutePath.contains("metadata.json"))
       val screenshotSuite = metadataFiles.flatMap { metadataFilePath =>
-        val metadataFileContent =
-          files.read(metadataFilePath.getAbsolutePath)
+        val metadataFileContent = files.read(metadataFilePath.getAbsolutePath)
         ScreenshotsComposeSuiteJsonParser.parseScreenshots(
-          os,
           metadataFileContent,
           projectName,
-          projectFolder + Config.screenshotsFolderName(flavor, buildType),
-          projectFolder + Config.pulledScreenshotsFolder(flavor, buildType)
+          shotFolder.screenshotsFolder(),
+          shotFolder.pulledScreenshotsFolder()
         )
       }
-      val suite = screenshotSuite.par.map { screenshot =>
+      val suite = screenshotSuite.map { screenshot =>
         val dimension =
-          screenshotsSaver.getScreenshotDimension(projectFolder, flavor, buildType, screenshot)
+          screenshotsSaver.getScreenshotDimension(shotFolder, screenshot)
         screenshot.copy(screenshotDimension = dimension)
       }.toList
       Some(suite)
@@ -347,14 +273,8 @@ class Shot(
     }
   }
 
-  private def removeProjectTemporalScreenshotsFolder(
-      projectFolder: Folder,
-      flavor: String,
-      buildType: String
-  ): Unit = {
-    val projectTemporalScreenshots = new File(
-      projectFolder + Config.pulledScreenshotsFolder(flavor, buildType)
-    )
+  private def removeProjectTemporalScreenshotsFolder(shotFolder: ShotFolder): Unit = {
+    val projectTemporalScreenshots = new File(shotFolder.pulledScreenshotsFolder())
 
     if (projectTemporalScreenshots.exists()) {
       FileUtils.deleteDirectory(projectTemporalScreenshots)
@@ -362,7 +282,7 @@ class Shot(
   }
 
   private def extractPicturesFromBundle(screenshotsFolder: String): Unit = {
-    val bundleFile = s"$screenshotsFolder/screenshot_bundle.zip"
+    val bundleFile = s"${screenshotsFolder}screenshot_bundle.zip"
     if (java.nio.file.Files.exists(Paths.get(bundleFile))) {
       TinyZip.unzip(bundleFile, screenshotsFolder)
     }
