@@ -129,7 +129,8 @@ class Shot(
       )
       console.show(
         "🤓  You can review the execution report here: " + shotFolder
-          .verificationReportFolder() + "index.html")
+          .verificationReportFolder() + "index.html"
+      )
       comparison
     }
   }
@@ -166,7 +167,7 @@ class Shot(
 
   private def recordComposeScreenshots(
       shotFolder: ShotFolder,
-      projectName: String,
+      projectName: String
   ) = {
     readComposeScreenshotsMetadata(projectName, shotFolder).map { screenshots =>
       screenshotsSaver.saveRecordedScreenshots(shotFolder.screenshotsFolder(), screenshots)
@@ -214,7 +215,7 @@ class Shot(
 
   private def readScreenshotsMetadata(
       shotFolder: ShotFolder,
-      projectName: String,
+      projectName: String
   ): Option[ScreenshotsSuite] = {
     val screenshotsFolder = shotFolder.pulledScreenshotsFolder()
     val folder            = new File(screenshotsFolder)
@@ -244,7 +245,7 @@ class Shot(
 
   private def readComposeScreenshotsMetadata(
       projectName: String,
-      shotFolder: ShotFolder,
+      shotFolder: ShotFolder
   ): Option[ScreenshotsSuite] = {
     val screenshotsFolder = shotFolder.pulledScreenshotsFolder()
     val folder            = new File(screenshotsFolder)
@@ -258,7 +259,7 @@ class Shot(
           metadataFileContent,
           projectName,
           shotFolder.screenshotsFolder(),
-          shotFolder.pulledScreenshotsFolder(),
+          shotFolder.pulledScreenshotsFolder()
         )
       }
       val suite = screenshotSuite.map { screenshot =>

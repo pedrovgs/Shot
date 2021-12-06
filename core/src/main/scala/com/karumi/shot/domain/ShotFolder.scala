@@ -7,13 +7,13 @@ case class ShotFolder(
     private val buildFolderPath: FilePath,
     private val buildType: String,
     private val flavor: Option[String],
-    private val directorySuffix: Option[String],
+    private val directorySuffix: Option[String]
 ) {
 
   private def pathSuffix(): String = {
-    s"${flavor.fold("") { s =>s"$s/"}}"+
+    s"${flavor.fold("") { s => s"$s/" }}" +
       s"$buildType/" +
-      s"${directorySuffix.fold("") { s =>s"$s/"}}"
+      s"${directorySuffix.fold("") { s => s"$s/" }}"
   }
 
   def screenshotsFolder(): FilePath = {

@@ -4,7 +4,11 @@ import com.karumi.shot.android.Adb
 import com.karumi.shot.domain.model.AppId
 import com.karumi.shot.mothers.{AppIdMother, ProjectFolderMother, ProjectNameMother}
 import com.karumi.shot.reports.{ConsoleReporter, ExecutionReporter}
-import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsDiffGenerator, ScreenshotsSaver}
+import com.karumi.shot.screenshots.{
+  ScreenshotsComparator,
+  ScreenshotsDiffGenerator,
+  ScreenshotsSaver
+}
 import com.karumi.shot.system.EnvVars
 import com.karumi.shot.ui.Console
 import org.scalamock.scalatest.MockFactory
@@ -182,8 +186,10 @@ class ShotSpec
       "🤔 We couldn't find any screenshot. Did you configure Shot properly and added your tests to your project? https://github.com/Karumi/Shot/#getting-started"
     )
 
-    shot.recordScreenshots(appId,
-                           ProjectFolderMother.anyShotFolder,
-                           ProjectNameMother.anyProjectName)
+    shot.recordScreenshots(
+      appId,
+      ProjectFolderMother.anyShotFolder,
+      ProjectNameMother.anyProjectName
+    )
   }
 }

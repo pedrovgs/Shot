@@ -26,7 +26,8 @@ class ExecutionReporter {
       shotFolder: ShotFolder,
       showOnlyFailingTestsInReports: Boolean = false
   ) = {
-    val reportFileContents = populateVerificationTemplate(appId, comparision, showOnlyFailingTestsInReports)
+    val reportFileContents =
+      populateVerificationTemplate(appId, comparision, showOnlyFailingTestsInReports)
     resetVerificationReport(shotFolder)
     val reportFolder = shotFolder.verificationReportFolder()
     writeReport(reportFileContents, reportFolder)

@@ -10,10 +10,12 @@ object ProjectFolderMother {
   val anyFlavor          = "green"
   val anyDirectorySuffix = "Api26"
 
-  val anyShotFolder: ShotFolder = ShotFolder(anyProjectFolder,
-                                             anyBuildFolder,
-                                             anyBuildType,
-                                             Some(anyFlavor),
-                                             Some(anyDirectorySuffix))
+  val anyShotFolder: ShotFolder = ShotFolder(
+    anyProjectFolder,
+    anyBuildFolder,
+    anyBuildType,
+    Some(anyFlavor),
+    Some(anyDirectorySuffix)
+  )
 
 }

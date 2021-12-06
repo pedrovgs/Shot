@@ -18,7 +18,10 @@ class ConfigSpec extends AnyFlatSpec with should.Matchers {
   }
 
   it should "have instrumentation test task with flavor" in {
-    Config.defaultInstrumentationTestTask(Some("green"), "debug") shouldBe "connectedGreenDebugAndroidTest"
+    Config.defaultInstrumentationTestTask(
+      Some("green"),
+      "debug"
+    ) shouldBe "connectedGreenDebugAndroidTest"
     Config.composerInstrumentationTestTask(Some("green"), "debug") shouldBe "testGreenDebugComposer"
   }
 

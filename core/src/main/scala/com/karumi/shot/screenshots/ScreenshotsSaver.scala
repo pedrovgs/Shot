@@ -1,7 +1,16 @@
 package com.karumi.shot.screenshots
 
 import java.io.File
-import com.karumi.shot.domain.{Config, DifferentImageDimensions, DifferentScreenshots, Dimension, Screenshot, ScreenshotNotFound, ScreenshotsComparisionResult, ShotFolder}
+import com.karumi.shot.domain.{
+  Config,
+  DifferentImageDimensions,
+  DifferentScreenshots,
+  Dimension,
+  Screenshot,
+  ScreenshotNotFound,
+  ScreenshotsComparisionResult,
+  ShotFolder
+}
 import com.karumi.shot.domain.model.{FilePath, Folder, ScreenshotsSuite}
 import com.sksamuel.scrimage.Image
 import org.apache.commons.io.FileUtils
@@ -9,7 +18,7 @@ import org.apache.commons.io.FileUtils
 class ScreenshotsSaver {
 
   def saveRecordedScreenshots(
-      to:FilePath,
+      to: FilePath,
       screenshots: ScreenshotsSuite
   ) = {
     deleteFile(to)
@@ -28,8 +37,8 @@ class ScreenshotsSaver {
   }
 
   def copyRecordedScreenshotsToTheReportFolder(
-      from:FilePath,
-      to:FilePath
+      from: FilePath,
+      to: FilePath
   ) = {
     FileUtils.copyDirectory(new File(from), new File(to))
     deleteFile(to)
@@ -61,7 +70,7 @@ class ScreenshotsSaver {
       screenshot: Screenshot
   ): Dimension = {
     val screenshotPath = shotFolder.screenshotsFolder() + screenshot.name + ".png"
-    val image = Image.fromFile(new File(screenshotPath))
+    val image          = Image.fromFile(new File(screenshotPath))
     Dimension(image.width, image.height)
   }
 

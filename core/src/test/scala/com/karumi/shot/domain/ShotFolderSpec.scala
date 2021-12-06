@@ -8,15 +8,17 @@ class ShotFolderSpec extends AnyFunSpec {
   describe("Shot folder") {
     val shotFolder = ShotFolder("shot", "shot/build", "debug", None, None)
 
-    it("should have screenshots folder"){
+    it("should have screenshots folder") {
       shotFolder.screenshotsFolder() shouldBe s"shot/screenshots/debug/"
       shotFolder.pulledScreenshotsFolder() shouldBe s"shot/screenshots/debug/screenshots-default/"
-      shotFolder.pulledComposeScreenshotsFolder() shouldBe s"shot/screenshots/debug/screenshots-compose-default/"
+      shotFolder
+        .pulledComposeScreenshotsFolder() shouldBe s"shot/screenshots/debug/screenshots-compose-default/"
     }
 
-    it("should have metadata file"){
+    it("should have metadata file") {
       shotFolder.metadataFile() shouldBe s"shot/screenshots/debug/screenshots-default/metadata.xml"
-      shotFolder.composeMetadataFile() shouldBe s"shot/screenshots/debug/screenshots-compose-default/metadata.json"
+      shotFolder
+        .composeMetadataFile() shouldBe s"shot/screenshots/debug/screenshots-compose-default/metadata.json"
     }
 
     it("should have a report folder") {
@@ -29,20 +31,25 @@ class ShotFolderSpec extends AnyFunSpec {
   describe("Product Flavor") {
     val shotFolder = ShotFolder("shot", "shot/build", "debug", Some("green"), None)
 
-    it("should have screenshots folder"){
+    it("should have screenshots folder") {
       shotFolder.screenshotsFolder() shouldBe s"shot/screenshots/green/debug/"
-      shotFolder.pulledScreenshotsFolder() shouldBe s"shot/screenshots/green/debug/screenshots-default/"
-      shotFolder.pulledComposeScreenshotsFolder() shouldBe s"shot/screenshots/green/debug/screenshots-compose-default/"
+      shotFolder
+        .pulledScreenshotsFolder() shouldBe s"shot/screenshots/green/debug/screenshots-default/"
+      shotFolder
+        .pulledComposeScreenshotsFolder() shouldBe s"shot/screenshots/green/debug/screenshots-compose-default/"
     }
 
-    it("should have metadata file"){
-      shotFolder.metadataFile() shouldBe s"shot/screenshots/green/debug/screenshots-default/metadata.xml"
-      shotFolder.composeMetadataFile() shouldBe s"shot/screenshots/green/debug/screenshots-compose-default/metadata.json"
+    it("should have metadata file") {
+      shotFolder
+        .metadataFile() shouldBe s"shot/screenshots/green/debug/screenshots-default/metadata.xml"
+      shotFolder
+        .composeMetadataFile() shouldBe s"shot/screenshots/green/debug/screenshots-compose-default/metadata.json"
     }
 
     it("should have a report folder") {
       shotFolder.reportFolder() shouldBe s"shot/build/reports/shot/green/debug/"
-      shotFolder.verificationReportFolder() shouldBe s"shot/build/reports/shot/green/debug/verification/"
+      shotFolder
+        .verificationReportFolder() shouldBe s"shot/build/reports/shot/green/debug/verification/"
       shotFolder.recordingReportFolder() shouldBe s"shot/build/reports/shot/green/debug/record/"
     }
   }
@@ -50,20 +57,25 @@ class ShotFolderSpec extends AnyFunSpec {
   describe("Directory Suffix") {
     val shotFolder = ShotFolder("shot", "shot/build", "debug", None, Some("Api26"))
 
-    it("should have screenshots folder"){
+    it("should have screenshots folder") {
       shotFolder.screenshotsFolder() shouldBe s"shot/screenshots/debug/Api26/"
-      shotFolder.pulledScreenshotsFolder() shouldBe s"shot/screenshots/debug/Api26/screenshots-default/"
-      shotFolder.pulledComposeScreenshotsFolder() shouldBe s"shot/screenshots/debug/Api26/screenshots-compose-default/"
+      shotFolder
+        .pulledScreenshotsFolder() shouldBe s"shot/screenshots/debug/Api26/screenshots-default/"
+      shotFolder
+        .pulledComposeScreenshotsFolder() shouldBe s"shot/screenshots/debug/Api26/screenshots-compose-default/"
     }
 
-    it("should have metadata file"){
-      shotFolder.metadataFile() shouldBe s"shot/screenshots/debug/Api26/screenshots-default/metadata.xml"
-      shotFolder.composeMetadataFile() shouldBe s"shot/screenshots/debug/Api26/screenshots-compose-default/metadata.json"
+    it("should have metadata file") {
+      shotFolder
+        .metadataFile() shouldBe s"shot/screenshots/debug/Api26/screenshots-default/metadata.xml"
+      shotFolder
+        .composeMetadataFile() shouldBe s"shot/screenshots/debug/Api26/screenshots-compose-default/metadata.json"
     }
 
     it("should have a report folder") {
       shotFolder.reportFolder() shouldBe s"shot/build/reports/shot/debug/Api26/"
-      shotFolder.verificationReportFolder() shouldBe s"shot/build/reports/shot/debug/Api26/verification/"
+      shotFolder
+        .verificationReportFolder() shouldBe s"shot/build/reports/shot/debug/Api26/verification/"
       shotFolder.recordingReportFolder() shouldBe s"shot/build/reports/shot/debug/Api26/record/"
     }
   }
@@ -71,21 +83,27 @@ class ShotFolderSpec extends AnyFunSpec {
   describe("Product Flavor & Directory Suffix") {
     val shotFolder = ShotFolder("shot", "shot/build", "debug", Some("green"), Some("Api26"))
 
-    it("should have screenshots folder"){
+    it("should have screenshots folder") {
       shotFolder.screenshotsFolder() shouldBe s"shot/screenshots/green/debug/Api26/"
-      shotFolder.pulledScreenshotsFolder() shouldBe s"shot/screenshots/green/debug/Api26/screenshots-default/"
-      shotFolder.pulledComposeScreenshotsFolder() shouldBe s"shot/screenshots/green/debug/Api26/screenshots-compose-default/"
+      shotFolder
+        .pulledScreenshotsFolder() shouldBe s"shot/screenshots/green/debug/Api26/screenshots-default/"
+      shotFolder
+        .pulledComposeScreenshotsFolder() shouldBe s"shot/screenshots/green/debug/Api26/screenshots-compose-default/"
     }
 
-    it("should have metadata file"){
-      shotFolder.metadataFile() shouldBe s"shot/screenshots/green/debug/Api26/screenshots-default/metadata.xml"
-      shotFolder.composeMetadataFile() shouldBe s"shot/screenshots/green/debug/Api26/screenshots-compose-default/metadata.json"
+    it("should have metadata file") {
+      shotFolder
+        .metadataFile() shouldBe s"shot/screenshots/green/debug/Api26/screenshots-default/metadata.xml"
+      shotFolder
+        .composeMetadataFile() shouldBe s"shot/screenshots/green/debug/Api26/screenshots-compose-default/metadata.json"
     }
 
     it("should have a report folder") {
       shotFolder.reportFolder() shouldBe s"shot/build/reports/shot/green/debug/Api26/"
-      shotFolder.verificationReportFolder() shouldBe s"shot/build/reports/shot/green/debug/Api26/verification/"
-      shotFolder.recordingReportFolder() shouldBe s"shot/build/reports/shot/green/debug/Api26/record/"
+      shotFolder
+        .verificationReportFolder() shouldBe s"shot/build/reports/shot/green/debug/Api26/verification/"
+      shotFolder
+        .recordingReportFolder() shouldBe s"shot/build/reports/shot/green/debug/Api26/record/"
     }
   }
 

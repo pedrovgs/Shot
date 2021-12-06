@@ -8,9 +8,18 @@ import com.karumi.shot.base64.Base64Encoder
 import com.karumi.shot.domain.Config
 import com.karumi.shot.exceptions.ShotException
 import com.karumi.shot.reports.{ConsoleReporter, ExecutionReporter}
-import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsDiffGenerator, ScreenshotsSaver}
+import com.karumi.shot.screenshots.{
+  ScreenshotsComparator,
+  ScreenshotsDiffGenerator,
+  ScreenshotsSaver
+}
 import com.karumi.shot.system.EnvVars
-import com.karumi.shot.tasks.{DownloadScreenshotsTask, ExecuteScreenshotTests, ExecuteScreenshotTestsForEveryFlavor, RemoveScreenshotsTask}
+import com.karumi.shot.tasks.{
+  DownloadScreenshotsTask,
+  ExecuteScreenshotTests,
+  ExecuteScreenshotTestsForEveryFlavor,
+  RemoveScreenshotsTask
+}
 import com.karumi.shot.ui.Console
 import org.gradle.api.artifacts.DependencySet
 import org.gradle.api.tasks.TaskProvider
@@ -87,8 +96,8 @@ class ShotPlugin extends Plugin[Project] {
     val flavor = variant.getMergedFlavor
     checkIfApplicationIdIsConfigured(project, flavor)
     val completeAppId = composeCompleteAppId(project, variant)
-    val appTestId = Option(flavor.getTestApplicationId).getOrElse(completeAppId)
-    val flavorName = if (variant.getFlavorName.nonEmpty) Some(variant.getFlavorName) else None
+    val appTestId     = Option(flavor.getTestApplicationId).getOrElse(completeAppId)
+    val flavorName    = if (variant.getFlavorName.nonEmpty) Some(variant.getFlavorName) else None
     addTasksFor(project, flavorName, variant.getBuildType, appTestId, baseTask)
   }
 
