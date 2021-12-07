@@ -20,7 +20,7 @@ object Config {
   val androidDependency: FilePath =
     s"$androidDependencyGroup:$androidDependencyName:$androidDependencyVersion"
 
-  val androidPluginName: FilePath           = "com.android.application"
+  val androidPluginName: FilePath = "com.android.application"
 
   def defaultInstrumentationTestTask(flavor: Option[String], buildType: String): String =
     s"connected${flavor.getOrElse("").capitalize}${buildType.capitalize}AndroidTest"

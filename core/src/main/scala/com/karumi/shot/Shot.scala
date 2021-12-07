@@ -47,7 +47,7 @@ class Shot(
     console.show("💾  Saving screenshots.")
     moveComposeScreenshotsToRegularScreenshotsFolder(shotFolder)
     val composeScreenshotSuite = recordComposeScreenshots(shotFolder)
-    val regularScreenshotSuite = recordRegularScreenshots(shotFolder, projectName)
+    val regularScreenshotSuite = recordRegularScreenshots(shotFolder)
     if (regularScreenshotSuite.isEmpty && composeScreenshotSuite.isEmpty) {
       console.showWarning(
         "🤔 We couldn't find any screenshot. Did you configure Shot properly and added your tests to your project? https://github.com/Karumi/Shot/#getting-started"
@@ -154,7 +154,7 @@ class Shot(
     }
   }
 
-  private def recordRegularScreenshots(shotFolder: ShotFolder, projectName: String) = {
+  private def recordRegularScreenshots(shotFolder: ShotFolder) = {
     readScreenshotsMetadata(shotFolder)
       .map { screenshots =>
         screenshotsSaver.saveRecordedScreenshots(shotFolder.screenshotsFolder(), screenshots)
@@ -215,7 +215,7 @@ class Shot(
 
   private def readScreenshotsMetadata(
       shotFolder: ShotFolder
-   ): Option[ScreenshotsSuite] = {
+  ): Option[ScreenshotsSuite] = {
     val screenshotsFolder = shotFolder.pulledScreenshotsFolder()
     val folder            = new File(screenshotsFolder)
     if (folder.exists()) {
