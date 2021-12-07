@@ -17,7 +17,12 @@ class ScreenshotsSuiteXmlParserSpec extends AnyFlatSpec with should.Matchers wit
     val xml = testResourceContent("/screenshots-metadata/empty-screenshots-metadata.xml")
 
     val screenshots =
-      parseScreenshots(xml, anyScreenshotsFolder, anyTemporalScreenshotsFolder, anyScreenshotsTemporalBuildPath)
+      parseScreenshots(
+        xml,
+        anyScreenshotsFolder,
+        anyTemporalScreenshotsFolder,
+        anyScreenshotsTemporalBuildPath
+      )
 
     screenshots shouldBe empty
   }
@@ -28,7 +33,12 @@ class ScreenshotsSuiteXmlParserSpec extends AnyFlatSpec with should.Matchers wit
       testResourceContent("/screenshots-metadata/view-hierarchy.json")
 
     val screenshotsWithoutSize =
-      parseScreenshots(xml, anyScreenshotsFolder, anyTemporalScreenshotsFolder, anyScreenshotsTemporalBuildPath)
+      parseScreenshots(
+        xml,
+        anyScreenshotsFolder,
+        anyTemporalScreenshotsFolder,
+        anyScreenshotsTemporalBuildPath
+      )
     val screenshots = screenshotsWithoutSize.map { screenshot =>
       parseScreenshotSize(screenshot, viewHierarchyContent)
     }
