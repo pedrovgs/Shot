@@ -19,8 +19,7 @@ object ScreenshotsComposeSuiteJsonParser {
       Screenshot(
         name = name,
         recordedScreenshotPath = screenshotsFolder + name + ".png",
-        temporalScreenshotPath =
-          screenshotsTemporalBuildPath + "/" + name + ".png",
+        temporalScreenshotPath = screenshotsTemporalBuildPath + "/" + name + ".png",
         testClass = screenshot.testClassName,
         testName = screenshot.testName,
         tilesDimension = Dimension(0, 0),
