@@ -10,13 +10,19 @@ class ScreenshotsSuiteXmlParserSpec extends AnyFlatSpec with should.Matchers wit
   private val anyScreenshotsFolder = "/screenshots/"
   private val anyTemporalScreenshotsFolder =
     "/screenshots/screenshots-default/"
-  private val anyProjectName = "flowup"
+  private val anyScreenshotsTemporalBuildPath =
+    "build/tmp/shot/screenshots"
 
   "ScreenshotsSuiteXmlParser" should "return an empty spec if there are no screenshots" in {
     val xml = testResourceContent("/screenshots-metadata/empty-screenshots-metadata.xml")
 
     val screenshots =
-      parseScreenshots(xml, anyProjectName, anyScreenshotsFolder, anyTemporalScreenshotsFolder)
+      parseScreenshots(
+        xml,
+        anyScreenshotsFolder,
+        anyTemporalScreenshotsFolder,
+        anyScreenshotsTemporalBuildPath
+      )
 
     screenshots shouldBe empty
   }
@@ -27,7 +33,12 @@ class ScreenshotsSuiteXmlParserSpec extends AnyFlatSpec with should.Matchers wit
       testResourceContent("/screenshots-metadata/view-hierarchy.json")
 
     val screenshotsWithoutSize =
-      parseScreenshots(xml, anyProjectName, anyScreenshotsFolder, anyTemporalScreenshotsFolder)
+      parseScreenshots(
+        xml,
+        anyScreenshotsFolder,
+        anyTemporalScreenshotsFolder,
+        anyScreenshotsTemporalBuildPath
+      )
     val screenshots = screenshotsWithoutSize.map { screenshot =>
       parseScreenshotSize(screenshot, viewHierarchyContent)
     }
@@ -36,7 +47,7 @@ class ScreenshotsSuiteXmlParserSpec extends AnyFlatSpec with should.Matchers wit
     val firstScreenshot = screenshots.head
     firstScreenshot.name shouldBe "com.karumi.ui.view.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes"
     firstScreenshot.recordedScreenshotPath shouldBe "/screenshots/com.karumi.ui.view.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes.png"
-    firstScreenshot.temporalScreenshotPath shouldBe "/tmp/shot/screenshot/flowup/com.karumi.ui.view.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes.png"
+    firstScreenshot.temporalScreenshotPath shouldBe "build/tmp/shot/screenshots/com.karumi.ui.view.MainActivityTest_showsSuperHeroesIfThereAreSomeSuperHeroes.png"
     firstScreenshot.testClass shouldBe "com.karumi.ui.view.MainActivityTest"
     firstScreenshot.testName shouldBe "showsSuperHeroesIfThereAreSomeSuperHeroes"
     firstScreenshot.tilesDimension.width shouldBe 2

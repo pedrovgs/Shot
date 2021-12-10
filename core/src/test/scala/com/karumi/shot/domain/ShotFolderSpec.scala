@@ -26,6 +26,10 @@ class ShotFolderSpec extends AnyFunSpec {
       shotFolder.verificationReportFolder() shouldBe s"shot/build/reports/shot/debug/verification/"
       shotFolder.recordingReportFolder() shouldBe s"shot/build/reports/shot/debug/record/"
     }
+
+    it("should have a temporary folder path") {
+      shotFolder.screenshotsTemporalBuildPath() shouldBe "shot/build/tmp/shot/screenshot/"
+    }
   }
 
   describe("Product Flavor") {
@@ -106,5 +110,4 @@ class ShotFolderSpec extends AnyFunSpec {
         .recordingReportFolder() shouldBe s"shot/build/reports/shot/green/debug/Api26/record/"
     }
   }
-
 }

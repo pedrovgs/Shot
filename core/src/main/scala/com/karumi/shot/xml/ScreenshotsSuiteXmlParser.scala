@@ -1,7 +1,7 @@
 package com.karumi.shot.xml
 
 import com.karumi.shot.domain.model.{Folder, ScreenshotsSuite}
-import com.karumi.shot.domain.{Config, Dimension, Screenshot}
+import com.karumi.shot.domain.{Dimension, Screenshot}
 import org.json4s._
 import org.json4s.native.JsonMethods._
 
@@ -11,26 +11,26 @@ object ScreenshotsSuiteXmlParser {
 
   def parseScreenshots(
       xml: String,
-      projectName: String,
       screenshotsFolder: Folder,
-      temporalScreenshotsFolder: Folder
+      temporalScreenshotsFolder: Folder,
+      screenshotsTemporalBuildPath: Folder
   ): ScreenshotsSuite = {
     val xmlScreenshots = XML.loadString(xml) \ "screenshot"
     xmlScreenshots.map(
-      parseScreenshot(_, projectName, screenshotsFolder, temporalScreenshotsFolder)
+      parseScreenshot(_, screenshotsFolder, temporalScreenshotsFolder, screenshotsTemporalBuildPath)
     )
   }
 
   private def parseScreenshot(
       xmlNode: Node,
-      projectName: String,
       screenshotsFolder: Folder,
-      temporalScreenshotsFolder: Folder
+      temporalScreenshotsFolder: Folder,
+      screenshotsTemporalBuildPath: Folder
   ): Screenshot = {
     val name                   = (xmlNode \ "name" head).text.trim
     val recordedScreenshotPath = screenshotsFolder + name + ".png"
     val temporalScreenshotPath =
-      Config.screenshotsTemporalRootPath + projectName + "/" + name + ".png"
+      screenshotsTemporalBuildPath + "/" + name + ".png"
     val testClass      = (xmlNode \ "test_class" head).text.trim
     val testName       = (xmlNode \ "test_name" head).text.trim
     val tileWidth      = (xmlNode \ "tile_width" head).text.toInt
