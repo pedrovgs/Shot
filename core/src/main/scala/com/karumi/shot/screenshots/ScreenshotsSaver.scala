@@ -70,7 +70,7 @@ class ScreenshotsSaver {
       shotFolder: ShotFolder,
       screenshot: Screenshot
   ): Dimension = {
-    val screenshotPath = shotFolder.screenshotsFolder() + screenshot.name + ".png"
+    val screenshotPath = shotFolder.pulledScreenshotsFolder() + screenshot.name + ".png"
     val image          = Image.fromFile(new File(screenshotPath))
     Dimension(image.width, image.height)
   }
