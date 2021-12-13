@@ -314,6 +314,18 @@ shot {
 }
 ```
 
+## Tolerance
+
+Shot provides a simple mechanism to be able to configure a threshold value when comparing recorded images with the new ones during the verification stage. You may need to use tolerance in your tests when testing compose components because the API Shot uses to record screenshots depending on the device where your tests are executed. There are other scenarios where you may need to configure a tolerance value, but these are not so common. If you want to configure it you can use this config in your ``build.gradle`` file.
+
+```gradle
+shot {
+    tolerance =  0.1 // 0,1% tolerance
+}
+```
+
+If you configure ``tolerance = 1`` it means the tolerance threshold will be 100% and all your tests will pass even if they should fail...so be careful when configuring this param. 
+
 Take into account the ``instrumentationTestTask`` could be different if you use different flavors or build types. Remember also you should use Shot > 3.0.0 because this feature was introduced in this release!
  
 ## CI Reporting
