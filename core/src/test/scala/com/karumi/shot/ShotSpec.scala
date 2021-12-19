@@ -188,8 +188,6 @@ class ShotSpec
 
     shot.recordScreenshots(
       appId,
-      ProjectFolderMother.anyShotFolder,
-      ProjectNameMother.anyProjectName
-    )
+      ProjectFolderMother.anyShotFolder)
   }
 }

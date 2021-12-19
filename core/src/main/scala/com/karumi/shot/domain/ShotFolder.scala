@@ -7,25 +7,26 @@ case class ShotFolder(
     private val buildFolderPath: FilePath,
     private val buildType: String,
     private val flavor: Option[String],
-    private val directorySuffix: Option[String]
+    private val directorySuffix: Option[String],
+    private val separator: String
 ) {
-
+  
   private def pathSuffix(): String = {
-    s"${flavor.fold("") { s => s"$s/" }}" +
-      s"$buildType/" +
-      s"${directorySuffix.fold("") { s => s"$s/" }}"
+    s"${flavor.fold("") { s => s"$s$separator" }}" +
+      s"$buildType$separator" +
+      s"${directorySuffix.fold("") { s => s"$s$separator" }}"
   }
 
   def screenshotsFolder(): FilePath = {
-    s"${projectFolderPath}/screenshots/" + pathSuffix()
+    s"${projectFolderPath}${separator}screenshots$separator" + pathSuffix()
   }
 
   def pulledScreenshotsFolder(): FilePath = {
-    s"${screenshotsFolder()}screenshots-default/"
+    s"${screenshotsFolder()}screenshots-default$separator"
   }
 
   def pulledComposeScreenshotsFolder(): FilePath = {
-    s"${screenshotsFolder()}screenshots-compose-default/"
+    s"${screenshotsFolder()}screenshots-compose-default$separator"
   }
 
   def metadataFile(): FilePath = {
@@ -37,16 +38,17 @@ case class ShotFolder(
   }
 
   def reportFolder(): FilePath = {
-    s"${buildFolderPath}/reports/shot/${pathSuffix()}"
+    s"${buildFolderPath}${separator}reports${separator}shot$separator${pathSuffix()}"
   }
 
   def verificationReportFolder(): String = {
-    s"${reportFolder()}verification/"
+    s"${reportFolder()}verification$separator"
   }
 
   def recordingReportFolder(): String = {
-    s"${reportFolder()}record/"
+    s"${reportFolder()}record$separator"
   }
 
-  def screenshotsTemporalBuildPath(): FilePath = s"$buildFolderPath/tmp/shot/screenshot/"
+  def screenshotsTemporalBuildPath(): FilePath =
+    s"$buildFolderPath${separator}tmp${separator}shot${separator}screenshot$separator"
 }

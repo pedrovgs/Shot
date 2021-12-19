@@ -5,16 +5,14 @@ import com.karumi.shot.android.Adb
 import com.karumi.shot.base64.Base64Encoder
 import com.karumi.shot.domain.ShotFolder
 import com.karumi.shot.reports.{ConsoleReporter, ExecutionReporter}
-import com.karumi.shot.screenshots.{
-  ScreenshotsComparator,
-  ScreenshotsDiffGenerator,
-  ScreenshotsSaver
-}
+import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsDiffGenerator, ScreenshotsSaver}
 import com.karumi.shot.system.EnvVars
 import com.karumi.shot.ui.Console
 import com.karumi.shot.{Files, Shot, ShotExtension}
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.{DefaultTask, GradleException}
+
+import java.io.File
 
 abstract class ShotTask extends DefaultTask {
   var appId: String          = _
@@ -44,7 +42,8 @@ abstract class ShotTask extends DefaultTask {
       buildType.getName,
       flavor,
       if (project.hasProperty("directorySuffix")) Some(project.property("directorySuffix").toString)
-      else None
+      else None,
+      File.separator
     )
   }
 
@@ -84,9 +83,7 @@ class ExecuteScreenshotTests extends ShotTask {
     if (recordScreenshots) {
       shot.recordScreenshots(
         appId,
-        shotFolder,
-        project.getName
-      )
+        shotFolder)
     } else {
       val result = shot.verifyScreenshots(
         appId,
