@@ -10,7 +10,7 @@ case class ShotFolder(
     private val directorySuffix: Option[String],
     private val separator: String
 ) {
-  
+
   private def pathSuffix(): String = {
     s"${flavor.fold("") { s => s"$s$separator" }}" +
       s"$buildType$separator" +

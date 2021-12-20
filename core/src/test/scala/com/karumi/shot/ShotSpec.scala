@@ -186,8 +186,6 @@ class ShotSpec
       "🤔 We couldn't find any screenshot. Did you configure Shot properly and added your tests to your project? https://github.com/Karumi/Shot/#getting-started"
     )
 
-    shot.recordScreenshots(
-      appId,
-      ProjectFolderMother.anyShotFolder)
+    shot.recordScreenshots(appId, ProjectFolderMother.anyShotFolder)
   }
 }

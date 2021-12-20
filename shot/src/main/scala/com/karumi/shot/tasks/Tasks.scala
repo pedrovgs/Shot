@@ -5,7 +5,11 @@ import com.karumi.shot.android.Adb
 import com.karumi.shot.base64.Base64Encoder
 import com.karumi.shot.domain.ShotFolder
 import com.karumi.shot.reports.{ConsoleReporter, ExecutionReporter}
-import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsDiffGenerator, ScreenshotsSaver}
+import com.karumi.shot.screenshots.{
+  ScreenshotsComparator,
+  ScreenshotsDiffGenerator,
+  ScreenshotsSaver
+}
 import com.karumi.shot.system.EnvVars
 import com.karumi.shot.ui.Console
 import com.karumi.shot.{Files, Shot, ShotExtension}
@@ -81,9 +85,7 @@ class ExecuteScreenshotTests extends ShotTask {
       .getByType[ShotExtension](classOf[ShotExtension])
       .showOnlyFailingTestsInReports
     if (recordScreenshots) {
-      shot.recordScreenshots(
-        appId,
-        shotFolder)
+      shot.recordScreenshots(appId, shotFolder)
     } else {
       val result = shot.verifyScreenshots(
         appId,
