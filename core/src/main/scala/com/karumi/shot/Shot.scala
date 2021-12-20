@@ -39,9 +39,7 @@ class Shot(
     pullScreenshots(appId, shotFolder)
   }
 
-  def recordScreenshots(
-      appId: AppId,
-      shotFolder: ShotFolder): Unit = {
+  def recordScreenshots(appId: AppId, shotFolder: ShotFolder): Unit = {
     console.show("💾  Saving screenshots.")
     moveComposeScreenshotsToRegularScreenshotsFolder(shotFolder)
     val composeScreenshotSuite = recordComposeScreenshots(shotFolder)
