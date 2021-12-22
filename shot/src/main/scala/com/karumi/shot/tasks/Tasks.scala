@@ -16,6 +16,8 @@ import com.karumi.shot.{Files, Shot, ShotExtension}
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.{DefaultTask, GradleException}
 
+import java.io.File
+
 abstract class ShotTask extends DefaultTask {
   var appId: String          = _
   var flavor: Option[String] = _
@@ -44,7 +46,8 @@ abstract class ShotTask extends DefaultTask {
       buildType.getName,
       flavor,
       if (project.hasProperty("directorySuffix")) Some(project.property("directorySuffix").toString)
-      else None
+      else None,
+      File.separator
     )
   }
 
@@ -82,11 +85,7 @@ class ExecuteScreenshotTests extends ShotTask {
       .getByType[ShotExtension](classOf[ShotExtension])
       .showOnlyFailingTestsInReports
     if (recordScreenshots) {
-      shot.recordScreenshots(
-        appId,
-        shotFolder,
-        project.getName
-      )
+      shot.recordScreenshots(appId, shotFolder)
     } else {
       val result = shot.verifyScreenshots(
         appId,

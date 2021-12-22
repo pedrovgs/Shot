@@ -6,7 +6,7 @@ import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 class ShotFolderSpec extends AnyFunSpec {
 
   describe("Shot folder") {
-    val shotFolder = ShotFolder("shot", "shot/build", "debug", None, None)
+    val shotFolder = ShotFolder("shot", "shot/build", "debug", None, None, "/")
 
     it("should have screenshots folder") {
       shotFolder.screenshotsFolder() shouldBe s"shot/screenshots/debug/"
@@ -33,7 +33,7 @@ class ShotFolderSpec extends AnyFunSpec {
   }
 
   describe("Product Flavor") {
-    val shotFolder = ShotFolder("shot", "shot/build", "debug", Some("green"), None)
+    val shotFolder = ShotFolder("shot", "shot/build", "debug", Some("green"), None, "/")
 
     it("should have screenshots folder") {
       shotFolder.screenshotsFolder() shouldBe s"shot/screenshots/green/debug/"
@@ -59,7 +59,7 @@ class ShotFolderSpec extends AnyFunSpec {
   }
 
   describe("Directory Suffix") {
-    val shotFolder = ShotFolder("shot", "shot/build", "debug", None, Some("Api26"))
+    val shotFolder = ShotFolder("shot", "shot/build", "debug", None, Some("Api26"), "/")
 
     it("should have screenshots folder") {
       shotFolder.screenshotsFolder() shouldBe s"shot/screenshots/debug/Api26/"
@@ -85,7 +85,7 @@ class ShotFolderSpec extends AnyFunSpec {
   }
 
   describe("Product Flavor & Directory Suffix") {
-    val shotFolder = ShotFolder("shot", "shot/build", "debug", Some("green"), Some("Api26"))
+    val shotFolder = ShotFolder("shot", "shot/build", "debug", Some("green"), Some("Api26"), "/")
 
     it("should have screenshots folder") {
       shotFolder.screenshotsFolder() shouldBe s"shot/screenshots/green/debug/Api26/"

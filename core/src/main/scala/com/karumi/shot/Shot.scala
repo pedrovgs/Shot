@@ -2,7 +2,7 @@ package com.karumi.shot
 
 import com.karumi.shot.android.Adb
 import com.karumi.shot.domain._
-import com.karumi.shot.domain.model.{AppId, Folder, ScreenshotsSuite}
+import com.karumi.shot.domain.model.{AppId, FilePath, Folder, ScreenshotsSuite}
 import com.karumi.shot.json.ScreenshotsComposeSuiteJsonParser
 import com.karumi.shot.reports.{ConsoleReporter, ExecutionReporter}
 import com.karumi.shot.screenshots.{
@@ -39,11 +39,7 @@ class Shot(
     pullScreenshots(appId, shotFolder)
   }
 
-  def recordScreenshots(
-      appId: AppId,
-      shotFolder: ShotFolder,
-      projectName: String
-  ): Unit = {
+  def recordScreenshots(appId: AppId, shotFolder: ShotFolder): Unit = {
     console.show("💾  Saving screenshots.")
     moveComposeScreenshotsToRegularScreenshotsFolder(shotFolder)
     val composeScreenshotSuite = recordComposeScreenshots(shotFolder)
@@ -150,6 +146,8 @@ class Shot(
           shotFolder.pulledComposeScreenshotsFolder(),
           shotFolder.pulledScreenshotsFolder()
         )
+      println(rawFilePath)
+      println(newFilePath)
       files.rename(rawFilePath, newFilePath)
     }
   }
@@ -206,6 +204,7 @@ class Shot(
     forEachDevice { device =>
       val screenshotsFolder = shotFolder.screenshotsFolder()
       createScreenshotsFolderIfDoesNotExist(screenshotsFolder)
+      removeProjectTemporalScreenshotsFolder(shotFolder)
       adb.pullScreenshots(device, screenshotsFolder, appId)
 
       extractPicturesFromBundle(shotFolder.pulledScreenshotsFolder())
@@ -272,11 +271,8 @@ class Shot(
   }
 
   private def removeProjectTemporalScreenshotsFolder(shotFolder: ShotFolder): Unit = {
-    val projectTemporalScreenshots = new File(shotFolder.pulledScreenshotsFolder())
-
-    if (projectTemporalScreenshots.exists()) {
-      FileUtils.deleteDirectory(projectTemporalScreenshots)
-    }
+    FileUtils.deleteDirectory(new File(shotFolder.pulledScreenshotsFolder()))
+    FileUtils.deleteDirectory(new File(shotFolder.pulledComposeScreenshotsFolder()))
   }
 
   private def extractPicturesFromBundle(screenshotsFolder: String): Unit = {

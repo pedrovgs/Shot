@@ -9,13 +9,15 @@ object ProjectFolderMother {
   val anyBuildType       = "debug"
   val anyFlavor          = "green"
   val anyDirectorySuffix = "Api26"
+  val anySeparator       = "/"
 
   val anyShotFolder: ShotFolder = ShotFolder(
     anyProjectFolder,
     anyBuildFolder,
     anyBuildType,
     Some(anyFlavor),
-    Some(anyDirectorySuffix)
+    Some(anyDirectorySuffix),
+    anySeparator
   )
 
 }
