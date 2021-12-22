@@ -146,8 +146,6 @@ class Shot(
           shotFolder.pulledComposeScreenshotsFolder(),
           shotFolder.pulledScreenshotsFolder()
         )
-      println(rawFilePath)
-      println(newFilePath)
       files.rename(rawFilePath, newFilePath)
     }
   }
