@@ -5,6 +5,7 @@ import android.system.Os
 import androidx.test.runner.AndroidJUnitRunner
 import com.facebook.testing.screenshot.ScreenshotRunner
 import com.karumi.shot.compose.ComposeScreenshotRunner
+import java.io.File
 
 open class ShotTestRunner : AndroidJUnitRunner() {
 
@@ -18,6 +19,26 @@ open class ShotTestRunner : AndroidJUnitRunner() {
     override fun finish(resultCode: Int, results: Bundle?) {
         ScreenshotRunner.onDestroy()
         ComposeScreenshotRunner.onDestroy()
+
+        val packageName = ComposeScreenshotRunner.packageName.orEmpty()
+        val screenshotsFolder: String = "${AndroidStorageInfo.storageBaseUrl}/screenshots/$packageName/screenshots-default/"
+        val orchestratedFolder: String = "${AndroidStorageInfo.storageBaseUrl}/screenshots-orchestrated/$packageName/screenshots-default/"
+
+        File(orchestratedFolder).mkdirs()
+        val file = File(screenshotsFolder)
+
+        file.listFiles()?.forEach { file ->
+            var i = 0
+            var target: File
+            do {
+                var end = if (i == 0) "" else "_$i"
+                target = File(orchestratedFolder + file.nameWithoutExtension + "$end." + file.extension)
+                i = i.inc()
+            } while (target.exists())
+
+            file.copyTo(target, overwrite = true)
+        }
+
         super.finish(resultCode, results)
     }
 

@@ -11,6 +11,9 @@ object Adb {
   // the base url where the app saves our screenshots inside the device.
   // This value is computed in runtime in shot-android AndroidStorageInfo.
   private val baseStoragePath = "/storage/emulated/0/Download"
+
+  private val orchestrated: Boolean = true
+  val orchestratedSuffix = if (orchestrated) "-orchestrated" else ""
 }
 
 class Adb {
@@ -38,8 +41,8 @@ class Adb {
   }
 
   def clearScreenshots(device: String, appId: AppId): Unit = {
-    clearScreenshotsFromFolder(device, appId, "screenshots-default")
-    clearScreenshotsFromFolder(device, appId, "screenshots-compose-default")
+//    clearScreenshotsFromFolder(device, appId, "screenshots-default")
+//    clearScreenshotsFromFolder(device, appId, "screenshots-compose-default")
   }
 
   private def pullFolder(
@@ -48,7 +51,7 @@ class Adb {
       screenshotsFolder: Folder,
       appId: AppId
   ) = {
-    val folderToPull = s"${baseStoragePath}/screenshots/$appId/$folderName/"
+    val folderToPull = s"${baseStoragePath}/screenshots${Adb.orchestratedSuffix}/$appId/$folderName/"
     try {
       executeAdbCommandWithResult(s"-s $device pull $folderToPull $screenshotsFolder")
     } catch {

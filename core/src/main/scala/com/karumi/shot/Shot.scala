@@ -12,7 +12,7 @@ import com.karumi.shot.screenshots.{
 }
 import com.karumi.shot.system.EnvVars
 import com.karumi.shot.ui.Console
-import com.karumi.shot.xml.ScreenshotsSuiteXmlParser._
+import com.karumi.shot.xml.ScreenshotsSuiteJsonParser._
 import org.apache.commons.io.FileUtils
 import org.tinyzip.TinyZip
 
@@ -218,7 +218,7 @@ class Shot(
     if (folder.exists()) {
       val filesInScreenshotFolder = folder.listFiles
       val metadataFiles =
-        filesInScreenshotFolder.filter(file => file.getAbsolutePath.contains("metadata.xml"))
+        filesInScreenshotFolder.filter(file => file.getAbsolutePath.contains("metadata.json"))
       val screenshotSuite = metadataFiles.flatMap { metadataFilePath =>
         val metadataFileContent = files.read(metadataFilePath.getAbsolutePath)
         parseScreenshots(
@@ -269,8 +269,8 @@ class Shot(
   }
 
   private def removeProjectTemporalScreenshotsFolder(shotFolder: ShotFolder): Unit = {
-    FileUtils.deleteDirectory(new File(shotFolder.pulledScreenshotsFolder()))
-    FileUtils.deleteDirectory(new File(shotFolder.pulledComposeScreenshotsFolder()))
+//    FileUtils.deleteDirectory(new File(shotFolder.pulledScreenshotsFolder()))
+//    FileUtils.deleteDirectory(new File(shotFolder.pulledComposeScreenshotsFolder()))
   }
 
   private def extractPicturesFromBundle(screenshotsFolder: String): Unit = {

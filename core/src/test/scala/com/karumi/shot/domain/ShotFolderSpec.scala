@@ -16,7 +16,7 @@ class ShotFolderSpec extends AnyFunSpec {
     }
 
     it("should have metadata file") {
-      shotFolder.metadataFile() shouldBe s"shot/screenshots/debug/screenshots-default/metadata.xml"
+      shotFolder.metadataFile() shouldBe s"shot/screenshots/debug/screenshots-default/metadata.json"
       shotFolder
         .composeMetadataFile() shouldBe s"shot/screenshots/debug/screenshots-compose-default/metadata.json"
     }
@@ -45,7 +45,7 @@ class ShotFolderSpec extends AnyFunSpec {
 
     it("should have metadata file") {
       shotFolder
-        .metadataFile() shouldBe s"shot/screenshots/green/debug/screenshots-default/metadata.xml"
+        .metadataFile() shouldBe s"shot/screenshots/green/debug/screenshots-default/metadata.json"
       shotFolder
         .composeMetadataFile() shouldBe s"shot/screenshots/green/debug/screenshots-compose-default/metadata.json"
     }
@@ -71,7 +71,7 @@ class ShotFolderSpec extends AnyFunSpec {
 
     it("should have metadata file") {
       shotFolder
-        .metadataFile() shouldBe s"shot/screenshots/debug/Api26/screenshots-default/metadata.xml"
+        .metadataFile() shouldBe s"shot/screenshots/debug/Api26/screenshots-default/metadata.json"
       shotFolder
         .composeMetadataFile() shouldBe s"shot/screenshots/debug/Api26/screenshots-compose-default/metadata.json"
     }
@@ -97,7 +97,7 @@ class ShotFolderSpec extends AnyFunSpec {
 
     it("should have metadata file") {
       shotFolder
-        .metadataFile() shouldBe s"shot/screenshots/green/debug/Api26/screenshots-default/metadata.xml"
+        .metadataFile() shouldBe s"shot/screenshots/green/debug/Api26/screenshots-default/metadata.json"
       shotFolder
         .composeMetadataFile() shouldBe s"shot/screenshots/green/debug/Api26/screenshots-compose-default/metadata.json"
     }

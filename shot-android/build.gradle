@@ -48,7 +48,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.facebook.testing.screenshot:core:0.13.0"
+    implementation "com.facebook.testing.screenshot:core:0.14.0"
     implementation "androidx.test:runner:1.3.0"
     implementation "androidx.recyclerview:recyclerview:1.2.0"
     implementation "androidx.test.espresso:espresso-core:3.3.0"
