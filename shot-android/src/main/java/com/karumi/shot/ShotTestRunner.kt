@@ -32,7 +32,7 @@ open class ShotTestRunner : AndroidJUnitRunner() {
             var target: File
             do {
                 var end = if (i == 0) "" else "_$i"
-                target = File(orchestratedFolder + file.nameWithoutExtension + "$end." + file.extension)
+                target = File(orchestratedFolder + file.name + end)
                 i = i.inc()
             } while (target.exists())
 
