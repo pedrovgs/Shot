@@ -1,6 +1,6 @@
 package com.karumi.shot.android
 
-import com.karumi.shot.android.Adb.baseStoragePath
+import com.karumi.shot.android.Adb.{baseStoragePath, orchestrated}
 import com.karumi.shot.domain.model.{AppId, Folder}
 
 import scala.sys.process._
@@ -13,7 +13,6 @@ object Adb {
   private val baseStoragePath = "/storage/emulated/0/Download"
 
   private val orchestrated: Boolean = true
-  val orchestratedSuffix = if (orchestrated) "-orchestrated" else ""
 }
 
 class Adb {
@@ -41,8 +40,8 @@ class Adb {
   }
 
   def clearScreenshots(device: String, appId: AppId): Unit = {
-//    clearScreenshotsFromFolder(device, appId, "screenshots-default")
-//    clearScreenshotsFromFolder(device, appId, "screenshots-compose-default")
+    clearScreenshotsFromFolder(device, appId, "screenshots-default")
+    clearScreenshotsFromFolder(device, appId, "screenshots-compose-default")
   }
 
   private def pullFolder(
@@ -51,7 +50,7 @@ class Adb {
       screenshotsFolder: Folder,
       appId: AppId
   ) = {
-    val folderToPull = s"${baseStoragePath}/screenshots${Adb.orchestratedSuffix}/$appId/$folderName/"
+    val folderToPull = s"${baseStoragePath}/screenshots${orchestratedSuffix(Adb.orchestrated)}/$appId/$folderName/"
     try {
       executeAdbCommandWithResult(s"-s $device pull $folderToPull $screenshotsFolder")
     } catch {
@@ -62,8 +61,10 @@ class Adb {
     }
   }
 
-  private def clearScreenshotsFromFolder(device: String, appId: AppId, folder: AppId) =
+  private def clearScreenshotsFromFolder(device: String, appId: AppId, folder: AppId): Unit = {
     executeAdbCommand(s"-s $device shell rm -r $baseStoragePath/screenshots/$appId/$folder/")
+    executeAdbCommand(s"-s $device shell rm -r $baseStoragePath/screenshots${orchestratedSuffix(Adb.orchestrated)}/$appId/$folder/")
+  }
 
   private def executeAdbCommand(command: String): Int =
     s"${Adb.adbBinaryPath} $command" ! logger
@@ -73,4 +74,6 @@ class Adb {
 
   private def isCarriageReturnASCII(device: String): Boolean =
     device.charAt(0) == CR_ASCII_DECIMAL
+
+  private def orchestratedSuffix(orchestrated: Boolean) = if (orchestrated) "-orchestrated" else ""
 }
