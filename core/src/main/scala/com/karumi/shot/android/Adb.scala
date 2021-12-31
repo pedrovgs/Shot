@@ -50,7 +50,7 @@ class Adb {
       screenshotsFolder: Folder,
       appId: AppId
   ) = {
-    val folderToPull = s"${baseStoragePath}/screenshots${orchestratedSuffix(Adb.orchestrated)}/$appId/$folderName/"
+    val folderToPull = s"${baseStoragePath}/screenshots/$appId/$folderName${orchestratedSuffix(Adb.orchestrated)}/"
     try {
       executeAdbCommandWithResult(s"-s $device pull $folderToPull $screenshotsFolder")
     } catch {
@@ -63,7 +63,7 @@ class Adb {
 
   private def clearScreenshotsFromFolder(device: String, appId: AppId, folder: AppId): Unit = {
     executeAdbCommand(s"-s $device shell rm -r $baseStoragePath/screenshots/$appId/$folder/")
-    executeAdbCommand(s"-s $device shell rm -r $baseStoragePath/screenshots${orchestratedSuffix(Adb.orchestrated)}/$appId/$folder/")
+    executeAdbCommand(s"-s $device shell rm -r $baseStoragePath/screenshots/$appId/$folder${orchestratedSuffix(Adb.orchestrated)}/")
   }
 
   private def executeAdbCommand(command: String): Int =

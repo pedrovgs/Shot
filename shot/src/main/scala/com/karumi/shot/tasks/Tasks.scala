@@ -47,7 +47,8 @@ abstract class ShotTask extends DefaultTask {
       flavor,
       if (project.hasProperty("directorySuffix")) Some(project.property("directorySuffix").toString)
       else None,
-      File.separator
+      File.separator,
+      true
     )
   }
 

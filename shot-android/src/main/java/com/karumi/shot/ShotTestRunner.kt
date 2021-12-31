@@ -20,9 +20,11 @@ open class ShotTestRunner : AndroidJUnitRunner() {
         ScreenshotRunner.onDestroy()
         ComposeScreenshotRunner.onDestroy()
 
+        val orchestratedSuffix = "-orchestrated"
+
         val packageName = ComposeScreenshotRunner.packageName.orEmpty()
         val screenshotsFolder: String = "${AndroidStorageInfo.storageBaseUrl}/screenshots/$packageName/screenshots-default/"
-        val orchestratedFolder: String = "${AndroidStorageInfo.storageBaseUrl}/screenshots-orchestrated/$packageName/screenshots-default/"
+        val orchestratedFolder: String = "${AndroidStorageInfo.storageBaseUrl}/screenshots/$packageName/screenshots-default$orchestratedSuffix/"
 
         File(orchestratedFolder).mkdirs()
         val file = File(screenshotsFolder)
