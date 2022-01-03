@@ -269,8 +269,8 @@ class Shot(
   }
 
   private def removeProjectTemporalScreenshotsFolder(shotFolder: ShotFolder): Unit = {
-//    FileUtils.deleteDirectory(new File(shotFolder.pulledScreenshotsFolder()))
-//    FileUtils.deleteDirectory(new File(shotFolder.pulledComposeScreenshotsFolder()))
+    FileUtils.deleteDirectory(new File(shotFolder.pulledScreenshotsFolder()))
+    FileUtils.deleteDirectory(new File(shotFolder.pulledComposeScreenshotsFolder()))
   }
 
   private def extractPicturesFromBundle(screenshotsFolder: String): Unit = {
