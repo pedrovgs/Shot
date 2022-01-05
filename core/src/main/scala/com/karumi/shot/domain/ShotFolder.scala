@@ -29,6 +29,10 @@ case class ShotFolder(
   }
 
   def pulledComposeScreenshotsFolder(): FilePath = {
+    s"${screenshotsFolder()}screenshots-compose-default$separator"
+  }
+
+  def pulledComposeOrchestratedScreenshotsFolder(): FilePath = {
     s"${screenshotsFolder()}screenshots-compose-default$orchestratedSuffix$separator"
   }
 

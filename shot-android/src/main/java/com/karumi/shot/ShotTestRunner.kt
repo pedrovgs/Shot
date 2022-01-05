@@ -14,33 +14,13 @@ open class ShotTestRunner : AndroidJUnitRunner() {
         configureFacebookLibFolder()
         ScreenshotRunner.onCreate(this, args)
         ComposeScreenshotRunner.onCreate(this)
+        OrchestratorScreenshotSaver.onCreate(this, args)
     }
 
     override fun finish(resultCode: Int, results: Bundle?) {
         ScreenshotRunner.onDestroy()
         ComposeScreenshotRunner.onDestroy()
-
-        val orchestratedSuffix = "-orchestrated"
-
-        val packageName = ComposeScreenshotRunner.packageName.orEmpty()
-        val screenshotsFolder: String = "${AndroidStorageInfo.storageBaseUrl}/screenshots/$packageName/screenshots-default/"
-        val orchestratedFolder: String = "${AndroidStorageInfo.storageBaseUrl}/screenshots/$packageName/screenshots-default$orchestratedSuffix/"
-
-        File(orchestratedFolder).mkdirs()
-        val file = File(screenshotsFolder)
-
-        file.listFiles()?.forEach { file ->
-            var i = 0
-            var target: File
-            do {
-                var end = if (i == 0) "" else "_$i"
-                target = File(orchestratedFolder + file.name + end)
-                i = i.inc()
-            } while (target.exists())
-
-            file.copyTo(target, overwrite = true)
-        }
-
+        OrchestratorScreenshotSaver.onDestroy()
         super.finish(resultCode, results)
     }
 

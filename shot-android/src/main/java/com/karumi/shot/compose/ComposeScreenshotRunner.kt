@@ -7,13 +7,11 @@ class ComposeScreenshotRunner {
     companion object {
 
         var composeScreenshot: ComposeScreenshot? = null
-        var packageName: String? = null
 
         fun onCreate(instrumentation: Instrumentation) {
-            packageName = instrumentation.context.packageName
             composeScreenshot = ComposeScreenshot(
                 session = ScreenshotTestSession(),
-                saver = ScreenshotSaver(packageName!!, SemanticsNodeBitmapGenerator()),
+                saver = ScreenshotSaver(instrumentation.context.packageName, SemanticsNodeBitmapGenerator()),
                 permissions = AndroidStoragePermissions(instrumentation)
             )
         }

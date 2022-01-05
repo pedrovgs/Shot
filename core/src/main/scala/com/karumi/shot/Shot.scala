@@ -5,11 +5,7 @@ import com.karumi.shot.domain._
 import com.karumi.shot.domain.model.{AppId, FilePath, Folder, ScreenshotsSuite}
 import com.karumi.shot.json.ScreenshotsComposeSuiteJsonParser
 import com.karumi.shot.reports.{ConsoleReporter, ExecutionReporter}
-import com.karumi.shot.screenshots.{
-  ScreenshotsComparator,
-  ScreenshotsDiffGenerator,
-  ScreenshotsSaver
-}
+import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsDiffGenerator, ScreenshotsSaver}
 import com.karumi.shot.system.EnvVars
 import com.karumi.shot.ui.Console
 import com.karumi.shot.xml.ScreenshotsSuiteJsonParser._
@@ -18,6 +14,7 @@ import org.tinyzip.TinyZip
 
 import java.io.File
 import java.nio.file.Paths
+import scala.collection.convert.ImplicitConversions.{`collection AsScalaIterable`, `collection asJava`}
 
 class Shot(
     adb: Adb,
@@ -139,13 +136,11 @@ class Shot(
       shotFolder: ShotFolder
   ): Unit = {
     val composeFolder = shotFolder.pulledComposeScreenshotsFolder()
-    files.listFilesInFolder(composeFolder).forEach { file: File =>
+    val orchestratedComposeFolder = shotFolder.pulledComposeOrchestratedScreenshotsFolder()
+    val fileList = files.listFilesInFolder(composeFolder) ++ files.listFilesInFolder(orchestratedComposeFolder)
+    fileList.forEach { file: File =>
       val rawFilePath = file.getAbsolutePath
-      val newFilePath =
-        rawFilePath.replace(
-          shotFolder.pulledComposeScreenshotsFolder(),
-          shotFolder.pulledScreenshotsFolder()
-        )
+      val newFilePath = shotFolder.pulledScreenshotsFolder() + file.getName
       files.rename(rawFilePath, newFilePath)
     }
   }
@@ -247,7 +242,7 @@ class Shot(
     if (folder.exists()) {
       val filesInScreenshotFolder = folder.listFiles
       val metadataFiles =
-        filesInScreenshotFolder.filter(file => file.getAbsolutePath.contains("metadata.json"))
+        filesInScreenshotFolder.filter(file => file.getAbsolutePath.contains("metadata_compose.json"))
       val screenshotSuite = metadataFiles.flatMap { metadataFilePath =>
         val metadataFileContent = files.read(metadataFilePath.getAbsolutePath)
         ScreenshotsComposeSuiteJsonParser.parseScreenshots(
@@ -271,6 +266,7 @@ class Shot(
   private def removeProjectTemporalScreenshotsFolder(shotFolder: ShotFolder): Unit = {
     FileUtils.deleteDirectory(new File(shotFolder.pulledScreenshotsFolder()))
     FileUtils.deleteDirectory(new File(shotFolder.pulledComposeScreenshotsFolder()))
+    FileUtils.deleteDirectory(new File(shotFolder.pulledComposeOrchestratedScreenshotsFolder()))
   }
 
   private def extractPicturesFromBundle(screenshotsFolder: String): Unit = {

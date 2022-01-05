@@ -1,6 +1,6 @@
 package com.karumi.shot.android
 
-import com.karumi.shot.android.Adb.{baseStoragePath, orchestrated}
+import com.karumi.shot.android.Adb.{baseStoragePath}
 import com.karumi.shot.domain.model.{AppId, Folder}
 
 import scala.sys.process._
@@ -35,13 +35,20 @@ class Adb {
   }
 
   def pullScreenshots(device: String, screenshotsFolder: Folder, appId: AppId): Unit = {
-    pullFolder("screenshots-default", device, screenshotsFolder, appId)
+    pullFolder(s"screenshots-default${orchestratedSuffix(Adb.orchestrated)}", device, screenshotsFolder, appId)
     pullFolder("screenshots-compose-default", device, screenshotsFolder, appId)
+    if (Adb.orchestrated) {
+      pullFolder(s"screenshots-compose-default${orchestratedSuffix(Adb.orchestrated)}", device, screenshotsFolder, appId)
+    }
   }
 
   def clearScreenshots(device: String, appId: AppId): Unit = {
     clearScreenshotsFromFolder(device, appId, "screenshots-default")
     clearScreenshotsFromFolder(device, appId, "screenshots-compose-default")
+    if (Adb.orchestrated) {
+      clearScreenshotsFromFolder(device, appId, s"screenshots-default${orchestratedSuffix(Adb.orchestrated)}")
+      clearScreenshotsFromFolder(device, appId, s"screenshots-compose-default${orchestratedSuffix(Adb.orchestrated)}")
+    }
   }
 
   private def pullFolder(
@@ -50,7 +57,7 @@ class Adb {
       screenshotsFolder: Folder,
       appId: AppId
   ) = {
-    val folderToPull = s"${baseStoragePath}/screenshots/$appId/$folderName${orchestratedSuffix(Adb.orchestrated)}/"
+    val folderToPull = s"${baseStoragePath}/screenshots/$appId/$folderName/"
     try {
       executeAdbCommandWithResult(s"-s $device pull $folderToPull $screenshotsFolder")
     } catch {
@@ -63,7 +70,6 @@ class Adb {
 
   private def clearScreenshotsFromFolder(device: String, appId: AppId, folder: AppId): Unit = {
     executeAdbCommand(s"-s $device shell rm -r $baseStoragePath/screenshots/$appId/$folder/")
-    executeAdbCommand(s"-s $device shell rm -r $baseStoragePath/screenshots/$appId/$folder${orchestratedSuffix(Adb.orchestrated)}/")
   }
 
   private def executeAdbCommand(command: String): Int =
