@@ -98,7 +98,8 @@ class ShotPlugin extends Plugin[Project] {
     val completeAppId = composeCompleteAppId(project, variant)
     val appTestId     = Option(flavor.getTestApplicationId).getOrElse(completeAppId)
     val flavorName    = if (variant.getFlavorName.nonEmpty) Some(variant.getFlavorName) else None
-    addTasksFor(project, flavorName, variant.getBuildType, appTestId, baseTask)
+    val orchestrated = isOrchestratorConnected(project)
+    addTasksFor(project, flavorName, variant.getBuildType, appTestId, orchestrated, baseTask)
   }
 
   private def composeCompleteAppId(project: Project, variant: BaseVariant): String = {
@@ -138,6 +139,7 @@ class ShotPlugin extends Plugin[Project] {
       flavor: Option[String],
       buildType: BuildType,
       appId: String,
+      orchestrated: Boolean,
       baseTask: TaskProvider[ExecuteScreenshotTestsForEveryFlavor]
   ): Unit = {
     val extension = project.getExtensions.getByType[ShotExtension](classOf[ShotExtension])
@@ -173,12 +175,14 @@ class ShotPlugin extends Plugin[Project] {
       task.flavor = flavor
       task.buildType = buildType
       task.appId = appId
+      task.orchestrated = orchestrated
     }
     removeScreenshotsBeforeExecution.configure { task =>
       task.setDescription(RemoveScreenshotsTask.description(flavor, buildType))
       task.flavor = flavor
       task.buildType = buildType
       task.appId = appId
+      task.orchestrated = orchestrated
     }
 
     val downloadScreenshots = tasks
@@ -188,6 +192,7 @@ class ShotPlugin extends Plugin[Project] {
       task.flavor = flavor
       task.buildType = buildType
       task.appId = appId
+      task.orchestrated = orchestrated
     }
     val executeScreenshot = tasks
       .register(ExecuteScreenshotTests.name(flavor, buildType), classOf[ExecuteScreenshotTests])
@@ -196,6 +201,7 @@ class ShotPlugin extends Plugin[Project] {
       task.flavor = flavor
       task.buildType = buildType
       task.appId = appId
+      task.orchestrated = orchestrated
     }
 
     if (runInstrumentation(project, extension)) {
@@ -273,5 +279,16 @@ class ShotPlugin extends Plugin[Project] {
 
   private def getAndroidAppExtension(project: Project) = {
     project.getExtensions.getByType[AppExtension](classOf[AppExtension])
+  }
+
+  private def isOrchestratorConnected(project: Project) = {
+    val orchestrator = "ANDROIDX_TEST_ORCHESTRATOR"
+    if (isAnAndroidLibrary(project)) {
+      getAndroidAppExtension(project).getTestOptions.getExecution == orchestrator
+    } else if (isAnAndroidLibrary(project)) {
+      getAndroidAppExtension(project).getTestOptions.getExecution == orchestrator
+    } else {
+      false
+    }
   }
 }

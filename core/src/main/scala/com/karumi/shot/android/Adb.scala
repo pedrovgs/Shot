@@ -11,8 +11,6 @@ object Adb {
   // the base url where the app saves our screenshots inside the device.
   // This value is computed in runtime in shot-android AndroidStorageInfo.
   private val baseStoragePath = "/storage/emulated/0/Download"
-
-  private val orchestrated: Boolean = true
 }
 
 class Adb {
@@ -34,20 +32,20 @@ class Adb {
       .filter(device => !isCarriageReturnASCII(device))
   }
 
-  def pullScreenshots(device: String, screenshotsFolder: Folder, appId: AppId): Unit = {
-    pullFolder(s"screenshots-default${orchestratedSuffix(Adb.orchestrated)}", device, screenshotsFolder, appId)
+  def pullScreenshots(device: String, screenshotsFolder: Folder, appId: AppId, orchestrated: Boolean): Unit = {
+    pullFolder(s"screenshots-default${orchestratedSuffix(orchestrated)}", device, screenshotsFolder, appId)
     pullFolder("screenshots-compose-default", device, screenshotsFolder, appId)
-    if (Adb.orchestrated) {
-      pullFolder(s"screenshots-compose-default${orchestratedSuffix(Adb.orchestrated)}", device, screenshotsFolder, appId)
+    if (orchestrated) {
+      pullFolder(s"screenshots-compose-default${orchestratedSuffix(orchestrated)}", device, screenshotsFolder, appId)
     }
   }
 
-  def clearScreenshots(device: String, appId: AppId): Unit = {
+  def clearScreenshots(device: String, appId: AppId, orchestrated: Boolean): Unit = {
     clearScreenshotsFromFolder(device, appId, "screenshots-default")
     clearScreenshotsFromFolder(device, appId, "screenshots-compose-default")
-    if (Adb.orchestrated) {
-      clearScreenshotsFromFolder(device, appId, s"screenshots-default${orchestratedSuffix(Adb.orchestrated)}")
-      clearScreenshotsFromFolder(device, appId, s"screenshots-compose-default${orchestratedSuffix(Adb.orchestrated)}")
+    if (orchestrated) {
+      clearScreenshotsFromFolder(device, appId, s"screenshots-default${orchestratedSuffix(orchestrated)}")
+      clearScreenshotsFromFolder(device, appId, s"screenshots-compose-default${orchestratedSuffix(orchestrated)}")
     }
   }
 

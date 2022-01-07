@@ -31,9 +31,9 @@ class Shot(
     Adb.adbBinaryPath = adbPath
   }
 
-  def downloadScreenshots(appId: AppId, shotFolder: ShotFolder): Unit = {
+  def downloadScreenshots(appId: AppId, shotFolder: ShotFolder, orchestrated: Boolean): Unit = {
     console.show("⬇️  Pulling screenshots from your connected devices!")
-    pullScreenshots(appId, shotFolder)
+    pullScreenshots(appId, shotFolder, orchestrated)
   }
 
   def recordScreenshots(appId: AppId, shotFolder: ShotFolder): Unit = {
@@ -129,8 +129,8 @@ class Shot(
     }
   }
 
-  def removeScreenshots(appId: AppId): Unit =
-    clearScreenshots(appId)
+  def removeScreenshots(appId: AppId, orchestrated: Boolean): Unit =
+    clearScreenshots(appId, orchestrated)
 
   private def moveComposeScreenshotsToRegularScreenshotsFolder(
       shotFolder: ShotFolder
@@ -170,8 +170,8 @@ class Shot(
     }
   }
 
-  private def clearScreenshots(appId: AppId): Unit = forEachDevice { device =>
-    adb.clearScreenshots(device, appId)
+  private def clearScreenshots(appId: AppId, orchestrated: Boolean): Unit = forEachDevice { device =>
+    adb.clearScreenshots(device, appId, orchestrated)
   }
 
   private def forEachDevice[T](f: String => T): Unit = devices().foreach(f)
@@ -192,13 +192,14 @@ class Shot(
 
   private def pullScreenshots(
       appId: AppId,
-      shotFolder: ShotFolder
+      shotFolder: ShotFolder,
+      orchestrated: Boolean
   ): Unit =
     forEachDevice { device =>
       val screenshotsFolder = shotFolder.screenshotsFolder()
       createScreenshotsFolderIfDoesNotExist(screenshotsFolder)
       removeProjectTemporalScreenshotsFolder(shotFolder)
-      adb.pullScreenshots(device, screenshotsFolder, appId)
+      adb.pullScreenshots(device, screenshotsFolder, appId, orchestrated)
 
       extractPicturesFromBundle(shotFolder.pulledScreenshotsFolder())
       files.rename(shotFolder.metadataFile(), s"${shotFolder.metadataFile()}_$device")

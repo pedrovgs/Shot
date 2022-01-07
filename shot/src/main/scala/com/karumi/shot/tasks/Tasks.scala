@@ -22,6 +22,7 @@ abstract class ShotTask extends DefaultTask {
   var appId: String          = _
   var flavor: Option[String] = _
   var buildType: BuildType   = _
+  var orchestrated: Boolean   = false
   private val console        = new Console
   protected val shot: Shot =
     new Shot(
@@ -48,7 +49,7 @@ abstract class ShotTask extends DefaultTask {
       if (project.hasProperty("directorySuffix")) Some(project.property("directorySuffix").toString)
       else None,
       File.separator,
-      true
+      orchestrated
     )
   }
 
@@ -117,7 +118,7 @@ object DownloadScreenshotsTask {
 class DownloadScreenshotsTask extends ShotTask {
   @TaskAction
   def downloadScreenshots(): Unit = {
-    shot.downloadScreenshots(appId, shotFolder)
+    shot.downloadScreenshots(appId, shotFolder, orchestrated)
   }
 }
 
@@ -134,7 +135,7 @@ object RemoveScreenshotsTask {
 class RemoveScreenshotsTask extends ShotTask {
   @TaskAction
   def clearScreenshots(): Unit =
-    shot.removeScreenshots(appId)
+    shot.removeScreenshots(appId, orchestrated)
 }
 object ExecuteScreenshotTestsForEveryFlavor {
   val name: String = "executeScreenshotTests"
