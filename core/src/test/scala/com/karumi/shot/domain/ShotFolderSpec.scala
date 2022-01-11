@@ -14,7 +14,8 @@ class ShotFolderSpec extends AnyFunSpec {
       shotFolder
         .pulledComposeScreenshotsFolder() shouldBe s"shot/screenshots/debug/screenshots-compose-default/"
     }
-    shotFolder.pulledComposeOrchestratedScreenshotsFolder() shouldBe s"shot/screenshots/debug/screenshots-compose-default-orchestrated/"
+    shotFolder
+      .pulledComposeOrchestratedScreenshotsFolder() shouldBe s"shot/screenshots/debug/screenshots-compose-default-orchestrated/"
 
     it("should have metadata file") {
       shotFolder.metadataFile() shouldBe s"shot/screenshots/debug/screenshots-default/metadata.json"
@@ -86,7 +87,8 @@ class ShotFolderSpec extends AnyFunSpec {
   }
 
   describe("Product Flavor & Directory Suffix") {
-    val shotFolder = ShotFolder("shot", "shot/build", "debug", Some("green"), Some("Api26"), "/", false)
+    val shotFolder =
+      ShotFolder("shot", "shot/build", "debug", Some("green"), Some("Api26"), "/", false)
 
     it("should have screenshots folder") {
       shotFolder.screenshotsFolder() shouldBe s"shot/screenshots/green/debug/Api26/"
@@ -116,10 +118,12 @@ class ShotFolderSpec extends AnyFunSpec {
     val shotFolder = ShotFolder("shot", "shot/build", "debug", None, None, "/", true)
 
     it("should have screenshots folder") {
-      shotFolder.pulledScreenshotsFolder() shouldBe s"shot/screenshots/debug/screenshots-default-orchestrated/"
+      shotFolder
+        .pulledScreenshotsFolder() shouldBe s"shot/screenshots/debug/screenshots-default-orchestrated/"
       shotFolder
         .pulledComposeScreenshotsFolder() shouldBe s"shot/screenshots/debug/screenshots-compose-default/"
     }
-    shotFolder.pulledComposeOrchestratedScreenshotsFolder() shouldBe s"shot/screenshots/debug/screenshots-compose-default-orchestrated/"
+    shotFolder
+      .pulledComposeOrchestratedScreenshotsFolder() shouldBe s"shot/screenshots/debug/screenshots-compose-default-orchestrated/"
   }
 }

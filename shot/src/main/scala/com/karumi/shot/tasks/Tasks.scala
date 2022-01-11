@@ -22,7 +22,7 @@ abstract class ShotTask extends DefaultTask {
   var appId: String          = _
   var flavor: Option[String] = _
   var buildType: BuildType   = _
-  var orchestrated: Boolean   = false
+  var orchestrated: Boolean  = false
   private val console        = new Console
   protected val shot: Shot =
     new Shot(

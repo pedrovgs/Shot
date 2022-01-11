@@ -5,7 +5,11 @@ import com.karumi.shot.domain._
 import com.karumi.shot.domain.model.{AppId, FilePath, Folder, ScreenshotsSuite}
 import com.karumi.shot.json.ScreenshotsComposeSuiteJsonParser
 import com.karumi.shot.reports.{ConsoleReporter, ExecutionReporter}
-import com.karumi.shot.screenshots.{ScreenshotsComparator, ScreenshotsDiffGenerator, ScreenshotsSaver}
+import com.karumi.shot.screenshots.{
+  ScreenshotsComparator,
+  ScreenshotsDiffGenerator,
+  ScreenshotsSaver
+}
 import com.karumi.shot.system.EnvVars
 import com.karumi.shot.ui.Console
 import com.karumi.shot.xml.ScreenshotsSuiteJsonParser._
@@ -14,7 +18,10 @@ import org.tinyzip.TinyZip
 
 import java.io.File
 import java.nio.file.Paths
-import scala.collection.convert.ImplicitConversions.{`collection AsScalaIterable`, `collection asJava`}
+import scala.collection.convert.ImplicitConversions.{
+  `collection AsScalaIterable`,
+  `collection asJava`
+}
 import scala.collection.immutable.Stream.Empty
 
 class Shot(
@@ -138,11 +145,12 @@ class Shot(
       shotFolder: ShotFolder,
       orchestrated: Boolean
   ): Unit = {
-    val composeFolder = shotFolder.pulledComposeScreenshotsFolder()
+    val composeFolder            = shotFolder.pulledComposeScreenshotsFolder()
     var fileList: Iterable[File] = Empty
     if (orchestrated) {
       val orchestratedComposeFolder = shotFolder.pulledComposeOrchestratedScreenshotsFolder()
-      fileList = files.listFilesInFolder(composeFolder) ++ files.listFilesInFolder(orchestratedComposeFolder)
+      fileList =
+        files.listFilesInFolder(composeFolder) ++ files.listFilesInFolder(orchestratedComposeFolder)
     } else {
       fileList = files.listFilesInFolder(composeFolder)
     }
@@ -178,8 +186,9 @@ class Shot(
     }
   }
 
-  private def clearScreenshots(appId: AppId, orchestrated: Boolean): Unit = forEachDevice { device =>
-    adb.clearScreenshots(device, appId, orchestrated)
+  private def clearScreenshots(appId: AppId, orchestrated: Boolean): Unit = forEachDevice {
+    device =>
+      adb.clearScreenshots(device, appId, orchestrated)
   }
 
   private def forEachDevice[T](f: String => T): Unit = devices().foreach(f)
@@ -251,7 +260,9 @@ class Shot(
     if (folder.exists()) {
       val filesInScreenshotFolder = folder.listFiles
       val metadataFiles =
-        filesInScreenshotFolder.filter(file => file.getAbsolutePath.contains("metadata_compose.json"))
+        filesInScreenshotFolder.filter(file =>
+          file.getAbsolutePath.contains("metadata_compose.json")
+        )
       val screenshotSuite = metadataFiles.flatMap { metadataFilePath =>
         val metadataFileContent = files.read(metadataFilePath.getAbsolutePath)
         ScreenshotsComposeSuiteJsonParser.parseScreenshots(

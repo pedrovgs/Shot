@@ -16,7 +16,7 @@ object ScreenshotsSuiteJsonParser {
       temporalScreenshotsFolder: Folder,
       screenshotsTemporalBuildPath: Folder
   ): ScreenshotsSuite = {
-    val json = parse(metadataJson)
+    val json                    = parse(metadataJson)
     val JArray(jsonScreenshots) = json
     jsonScreenshots.map(
       parseScreenshot(_, screenshotsFolder, temporalScreenshotsFolder, screenshotsTemporalBuildPath)
@@ -24,23 +24,23 @@ object ScreenshotsSuiteJsonParser {
   }
 
   private def parseScreenshot(
-                               jsonNode: JValue,
-                               screenshotsFolder: Folder,
-                               temporalScreenshotsFolder: Folder,
-                               screenshotsTemporalBuildPath: Folder
+      jsonNode: JValue,
+      screenshotsFolder: Folder,
+      temporalScreenshotsFolder: Folder,
+      screenshotsTemporalBuildPath: Folder
   ): Screenshot = {
-    val JString(name)                   = jsonNode \ "name"
+    val JString(name)          = jsonNode \ "name"
     val recordedScreenshotPath = screenshotsFolder + name + ".png"
     val temporalScreenshotPath =
       screenshotsTemporalBuildPath + "/" + name + ".png"
-    val JString(testClass)      = (jsonNode \ "testClass")
-    val JString(testName)       = (jsonNode \ "testName")
-    val JInt(tileWidth)      = (jsonNode \ "tileWidth")
-    val JInt(tileHeight)     = (jsonNode \ "tileHeight")
-    val tilesDimension = Dimension(tileWidth.toInt, tileHeight.toInt)
-    val JString(viewHierarchy)  = (jsonNode \ "viewHierarchy")
+    val JString(testClass)                = (jsonNode \ "testClass")
+    val JString(testName)                 = (jsonNode \ "testName")
+    val JInt(tileWidth)                   = (jsonNode \ "tileWidth")
+    val JInt(tileHeight)                  = (jsonNode \ "tileHeight")
+    val tilesDimension                    = Dimension(tileWidth.toInt, tileHeight.toInt)
+    val JString(viewHierarchy)            = (jsonNode \ "viewHierarchy")
     val JArray(absoluteFileNamesFromJson) = (jsonNode \ "absoluteFilesNames")
-    val absoluteFileNames = ListBuffer[String]()
+    val absoluteFileNames                 = ListBuffer[String]()
     absoluteFileNamesFromJson.foreach(value => {
       val JString(fileName) = value
       absoluteFileNames += (fileName + ".png")

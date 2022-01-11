@@ -32,11 +32,26 @@ class Adb {
       .filter(device => !isCarriageReturnASCII(device))
   }
 
-  def pullScreenshots(device: String, screenshotsFolder: Folder, appId: AppId, orchestrated: Boolean): Unit = {
-    pullFolder(s"screenshots-default${orchestratedSuffix(orchestrated)}", device, screenshotsFolder, appId)
+  def pullScreenshots(
+      device: String,
+      screenshotsFolder: Folder,
+      appId: AppId,
+      orchestrated: Boolean
+  ): Unit = {
+    pullFolder(
+      s"screenshots-default${orchestratedSuffix(orchestrated)}",
+      device,
+      screenshotsFolder,
+      appId
+    )
     pullFolder("screenshots-compose-default", device, screenshotsFolder, appId)
     if (orchestrated) {
-      pullFolder(s"screenshots-compose-default${orchestratedSuffix(orchestrated)}", device, screenshotsFolder, appId)
+      pullFolder(
+        s"screenshots-compose-default${orchestratedSuffix(orchestrated)}",
+        device,
+        screenshotsFolder,
+        appId
+      )
     }
   }
 
@@ -44,8 +59,16 @@ class Adb {
     clearScreenshotsFromFolder(device, appId, "screenshots-default")
     clearScreenshotsFromFolder(device, appId, "screenshots-compose-default")
     if (orchestrated) {
-      clearScreenshotsFromFolder(device, appId, s"screenshots-default${orchestratedSuffix(orchestrated)}")
-      clearScreenshotsFromFolder(device, appId, s"screenshots-compose-default${orchestratedSuffix(orchestrated)}")
+      clearScreenshotsFromFolder(
+        device,
+        appId,
+        s"screenshots-default${orchestratedSuffix(orchestrated)}"
+      )
+      clearScreenshotsFromFolder(
+        device,
+        appId,
+        s"screenshots-compose-default${orchestratedSuffix(orchestrated)}"
+      )
     }
   }
 
