@@ -5,7 +5,6 @@ import android.system.Os
 import androidx.test.runner.AndroidJUnitRunner
 import com.facebook.testing.screenshot.ScreenshotRunner
 import com.karumi.shot.compose.ComposeScreenshotRunner
-import java.io.File
 
 open class ShotTestRunner : AndroidJUnitRunner() {
 

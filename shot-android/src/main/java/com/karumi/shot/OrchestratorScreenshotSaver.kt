@@ -13,10 +13,10 @@ class OrchestratorScreenshotSaver {
 
         fun onCreate(instrumentation: Instrumentation, args: Bundle) {
             orchestrated = RunnerArgs.Builder()
-                    .fromManifest(instrumentation)
-                    .fromBundle(instrumentation, args)
-                    .build()
-                    .orchestratorService != null
+                .fromManifest(instrumentation)
+                .fromBundle(instrumentation, args)
+                .build()
+                .orchestratorService != null
             packageName = instrumentation.context.packageName
         }
 
@@ -24,24 +24,24 @@ class OrchestratorScreenshotSaver {
             if (orchestrated) {
                 copyScreenshots("screenshots-default")
                 copyScreenshots(
-                        screenshotDirName = "screenshots-compose-default",
-                        onlyMetadata = true,
-                        fileSuffix = "_compose"
+                    screenshotDirName = "screenshots-compose-default",
+                    onlyMetadata = true,
+                    fileSuffix = "_compose"
                 )
             }
         }
 
         private fun copyScreenshots(
-                screenshotDirName: String,
-                onlyMetadata: Boolean = false,
-                fileSuffix: String = ""
+            screenshotDirName: String,
+            onlyMetadata: Boolean = false,
+            fileSuffix: String = ""
         ) {
             val orchestratedSuffix = "-orchestrated"
 
             val screenshotsFolderPath =
-                    "${AndroidStorageInfo.storageBaseUrl}/screenshots/$packageName/$screenshotDirName/"
+                "${AndroidStorageInfo.storageBaseUrl}/screenshots/$packageName/$screenshotDirName/"
             val orchestratedFolderPath =
-                    "${AndroidStorageInfo.storageBaseUrl}/screenshots/$packageName/$screenshotDirName$orchestratedSuffix/"
+                "${AndroidStorageInfo.storageBaseUrl}/screenshots/$packageName/$screenshotDirName$orchestratedSuffix/"
 
             File(orchestratedFolderPath).mkdirs()
             val screenshotsFolder = File(screenshotsFolderPath)
