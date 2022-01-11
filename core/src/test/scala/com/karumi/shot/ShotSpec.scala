@@ -52,8 +52,8 @@ class ShotSpec
   }
 
   "Shot" should "should delegate screenshots cleaning to Adb" in {
-    val appId: AppId   = AppIdMother.anyAppId
-    val device: String = "emulator-5554"
+    val appId: AppId          = AppIdMother.anyAppId
+    val device: String        = "emulator-5554"
     val orchestrated: Boolean = false
 
     (adb.devices _).expects().returns(List(device))
@@ -65,8 +65,8 @@ class ShotSpec
   }
 
   it should "pull the screenshots using the project metadata folder and the app id" in {
-    val appId  = AppIdMother.anyAppId
-    val device = "emulator-5554"
+    val appId                 = AppIdMother.anyAppId
+    val device                = "emulator-5554"
     val orchestrated: Boolean = false
 
     (adb.devices _).expects().returns(List(device))
@@ -74,7 +74,12 @@ class ShotSpec
 
     (console.show _).expects(*)
     (adb.pullScreenshots _)
-      .expects(device, "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/", appId, orchestrated)
+      .expects(
+        device,
+        "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/",
+        appId,
+        orchestrated
+      )
     (files.rename _)
       .expects(
         "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/screenshots-default/metadata.json",
@@ -104,9 +109,9 @@ class ShotSpec
   }
 
   it should "should delegate screenshots cleaning to Adb using the specified ANDROID_SERIAL env var" in {
-    val appId: AppId    = AppIdMother.anyAppId
-    val device1: String = "emulator-5554"
-    val device2: String = "emulator-5556"
+    val appId: AppId          = AppIdMother.anyAppId
+    val device1: String       = "emulator-5554"
+    val device2: String       = "emulator-5556"
     val orchestrated: Boolean = false
 
     (adb.devices _).expects().returns(List(device1, device2))
@@ -118,9 +123,9 @@ class ShotSpec
   }
 
   it should "pull the screenshots using the project metadata folder and the app id from the specified ANDROID_SERIAL env var" in {
-    val appId   = AppIdMother.anyAppId
-    val device1 = "emulator-5554"
-    val device2 = "emulator-5556"
+    val appId                 = AppIdMother.anyAppId
+    val device1               = "emulator-5554"
+    val device2               = "emulator-5556"
     val orchestrated: Boolean = false
 
     (adb.devices _).expects().returns(List(device1, device2))
@@ -128,7 +133,12 @@ class ShotSpec
 
     (console.show _).expects(*)
     (adb.pullScreenshots _)
-      .expects(device2, "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/", appId, orchestrated)
+      .expects(
+        device2,
+        "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/",
+        appId,
+        orchestrated
+      )
     (files.rename _).expects(
       "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/screenshots-default/metadata.json",
       "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/screenshots-default/metadata.json_emulator-5556"
@@ -147,9 +157,9 @@ class ShotSpec
   }
 
   it should "should delegate screenshots cleaning to Adb using the devices if ANDROID_SERIAL env var is not valid" in {
-    val appId: AppId    = AppIdMother.anyAppId
-    val device1: String = "emulator-5554"
-    val device2: String = "emulator-5556"
+    val appId: AppId          = AppIdMother.anyAppId
+    val device1: String       = "emulator-5554"
+    val device2: String       = "emulator-5556"
     val orchestrated: Boolean = false
 
     (adb.devices _).expects().returns(List(device1, device2))
