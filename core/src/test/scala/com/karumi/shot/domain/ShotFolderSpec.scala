@@ -14,7 +14,7 @@ class ShotFolderSpec extends AnyFunSpec {
       shotFolder
         .pulledComposeScreenshotsFolder() shouldBe s"shot/screenshots/debug/screenshots-compose-default/"
       shotFolder
-        .pulledComposeOrchestratedScreenshotsFolder() shouldBe s"shot/screenshots/debug/screenshots-compose-default-orchestrated/"
+        .pulledComposeOrchestratedScreenshotsFolder() shouldBe s"shot/screenshots/debug/screenshots-compose-default/"
     }
 
     it("should have metadata file") {
