@@ -1,7 +1,7 @@
-package com.karumi.shot.xml
+package com.karumi.shot.json
 
 import com.karumi.shot.Resources
-import com.karumi.shot.xml.ScreenshotsSuiteJsonParser._
+import com.karumi.shot.xml.ScreenshotsSuiteJsonParser.{parseScreenshotSize, parseScreenshots}
 import org.scalatest.flatspec._
 import org.scalatest.matchers._
 
@@ -13,12 +13,12 @@ class ScreenshotsSuiteJsonParserSpec extends AnyFlatSpec with should.Matchers wi
   private val anyScreenshotsTemporalBuildPath =
     "build/tmp/shot/screenshots"
 
-  "ScreenshotsSuiteXmlParser" should "return an empty spec if there are no screenshots" in {
-    val xml = testResourceContent("/screenshots-metadata/empty-screenshots-metadata.json")
+  "ScreenshotsSuiteJsonParser" should "return an empty spec if there are no screenshots" in {
+    val json = testResourceContent("/screenshots-metadata/empty-screenshots-metadata.json")
 
     val screenshots =
       parseScreenshots(
-        xml,
+        json,
         anyScreenshotsFolder,
         anyTemporalScreenshotsFolder,
         anyScreenshotsTemporalBuildPath
@@ -28,13 +28,13 @@ class ScreenshotsSuiteJsonParserSpec extends AnyFlatSpec with should.Matchers wi
   }
 
   it should "parse a regular metadata file" in {
-    val xml = testResourceContent("/screenshots-metadata/metadata.json")
+    val json = testResourceContent("/screenshots-metadata/metadata.json")
     val viewHierarchyContent =
       testResourceContent("/screenshots-metadata/view-hierarchy.json")
 
     val screenshotsWithoutSize =
       parseScreenshots(
-        xml,
+        json,
         anyScreenshotsFolder,
         anyTemporalScreenshotsFolder,
         anyScreenshotsTemporalBuildPath
