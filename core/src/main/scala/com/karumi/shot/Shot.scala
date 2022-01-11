@@ -15,6 +15,7 @@ import org.tinyzip.TinyZip
 import java.io.File
 import java.nio.file.Paths
 import scala.collection.convert.ImplicitConversions.{`collection AsScalaIterable`, `collection asJava`}
+import scala.collection.immutable.Stream.Empty
 
 class Shot(
     adb: Adb,
@@ -36,9 +37,9 @@ class Shot(
     pullScreenshots(appId, shotFolder, orchestrated)
   }
 
-  def recordScreenshots(appId: AppId, shotFolder: ShotFolder): Unit = {
+  def recordScreenshots(appId: AppId, shotFolder: ShotFolder, orchestrated: Boolean): Unit = {
     console.show("💾  Saving screenshots.")
-    moveComposeScreenshotsToRegularScreenshotsFolder(shotFolder)
+    moveComposeScreenshotsToRegularScreenshotsFolder(shotFolder, orchestrated)
     val composeScreenshotSuite = recordComposeScreenshots(shotFolder)
     val regularScreenshotSuite = recordRegularScreenshots(shotFolder)
     if (regularScreenshotSuite.isEmpty && composeScreenshotSuite.isEmpty) {
@@ -62,10 +63,11 @@ class Shot(
       projectName: String,
       shouldPrintBase64Error: Boolean,
       tolerance: Double,
-      showOnlyFailingTestsInReports: Boolean
+      showOnlyFailingTestsInReports: Boolean,
+      orchestrated: Boolean
   ): ScreenshotsComparisionResult = {
     console.show("🔎  Comparing screenshots with previous ones.")
-    moveComposeScreenshotsToRegularScreenshotsFolder(shotFolder)
+    moveComposeScreenshotsToRegularScreenshotsFolder(shotFolder, orchestrated)
     val regularScreenshots = readScreenshotsMetadata(shotFolder)
     val composeScreenshots = readComposeScreenshotsMetadata(shotFolder)
     if (regularScreenshots.isEmpty && composeScreenshots.isEmpty) {
@@ -133,11 +135,17 @@ class Shot(
     clearScreenshots(appId, orchestrated)
 
   private def moveComposeScreenshotsToRegularScreenshotsFolder(
-      shotFolder: ShotFolder
+      shotFolder: ShotFolder,
+      orchestrated: Boolean
   ): Unit = {
     val composeFolder = shotFolder.pulledComposeScreenshotsFolder()
-    val orchestratedComposeFolder = shotFolder.pulledComposeOrchestratedScreenshotsFolder()
-    val fileList = files.listFilesInFolder(composeFolder) ++ files.listFilesInFolder(orchestratedComposeFolder)
+    var fileList: Iterable[File] = Empty
+    if (orchestrated) {
+      val orchestratedComposeFolder = shotFolder.pulledComposeOrchestratedScreenshotsFolder()
+      fileList = files.listFilesInFolder(composeFolder) ++ files.listFilesInFolder(orchestratedComposeFolder)
+    } else {
+      fileList = files.listFilesInFolder(composeFolder)
+    }
     fileList.forEach { file: File =>
       val rawFilePath = file.getAbsolutePath
       val newFilePath = shotFolder.pulledScreenshotsFolder() + file.getName

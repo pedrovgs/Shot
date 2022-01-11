@@ -54,25 +54,27 @@ class ShotSpec
   "Shot" should "should delegate screenshots cleaning to Adb" in {
     val appId: AppId   = AppIdMother.anyAppId
     val device: String = "emulator-5554"
+    val orchestrated: Boolean = false
 
     (adb.devices _).expects().returns(List(device))
     (envVars.androidSerial _).expects().returns(None)
 
-    (adb.clearScreenshots _).expects(device, appId)
+    (adb.clearScreenshots _).expects(device, appId, orchestrated)
 
-    shot.removeScreenshots(appId)
+    shot.removeScreenshots(appId, orchestrated)
   }
 
   it should "pull the screenshots using the project metadata folder and the app id" in {
     val appId  = AppIdMother.anyAppId
     val device = "emulator-5554"
+    val orchestrated: Boolean = false
 
     (adb.devices _).expects().returns(List(device))
     (envVars.androidSerial _).expects().returns(None)
 
     (console.show _).expects(*)
     (adb.pullScreenshots _)
-      .expects(device, "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/", appId)
+      .expects(device, "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/", appId, orchestrated)
     (files.rename _)
       .expects(
         "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/screenshots-default/metadata.json",
@@ -88,7 +90,8 @@ class ShotSpec
 
     shot.downloadScreenshots(
       appId,
-      ProjectFolderMother.anyShotFolder
+      ProjectFolderMother.anyShotFolder,
+      orchestrated
     )
   }
 
@@ -104,26 +107,28 @@ class ShotSpec
     val appId: AppId    = AppIdMother.anyAppId
     val device1: String = "emulator-5554"
     val device2: String = "emulator-5556"
+    val orchestrated: Boolean = false
 
     (adb.devices _).expects().returns(List(device1, device2))
     (envVars.androidSerial _).expects().returns(Some(device2))
 
-    (adb.clearScreenshots _).expects(device2, appId)
+    (adb.clearScreenshots _).expects(device2, appId, orchestrated)
 
-    shot.removeScreenshots(appId)
+    shot.removeScreenshots(appId, orchestrated)
   }
 
   it should "pull the screenshots using the project metadata folder and the app id from the specified ANDROID_SERIAL env var" in {
     val appId   = AppIdMother.anyAppId
     val device1 = "emulator-5554"
     val device2 = "emulator-5556"
+    val orchestrated: Boolean = false
 
     (adb.devices _).expects().returns(List(device1, device2))
     (envVars.androidSerial _).expects().returns(Some(device2))
 
     (console.show _).expects(*)
     (adb.pullScreenshots _)
-      .expects(device2, "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/", appId)
+      .expects(device2, "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/", appId, orchestrated)
     (files.rename _).expects(
       "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/screenshots-default/metadata.json",
       "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/screenshots-default/metadata.json_emulator-5556"
@@ -136,7 +141,8 @@ class ShotSpec
 
     shot.downloadScreenshots(
       appId,
-      ProjectFolderMother.anyShotFolder
+      ProjectFolderMother.anyShotFolder,
+      orchestrated
     )
   }
 
@@ -144,14 +150,15 @@ class ShotSpec
     val appId: AppId    = AppIdMother.anyAppId
     val device1: String = "emulator-5554"
     val device2: String = "emulator-5556"
+    val orchestrated: Boolean = false
 
     (adb.devices _).expects().returns(List(device1, device2))
     (envVars.androidSerial _).expects().returns(Some("another emulator"))
 
-    (adb.clearScreenshots _).expects(device1, appId)
-    (adb.clearScreenshots _).expects(device2, appId)
+    (adb.clearScreenshots _).expects(device1, appId, orchestrated)
+    (adb.clearScreenshots _).expects(device2, appId, orchestrated)
 
-    shot.removeScreenshots(appId)
+    shot.removeScreenshots(appId, orchestrated)
   }
 
   it should "show a warning message if we couldn't find the compose screenshots' metadata during the verification proces" in {
@@ -171,7 +178,8 @@ class ShotSpec
       ProjectNameMother.anyProjectName,
       shouldPrintBase64Error = false,
       0d,
-      showOnlyFailingTestsInReports = false
+      showOnlyFailingTestsInReports = false,
+      orchestrated = false
     )
   }
 
@@ -186,6 +194,6 @@ class ShotSpec
       "🤔 We couldn't find any screenshot. Did you configure Shot properly and added your tests to your project? https://github.com/Karumi/Shot/#getting-started"
     )
 
-    shot.recordScreenshots(appId, ProjectFolderMother.anyShotFolder)
+    shot.recordScreenshots(appId, ProjectFolderMother.anyShotFolder, orchestrated = false)
   }
 }

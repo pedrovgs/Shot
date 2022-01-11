@@ -87,7 +87,7 @@ class ExecuteScreenshotTests extends ShotTask {
       .getByType[ShotExtension](classOf[ShotExtension])
       .showOnlyFailingTestsInReports
     if (recordScreenshots) {
-      shot.recordScreenshots(appId, shotFolder)
+      shot.recordScreenshots(appId, shotFolder, orchestrated)
     } else {
       val result = shot.verifyScreenshots(
         appId,
@@ -95,7 +95,8 @@ class ExecuteScreenshotTests extends ShotTask {
         project.getName,
         printBase64,
         tolerance,
-        showOnlyFailingTestsInReports
+        showOnlyFailingTestsInReports,
+        orchestrated
       )
       if (result.hasErrors) {
         throw new GradleException(
