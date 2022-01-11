@@ -13,14 +13,15 @@ class ShotFolderSpec extends AnyFunSpec {
       shotFolder.pulledScreenshotsFolder() shouldBe s"shot/screenshots/debug/screenshots-default/"
       shotFolder
         .pulledComposeScreenshotsFolder() shouldBe s"shot/screenshots/debug/screenshots-compose-default/"
+      shotFolder
+        .pulledComposeOrchestratedScreenshotsFolder() shouldBe s"shot/screenshots/debug/screenshots-compose-default-orchestrated/"
     }
-    shotFolder
-      .pulledComposeOrchestratedScreenshotsFolder() shouldBe s"shot/screenshots/debug/screenshots-compose-default-orchestrated/"
 
     it("should have metadata file") {
       shotFolder.metadataFile() shouldBe s"shot/screenshots/debug/screenshots-default/metadata.json"
       shotFolder
         .composeMetadataFile() shouldBe s"shot/screenshots/debug/screenshots-compose-default/metadata.json"
+      shotFolder.composeMetadataFileName() shouldBe "metadata.json"
     }
 
     it("should have a report folder") {
@@ -122,8 +123,15 @@ class ShotFolderSpec extends AnyFunSpec {
         .pulledScreenshotsFolder() shouldBe s"shot/screenshots/debug/screenshots-default-orchestrated/"
       shotFolder
         .pulledComposeScreenshotsFolder() shouldBe s"shot/screenshots/debug/screenshots-compose-default/"
+      shotFolder
+        .pulledComposeOrchestratedScreenshotsFolder() shouldBe s"shot/screenshots/debug/screenshots-compose-default-orchestrated/"
     }
-    shotFolder
-      .pulledComposeOrchestratedScreenshotsFolder() shouldBe s"shot/screenshots/debug/screenshots-compose-default-orchestrated/"
+
+    it("should have metadata file") {
+      shotFolder.metadataFile() shouldBe s"shot/screenshots/debug/screenshots-default-orchestrated/metadata.json"
+      shotFolder
+        .composeMetadataFile() shouldBe s"shot/screenshots/debug/screenshots-compose-default/metadata.json"
+      shotFolder.composeMetadataFileName() shouldBe "metadata_compose.json"
+    }
   }
 }

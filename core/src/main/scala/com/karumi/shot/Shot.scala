@@ -261,7 +261,7 @@ class Shot(
       val filesInScreenshotFolder = folder.listFiles
       val metadataFiles =
         filesInScreenshotFolder.filter(file =>
-          file.getAbsolutePath.contains("metadata_compose.json")
+          file.getAbsolutePath.contains(shotFolder.composeMetadataFileName())
         )
       val screenshotSuite = metadataFiles.flatMap { metadataFilePath =>
         val metadataFileContent = files.read(metadataFilePath.getAbsolutePath)

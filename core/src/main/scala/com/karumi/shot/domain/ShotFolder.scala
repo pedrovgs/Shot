@@ -44,6 +44,14 @@ case class ShotFolder(
     pulledComposeScreenshotsFolder() + s"metadata.json"
   }
 
+  def composeMetadataFileName(): FilePath = {
+    if (orchestrated) {
+      "metadata_compose.json"
+    } else {
+      "metadata.json"
+    }
+  }
+
   def reportFolder(): FilePath = {
     s"${buildFolderPath}${separator}reports${separator}shot$separator${pathSuffix()}"
   }
