@@ -47,13 +47,13 @@ class OrchestratorScreenshotSaver {
             val screenshotsFolder = File(screenshotsFolderPath)
 
             screenshotsFolder.listFiles()?.forEach { file ->
-                if (!onlyMetadata || file.name.contains("metadata.json")) {
-                    moveFile(file, orchestratedFolderPath, fileSuffix)
+                if (!onlyMetadata || file.name.contains("metadata$fileSuffix.json")) {
+                    moveFile(file, orchestratedFolderPath)
                 }
             }
         }
 
-        private fun moveFile(file: File, targetDirPath: String, fileSuffix: String) {
+        private fun moveFile(file: File, targetDirPath: String) {
             // Under orchestrated tests metadata files are created for every test.
             // It requires to change their names to achieve unique files and avoid
             // FileExistsException be thrown during copying.
@@ -61,7 +61,7 @@ class OrchestratorScreenshotSaver {
             var targetFile: File
             do {
                 val counterSuffix = if (counter == 0) "" else "_$counter"
-                val newPath = "$targetDirPath${file.nameWithoutExtension}$fileSuffix.${file.extension}$counterSuffix"
+                val newPath = "$targetDirPath${file.nameWithoutExtension}.${file.extension}$counterSuffix"
                 targetFile = File(newPath)
                 counter = counter.inc()
             } while (targetFile.exists())
