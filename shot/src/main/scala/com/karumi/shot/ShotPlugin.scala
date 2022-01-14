@@ -283,10 +283,10 @@ class ShotPlugin extends Plugin[Project] {
 
   private def isOrchestratorConnected(project: Project) = {
     val orchestrator = "ANDROIDX_TEST_ORCHESTRATOR"
-    if (isAnAndroidLibrary(project)) {
-      getAndroidAppExtension(project).getTestOptions.getExecution == orchestrator
+    if (isAnAndroidProject(project)) {
+      getAndroidAppExtension(project).getTestOptions.getExecution.equalsIgnoreCase(orchestrator)
     } else if (isAnAndroidLibrary(project)) {
-      getAndroidAppExtension(project).getTestOptions.getExecution == orchestrator
+      getAndroidLibraryExtension(project).getTestOptions.getExecution.equalsIgnoreCase(orchestrator)
     } else {
       false
     }
