@@ -86,7 +86,7 @@ class ScreenshotSaverTest {
         saver.saveMetadata(session)
 
         val expectedContent = "{\"screenshots\":[{\"name\":\"test1\",\"testClassName\":\"MainActivityTest\",\"testName\":\"testName1\"},{\"name\":\"test2\",\"testClassName\":\"MainActivityTest\",\"testName\":\"testName2\"}]}"
-        val file = File("${AndroidStorageInfo.storageBaseUrl}/screenshots/com.karumi.shot.test/screenshots-compose-default/metadata.json")
+        val file = File("${AndroidStorageInfo.storageBaseUrl}/screenshots/com.karumi.shot.test/screenshots-compose-default/metadata_compose.json")
         val content = file.readText(Charset.defaultCharset())
         assertTrue(file.exists())
         assertEquals(expectedContent, content)
@@ -101,7 +101,7 @@ class ScreenshotSaverTest {
 
         val bitmapFile = File("${AndroidStorageInfo.storageBaseUrl}/screenshots/com.karumi.shot.test/screenshots-compose-default/${anyScreenshotMetadata.name}.png")
         assertTrue(bitmapFile.exists())
-        val metadataFile = File("${AndroidStorageInfo.storageBaseUrl}/screenshots/com.karumi.shot.test/screenshots-compose-default/metadata.json")
+        val metadataFile = File("${AndroidStorageInfo.storageBaseUrl}/screenshots/com.karumi.shot.test/screenshots-compose-default/metadata_compose.json")
         assertTrue(metadataFile.exists())
     }
 
