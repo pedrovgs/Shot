@@ -223,12 +223,18 @@ class Shot(
       files
         .listFilesInFolder(shotFolder.pulledScreenshotsFolder())
         .filter(file => file.getAbsolutePath.contains(shotFolder.metadataFileName()))
-        .foreach(file => files.rename(file.getAbsolutePath, s"${file.getAbsolutePath}_$device"))
+        .foreach(file => {
+          val filePath = shotFolder.pulledScreenshotsFolder() + file.getName
+          files.rename(filePath, s"${filePath}_$device")
+        })
 
       files
         .listFilesInFolder(shotFolder.pulledComposeOrchestratedScreenshotsFolder())
         .filter(file => file.getAbsolutePath.contains(shotFolder.composeMetadataFileName()))
-        .foreach(file => files.rename(file.getAbsolutePath, s"${file.getAbsolutePath}_$device"))
+        .foreach(file => {
+          val filePath = shotFolder.pulledComposeOrchestratedScreenshotsFolder() + file.getName
+          files.rename(filePath, s"${filePath}_$device")
+        })
     }
 
   private def readScreenshotsMetadata(

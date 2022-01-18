@@ -69,6 +69,20 @@ class ShotSpec
     val device                = "emulator-5554"
     val orchestrated: Boolean = false
 
+    val listOfMetadataFiles = new util.LinkedList[File]()
+    listOfMetadataFiles.add(
+      new File(
+        "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/screenshots-default/metadata.json"
+      )
+    )
+
+    val listOfMetadataComposeFiles = new util.LinkedList[File]()
+    listOfMetadataComposeFiles.add(
+      new File(
+        "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/screenshots-compose-default/metadata_compose.json"
+      )
+    )
+
     (adb.devices _).expects().returns(List(device))
     (envVars.androidSerial _).expects().returns(None)
 
@@ -88,9 +102,23 @@ class ShotSpec
       .once()
     (files.rename _)
       .expects(
-        "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/screenshots-compose-default/metadata.json",
-        "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/screenshots-compose-default/metadata.json_emulator-5554"
+        "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/screenshots-compose-default/metadata_compose.json",
+        "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/screenshots-compose-default/metadata_compose.json_emulator-5554"
       )
+      .once()
+
+    (files.listFilesInFolder _)
+      .expects(
+        "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/screenshots-default/"
+      )
+      .returns(listOfMetadataFiles)
+      .once()
+
+    (files.listFilesInFolder _)
+      .expects(
+        "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/screenshots-compose-default/"
+      )
+      .returns(listOfMetadataComposeFiles)
       .once()
 
     shot.downloadScreenshots(
@@ -128,6 +156,20 @@ class ShotSpec
     val device2               = "emulator-5556"
     val orchestrated: Boolean = false
 
+    val listOfMetadataFiles = new util.LinkedList[File]()
+    listOfMetadataFiles.add(
+      new File(
+        "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/screenshots-default/metadata.json"
+      )
+    )
+
+    val listOfMetadataComposeFiles = new util.LinkedList[File]()
+    listOfMetadataComposeFiles.add(
+      new File(
+        "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/screenshots-compose-default/metadata_compose.json"
+      )
+    )
+
     (adb.devices _).expects().returns(List(device1, device2))
     (envVars.androidSerial _).expects().returns(Some(device2))
 
@@ -145,9 +187,23 @@ class ShotSpec
     )
     (files.rename _)
       .expects(
-        "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/screenshots-compose-default/metadata.json",
-        "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/screenshots-compose-default/metadata.json_emulator-5556"
+        "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/screenshots-compose-default/metadata_compose.json",
+        "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/screenshots-compose-default/metadata_compose.json_emulator-5556"
       )
+
+    (files.listFilesInFolder _)
+      .expects(
+        "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/screenshots-default/"
+      )
+      .returns(listOfMetadataFiles)
+      .once()
+
+    (files.listFilesInFolder _)
+      .expects(
+        "/User/pedro/projects/KarumiApp/app/screenshots/green/debug/Api26/screenshots-compose-default/"
+      )
+      .returns(listOfMetadataComposeFiles)
+      .once()
 
     shot.downloadScreenshots(
       appId,
