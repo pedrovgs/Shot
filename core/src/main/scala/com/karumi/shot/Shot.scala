@@ -220,19 +220,15 @@ class Shot(
 
       extractPicturesFromBundle(shotFolder.pulledScreenshotsFolder())
 
-      files.listFilesInFolder(shotFolder.pulledScreenshotsFolder())
-        .filter(file =>
-          file.getAbsolutePath.contains(shotFolder.metadataFileName())
-        ).foreach(file =>
-          files.rename(file.getAbsolutePath, s"${file.getAbsolutePath}_$device")
-        )
+      files
+        .listFilesInFolder(shotFolder.pulledScreenshotsFolder())
+        .filter(file => file.getAbsolutePath.contains(shotFolder.metadataFileName()))
+        .foreach(file => files.rename(file.getAbsolutePath, s"${file.getAbsolutePath}_$device"))
 
-      files.listFilesInFolder(shotFolder.pulledComposeOrchestratedScreenshotsFolder())
-        .filter(file =>
-          file.getAbsolutePath.contains(shotFolder.composeMetadataFileName())
-        ).foreach(file =>
-        files.rename(file.getAbsolutePath, s"${file.getAbsolutePath}_$device")
-        )
+      files
+        .listFilesInFolder(shotFolder.pulledComposeOrchestratedScreenshotsFolder())
+        .filter(file => file.getAbsolutePath.contains(shotFolder.composeMetadataFileName()))
+        .foreach(file => files.rename(file.getAbsolutePath, s"${file.getAbsolutePath}_$device"))
     }
 
   private def readScreenshotsMetadata(
