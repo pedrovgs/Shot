@@ -22,6 +22,7 @@ class ShotFolderSpec extends AnyFunSpec {
       shotFolder
         .composeMetadataFile() shouldBe s"shot/screenshots/debug/screenshots-compose-default/metadata.json"
       shotFolder.composeMetadataFileName() shouldBe "metadata_compose.json"
+      shotFolder.metadataFileName() shouldBe "metadata.json"
     }
 
     it("should have a report folder") {
@@ -133,6 +134,7 @@ class ShotFolderSpec extends AnyFunSpec {
       shotFolder
         .composeMetadataFile() shouldBe s"shot/screenshots/debug/screenshots-compose-default/metadata.json"
       shotFolder.composeMetadataFileName() shouldBe "metadata_compose.json"
+      shotFolder.metadataFileName() shouldBe "metadata.json"
     }
   }
 }

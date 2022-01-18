@@ -219,8 +219,20 @@ class Shot(
       adb.pullScreenshots(device, screenshotsFolder, appId, orchestrated)
 
       extractPicturesFromBundle(shotFolder.pulledScreenshotsFolder())
-      files.rename(shotFolder.metadataFile(), s"${shotFolder.metadataFile()}_$device")
-      files.rename(shotFolder.composeMetadataFile(), s"${shotFolder.composeMetadataFile()}_$device")
+
+      files.listFilesInFolder(shotFolder.pulledScreenshotsFolder())
+        .filter(file =>
+          file.getAbsolutePath.contains(shotFolder.metadataFileName())
+        ).foreach(file =>
+          files.rename(file.getAbsolutePath, s"${file.getAbsolutePath}_$device")
+        )
+
+      files.listFilesInFolder(shotFolder.pulledComposeOrchestratedScreenshotsFolder())
+        .filter(file =>
+          file.getAbsolutePath.contains(shotFolder.composeMetadataFileName())
+        ).foreach(file =>
+        files.rename(file.getAbsolutePath, s"${file.getAbsolutePath}_$device")
+        )
     }
 
   private def readScreenshotsMetadata(

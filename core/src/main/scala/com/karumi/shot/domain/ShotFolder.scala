@@ -40,8 +40,12 @@ case class ShotFolder(
     pulledScreenshotsFolder() + s"metadata.json"
   }
 
+  def metadataFileName(): FilePath = {
+    "metadata.json"
+  }
+
   def composeMetadataFile(): FilePath = {
-    pulledComposeScreenshotsFolder() + s"metadata.json"
+    pulledComposeScreenshotsFolder() + composeMetadataFileName()
   }
 
   def composeMetadataFileName(): FilePath = {
