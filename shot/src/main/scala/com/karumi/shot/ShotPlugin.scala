@@ -99,6 +99,9 @@ class ShotPlugin extends Plugin[Project] {
     val appTestId     = Option(flavor.getTestApplicationId).getOrElse(completeAppId)
     val flavorName    = if (variant.getFlavorName.nonEmpty) Some(variant.getFlavorName) else None
     val orchestrated  = isOrchestratorConnected(project)
+
+    println(s"orchestrated $orchestrated")
+
     addTasksFor(project, flavorName, variant.getBuildType, appTestId, orchestrated, baseTask)
   }
 

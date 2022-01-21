@@ -45,6 +45,23 @@ jobs:
       - name: Execute screenshot tests for shot-consumer-flavors blue flavor
         run: ./gradlew blueCustomBuildTypeExecuteScreenshotTests
         working-directory: shot-consumer-flavors
+      - name: Set orchestrator enabled
+        run: echo "orchestrated=true" >> $GITHUB_ENV
+      - name: Execute screenshot tests with orchestrator for shot-consumer-library-no-tests
+        run: ./gradlew executeScreenshotTests
+        working-directory: shot-consumer-library-no-tests
+      - name: Execute screenshot tests with orchestrator for shot-consumer-compose
+        run: ./gradlew executeScreenshotTests
+        working-directory: shot-consumer-compose
+      - name: Execute screenshot tests with orchestrator for shot-consumer
+        run: ./gradlew executeScreenshotTests
+        working-directory: shot-consumer
+      - name: Execute screenshot tests with orchestrator for shot-consumer-flavors green flavor
+        run: ./gradlew greenCustomBuildTypeExecuteScreenshotTests
+        working-directory: shot-consumer-flavors
+      - name: Execute screenshot tests with orchestrator for shot-consumer-flavors blue flavor
+        run: ./gradlew blueCustomBuildTypeExecuteScreenshotTests
+        working-directory: shot-consumer-flavors
       - uses: actions/upload-artifact@v2
         if: always()
         with:

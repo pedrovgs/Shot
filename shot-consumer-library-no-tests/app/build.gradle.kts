@@ -19,6 +19,12 @@ android {
   kotlinOptions {
     jvmTarget = "1.8"
   }
+
+  testOptions {
+    if (System.getenv("orchestrated") == "true") {
+      execution "ANDROIDX_TEST_ORCHESTRATOR"
+    }
+  }
 }
 
 dependencies {
@@ -28,6 +34,7 @@ dependencies {
   implementation("com.google.android.material:material:1.3.0")
   implementation("androidx.constraintlayout:constraintlayout:2.0.4")
   testImplementation("junit:junit:4.+")
+  androidTestUtil("androidx.test:orchestrator:1.4.1")
   androidTestImplementation("androidx.test.ext:junit:1.1.2")
   androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
 }

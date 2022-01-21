@@ -56,6 +56,11 @@ android {
     packagingOptions {
         exclude "META-INF/*"
     }
+    testOptions {
+        if (System.getenv("orchestrated") == "true") {
+            execution "ANDROIDX_TEST_ORCHESTRATOR"
+        }
+    }
 }
 
 shot {
@@ -75,6 +80,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
 
     testImplementation "junit:junit:4.13.1"
+
+    androidTestUtil "androidx.test:orchestrator:1.4.1"
 
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:3.3.0"
