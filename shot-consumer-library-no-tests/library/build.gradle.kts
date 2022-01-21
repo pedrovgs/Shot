@@ -28,7 +28,7 @@ android {
 
   testOptions {
     if (System.getenv("orchestrated") == "true") {
-      execution "ANDROIDX_TEST_ORCHESTRATOR"
+      execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
   }
 }
