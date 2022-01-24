@@ -119,7 +119,7 @@ class Shot(
         consoleReporter.showErrors(updatedComparison, newScreenshotsVerificationReportFolder)
 
         console.showError("🤔 Do you a need a hand with your automated tests or your Android app?")
-        console.showError("   We'll be happy to help! Send us an email to hello@karumi.com\n")
+        console.showError("   Maye I can help you! https://github.com/sponsors/pedrovgs\n")
       } else {
         console.showSuccess("✅  Yeah!!! Your tests are passing.")
       }

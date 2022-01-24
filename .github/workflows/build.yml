@@ -3,8 +3,8 @@ on: [pull_request, push, workflow_dispatch]
 env:
   GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g -Dorg.gradle.daemon=false -Dkotlin.incremental=false"
 jobs:
-  test:
-    name: Build
+  test-verification-mode:
+    name: Build and test verification mode
     runs-on: macos-latest
 
     steps:
@@ -67,3 +67,55 @@ jobs:
         with:
           name: Reports
           path: shot-consumer-compose/app/build/reports/
+
+  test-record-mode:
+    name: Build and test verification mode
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Start emulator
+        run: shot-consumer/scripts/start_emulator.sh
+        timeout-minutes: 20
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Build and install Shot
+        run: ./gradlew publishToMavenLocal
+      - name: Execute screenshot tests for shot-consumer-library-no-tests
+        run: ./gradlew executeScreenshotTests -Precord
+        working-directory: shot-consumer-library-no-tests
+      - name: Execute screenshot tests for shot-consumer-compose
+        run: ./gradlew executeScreenshotTests -Precord
+        working-directory: shot-consumer-compose
+      - name: Execute screenshot tests for shot-consumer
+        run: ./gradlew executeScreenshotTests -Precord
+        working-directory: shot-consumer
+      - name: Execute screenshot tests for shot-consumer-flavors green flavor
+        run: ./gradlew greenCustomBuildTypeExecuteScreenshotTests -Precord
+        working-directory: shot-consumer-flavors
+      - name: Execute screenshot tests for shot-consumer-flavors blue flavor
+        run: ./gradlew blueCustomBuildTypeExecuteScreenshotTests -Precord
+        working-directory: shot-consumer-flavors
+      - name: Set orchestrator enabled
+        run: echo "orchestrated=true" >> $GITHUB_ENV
+      - name: Execute screenshot tests with orchestrator for shot-consumer-library-no-tests
+        run: ./gradlew executeScreenshotTests -Precord
+        working-directory: shot-consumer-library-no-tests
+      - name: Execute screenshot tests with orchestrator for shot-consumer-compose
+        run: ./gradlew executeScreenshotTests -Precord
+        working-directory: shot-consumer-compose
+      - name: Execute screenshot tests with orchestrator for shot-consumer
+        run: ./gradlew executeScreenshotTests -Precord
+        working-directory: shot-consumer
+      - name: Execute screenshot tests with orchestrator for shot-consumer-flavors green flavor
+        run: ./gradlew greenCustomBuildTypeExecuteScreenshotTests -Precord
+        working-directory: shot-consumer-flavors
+      - name: Execute screenshot tests with orchestrator for shot-consumer-flavors blue flavor
+        run: ./gradlew blueCustomBuildTypeExecuteScreenshotTests -Precord
+        working-directory: shot-consumer-flavors
