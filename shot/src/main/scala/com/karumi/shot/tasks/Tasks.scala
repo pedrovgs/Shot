@@ -22,6 +22,7 @@ abstract class ShotTask extends DefaultTask {
   var appId: String          = _
   var flavor: Option[String] = _
   var buildType: BuildType   = _
+  var orchestrated: Boolean  = false
   private val console        = new Console
   protected val shot: Shot =
     new Shot(
@@ -47,7 +48,8 @@ abstract class ShotTask extends DefaultTask {
       flavor,
       if (project.hasProperty("directorySuffix")) Some(project.property("directorySuffix").toString)
       else None,
-      File.separator
+      File.separator,
+      orchestrated
     )
   }
 
@@ -85,7 +87,7 @@ class ExecuteScreenshotTests extends ShotTask {
       .getByType[ShotExtension](classOf[ShotExtension])
       .showOnlyFailingTestsInReports
     if (recordScreenshots) {
-      shot.recordScreenshots(appId, shotFolder)
+      shot.recordScreenshots(appId, shotFolder, orchestrated)
     } else {
       val result = shot.verifyScreenshots(
         appId,
@@ -93,7 +95,8 @@ class ExecuteScreenshotTests extends ShotTask {
         project.getName,
         printBase64,
         tolerance,
-        showOnlyFailingTestsInReports
+        showOnlyFailingTestsInReports,
+        orchestrated
       )
       if (result.hasErrors) {
         throw new GradleException(
@@ -116,7 +119,7 @@ object DownloadScreenshotsTask {
 class DownloadScreenshotsTask extends ShotTask {
   @TaskAction
   def downloadScreenshots(): Unit = {
-    shot.downloadScreenshots(appId, shotFolder)
+    shot.downloadScreenshots(appId, shotFolder, orchestrated)
   }
 }
 
@@ -133,7 +136,7 @@ object RemoveScreenshotsTask {
 class RemoveScreenshotsTask extends ShotTask {
   @TaskAction
   def clearScreenshots(): Unit =
-    shot.removeScreenshots(appId)
+    shot.removeScreenshots(appId, orchestrated)
 }
 object ExecuteScreenshotTestsForEveryFlavor {
   val name: String = "executeScreenshotTests"

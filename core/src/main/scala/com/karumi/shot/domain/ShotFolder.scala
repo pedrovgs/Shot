@@ -8,8 +8,11 @@ case class ShotFolder(
     private val buildType: String,
     private val flavor: Option[String],
     private val directorySuffix: Option[String],
-    private val separator: String
+    private val separator: String,
+    private val orchestrated: Boolean
 ) {
+
+  private val orchestratedSuffix = if (orchestrated) "-orchestrated" else ""
 
   private def pathSuffix(): String = {
     s"${flavor.fold("") { s => s"$s$separator" }}" +
@@ -22,19 +25,31 @@ case class ShotFolder(
   }
 
   def pulledScreenshotsFolder(): FilePath = {
-    s"${screenshotsFolder()}screenshots-default$separator"
+    s"${screenshotsFolder()}screenshots-default$orchestratedSuffix$separator"
   }
 
   def pulledComposeScreenshotsFolder(): FilePath = {
     s"${screenshotsFolder()}screenshots-compose-default$separator"
   }
 
+  def pulledComposeOrchestratedScreenshotsFolder(): FilePath = {
+    s"${screenshotsFolder()}screenshots-compose-default$orchestratedSuffix$separator"
+  }
+
   def metadataFile(): FilePath = {
-    pulledScreenshotsFolder() + s"metadata.xml"
+    pulledScreenshotsFolder() + s"metadata.json"
+  }
+
+  def metadataFileName(): FilePath = {
+    "metadata.json"
   }
 
   def composeMetadataFile(): FilePath = {
-    pulledComposeScreenshotsFolder() + s"metadata.json"
+    pulledComposeScreenshotsFolder() + composeMetadataFileName()
+  }
+
+  def composeMetadataFileName(): FilePath = {
+    "metadata_compose.json"
   }
 
   def reportFolder(): FilePath = {

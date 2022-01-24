@@ -314,6 +314,16 @@ shot {
 }
 ```
 
+If you are using orchestrator remember to enable it in composer configuration:
+
+```groovy
+composer {
+  // ...
+  withOrchestrator true
+  // ...
+}
+```
+
 ## Tolerance
 
 Shot provides a simple mechanism to be able to configure a threshold value when comparing recorded images with the new ones during the verification stage. You may need to use tolerance in your tests when testing compose components because the API Shot uses to record screenshots depending on the device where your tests are executed. There are other scenarios where you may need to configure a tolerance value, but these are not so common. If you want to configure it you can use this config in your ``build.gradle`` file.

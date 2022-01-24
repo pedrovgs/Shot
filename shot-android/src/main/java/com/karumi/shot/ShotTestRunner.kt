@@ -13,11 +13,13 @@ open class ShotTestRunner : AndroidJUnitRunner() {
         configureFacebookLibFolder()
         ScreenshotRunner.onCreate(this, args)
         ComposeScreenshotRunner.onCreate(this)
+        OrchestratorScreenshotSaver.onCreate(this, args)
     }
 
     override fun finish(resultCode: Int, results: Bundle?) {
         ScreenshotRunner.onDestroy()
         ComposeScreenshotRunner.onDestroy()
+        OrchestratorScreenshotSaver.onDestroy()
         super.finish(resultCode, results)
     }
 

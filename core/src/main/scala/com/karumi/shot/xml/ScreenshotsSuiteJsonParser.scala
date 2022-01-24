@@ -1,48 +1,61 @@
 package com.karumi.shot.xml
 
-import com.karumi.shot.domain.model.{Folder, ScreenshotsSuite}
+import com.karumi.shot.domain.model.{FilePath, Folder, ScreenshotsSuite}
 import com.karumi.shot.domain.{Dimension, Screenshot}
 import org.json4s._
 import org.json4s.native.JsonMethods._
 
-import scala.xml._
+import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
 
-object ScreenshotsSuiteXmlParser {
+object ScreenshotsSuiteJsonParser {
 
   def parseScreenshots(
-      xml: String,
+      metadataJson: String,
       screenshotsFolder: Folder,
       temporalScreenshotsFolder: Folder,
       screenshotsTemporalBuildPath: Folder
   ): ScreenshotsSuite = {
-    val xmlScreenshots = XML.loadString(xml) \ "screenshot"
-    xmlScreenshots.map(
+    val json                    = parse(metadataJson)
+    val JArray(jsonScreenshots) = json
+    jsonScreenshots.map(
       parseScreenshot(_, screenshotsFolder, temporalScreenshotsFolder, screenshotsTemporalBuildPath)
     )
   }
 
   private def parseScreenshot(
-      xmlNode: Node,
+      jsonNode: JValue,
       screenshotsFolder: Folder,
       temporalScreenshotsFolder: Folder,
       screenshotsTemporalBuildPath: Folder
   ): Screenshot = {
-    val name                   = (xmlNode \ "name" head).text.trim
+    val JString(name)          = jsonNode \ "name"
     val recordedScreenshotPath = screenshotsFolder + name + ".png"
     val temporalScreenshotPath =
       screenshotsTemporalBuildPath + "/" + name + ".png"
-    val testClass      = (xmlNode \ "test_class" head).text.trim
-    val testName       = (xmlNode \ "test_name" head).text.trim
-    val tileWidth      = (xmlNode \ "tile_width" head).text.toInt
-    val tileHeight     = (xmlNode \ "tile_height" head).text.toInt
-    val tilesDimension = Dimension(tileWidth, tileHeight)
-    val viewHierarchy  = (xmlNode \ "view_hierarchy" head).text.trim
-    val absoluteFileNames =
-      (xmlNode \ "absolute_file_name").map(_.text.trim + ".png")
-    val relativeFileNames =
-      (xmlNode \ "relative_file_name").map(_.text.trim + ".png")
-    val recordedPartsPaths =
-      relativeFileNames.map(temporalScreenshotsFolder + _)
+    val JString(testClass)                = (jsonNode \ "testClass")
+    val JString(testName)                 = (jsonNode \ "testName")
+    val JInt(tileWidth)                   = (jsonNode \ "tileWidth")
+    val JInt(tileHeight)                  = (jsonNode \ "tileHeight")
+    val tilesDimension                    = Dimension(tileWidth.toInt, tileHeight.toInt)
+    val JString(viewHierarchy)            = (jsonNode \ "viewHierarchy")
+    val JArray(absoluteFileNamesFromJson) = (jsonNode \ "absoluteFilesNames")
+    val absoluteFileNames                 = ListBuffer[String]()
+    absoluteFileNamesFromJson.foreach(value => {
+      val JString(fileName) = value
+      absoluteFileNames += (fileName + ".png")
+    })
+    val JArray(relativeFileNamesFromJson) =
+      (jsonNode \ "relativeFileNames")
+
+    val relativeFileNames = ListBuffer[String]()
+    relativeFileNamesFromJson.foreach(value => {
+      val JString(fileName) = value
+      relativeFileNames += (fileName + ".png")
+    })
+
+    implicit val formats = DefaultFormats
+
     Screenshot(
       name,
       recordedScreenshotPath,
@@ -53,7 +66,7 @@ object ScreenshotsSuiteXmlParser {
       viewHierarchy,
       absoluteFileNames,
       relativeFileNames,
-      recordedPartsPaths,
+      relativeFileNames.map(temporalScreenshotsFolder + _),
       Dimension(0, 0)
     )
   }

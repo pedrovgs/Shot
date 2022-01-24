@@ -1,6 +1,6 @@
 package com.karumi.shot.android
 
-import com.karumi.shot.android.Adb.baseStoragePath
+import com.karumi.shot.android.Adb.{baseStoragePath}
 import com.karumi.shot.domain.model.{AppId, Folder}
 
 import scala.sys.process._
@@ -32,14 +32,44 @@ class Adb {
       .filter(device => !isCarriageReturnASCII(device))
   }
 
-  def pullScreenshots(device: String, screenshotsFolder: Folder, appId: AppId): Unit = {
-    pullFolder("screenshots-default", device, screenshotsFolder, appId)
+  def pullScreenshots(
+      device: String,
+      screenshotsFolder: Folder,
+      appId: AppId,
+      orchestrated: Boolean
+  ): Unit = {
+    pullFolder(
+      s"screenshots-default${orchestratedSuffix(orchestrated)}",
+      device,
+      screenshotsFolder,
+      appId
+    )
     pullFolder("screenshots-compose-default", device, screenshotsFolder, appId)
+    if (orchestrated) {
+      pullFolder(
+        s"screenshots-compose-default${orchestratedSuffix(orchestrated)}",
+        device,
+        screenshotsFolder,
+        appId
+      )
+    }
   }
 
-  def clearScreenshots(device: String, appId: AppId): Unit = {
+  def clearScreenshots(device: String, appId: AppId, orchestrated: Boolean): Unit = {
     clearScreenshotsFromFolder(device, appId, "screenshots-default")
     clearScreenshotsFromFolder(device, appId, "screenshots-compose-default")
+    if (orchestrated) {
+      clearScreenshotsFromFolder(
+        device,
+        appId,
+        s"screenshots-default${orchestratedSuffix(orchestrated)}"
+      )
+      clearScreenshotsFromFolder(
+        device,
+        appId,
+        s"screenshots-compose-default${orchestratedSuffix(orchestrated)}"
+      )
+    }
   }
 
   private def pullFolder(
@@ -59,8 +89,9 @@ class Adb {
     }
   }
 
-  private def clearScreenshotsFromFolder(device: String, appId: AppId, folder: AppId) =
+  private def clearScreenshotsFromFolder(device: String, appId: AppId, folder: AppId): Unit = {
     executeAdbCommand(s"-s $device shell rm -r $baseStoragePath/screenshots/$appId/$folder/")
+  }
 
   private def executeAdbCommand(command: String): Int =
     s"${Adb.adbBinaryPath} $command" ! logger
@@ -70,4 +101,6 @@ class Adb {
 
   private def isCarriageReturnASCII(device: String): Boolean =
     device.charAt(0) == CR_ASCII_DECIMAL
+
+  private def orchestratedSuffix(orchestrated: Boolean) = if (orchestrated) "-orchestrated" else ""
 }

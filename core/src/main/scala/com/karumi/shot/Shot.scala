@@ -12,12 +12,17 @@ import com.karumi.shot.screenshots.{
 }
 import com.karumi.shot.system.EnvVars
 import com.karumi.shot.ui.Console
-import com.karumi.shot.xml.ScreenshotsSuiteXmlParser._
+import com.karumi.shot.xml.ScreenshotsSuiteJsonParser._
 import org.apache.commons.io.FileUtils
 import org.tinyzip.TinyZip
 
 import java.io.File
 import java.nio.file.Paths
+import scala.collection.convert.ImplicitConversions.{
+  `collection AsScalaIterable`,
+  `collection asJava`
+}
+import scala.collection.immutable.Stream.Empty
 
 class Shot(
     adb: Adb,
@@ -34,14 +39,14 @@ class Shot(
     Adb.adbBinaryPath = adbPath
   }
 
-  def downloadScreenshots(appId: AppId, shotFolder: ShotFolder): Unit = {
+  def downloadScreenshots(appId: AppId, shotFolder: ShotFolder, orchestrated: Boolean): Unit = {
     console.show("⬇️  Pulling screenshots from your connected devices!")
-    pullScreenshots(appId, shotFolder)
+    pullScreenshots(appId, shotFolder, orchestrated)
   }
 
-  def recordScreenshots(appId: AppId, shotFolder: ShotFolder): Unit = {
+  def recordScreenshots(appId: AppId, shotFolder: ShotFolder, orchestrated: Boolean): Unit = {
     console.show("💾  Saving screenshots.")
-    moveComposeScreenshotsToRegularScreenshotsFolder(shotFolder)
+    moveComposeScreenshotsToRegularScreenshotsFolder(shotFolder, orchestrated)
     val composeScreenshotSuite = recordComposeScreenshots(shotFolder)
     val regularScreenshotSuite = recordRegularScreenshots(shotFolder)
     if (regularScreenshotSuite.isEmpty && composeScreenshotSuite.isEmpty) {
@@ -65,10 +70,11 @@ class Shot(
       projectName: String,
       shouldPrintBase64Error: Boolean,
       tolerance: Double,
-      showOnlyFailingTestsInReports: Boolean
+      showOnlyFailingTestsInReports: Boolean,
+      orchestrated: Boolean
   ): ScreenshotsComparisionResult = {
     console.show("🔎  Comparing screenshots with previous ones.")
-    moveComposeScreenshotsToRegularScreenshotsFolder(shotFolder)
+    moveComposeScreenshotsToRegularScreenshotsFolder(shotFolder, orchestrated)
     val regularScreenshots = readScreenshotsMetadata(shotFolder)
     val composeScreenshots = readComposeScreenshotsMetadata(shotFolder)
     if (regularScreenshots.isEmpty && composeScreenshots.isEmpty) {
@@ -132,20 +138,25 @@ class Shot(
     }
   }
 
-  def removeScreenshots(appId: AppId): Unit =
-    clearScreenshots(appId)
+  def removeScreenshots(appId: AppId, orchestrated: Boolean): Unit =
+    clearScreenshots(appId, orchestrated)
 
   private def moveComposeScreenshotsToRegularScreenshotsFolder(
-      shotFolder: ShotFolder
+      shotFolder: ShotFolder,
+      orchestrated: Boolean
   ): Unit = {
-    val composeFolder = shotFolder.pulledComposeScreenshotsFolder()
-    files.listFilesInFolder(composeFolder).forEach { file: File =>
+    val composeFolder            = shotFolder.pulledComposeScreenshotsFolder()
+    var fileList: Iterable[File] = Empty
+    if (orchestrated) {
+      val orchestratedComposeFolder = shotFolder.pulledComposeOrchestratedScreenshotsFolder()
+      fileList =
+        files.listFilesInFolder(composeFolder) ++ files.listFilesInFolder(orchestratedComposeFolder)
+    } else {
+      fileList = files.listFilesInFolder(composeFolder)
+    }
+    fileList.forEach { file: File =>
       val rawFilePath = file.getAbsolutePath
-      val newFilePath =
-        rawFilePath.replace(
-          shotFolder.pulledComposeScreenshotsFolder(),
-          shotFolder.pulledScreenshotsFolder()
-        )
+      val newFilePath = shotFolder.pulledScreenshotsFolder() + file.getName
       files.rename(rawFilePath, newFilePath)
     }
   }
@@ -175,8 +186,9 @@ class Shot(
     }
   }
 
-  private def clearScreenshots(appId: AppId): Unit = forEachDevice { device =>
-    adb.clearScreenshots(device, appId)
+  private def clearScreenshots(appId: AppId, orchestrated: Boolean): Unit = forEachDevice {
+    device =>
+      adb.clearScreenshots(device, appId, orchestrated)
   }
 
   private def forEachDevice[T](f: String => T): Unit = devices().foreach(f)
@@ -197,17 +209,32 @@ class Shot(
 
   private def pullScreenshots(
       appId: AppId,
-      shotFolder: ShotFolder
+      shotFolder: ShotFolder,
+      orchestrated: Boolean
   ): Unit =
     forEachDevice { device =>
       val screenshotsFolder = shotFolder.screenshotsFolder()
       createScreenshotsFolderIfDoesNotExist(screenshotsFolder)
       removeProjectTemporalScreenshotsFolder(shotFolder)
-      adb.pullScreenshots(device, screenshotsFolder, appId)
+      adb.pullScreenshots(device, screenshotsFolder, appId, orchestrated)
 
       extractPicturesFromBundle(shotFolder.pulledScreenshotsFolder())
-      files.rename(shotFolder.metadataFile(), s"${shotFolder.metadataFile()}_$device")
-      files.rename(shotFolder.composeMetadataFile(), s"${shotFolder.composeMetadataFile()}_$device")
+
+      files
+        .listFilesInFolder(shotFolder.pulledScreenshotsFolder())
+        .filter(file => file.getAbsolutePath.contains(shotFolder.metadataFileName()))
+        .foreach(file => {
+          val filePath = shotFolder.pulledScreenshotsFolder() + file.getName
+          files.rename(filePath, s"${filePath}_$device")
+        })
+
+      files
+        .listFilesInFolder(shotFolder.pulledComposeOrchestratedScreenshotsFolder())
+        .filter(file => file.getAbsolutePath.contains(shotFolder.composeMetadataFileName()))
+        .foreach(file => {
+          val filePath = shotFolder.pulledComposeOrchestratedScreenshotsFolder() + file.getName
+          files.rename(filePath, s"${filePath}_$device")
+        })
     }
 
   private def readScreenshotsMetadata(
@@ -218,7 +245,7 @@ class Shot(
     if (folder.exists()) {
       val filesInScreenshotFolder = folder.listFiles
       val metadataFiles =
-        filesInScreenshotFolder.filter(file => file.getAbsolutePath.contains("metadata.xml"))
+        filesInScreenshotFolder.filter(file => file.getAbsolutePath.contains("metadata.json"))
       val screenshotSuite = metadataFiles.flatMap { metadataFilePath =>
         val metadataFileContent = files.read(metadataFilePath.getAbsolutePath)
         parseScreenshots(
@@ -247,7 +274,9 @@ class Shot(
     if (folder.exists()) {
       val filesInScreenshotFolder = folder.listFiles
       val metadataFiles =
-        filesInScreenshotFolder.filter(file => file.getAbsolutePath.contains("metadata.json"))
+        filesInScreenshotFolder.filter(file =>
+          file.getAbsolutePath.contains(shotFolder.composeMetadataFileName())
+        )
       val screenshotSuite = metadataFiles.flatMap { metadataFilePath =>
         val metadataFileContent = files.read(metadataFilePath.getAbsolutePath)
         ScreenshotsComposeSuiteJsonParser.parseScreenshots(
@@ -271,6 +300,7 @@ class Shot(
   private def removeProjectTemporalScreenshotsFolder(shotFolder: ShotFolder): Unit = {
     FileUtils.deleteDirectory(new File(shotFolder.pulledScreenshotsFolder()))
     FileUtils.deleteDirectory(new File(shotFolder.pulledComposeScreenshotsFolder()))
+    FileUtils.deleteDirectory(new File(shotFolder.pulledComposeOrchestratedScreenshotsFolder()))
   }
 
   private def extractPicturesFromBundle(screenshotsFolder: String): Unit = {

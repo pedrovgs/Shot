@@ -12,7 +12,7 @@ import java.lang.IllegalArgumentException
 class ScreenshotSaver(private val packageName: String, private val bitmapGenerator: SemanticsNodeBitmapGenerator) {
 
     private val screenshotsFolder: String = "${AndroidStorageInfo.storageBaseUrl}/screenshots/$packageName/screenshots-compose-default/"
-    private val metadataFile: String = "$screenshotsFolder/metadata.json"
+    private val metadataFile: String = "$screenshotsFolder/metadata_compose.json"
     private val gson: Gson = Gson()
 
     fun saveScreenshot(screenshot: ScreenshotToSave) {
