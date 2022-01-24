@@ -69,7 +69,7 @@ jobs:
           path: shot-consumer-compose/app/build/reports/
 
   test-record-mode:
-    name: Build and test verification mode
+    name: Build and test record mode
     runs-on: macos-latest
 
     steps:
