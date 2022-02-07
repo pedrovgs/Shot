@@ -243,7 +243,8 @@ class ShotSpec
       ProjectFolderMother.anyShotFolder,
       ProjectNameMother.anyProjectName,
       shouldPrintBase64Error = false,
-      0d,
+      tolerance = 0d,
+      colorTolerance = 0,
       showOnlyFailingTestsInReports = false,
       orchestrated = false
     )

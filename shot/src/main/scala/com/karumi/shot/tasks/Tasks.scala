@@ -81,6 +81,9 @@ class ExecuteScreenshotTests extends ShotTask {
     val tolerance = project.getExtensions
       .getByType[ShotExtension](classOf[ShotExtension])
       .tolerance
+    val colorTolerance = project.getExtensions
+      .getByType[ShotExtension](classOf[ShotExtension])
+      .colorTolerance
     val recordScreenshots = project.hasProperty("record")
     val printBase64       = project.hasProperty("printBase64")
     val showOnlyFailingTestsInReports = project.getExtensions
@@ -95,6 +98,7 @@ class ExecuteScreenshotTests extends ShotTask {
         project.getName,
         printBase64,
         tolerance,
+        colorTolerance,
         showOnlyFailingTestsInReports,
         orchestrated
       )

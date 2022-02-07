@@ -12,6 +12,7 @@ object model {
 
 object Config {
   val defaultTolerance: Double         = 0.0
+  val defaultColorTolerance: Int       = 0
   val shotConfiguration: String        = "shotDependencies"
   val androidDependencyMode: FilePath  = "androidTestImplementation"
   val androidDependencyGroup: String   = "com.karumi"
