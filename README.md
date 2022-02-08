@@ -326,17 +326,39 @@ composer {
 
 ## Tolerance
 
-Shot provides a simple mechanism to be able to configure a threshold value when comparing recorded images with the new ones during the verification stage. You may need to use tolerance in your tests when testing compose components because the API Shot uses to record screenshots depending on the device where your tests are executed. There are other scenarios where you may need to configure a tolerance value, but these are not so common. If you want to configure it you can use this config in your ``build.gradle`` file.
+Shot provides a simple mechanism to be able to configure a threshold value when comparing recorded images with the new ones during the verification stage. You may need to use tolerance in your tests when testing compose components, because the API Shot uses to record screenshots depending on the device where your tests are executed, or when recording and verifying the images in different architectures (x86_64 and arm64). There are other scenarios where you may need to configure a tolerance value, but these are not so common.
+
+Be careful when using these parameters because it could make your tests less reliable.
+
+### Global tolerance
+
+This is global tolerance that allows having a percentage of pixels different from the recorded image.
+
+If you want to configure it you can use this config in your ``build.gradle`` file:
 
 ```gradle
 shot {
-    tolerance =  0.1 // 0,1% tolerance
+    tolerance =  0.1 // 0.1% tolerance
 }
 ```
 
-If you configure ``tolerance = 1`` it means the tolerance threshold will be 100% and all your tests will pass even if they should fail...so be careful when configuring this param. 
+If you configure ``tolerance = 100`` it means the tolerance threshold will be 100% and all your tests will pass even if they should fail...so be careful when configuring this param. 
 
 Take into account the ``instrumentationTestTask`` could be different if you use different flavors or build types. Remember also you should use Shot > 3.0.0 because this feature was introduced in this release!
+
+### Color tolerance
+
+This color tolerance will allow the pixels to be slightly different from the recorded ones, looking in each RGB channel. The `colorTolerance` is the maximum allowed absolute difference between a pixel in the recorded screenshot and in the new one.
+
+This tolerance is needed when using different emulator architectures (we've seen problems when mixing x86_84 and arm64) to record or verify screenshots. The screenshots are not exactly the same probably due to hardware rendering, there is a small shift in colors in some cases (gradients, borders between components, etc.)
+
+```gradle
+shot {
+    colorTolerance =  2 // In the range [0, 255]
+}
+```
+
+Keep in mind that you should use the smallest value possible, if you set a high value it will cause the test to pass even when the screenshots are different. You can combine this with a small `tolerance` value.
  
 ## CI Reporting
 
