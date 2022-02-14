@@ -1,0 +1,19 @@
+{
+  "screenshots": [
+    {
+      "name": "com.example.test.ButtonTest_test1",
+      "testClassName": "com.example.test.ButtonTest",
+      "testName": "test1"
+    },
+    {
+      "name": "com.example.test.ButtonTest_test2",
+      "testClassName": "com.example.test.ButtonTest",
+      "testName": "test2"
+    },
+    {
+      "name": "com.example.test.ButtonTest_test3",
+      "testClassName": "com.example.test.ButtonTest",
+      "testName": "test3"
+    }
+  ]
+}

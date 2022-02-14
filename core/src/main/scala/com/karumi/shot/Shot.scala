@@ -279,7 +279,7 @@ class Shot(
         )
       val screenshotSuite = metadataFiles.flatMap { metadataFilePath =>
         val metadataFileContent = files.read(metadataFilePath.getAbsolutePath)
-        ScreenshotsComposeSuiteJsonParser.parseScreenshots(
+        ScreenshotsComposeSuiteJsonParser.parseScreenshotSuite(
           metadataFileContent,
           shotFolder.screenshotsFolder(),
           shotFolder.pulledScreenshotsFolder(),
