@@ -3,12 +3,12 @@ apply plugin: 'kotlin-android'
 apply plugin: 'shot'
 
 android {
-    compileSdkVersion 28
+    compileSdk 31
 
     defaultConfig {
         testApplicationId "com.karumi.samplelibrary.test.app.id"
         minSdkVersion 21
-        targetSdkVersion 28
+        compileSdk 31
         versionCode 1
         versionName "1.0"
         multiDexEnabled true

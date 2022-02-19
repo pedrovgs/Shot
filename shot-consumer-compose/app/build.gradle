@@ -5,13 +5,13 @@ plugins {
 apply plugin: "shot"
 
 android {
-    compileSdkVersion 30
+    compileSdk 31
     buildToolsVersion "30.0.2"
 
     defaultConfig {
         applicationId "com.karumi.shotconsumercompose"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdk 30
         versionCode 1
         versionName "1.0"
 
