@@ -8,7 +8,7 @@ android {
     defaultConfig {
         testApplicationId "com.karumi.samplelibrary.test.app.id"
         minSdkVersion 21
-        compileSdk 31
+        targetSdk 30
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
