@@ -21,8 +21,15 @@ import java.io.File
 abstract class ShotTask extends DefaultTask {
   var appId: String          = _
   var flavor: Option[String] = _
-  var buildType: BuildType   = _
+  var buildTypeName: String   = _
   var orchestrated: Boolean  = false
+  var projectPath: String    = _
+  var buildPath: String      = _
+  var shotExtension: ShotExtension = _
+  var directorySuffix: Option[String] = _
+  var recordScreenshots: Boolean = _
+  var printBase64: Boolean = _
+  var projectName: String = _
   private val console        = new Console
   protected val shot: Shot =
     new Shot(
@@ -36,18 +43,14 @@ abstract class ShotTask extends DefaultTask {
       new ConsoleReporter(console),
       new EnvVars()
     )
-  protected val shotExtension: ShotExtension =
-    getProject.getExtensions.findByType(classOf[ShotExtension])
 
   protected def shotFolder: ShotFolder = {
-    val project = getProject
     ShotFolder(
-      project.getProjectDir.getAbsolutePath,
-      project.getBuildDir.getAbsolutePath,
-      buildType.getName,
+      projectPath,
+      buildPath,
+      buildTypeName,
       flavor,
-      if (project.hasProperty("directorySuffix")) Some(project.property("directorySuffix").toString)
-      else None,
+      directorySuffix,
       File.separator,
       orchestrated
     )
@@ -77,22 +80,15 @@ class ExecuteScreenshotTests extends ShotTask {
 
   @TaskAction
   def executeScreenshotTests(): Unit = {
-    val project = getProject
-    val tolerance = project.getExtensions
-      .getByType[ShotExtension](classOf[ShotExtension])
-      .tolerance
-    val recordScreenshots = project.hasProperty("record")
-    val printBase64       = project.hasProperty("printBase64")
-    val showOnlyFailingTestsInReports = project.getExtensions
-      .getByType[ShotExtension](classOf[ShotExtension])
-      .showOnlyFailingTestsInReports
+    val tolerance = shotExtension.tolerance
+    val showOnlyFailingTestsInReports = shotExtension.showOnlyFailingTestsInReports
     if (recordScreenshots) {
       shot.recordScreenshots(appId, shotFolder, orchestrated)
     } else {
       val result = shot.verifyScreenshots(
         appId,
         shotFolder,
-        project.getName,
+        projectName,
         printBase64,
         tolerance,
         showOnlyFailingTestsInReports,
