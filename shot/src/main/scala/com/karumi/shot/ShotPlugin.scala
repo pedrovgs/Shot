@@ -180,8 +180,10 @@ class ShotPlugin extends Plugin[Project] {
       task.projectPath = project.getProjectDir.getAbsolutePath
       task.buildPath = project.getBuildDir.getAbsolutePath
       task.shotExtension = project.getExtensions.findByType(classOf[ShotExtension])
-      task.directorySuffix = if (project.hasProperty("directorySuffix")) Some(project.property("directorySuffix").toString)
-      else None
+      task.directorySuffix =
+        if (project.hasProperty("directorySuffix"))
+          Some(project.property("directorySuffix").toString)
+        else None
       task.recordScreenshots = project.hasProperty("record")
       task.printBase64 = project.hasProperty("printBase64")
       task.projectName = project.getName
@@ -195,8 +197,10 @@ class ShotPlugin extends Plugin[Project] {
       task.projectPath = project.getProjectDir.getAbsolutePath
       task.buildPath = project.getBuildDir.getAbsolutePath
       task.shotExtension = project.getExtensions.findByType(classOf[ShotExtension])
-      task.directorySuffix = if (project.hasProperty("directorySuffix")) Some(project.property("directorySuffix").toString)
-      else None
+      task.directorySuffix =
+        if (project.hasProperty("directorySuffix"))
+          Some(project.property("directorySuffix").toString)
+        else None
       task.recordScreenshots = project.hasProperty("record")
       task.printBase64 = project.hasProperty("printBase64")
       task.projectName = project.getName
@@ -213,8 +217,10 @@ class ShotPlugin extends Plugin[Project] {
       task.projectPath = project.getProjectDir.getAbsolutePath
       task.buildPath = project.getBuildDir.getAbsolutePath
       task.shotExtension = project.getExtensions.findByType(classOf[ShotExtension])
-      task.directorySuffix = if (project.hasProperty("directorySuffix")) Some(project.property("directorySuffix").toString)
-      else None
+      task.directorySuffix =
+        if (project.hasProperty("directorySuffix"))
+          Some(project.property("directorySuffix").toString)
+        else None
       task.recordScreenshots = project.hasProperty("record")
       task.printBase64 = project.hasProperty("printBase64")
       task.projectName = project.getName
@@ -230,8 +236,10 @@ class ShotPlugin extends Plugin[Project] {
       task.projectPath = project.getProjectDir.getAbsolutePath
       task.buildPath = project.getBuildDir.getAbsolutePath
       task.shotExtension = project.getExtensions.findByType(classOf[ShotExtension])
-      task.directorySuffix = if (project.hasProperty("directorySuffix")) Some(project.property("directorySuffix").toString)
-      else None
+      task.directorySuffix =
+        if (project.hasProperty("directorySuffix"))
+          Some(project.property("directorySuffix").toString)
+        else None
       task.recordScreenshots = project.hasProperty("record")
       task.printBase64 = project.hasProperty("printBase64")
       task.projectName = project.getName
