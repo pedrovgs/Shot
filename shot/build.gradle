@@ -9,20 +9,15 @@ repositories {
     mavenCentral()
     mavenLocal()
     google()
-    exclusiveContent {
-        forRepository { jcenter() }
-        filter {
-            includeGroup("org.jetbrains.trove4j")
-        }
-    }
 }
 
 dependencies {
     implementation gradleApi()
     implementation localGroovy()
     implementation project(':core')
-    compileOnly 'com.android.tools.build:gradle:7.1.0-alpha06'
+    compileOnly 'com.android.tools.build:gradle:7.1.2'
     implementation 'org.scala-lang:scala-library:2.12.13'
+    implementation 'commons-io:commons-io:2.11.0'
 
     testImplementation 'org.scalatest:scalatest_2.12:3.2.6'
     testRuntimeOnly "com.vladsch.flexmark:flexmark-profile-pegdown:0.36.8" // https://github.com/scalatest/scalatest/issues/1736
