@@ -1,18 +1,10 @@
 package com.karumi.shot.screenshots
 
 import java.io.File
-import com.karumi.shot.domain.{
-  Config,
-  DifferentImageDimensions,
-  DifferentScreenshots,
-  Dimension,
-  Screenshot,
-  ScreenshotNotFound,
-  ScreenshotsComparisionResult,
-  ShotFolder
-}
+import com.karumi.shot.domain.{Dimension, Screenshot, ScreenshotsComparisionResult, ShotFolder}
 import com.karumi.shot.domain.model.{FilePath, Folder, ScreenshotsSuite}
-import com.sksamuel.scrimage.Image
+import com.sksamuel.scrimage.ImmutableImage
+import com.sksamuel.scrimage.nio.PngWriter
 import org.apache.commons.io.FileUtils
 
 class ScreenshotsSaver {
@@ -71,7 +63,7 @@ class ScreenshotsSaver {
       screenshot: Screenshot
   ): Dimension = {
     val screenshotPath = shotFolder.pulledScreenshotsFolder() + screenshot.name + ".png"
-    val image          = Image.fromFile(new File(screenshotPath))
+    val image          = ImmutableImage.loader().fromFile(new File(screenshotPath))
     Dimension(image.width, image.height)
   }
 
@@ -97,7 +89,7 @@ class ScreenshotsSaver {
         outputFile.createNewFile()
       }
       val image = ScreenshotComposer.composeNewScreenshot(screenshot)
-      image.output(outputFile)
+      image.output(PngWriter.NoCompression, outputFile)
     }
   }
 

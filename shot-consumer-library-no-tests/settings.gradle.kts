@@ -4,7 +4,6 @@ dependencyResolutionManagement {
     mavenLocal()
     google()
     mavenCentral()
-    jcenter() // Warning: this repository is going to shut down soon
   }
 }
 rootProject.name = "ShotAGPBug"
