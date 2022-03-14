@@ -130,12 +130,14 @@ class ExecutionReporter {
         val reason       = generateReasonMessage(error)
         val color        = if (isFailedTest) "red-text" else "green-text"
         val id           = screenshot.name.replace(".", "")
+        val screenshotName = screenshot.name
 
         if (showOnlyFailingTestsInReports && isFailedTest || !showOnlyFailingTestsInReports) {
           "<tr>" +
             s"<th><a href='#$id'>$result</a></th>" +
             s"<th><a href='#$id'><p class='$color'>Test class: $testClass</p>" +
             s"<p class='$color'>Test name: $testName</p></a></th>" +
+            s"<p class='$color'>Screenshot name: $screenshotName</p></th>" +
             s"<th>$reason</th>" +
             "</tr>"
         } else {
@@ -164,11 +166,13 @@ class ExecutionReporter {
         val color = if (isFailedTest) "red-text" else "green-text"
         val width = (screenshot.screenshotDimension.width * 0.2).toInt
         val id    = screenshot.name.replace(".", "")
+        val screenshotName = screenshot.name
 
         if (showOnlyFailingTestsInReports && isFailedTest || !showOnlyFailingTestsInReports) {
           "<tr>" +
             s"<th id='$id'> <p class='$color'>Test class: $testClass</p>" +
             s"<p class='$color'>Test name: $testName</p></th>" +
+            s"<p class='$color'>Screenshot name: $screenshotName</p></th>" +
             s"<th> <a href='$originalScreenshot'><img width='$width' src='$originalScreenshot'/></a></th>" +
             s"<th> <a href='$newScreenshot'><img width='$width' src='$newScreenshot'/></a></th>" +
             s"<th> <a href='$diff'><img width='$width' src='$diff'/></a></th>" +
