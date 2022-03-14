@@ -74,9 +74,11 @@ class ExecutionReporter {
         val testName           = screenshot.testName
         val originalScreenshot = "./images/recorded/" + screenshot.name + ".png"
         val width              = (screenshot.screenshotDimension.width * 0.2).toInt
+        val screenshotName = screenshot.name
         "<tr>" +
           s"<th> <p>Test class: $testClass</p>" +
           s"<p>Test name: $testName</p></th>" +
+          s"<p>Screenshot name: $screenshotName</p></th>" +
           s"<th> <a href='$originalScreenshot'><img width='$width' src='$originalScreenshot'/></a></th>" +
           "</tr>"
       }
