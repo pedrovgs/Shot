@@ -215,7 +215,6 @@ class Shot(
     forEachDevice { device =>
       val screenshotsFolder = shotFolder.screenshotsFolder()
       createScreenshotsFolderIfDoesNotExist(screenshotsFolder)
-      removeProjectTemporalScreenshotsFolder(shotFolder)
       adb.pullScreenshots(device, screenshotsFolder, appId, orchestrated)
 
       extractPicturesFromBundle(shotFolder.pulledScreenshotsFolder())
