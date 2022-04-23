@@ -334,7 +334,7 @@ shot {
 }
 ```
 
-If you configure ``tolerance = 1`` it means the tolerance threshold will be 100% and all your tests will pass even if they should fail...so be careful when configuring this param. 
+If you configure ``tolerance = 100`` it means the tolerance threshold will be 100% and all your tests will pass even if they should fail...so be careful when configuring this param. 
 
 Take into account the ``instrumentationTestTask`` could be different if you use different flavors or build types. Remember also you should use Shot > 3.0.0 because this feature was introduced in this release!
  
