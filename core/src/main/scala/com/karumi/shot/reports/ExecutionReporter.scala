@@ -77,7 +77,7 @@ class ExecutionReporter {
         val screenshotName     = screenshot.name
         "<tr>" +
           s"<th> <p>Test class: $testClass</p>" +
-          s"<p>Test name: $testName</p></th>" +
+          s"<p>Test name: $testName</p>" +
           s"<p>Screenshot name: $screenshotName</p></th>" +
           s"<th> <a href='$originalScreenshot'><img width='$width' src='$originalScreenshot'/></a></th>" +
           "</tr>"
@@ -171,7 +171,7 @@ class ExecutionReporter {
         if (showOnlyFailingTestsInReports && isFailedTest || !showOnlyFailingTestsInReports) {
           "<tr>" +
             s"<th id='$id'> <p class='$color'>Test class: $testClass</p>" +
-            s"<p class='$color'>Test name: $testName</p></th>" +
+            s"<p class='$color'>Test name: $testName</p>" +
             s"<p class='$color'>Screenshot name: $screenshotName</p></th>" +
             s"<th> <a href='$originalScreenshot'><img width='$width' src='$originalScreenshot'/></a></th>" +
             s"<th> <a href='$newScreenshot'><img width='$width' src='$newScreenshot'/></a></th>" +
