@@ -67,7 +67,10 @@ class ScreenshotsComparator {
     }
   }
 
-  private def haveSameDimensions(newScreenshot: ImmutableImage, recordedScreenshot: ImmutableImage): Boolean =
+  private def haveSameDimensions(
+      newScreenshot: ImmutableImage,
+      recordedScreenshot: ImmutableImage
+  ): Boolean =
     newScreenshot.width == recordedScreenshot.width && newScreenshot.height == recordedScreenshot.height
 
 }
