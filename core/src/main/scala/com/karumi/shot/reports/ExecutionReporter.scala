@@ -74,7 +74,7 @@ class ExecutionReporter {
         val testName           = screenshot.testName
         val originalScreenshot = "./images/recorded/" + screenshot.name + ".png"
         val width              = (screenshot.screenshotDimension.width * 0.2).toInt
-        val screenshotName = screenshot.name
+        val screenshotName     = screenshot.name
         "<tr>" +
           s"<th> <p>Test class: $testClass</p>" +
           s"<p>Test name: $testName</p></th>" +
@@ -123,13 +123,13 @@ class ExecutionReporter {
   ): String = {
     getSortedByResultScreenshots(comparision)
       .map { case (screenshot, error) =>
-        val isFailedTest = error.isDefined
-        val testClass    = screenshot.testClass
-        val testName     = screenshot.testName
-        val result       = if (isFailedTest) "❌" else "✅"
-        val reason       = generateReasonMessage(error)
-        val color        = if (isFailedTest) "red-text" else "green-text"
-        val id           = screenshot.name.replace(".", "")
+        val isFailedTest   = error.isDefined
+        val testClass      = screenshot.testClass
+        val testName       = screenshot.testName
+        val result         = if (isFailedTest) "❌" else "✅"
+        val reason         = generateReasonMessage(error)
+        val color          = if (isFailedTest) "red-text" else "green-text"
+        val id             = screenshot.name.replace(".", "")
         val screenshotName = screenshot.name
 
         if (showOnlyFailingTestsInReports && isFailedTest || !showOnlyFailingTestsInReports) {
@@ -163,9 +163,9 @@ class ExecutionReporter {
         } else {
           ""
         }
-        val color = if (isFailedTest) "red-text" else "green-text"
-        val width = (screenshot.screenshotDimension.width * 0.2).toInt
-        val id    = screenshot.name.replace(".", "")
+        val color          = if (isFailedTest) "red-text" else "green-text"
+        val width          = (screenshot.screenshotDimension.width * 0.2).toInt
+        val id             = screenshot.name.replace(".", "")
         val screenshotName = screenshot.name
 
         if (showOnlyFailingTestsInReports && isFailedTest || !showOnlyFailingTestsInReports) {
