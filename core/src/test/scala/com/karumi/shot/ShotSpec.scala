@@ -235,7 +235,7 @@ class ShotSpec
       .returns(new util.LinkedList[File]())
     (console.show _).expects(*)
     (console.showWarning _).expects(
-      "🤔 We couldn't find any screenshot. Did you configure Shot properly and added your tests to your project? https://github.com/Karumi/Shot/#getting-started"
+      "🤔 We couldn't find any screenshot. Did you configure Shot properly and added your tests to your project? https://github.com/pedrovgs/Shot/#getting-started"
     )
 
     shot.verifyScreenshots(
@@ -257,7 +257,7 @@ class ShotSpec
       .returns(new util.LinkedList[File]())
     (console.show _).expects(*)
     (console.showWarning _).expects(
-      "🤔 We couldn't find any screenshot. Did you configure Shot properly and added your tests to your project? https://github.com/Karumi/Shot/#getting-started"
+      "🤔 We couldn't find any screenshot. Did you configure Shot properly and added your tests to your project? https://github.com/pedrovgs/Shot/#getting-started"
     )
 
     shot.recordScreenshots(appId, ProjectFolderMother.anyShotFolder, orchestrated = false)
