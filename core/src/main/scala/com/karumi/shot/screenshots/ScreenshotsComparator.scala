@@ -55,7 +55,7 @@ class ScreenshotsComparator {
       val percentageOfDifferentPixels =
         differentPixels.length.toDouble / oldScreenshotPixels.length.toDouble
       val percentageOutOf100        = percentageOfDifferentPixels * 100.0
-      val imagesAreDifferent        = percentageOutOf100 >= tolerance
+      val imagesAreDifferent        = percentageOutOf100 > tolerance
       val imagesAreConsideredEquals = !imagesAreDifferent
       if (imagesAreConsideredEquals && tolerance != Config.defaultTolerance) {
         val screenshotName = screenshot.name

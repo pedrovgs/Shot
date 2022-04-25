@@ -334,7 +334,7 @@ shot {
 }
 ```
 
-If you configure ``tolerance = 1`` it means the tolerance threshold will be 100% and all your tests will pass even if they should fail...so be careful when configuring this param. 
+If you configure ``tolerance = 100`` it means the tolerance threshold will be 100% and all your tests will pass even if they should fail...so be careful when configuring this param. 
 
 Take into account the ``instrumentationTestTask`` could be different if you use different flavors or build types. Remember also you should use Shot > 3.0.0 because this feature was introduced in this release!
  
@@ -417,19 +417,31 @@ This is the list of most useful Gradle tasks you might need divided by type of p
 
 If you want to apply the same testing technique on iOS you can use [Swift Snapshot Testing](https://github.com/pointfreeco/swift-snapshot-testing)
 
+Developed By
+------------
+
+* Pedro Vicente Gómez Sánchez - <pedrovicente.gomez@gmail.com>
+
+<a href="https://twitter.com/pedro_g_s">
+  <img alt="Follow me on Twitter" src="https://image.freepik.com/iconos-gratis/twitter-logo_318-40209.jpg" height="60" width="60"/>
+</a>
+<a href="https://es.linkedin.com/in/pedrovgs">
+  <img alt="Add me to Linkedin" src="https://image.freepik.com/iconos-gratis/boton-del-logotipo-linkedin_318-84979.png" height="60" width="60"/>
+</a>
+
 License
 -------
 
-    Copyright 2018 Karumi
+Copyright 2022 Pedro Vicente Gómez Sánchez
 
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
+   http://www.apache.org/licenses/LICENSE-2.0
 
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

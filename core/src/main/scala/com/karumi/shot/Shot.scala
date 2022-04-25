@@ -51,7 +51,7 @@ class Shot(
     val regularScreenshotSuite = recordRegularScreenshots(shotFolder)
     if (regularScreenshotSuite.isEmpty && composeScreenshotSuite.isEmpty) {
       console.showWarning(
-        "🤔 We couldn't find any screenshot. Did you configure Shot properly and added your tests to your project? https://github.com/Karumi/Shot/#getting-started"
+        "🤔 We couldn't find any screenshot. Did you configure Shot properly and added your tests to your project? https://github.com/pedrovgs/Shot/#getting-started"
       )
     } else {
       val screenshots = regularScreenshotSuite.get ++ composeScreenshotSuite.get
@@ -79,7 +79,7 @@ class Shot(
     val composeScreenshots = readComposeScreenshotsMetadata(shotFolder)
     if (regularScreenshots.isEmpty && composeScreenshots.isEmpty) {
       console.showWarning(
-        "🤔 We couldn't find any screenshot. Did you configure Shot properly and added your tests to your project? https://github.com/Karumi/Shot/#getting-started"
+        "🤔 We couldn't find any screenshot. Did you configure Shot properly and added your tests to your project? https://github.com/pedrovgs/Shot/#getting-started"
       )
       ScreenshotsComparisionResult()
     } else {
@@ -215,7 +215,6 @@ class Shot(
     forEachDevice { device =>
       val screenshotsFolder = shotFolder.screenshotsFolder()
       createScreenshotsFolderIfDoesNotExist(screenshotsFolder)
-      removeProjectTemporalScreenshotsFolder(shotFolder)
       adb.pullScreenshots(device, screenshotsFolder, appId, orchestrated)
 
       extractPicturesFromBundle(shotFolder.pulledScreenshotsFolder())
@@ -279,7 +278,7 @@ class Shot(
         )
       val screenshotSuite = metadataFiles.flatMap { metadataFilePath =>
         val metadataFileContent = files.read(metadataFilePath.getAbsolutePath)
-        ScreenshotsComposeSuiteJsonParser.parseScreenshots(
+        ScreenshotsComposeSuiteJsonParser.parseScreenshotSuite(
           metadataFileContent,
           shotFolder.screenshotsFolder(),
           shotFolder.pulledScreenshotsFolder(),

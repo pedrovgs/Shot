@@ -174,16 +174,36 @@ class ShotPlugin extends Plugin[Project] {
     removeScreenshotsAfterExecution.configure { task =>
       task.setDescription(RemoveScreenshotsTask.description(flavor, buildType))
       task.flavor = flavor
-      task.buildType = buildType
+      task.buildTypeName = buildType.getName
       task.appId = appId
       task.orchestrated = orchestrated
+      task.projectPath = project.getProjectDir.getAbsolutePath
+      task.buildPath = project.getBuildDir.getAbsolutePath
+      task.shotExtension = project.getExtensions.findByType(classOf[ShotExtension])
+      task.directorySuffix =
+        if (project.hasProperty("directorySuffix"))
+          Some(project.property("directorySuffix").toString)
+        else None
+      task.recordScreenshots = project.hasProperty("record")
+      task.printBase64 = project.hasProperty("printBase64")
+      task.projectName = project.getName
     }
     removeScreenshotsBeforeExecution.configure { task =>
       task.setDescription(RemoveScreenshotsTask.description(flavor, buildType))
       task.flavor = flavor
-      task.buildType = buildType
+      task.buildTypeName = buildType.getName
       task.appId = appId
       task.orchestrated = orchestrated
+      task.projectPath = project.getProjectDir.getAbsolutePath
+      task.buildPath = project.getBuildDir.getAbsolutePath
+      task.shotExtension = project.getExtensions.findByType(classOf[ShotExtension])
+      task.directorySuffix =
+        if (project.hasProperty("directorySuffix"))
+          Some(project.property("directorySuffix").toString)
+        else None
+      task.recordScreenshots = project.hasProperty("record")
+      task.printBase64 = project.hasProperty("printBase64")
+      task.projectName = project.getName
     }
 
     val downloadScreenshots = tasks
@@ -191,18 +211,38 @@ class ShotPlugin extends Plugin[Project] {
     downloadScreenshots.configure { task =>
       task.setDescription(DownloadScreenshotsTask.description(flavor, buildType))
       task.flavor = flavor
-      task.buildType = buildType
+      task.buildTypeName = buildType.getName
       task.appId = appId
       task.orchestrated = orchestrated
+      task.projectPath = project.getProjectDir.getAbsolutePath
+      task.buildPath = project.getBuildDir.getAbsolutePath
+      task.shotExtension = project.getExtensions.findByType(classOf[ShotExtension])
+      task.directorySuffix =
+        if (project.hasProperty("directorySuffix"))
+          Some(project.property("directorySuffix").toString)
+        else None
+      task.recordScreenshots = project.hasProperty("record")
+      task.printBase64 = project.hasProperty("printBase64")
+      task.projectName = project.getName
     }
     val executeScreenshot = tasks
       .register(ExecuteScreenshotTests.name(flavor, buildType), classOf[ExecuteScreenshotTests])
     executeScreenshot.configure { task =>
       task.setDescription(ExecuteScreenshotTests.description(flavor, buildType))
       task.flavor = flavor
-      task.buildType = buildType
+      task.buildTypeName = buildType.getName
       task.appId = appId
       task.orchestrated = orchestrated
+      task.projectPath = project.getProjectDir.getAbsolutePath
+      task.buildPath = project.getBuildDir.getAbsolutePath
+      task.shotExtension = project.getExtensions.findByType(classOf[ShotExtension])
+      task.directorySuffix =
+        if (project.hasProperty("directorySuffix"))
+          Some(project.property("directorySuffix").toString)
+        else None
+      task.recordScreenshots = project.hasProperty("record")
+      task.printBase64 = project.hasProperty("printBase64")
+      task.projectName = project.getName
     }
 
     if (runInstrumentation(project, extension)) {
