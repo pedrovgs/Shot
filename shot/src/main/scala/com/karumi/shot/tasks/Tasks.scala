@@ -52,7 +52,8 @@ abstract class ShotTask extends DefaultTask {
       flavor,
       directorySuffix,
       File.separator,
-      orchestrated
+      orchestrated,
+      System.currentTimeMillis().toString
     )
   }
 

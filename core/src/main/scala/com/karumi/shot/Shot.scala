@@ -123,7 +123,6 @@ class Shot(
       } else {
         console.showSuccess("✅  Yeah!!! Your tests are passing.")
       }
-      removeProjectTemporalScreenshotsFolder(shotFolder)
       reporter.generateVerificationReport(
         appId,
         comparison,
@@ -134,6 +133,7 @@ class Shot(
         "🤓  You can review the execution report here: " + shotFolder
           .verificationReportFolder() + "index.html"
       )
+      removeProjectTemporalScreenshotsFolder(shotFolder)
       comparison
     }
   }
@@ -297,9 +297,23 @@ class Shot(
   }
 
   private def removeProjectTemporalScreenshotsFolder(shotFolder: ShotFolder): Unit = {
-    FileUtils.deleteDirectory(new File(shotFolder.pulledScreenshotsFolder()))
-    FileUtils.deleteDirectory(new File(shotFolder.pulledComposeScreenshotsFolder()))
-    FileUtils.deleteDirectory(new File(shotFolder.pulledComposeOrchestratedScreenshotsFolder()))
+    // Fix for https://github.com/pedrovgs/Shot/issues/53
+    // Avoid crash when directory can't be deleted
+    try {
+      FileUtils.deleteDirectory(new File(shotFolder.pulledScreenshotsFolder()))
+    } catch {
+      case e: Throwable => println(Console.RED + s"Shot error: $e")
+    }
+    try {
+      FileUtils.deleteDirectory(new File(shotFolder.pulledComposeScreenshotsFolder()))
+    } catch {
+      case e: Throwable => println(Console.RED + s"Shot error: $e")
+    }
+    try {
+      FileUtils.deleteDirectory(new File(shotFolder.pulledComposeOrchestratedScreenshotsFolder()))
+    } catch {
+      case e: Throwable => println(Console.RED + s"Shot error: $e")
+    }
   }
 
   private def extractPicturesFromBundle(screenshotsFolder: String): Unit = {
