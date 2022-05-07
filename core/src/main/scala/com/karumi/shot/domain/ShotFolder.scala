@@ -27,15 +27,15 @@ case class ShotFolder(
   }
 
   def pulledScreenshotsFolder(): FilePath = {
-    s"${screenshotsFolder()}screenshots-default$orchestratedSuffix$separator$uidSuffix"
+    s"${screenshotsFolder()}screenshots-default$orchestratedSuffix$uidSuffix$separator"
   }
 
   def pulledComposeScreenshotsFolder(): FilePath = {
-    s"${screenshotsFolder()}screenshots-compose-default$separator$uidSuffix"
+    s"${screenshotsFolder()}screenshots-compose-default$uidSuffix$separator"
   }
 
   def pulledComposeOrchestratedScreenshotsFolder(): FilePath = {
-    s"${screenshotsFolder()}screenshots-compose-default$orchestratedSuffix$separator$uidSuffix"
+    s"${screenshotsFolder()}screenshots-compose-default$orchestratedSuffix$uidSuffix$separator"
   }
 
   def metadataFile(): FilePath = {
