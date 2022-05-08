@@ -128,14 +128,6 @@ class ShotSpec
     )
   }
 
-  it should "configure adb path" in {
-    val anyAdbPath = "/Library/androidsdk/bin/adb"
-
-    shot.configureAdbPath(anyAdbPath)
-
-    Adb.adbBinaryPath shouldBe anyAdbPath
-  }
-
   it should "should delegate screenshots cleaning to Adb using the specified ANDROID_SERIAL env var" in {
     val appId: AppId          = AppIdMother.anyAppId
     val device1: String       = "emulator-5554"

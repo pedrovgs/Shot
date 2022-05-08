@@ -6,14 +6,15 @@ import com.karumi.shot.domain.model.{AppId, Folder}
 import scala.sys.process._
 
 object Adb {
-  var adbBinaryPath: String = ""
   // To be able to support API 29+ with scoped storage we need to change
   // the base url where the app saves our screenshots inside the device.
   // This value is computed in runtime in shot-android AndroidStorageInfo.
   private val baseStoragePath = "/storage/emulated/0/Download"
 }
 
-class Adb {
+class Adb(
+    adbPath: String
+) {
 
   private final val CR_ASCII_DECIMAL = 13
   private val logger = ProcessLogger(
@@ -94,10 +95,10 @@ class Adb {
   }
 
   private def executeAdbCommand(command: String): Int =
-    s"${Adb.adbBinaryPath} $command" ! logger
+    s"${adbPath} $command" ! logger
 
   private def executeAdbCommandWithResult(command: String): String =
-    s"${Adb.adbBinaryPath} $command" !! logger
+    s"${adbPath} $command" !! logger
 
   private def isCarriageReturnASCII(device: String): Boolean =
     device.charAt(0) == CR_ASCII_DECIMAL
