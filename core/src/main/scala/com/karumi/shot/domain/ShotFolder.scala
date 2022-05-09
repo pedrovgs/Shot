@@ -14,7 +14,7 @@ case class ShotFolder(
 ) {
 
   private val orchestratedSuffix = if (orchestrated) "-orchestrated" else ""
-  private val uidSuffix = if (uid.isEmpty) "" else s"-$uid"
+  private val uidSuffix          = if (uid.isEmpty) "" else s"-$uid"
 
   private def pathSuffix(): String = {
     s"${flavor.fold("") { s => s"$s$separator" }}" +
