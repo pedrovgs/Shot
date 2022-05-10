@@ -315,7 +315,7 @@ class Shot(
     try {
       FileUtils.deleteDirectory(file)
     } catch {
-      case e: Throwable => println(Console.RED + s"Failed to delete directory: $e")
+      case e: Throwable => println(Console.YELLOW + s"Failed to delete directory: $e")
     }
   }
 }
