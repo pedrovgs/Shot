@@ -11,7 +11,6 @@ object ProjectFolderMother {
   val anyDirectorySuffix = "Api26"
   val anySeparator       = "/"
   val anyOrchestrated    = false
-  val anyUid             = ""
 
   val anyShotFolder: ShotFolder = ShotFolder(
     anyProjectFolder,
@@ -20,8 +19,7 @@ object ProjectFolderMother {
     Some(anyFlavor),
     Some(anyDirectorySuffix),
     anySeparator,
-    anyOrchestrated,
-    anyUid
+    anyOrchestrated
   )
 
 }

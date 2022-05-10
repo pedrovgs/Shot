@@ -17,7 +17,6 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.api.{DefaultTask, GradleException}
 
 import java.io.File
-import java.util.UUID
 
 abstract class ShotTask extends DefaultTask {
   var appId: String                   = _
@@ -53,8 +52,7 @@ abstract class ShotTask extends DefaultTask {
       flavor,
       directorySuffix,
       File.separator,
-      orchestrated,
-      UUID.randomUUID().toString.replace("-", "")
+      orchestrated
     )
   }
 
