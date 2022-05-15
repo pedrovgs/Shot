@@ -13,27 +13,28 @@ import com.karumi.shot.screenshots.{
 import com.karumi.shot.system.EnvVars
 import com.karumi.shot.ui.Console
 import com.karumi.shot.{Files, Shot, ShotExtension}
-import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.{Input, TaskAction}
 import org.gradle.api.{DefaultTask, GradleException}
 
 import java.io.File
 
 abstract class ShotTask extends DefaultTask {
-  var appId: String                   = _
-  var flavor: Option[String]          = _
-  var buildTypeName: String           = _
-  var orchestrated: Boolean           = false
-  var projectPath: String             = _
-  var buildPath: String               = _
-  var shotExtension: ShotExtension    = _
-  var directorySuffix: Option[String] = _
-  var recordScreenshots: Boolean      = _
-  var printBase64: Boolean            = _
-  var projectName: String             = _
-  private val console                 = new Console
-  protected val shot: Shot =
+  @Input var appId: String                   = _
+  @Input var flavor: Option[String]          = _
+  @Input var buildTypeName: String           = _
+  @Input var orchestrated: Boolean           = false
+  @Input var projectPath: String             = _
+  @Input var buildPath: String               = _
+  @Input var shotExtension: ShotExtension    = _
+  @Input var directorySuffix: Option[String] = _
+  @Input var recordScreenshots: Boolean      = _
+  @Input var printBase64: Boolean            = _
+  @Input var projectName: String             = _
+  @Input var adbPath: String                 = _
+  protected def shot: Shot = {
+    val console = new Console
     new Shot(
-      new Adb,
+      new Adb(adbPath),
       new Files,
       new ScreenshotsComparator,
       new ScreenshotsDiffGenerator(new Base64Encoder),
@@ -43,6 +44,7 @@ abstract class ShotTask extends DefaultTask {
       new ConsoleReporter(console),
       new EnvVars()
     )
+  }
 
   protected def shotFolder: ShotFolder = {
     ShotFolder(

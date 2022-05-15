@@ -3,17 +3,8 @@ package com.karumi.shot
 import com.android.build.gradle.api.BaseVariant
 import com.android.build.gradle.{AppExtension, LibraryExtension}
 import com.android.builder.model.{BuildType, ProductFlavor}
-import com.karumi.shot.android.Adb
-import com.karumi.shot.base64.Base64Encoder
 import com.karumi.shot.domain.Config
 import com.karumi.shot.exceptions.ShotException
-import com.karumi.shot.reports.{ConsoleReporter, ExecutionReporter}
-import com.karumi.shot.screenshots.{
-  ScreenshotsComparator,
-  ScreenshotsDiffGenerator,
-  ScreenshotsSaver
-}
-import com.karumi.shot.system.EnvVars
 import com.karumi.shot.tasks.{
   DownloadScreenshotsTask,
   ExecuteScreenshotTests,
@@ -29,25 +20,12 @@ import scala.util.Try
 class ShotPlugin extends Plugin[Project] {
 
   private val console = new Console
-  private lazy val shot: Shot =
-    new Shot(
-      new Adb,
-      new Files,
-      new ScreenshotsComparator,
-      new ScreenshotsDiffGenerator(new Base64Encoder),
-      new ScreenshotsSaver,
-      console,
-      new ExecutionReporter,
-      new ConsoleReporter(console),
-      new EnvVars()
-    )
 
   override def apply(project: Project): Unit = {
     addExtensions(project)
     addAndroidTestDependency(project)
     project.afterEvaluate { project =>
       {
-        configureAdb(project)
         addTasks(project)
       }
     }
@@ -55,7 +33,10 @@ class ShotPlugin extends Plugin[Project] {
 
   private def configureAdb(project: Project): Unit = {
     val adbPath = AdbPathExtractor.extractPath(project)
-    shot.configureAdbPath(adbPath)
+  }
+
+  private def findAdbPath(project: Project): String = {
+    AdbPathExtractor.extractPath(project)
   }
 
   private def addTasks(project: Project): Unit = {
@@ -170,7 +151,7 @@ class ShotPlugin extends Plugin[Project] {
         RemoveScreenshotsTask.name(flavor, buildType, beforeExecution = true),
         classOf[RemoveScreenshotsTask]
       )
-
+    val adbPath = findAdbPath(project)
     removeScreenshotsAfterExecution.configure { task =>
       task.setDescription(RemoveScreenshotsTask.description(flavor, buildType))
       task.flavor = flavor
@@ -187,6 +168,7 @@ class ShotPlugin extends Plugin[Project] {
       task.recordScreenshots = project.hasProperty("record")
       task.printBase64 = project.hasProperty("printBase64")
       task.projectName = project.getName
+      task.adbPath = adbPath
     }
     removeScreenshotsBeforeExecution.configure { task =>
       task.setDescription(RemoveScreenshotsTask.description(flavor, buildType))
@@ -204,6 +186,7 @@ class ShotPlugin extends Plugin[Project] {
       task.recordScreenshots = project.hasProperty("record")
       task.printBase64 = project.hasProperty("printBase64")
       task.projectName = project.getName
+      task.adbPath = adbPath
     }
 
     val downloadScreenshots = tasks
@@ -224,6 +207,7 @@ class ShotPlugin extends Plugin[Project] {
       task.recordScreenshots = project.hasProperty("record")
       task.printBase64 = project.hasProperty("printBase64")
       task.projectName = project.getName
+      task.adbPath = adbPath
     }
     val executeScreenshot = tasks
       .register(ExecuteScreenshotTests.name(flavor, buildType), classOf[ExecuteScreenshotTests])
@@ -243,6 +227,7 @@ class ShotPlugin extends Plugin[Project] {
       task.recordScreenshots = project.hasProperty("record")
       task.printBase64 = project.hasProperty("printBase64")
       task.projectName = project.getName
+      task.adbPath = adbPath
     }
 
     if (runInstrumentation(project, extension)) {
