@@ -35,10 +35,6 @@ class Shot(
     consoleReporter: ConsoleReporter,
     envVars: EnvVars
 ) {
-  def configureAdbPath(adbPath: Folder): Unit = {
-    Adb.adbBinaryPath = adbPath
-  }
-
   def downloadScreenshots(appId: AppId, shotFolder: ShotFolder, orchestrated: Boolean): Unit = {
     console.show("⬇️  Pulling screenshots from your connected devices!")
     pullScreenshots(appId, shotFolder, orchestrated)
