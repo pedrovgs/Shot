@@ -72,7 +72,9 @@ class ScreenshotsSaver {
   ): Dimension = {
     val screenshotPath = shotFolder.pulledScreenshotsFolder() + screenshot.name + ".png"
     val image          = Image.fromFile(new File(screenshotPath))
-    Dimension(image.width, image.height)
+    val dimension      = Dimension(image.width, image.height)
+    image.awt.flush()
+    dimension
   }
 
   private def deleteOldTemporalScreenshots(projectName: String, shotFolder: ShotFolder): Unit = {
@@ -98,6 +100,7 @@ class ScreenshotsSaver {
       }
       val image = ScreenshotComposer.composeNewScreenshot(screenshot)
       image.output(outputFile)
+      image.awt.flush()
     }
   }
 

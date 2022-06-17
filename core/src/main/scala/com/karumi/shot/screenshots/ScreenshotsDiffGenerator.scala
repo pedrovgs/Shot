@@ -37,6 +37,9 @@ class ScreenshotsDiffGenerator(base64Encoder: Base64Encoder) {
     val diff              = newImage.composite(new RedComposite(1d), originalImage)
     val outputFilePath    = screenshot.getDiffScreenshotPath(outputFolder)
     diff.output(outputFilePath)
+    originalImage.awt.flush()
+    newImage.awt.flush()
+    diff.awt.flush()
     if (generateBase64Diff) {
       error.copy(base64Diff = base64Encoder.base64FromFile(outputFilePath))
     } else {
