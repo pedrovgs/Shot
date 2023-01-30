@@ -5,7 +5,7 @@ buildscript {
         google()
     }
 
-    ext.kotlin_version = "1.4.32"
+    ext.kotlin_version = "1.7.20"
 
     dependencies {
         classpath "gradle.plugin.com.github.maiflai:gradle-scalatest:0.31"
