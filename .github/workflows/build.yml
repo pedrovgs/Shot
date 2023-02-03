@@ -27,7 +27,7 @@ jobs:
       - name: Shot unit tests
         run: ./gradlew :shot-android:connectedCheck
       - name: Disable artifacts signing
-        run: echo "RELEASE_SIGNING_ENABLED=false" >> gradle.properties
+        run: echo "\nRELEASE_SIGNING_ENABLED=false" >> gradle.properties
       - name: Build and install Shot
         run: ./gradlew publishToMavenLocal
       - name: Execute screenshot tests for shot-consumer-library-no-tests
@@ -86,7 +86,7 @@ jobs:
         with:
           java-version: 17
       - name: Disable artifacts signing
-        run: echo "RELEASE_SIGNING_ENABLED=false" >> gradle.properties
+        run: echo "\nRELEASE_SIGNING_ENABLED=false" >> gradle.properties
       - name: Build and install Shot
         run: ./gradlew publishToMavenLocal
       - name: Execute screenshot tests for shot-consumer-library-no-tests
