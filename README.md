@@ -13,9 +13,9 @@ class GreetingScreenshotTest : ScreenshotTest {
 
     @Test
     fun theActivityIsShownProperly() {
-        val mainActivity = startMainActivity();
+        val mainActivity = startMainActivity()
 
-        compareScreenshot(activity);
+        compareScreenshot(activity)
     }
 
     // If you are using Jetpack Compose

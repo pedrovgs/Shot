@@ -35,10 +35,6 @@ class Shot(
     consoleReporter: ConsoleReporter,
     envVars: EnvVars
 ) {
-  def configureAdbPath(adbPath: Folder): Unit = {
-    Adb.adbBinaryPath = adbPath
-  }
-
   def downloadScreenshots(appId: AppId, shotFolder: ShotFolder, orchestrated: Boolean): Unit = {
     console.show("⬇️  Pulling screenshots from your connected devices!")
     pullScreenshots(appId, shotFolder, orchestrated)
@@ -123,7 +119,6 @@ class Shot(
       } else {
         console.showSuccess("✅  Yeah!!! Your tests are passing.")
       }
-      removeProjectTemporalScreenshotsFolder(shotFolder)
       reporter.generateVerificationReport(
         appId,
         comparison,
@@ -134,6 +129,7 @@ class Shot(
         "🤓  You can review the execution report here: " + shotFolder
           .verificationReportFolder() + "index.html"
       )
+      removeProjectTemporalScreenshotsFolder(shotFolder)
       comparison
     }
   }
@@ -297,15 +293,25 @@ class Shot(
   }
 
   private def removeProjectTemporalScreenshotsFolder(shotFolder: ShotFolder): Unit = {
-    FileUtils.deleteDirectory(new File(shotFolder.pulledScreenshotsFolder()))
-    FileUtils.deleteDirectory(new File(shotFolder.pulledComposeScreenshotsFolder()))
-    FileUtils.deleteDirectory(new File(shotFolder.pulledComposeOrchestratedScreenshotsFolder()))
+    // Fix for https://github.com/pedrovgs/Shot/issues/53
+    // Avoid crash when directory can't be deleted
+    safeDeleteDirectory(new File(shotFolder.pulledScreenshotsFolder()))
+    safeDeleteDirectory(new File(shotFolder.pulledComposeScreenshotsFolder()))
+    safeDeleteDirectory(new File(shotFolder.pulledComposeOrchestratedScreenshotsFolder()))
   }
 
   private def extractPicturesFromBundle(screenshotsFolder: String): Unit = {
     val bundleFile = s"${screenshotsFolder}screenshot_bundle.zip"
     if (java.nio.file.Files.exists(Paths.get(bundleFile))) {
       TinyZip.unzip(bundleFile, screenshotsFolder)
+    }
+  }
+
+  private def safeDeleteDirectory(file: File): Unit = {
+    try {
+      FileUtils.deleteDirectory(file)
+    } catch {
+      case e: Throwable => println(Console.YELLOW + s"Failed to delete directory: $e")
     }
   }
 }
