@@ -5,14 +5,14 @@ buildscript {
         google()
     }
 
-    ext.kotlin_version = "1.6.10"
+    ext.kotlin_version = "1.8.0"
 
     dependencies {
         classpath "gradle.plugin.com.github.maiflai:gradle-scalatest:0.31"
         classpath "gradle.plugin.cz.alenkacz:gradle-scalafmt:1.16.2"
-        classpath "com.android.tools.build:gradle:7.1.2"
+        classpath "com.android.tools.build:gradle:7.4.1"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jlleitschuh.gradle:ktlint-gradle:10.0.0"
-        classpath 'com.vanniktech:gradle-maven-publish-plugin:0.15.1'
+        classpath 'com.vanniktech:gradle-maven-publish-plugin:0.18.0'
     }
 }
