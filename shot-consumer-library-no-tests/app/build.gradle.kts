@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-  compileSdk = 30
+  compileSdk = 33
 
   defaultConfig {
     applicationId = "com.bpawlowski.shotagpbug"
     minSdk = 26
-    targetSdk = 30
+    targetSdk = 33
     versionCode = 1
     versionName = "1.0"
 
