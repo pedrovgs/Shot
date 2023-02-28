@@ -1,8 +1,6 @@
 apply plugin: "com.vanniktech.maven.publish"
 
 mavenPublish {
-    // We need this, because on Jitpack, we don't want the release to be signed,
-    // but on GitHub actions, we do, since it will be published to Maven Central
-    releaseSigningEnabled = !(System.getenv("JITPACK") == "true")
+    releaseSigningEnabled = false
     androidVariantToPublish = "release"
 }
