@@ -32,8 +32,9 @@ class ScreenshotsDiffGenerator(base64Encoder: Base64Encoder) {
     val screenshot        = error.screenshot
     val originalImagePath = screenshot.recordedScreenshotPath
     val newImagePath      = screenshot.temporalScreenshotPath
-    val originalImage     = ImmutableImage.loader().fromFile(new File(originalImagePath))
-    val newImage          = ImmutableImage.loader().fromFile(new File(newImagePath))
+    val originalImage     = ImmutableImage.loader().fromFile(new File(originalImagePath)).copy(BufferedImage.TYPE_INT_ARGB)
+    val newImage          = ImmutableImage.loader().fromFile(new File(newImagePath)).copy(BufferedImage.TYPE_INT_ARGB)
+
     val diff              = newImage.composite(new RedComposite(1d), originalImage)
     val outputFilePath    = screenshot.getDiffScreenshotPath(outputFolder)
     diff.output(PngWriter.NoCompression, outputFilePath)
