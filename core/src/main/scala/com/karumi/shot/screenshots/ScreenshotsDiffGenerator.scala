@@ -1,12 +1,14 @@
 package com.karumi.shot.screenshots
 
-import java.io.File
 import com.karumi.shot.base64.Base64Encoder
 import com.karumi.shot.domain.model.ScreenshotComparisionErrors
 import com.karumi.shot.domain.{DifferentScreenshots, ScreenshotsComparisionResult}
 import com.sksamuel.scrimage.ImmutableImage
 import com.sksamuel.scrimage.composite.RedComposite
 import com.sksamuel.scrimage.nio.PngWriter
+
+import java.awt.image.BufferedImage
+import java.io.File
 
 class ScreenshotsDiffGenerator(base64Encoder: Base64Encoder) {
 
