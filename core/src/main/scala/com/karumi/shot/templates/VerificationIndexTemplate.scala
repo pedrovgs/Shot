@@ -15,6 +15,7 @@ object VerificationIndexTemplate {
     <title>Shot verification results</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <meta charset="UTF-8">
 </head>
 <style>
     body {
