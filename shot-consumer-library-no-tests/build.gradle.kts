@@ -6,8 +6,8 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    classpath("com.android.tools.build:gradle:7.1.0-alpha06")
-    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.21")
+    classpath(libs.android.gradle.plugin)
+    classpath(libs.kotlin.gradle.plugin)
     classpath("com.karumi:shot:5.14.1")
 
     // NOTE: Do not place your application dependencies here; they belong

@@ -11,16 +11,14 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.scala-lang:scala-library:2.12.13'
-    implementation 'org.scala-lang.modules:scala-xml_2.12:1.3.0'
-    implementation 'com.sksamuel.scrimage:scrimage-core_2.12:2.1.8'
-    implementation 'io.github.bitstorm:tinyzip-core:1.0.0'
-    implementation 'org.json4s:json4s-native_2.12:3.6.11'
-    implementation 'org.json4s:json4s-jackson_2.12:3.6.11'
+    implementation libs.scala.library
+    implementation libs.scala.xml
+    implementation libs.scrimage
+    implementation libs.tinyzip
+    implementation libs.bundles.json4s
 
-    testImplementation 'org.scalatest:scalatest_2.12:3.2.6'
-    testRuntimeOnly "com.vladsch.flexmark:flexmark-profile-pegdown:0.36.8" // https://github.com/scalatest/scalatest/issues/1736
-    testImplementation 'org.scalamock:scalamock-scalatest-support_2.12:3.5.0'
+    testImplementation libs.bundles.scalatest
+    testRuntimeOnly libs.flexmark.profile.pegdown // https://github.com/scalatest/scalatest/issues/1736
 }
 
 sourceSets {

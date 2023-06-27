@@ -1,2 +1,10 @@
 rootProject.name = "shot-consumer-compose"
 include ':app'
+
+dependencyResolutionManagement {
+    versionCatalogs {
+        libs {
+            from(files("../gradle/libs.versions.toml"))
+        }
+    }
+}

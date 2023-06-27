@@ -29,12 +29,11 @@ android {
 
 dependencies {
 
-  implementation("androidx.core:core-ktx:1.5.0")
-  implementation("androidx.appcompat:appcompat:1.3.0")
-  implementation("com.google.android.material:material:1.3.0")
-  implementation("androidx.constraintlayout:constraintlayout:2.0.4")
-  testImplementation("junit:junit:4.+")
-  androidTestUtil("androidx.test:orchestrator:1.4.1")
-  androidTestImplementation("androidx.test.ext:junit:1.1.2")
-  androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
+  implementation(libs.androidx.core)
+  implementation(libs.androidx.appcompat)
+  implementation(libs.material)
+  implementation(libs.androidx.constraint.layout)
+  testImplementation(libs.junit)
+  androidTestUtil(libs.androidx.test.orchestrator)
+  androidTestImplementation(libs.bundles.androidx.test)
 }

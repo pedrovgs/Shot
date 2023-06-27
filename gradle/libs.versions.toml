@@ -1,0 +1,80 @@
+[versions]
+android-build-tools = "7.4.2"
+androidx-test = "1.3.0"
+compose = "1.0.0-beta03"
+espresso = "3.3.0"
+json4s = "3.6.11"
+kodein = "4.1.0"
+kotlin = "1.8.22"
+kotlin-coroutines = "1.3.9"
+lifecycle = "2.3.1"
+
+[libraries]
+androidx-activity-compose = {module = "androidx.activity:activity-compose", version = "1.3.0-alpha05"}
+androidx-appcompat = {module = "androidx.appcompat:appcompat", version = "1.3.0"}
+androidx-compose-material = {module = "androidx.compose.material:material", version.ref = "compose"}
+androidx-compose-test = {module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose"}
+androidx-compose-ui = {module = "androidx.compose.ui:ui", version.ref = "compose"}
+androidx-compose-ui-tooling = {module = "androidx.compose.ui:ui-tooling", version.ref = "compose"}
+androidx-constraint-layout = {module = "androidx.constraintlayout:constraintlayout", version = "2.0.4"}
+androidx-core = {module = "androidx.core:core-ktx", version = "1.5.0"}
+androidx-espresso-core = {module = "androidx.test.espresso:espresso-core", version.ref = "espresso"}
+androidx-espresso-contrib = {module = "androidx.test.espresso:espresso-contrib", version.ref = "espresso"}
+androidx-espresso-intents = {module = "androidx.test.espresso:espresso-intents", version.ref = "espresso"}
+androidx-fragment-testing = {module = "androidx.fragment:fragment-testing", version = "1.3.2"}
+androidx-lifecycle-compiler = {module = "androidx.lifecycle:lifecycle-compiler", version.ref = "lifecycle"}
+androidx-lifecycle-extensions = {module = "androidx.lifecycle:lifecycle-extensions", version.ref = "lifecycle"}
+androidx-lifecycle-runtime = {module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle"}
+androidx-recyclerview = {module = "androidx.recyclerview:recyclerview", version  = "1.2.0"}
+androidx-test-core = {module = "androidx.test:core-ktx", version.ref = "androidx-test"}
+androidx-test-junit-ext = {module = "androidx.test.ext:junit-ktx", version = "1.1.2"}
+androidx-test-orchestrator = {module = "androidx.test:orchestrator", version = "1.4.1"}
+androidx-test-rules = {module = "androidx.test:rules", version.ref = "androidx-test"}
+androidx-test-runner = {module = "androidx.test:runner", version.ref = "androidx-test"}
+asm = {module = "asm:asm", version = "3.3.1"}
+coroutines-android = {module ="org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlin-coroutines"}
+coroutines-core = {module ="org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlin-coroutines"}
+coroutines-test = {module ="org.jetbrains.kotlinx:kotlinx-coroutines-test", version = "1.1.1"}
+dexopener = {module = "com.github.tmurakami:dexopener", version = "2.0.5"}
+facebook-screenshot = {module = "com.facebook.testing.screenshot:core", version = "0.14.0"}
+flexmark-profile-pegdown = {module = "com.vladsch.flexmark:flexmark-profile-pegdown", version = "0.36.8"}
+gson = {module = "com.google.code.gson:gson", version = "2.8.6"}
+json4s-jackson = {module = "org.json4s:json4s-jackson_2.12", version.ref = "json4s"}
+json4s-native = {module = "org.json4s:json4s-native_2.12", version.ref = "json4s"}
+junit = {module = "junit:junit", version = "4.13.2"}
+keyboardvisibilityevent = {module = "net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent", version = "2.0.0"}
+kodein = {module = "com.github.salomonbrys.kodein:kodein", version.ref = "kodein"}
+kodein-android = {module = "com.github.salomonbrys.kodein:kodein-android", version.ref = "kodein"}
+kodein-conf = {module = "com.github.salomonbrys.kodein:kodein-conf", version.ref = "kodein"}
+kodein-core = {module = "com.github.salomonbrys.kodein:kodein-core", version.ref = "kodein"}
+material = {module = "com.google.android.material:material", version = "1.3.0"}
+mockito = {module = "org.mockito:mockito-core", version = "3.9.0"}
+mockito-android = {module = "org.mockito:mockito-android", version = "2.28.2"}
+mockito-kotlin = {module = "com.nhaarman:mockito-kotlin", version = "1.6.0"}
+picasso = {module = "com.squareup.picasso:picasso", version = "2.5.2"}
+robolectric = {module = "org.robolectric:robolectric", version = "4.5.1"}
+scala-library = {module = "org.scala-lang:scala-library", version = "2.12.13"}
+scala-xml = {module = "org.scala-lang.modules:scala-xml_2.12", version = "1.3.0"}
+scalamock-scalatest-support = {module = "org.scalamock:scalamock-scalatest-support_2.12", version = "3.5.0"}
+scalatest = {module = "org.scalatest:scalatest_2.12", version = "3.2.6"}
+scrimage = {module = "com.sksamuel.scrimage:scrimage-core_2.12", version = "2.1.8"}
+skyiko-ktlint = {module = "com.github.shyiko:ktlint", version = "0.29.0"}
+tinyzip = {module = "io.github.bitstorm:tinyzip-core", version = "1.0.0"}
+
+android-apt-gradle-plugin = {module = "com.neenbedankt.gradle.plugins:android-apt", version = "1.7"}
+android-gradle-plugin = {module = "com.android.tools.build:gradle", version.ref = "android-build-tools"}
+composer-gradle-plugin = {module = "com.trevjonez.composer:plugin", version = "1.0.0-rc08"}
+kotlin-gradle-plugin = {module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin"}
+ktlint-gradle-plugin = {module = "org.jlleitschuh.gradle:ktlint-gradle", version = "10.0.0"}
+scalafmt-gradle-plugin = {module = "gradle.plugin.cz.alenkacz:gradle-scalafmt", version = "1.16.2"}
+scalatest-gradle-plugin = {module = "gradle.plugin.com.github.maiflai:gradle-scalatest", version = "0.31"}
+vanniktech-publish-gradle-plugin = { module = "com.vanniktech:gradle-maven-publish-plugin", version = "0.18.0" }
+
+[bundles]
+androidx-test = ["androidx-espresso-core", "androidx-espresso-contrib", "androidx-espresso-intents", "androidx-test-core", "androidx-test-junit-ext", "androidx-test-rules", "androidx-test-runner"]
+compose = ["androidx-compose-material", "androidx-compose-ui", "androidx-compose-ui-tooling"]
+json4s = ["json4s-native", "json4s-jackson"]
+kodein = ["kodein", "kodein-android", "kodein-conf", "kodein-core"]
+scalatest = ["scalatest", "scalamock-scalatest-support"]
+
+[plugins]

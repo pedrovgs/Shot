@@ -1,2 +1,11 @@
 include ':app', ":app2"
 include ':samplelibrary'
+
+dependencyResolutionManagement {
+    versionCatalogs {
+        libs {
+            from(files("../gradle/libs.versions.toml"))
+        }
+    }
+}
+

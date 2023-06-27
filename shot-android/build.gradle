@@ -38,22 +38,15 @@ repositories {
     mavenLocal()
     google()
     maven { url 'https://jitpack.io' }
-    exclusiveContent {
-        forRepository { jcenter() }
-        filter {
-            includeModule("org.jetbrains.kotlinx", "kotlinx-collections-immutable-jvm")
-            includeGroup("org.jetbrains.trove4j")
-        }
-    }
 }
 
 dependencies {
-    implementation "com.facebook.testing.screenshot:core:0.14.0"
-    implementation "androidx.test:runner:1.3.0"
-    implementation "androidx.recyclerview:recyclerview:1.2.0"
-    implementation "androidx.test.espresso:espresso-core:3.3.0"
-    implementation "androidx.compose.ui:ui-test-junit4:1.0.0-beta03"
-    implementation "com.google.code.gson:gson:2.8.6"
+    implementation libs.facebook.screenshot
+    implementation libs.androidx.test.runner
+    implementation libs.androidx.recyclerview
+    implementation libs.androidx.espresso.core
+    implementation libs.androidx.compose.test
+    implementation libs.gson
 
     // fragment-testing dependency is normally declared for debug (not test) sources,
     // as you'd usually run your FragmentScenario tests only in debug variants.
@@ -61,28 +54,18 @@ dependencies {
     // debugImplementation instead. However it doesn't matter here because we're still only using it
     // for testing purposes. FragmentScenario API is needed to provide waitForFragment() extension.
     //noinspection FragmentGradleConfiguration
-    implementation "androidx.fragment:fragment-testing:1.3.2"
+    implementation libs.androidx.fragment.testing
 
-    testImplementation "junit:junit:4.13.2"
-    testImplementation "org.mockito:mockito-core:3.9.0"
-    testImplementation "com.nhaarman:mockito-kotlin:1.6.0"
-    testImplementation "org.robolectric:robolectric:4.5.1"
-    testImplementation "androidx.test.ext:junit:1.1.2"
-    testImplementation "androidx.test:runner:1.3.0"
-    testImplementation "androidx.test:rules:1.3.0"
-    testImplementation "androidx.test.espresso:espresso-core:3.3.0"
-    testImplementation "androidx.test.espresso:espresso-intents:3.3.0"
-    testImplementation "androidx.test.espresso:espresso-contrib:3.3.0"
+    testImplementation libs.junit
+    testImplementation libs.mockito
+    testImplementation libs.mockito.kotlin
+    testImplementation libs.robolectric
+    testImplementation libs.bundles.androidx.test
 
-    androidTestImplementation "com.github.tmurakami:dexopener:2.0.5"
-    androidTestImplementation "org.mockito:mockito-android:2.28.2"
-    androidTestImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
-    androidTestImplementation "androidx.test:runner:1.3.0"
-    androidTestImplementation "androidx.test.espresso:espresso-core:3.3.0"
-    androidTestImplementation "androidx.test.espresso:espresso-intents:3.3.0"
-    androidTestImplementation "androidx.test.espresso:espresso-contrib:3.3.0"
-    androidTestImplementation "androidx.test:rules:1.3.0"
-    androidTestImplementation "androidx.test.ext:junit:1.1.2"
+    androidTestImplementation libs.dexopener
+    androidTestImplementation libs.mockito.android
+    androidTestImplementation libs.mockito.kotlin
+    testImplementation libs.bundles.androidx.test
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
