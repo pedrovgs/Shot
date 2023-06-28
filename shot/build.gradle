@@ -18,7 +18,7 @@ dependencies {
     compileOnly libs.android.gradle.plugin
     implementation libs.scala.library
 
-    testImplementation libs.scalatest
+    testImplementation libs.bundles.scala.test
     testRuntimeOnly libs.flexmark.profile.pegdown // https://github.com/scalatest/scalatest/issues/1736
 }
 

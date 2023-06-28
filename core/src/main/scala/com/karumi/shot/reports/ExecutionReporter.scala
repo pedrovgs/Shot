@@ -69,7 +69,7 @@ class ExecutionReporter {
 
   private def generateRecordSummaryTableBody(screenshots: ScreenshotsSuite): String = {
     screenshots
-      .map { screenshot: Screenshot =>
+      .map { (screenshot: Screenshot) =>
         val testClass          = screenshot.testClass
         val testName           = screenshot.testName
         val originalScreenshot = "./images/recorded/" + screenshot.name + ".png"
@@ -111,7 +111,7 @@ class ExecutionReporter {
 
   private def getSortedByResultScreenshots(comparison: ScreenshotsComparisionResult) =
     comparison.screenshots
-      .map { screenshot: Screenshot =>
+      .map { (screenshot: Screenshot) =>
         val error = findError(screenshot, comparison.errors)
         (screenshot, error)
       }

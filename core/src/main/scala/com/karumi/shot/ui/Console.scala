@@ -1,20 +1,21 @@
 package com.karumi.shot.ui
+import scala.Console.{CYAN, GREEN, RED, RESET, YELLOW}
 
 class Console {
 
   type Message = String
 
   def show(message: Message): Unit =
-    print(Console.CYAN + message + Console.RESET)
+    print(CYAN + message + RESET)
 
   def showSuccess(message: Message): Unit =
-    print(Console.GREEN + message + Console.RESET)
+    print(GREEN + message + RESET)
 
   def showWarning(message: Message): Unit =
-    print(Console.YELLOW + message + Console.RESET)
+    print(YELLOW + message + RESET)
 
   def showError(message: Message): Unit =
-    print(Console.RED + message + Console.RESET)
+    print(RED + message + RESET)
 
   def lineBreak(): Unit = show("\n")
 

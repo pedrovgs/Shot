@@ -8,7 +8,7 @@ androidx-test = "1.5.0"
 compose = "1.4.3"
 compose-compiler = "1.4.6"
 espresso = "3.5.1"
-json4s = "3.6.11"
+json4s = "4.0.6"
 kodein = "4.1.0"
 kotlin = "1.8.20"
 kotlin-coroutines = "1.6.3"
@@ -36,15 +36,16 @@ androidx-test-orchestrator = {module = "androidx.test:orchestrator", version = "
 androidx-test-rules = {module = "androidx.test:rules", version.ref = "androidx-test"}
 androidx-test-runner = {module = "androidx.test:runner", version.ref = "androidx-test"}
 asm = {module = "asm:asm", version = "3.3.1"}
+commons-io = {module = "commons-io:commons-io", version = "2.11.0"}
 coroutines-android = {module ="org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlin-coroutines"}
 coroutines-core = {module ="org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlin-coroutines"}
 coroutines-test = {module ="org.jetbrains.kotlinx:kotlinx-coroutines-test", version = "1.5.1"}
 dexopener = {module = "com.github.tmurakami:dexopener", version = "2.0.5"}
 facebook-screenshot = {module = "com.facebook.testing.screenshot:core", version = "0.14.0"}
-flexmark-profile-pegdown = {module = "com.vladsch.flexmark:flexmark-profile-pegdown", version = "0.36.8"}
+flexmark-profile-pegdown = {module = "com.vladsch.flexmark:flexmark-profile-pegdown", version = "0.64.8"}
 gson = {module = "com.google.code.gson:gson", version = "2.9.0"}
-json4s-jackson = {module = "org.json4s:json4s-jackson_2.12", version.ref = "json4s"}
-json4s-native = {module = "org.json4s:json4s-native_2.12", version.ref = "json4s"}
+json4s-jackson = {module = "org.json4s:json4s-jackson_2.13", version.ref = "json4s"}
+json4s-native = {module = "org.json4s:json4s-native_2.13", version.ref = "json4s"}
 junit = {module = "junit:junit", version = "4.13.2"}
 keyboardvisibilityevent = {module = "net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent", version = "2.0.0"}
 kodein = {module = "com.github.salomonbrys.kodein:kodein", version.ref = "kodein"}
@@ -56,11 +57,13 @@ mockito-android = {module = "org.mockito:mockito-android", version = "5.1.1"}
 mockito-kotlin = {module = "org.mockito.kotlin:mockito-kotlin", version = "5.0.0"}
 picasso = {module = "com.squareup.picasso:picasso", version = "2.5.2"}
 robolectric = {module = "org.robolectric:robolectric", version = "4.9.2"}
-scala-library = {module = "org.scala-lang:scala-library", version = "2.12.13"}
-scala-xml = {module = "org.scala-lang.modules:scala-xml_2.12", version = "1.3.0"}
-scalamock-scalatest-support = {module = "org.scalamock:scalamock-scalatest-support_2.12", version = "3.5.0"}
-scalatest = {module = "org.scalatest:scalatest_2.12", version = "3.2.6"}
-scrimage = {module = "com.sksamuel.scrimage:scrimage-core_2.12", version = "2.1.8"}
+scala-library = {module = "org.scala-lang:scala-library", version = "2.13.11"}
+scala-parallel = {module = "org.scala-lang.modules:scala-parallel-collections_2.13", version = "1.0.4"}
+scala-xml = {module = "org.scala-lang.modules:scala-xml_2.13", version = "2.1.0"}
+scalamock = {module = "org.scalamock:scalamock_2.13", version = "5.2.0"}
+scalatest = {module = "org.scalatest:scalatest_2.13", version = "3.2.16"}
+scrimage-core = {module = "com.sksamuel.scrimage:scrimage-core", version = "4.0.37"}
+scrimage-scala = {module = "com.sksamuel.scrimage:scrimage-scala_2.13", version = "4.0.37"}
 skyiko-ktlint = {module = "com.github.shyiko:ktlint", version = "0.29.0"}
 tinyzip = {module = "io.github.bitstorm:tinyzip-core", version = "1.0.0"}
 
@@ -70,7 +73,7 @@ composer-gradle-plugin = {module = "com.trevjonez.composer:plugin", version = "1
 kotlin-gradle-plugin = {module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin"}
 ktlint-gradle-plugin = {module = "org.jlleitschuh.gradle:ktlint-gradle", version = "10.0.0"}
 scalafmt-gradle-plugin = {module = "gradle.plugin.cz.alenkacz:gradle-scalafmt", version = "1.16.2"}
-scalatest-gradle-plugin = {module = "gradle.plugin.com.github.maiflai:gradle-scalatest", version = "0.31"}
+scalatest-gradle-plugin = {module = "gradle.plugin.com.github.maiflai:gradle-scalatest", version = "0.32"}
 vanniktech-publish-gradle-plugin = { module = "com.vanniktech:gradle-maven-publish-plugin", version = "0.18.0" }
 
 [bundles]
@@ -78,6 +81,6 @@ androidx-test = ["androidx-espresso-core", "androidx-espresso-contrib", "android
 compose = ["androidx-compose-material", "androidx-compose-ui", "androidx-compose-ui-tooling"]
 json4s = ["json4s-native", "json4s-jackson"]
 kodein = ["kodein", "kodein-android", "kodein-conf", "kodein-core"]
-scalatest = ["scalatest", "scalamock-scalatest-support"]
-
-[plugins]
+scala = ["scala-library", "scala-parallel", "scala-xml"]
+scala-test = ["scalamock", "scalatest"]
+scrimage = ["scrimage-core", "scrimage-scala"]

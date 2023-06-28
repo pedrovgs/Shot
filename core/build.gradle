@@ -11,13 +11,13 @@ repositories {
 }
 
 dependencies {
-    implementation libs.scala.library
-    implementation libs.scala.xml
-    implementation libs.scrimage
+    implementation libs.bundles.scala
+    implementation libs.bundles.scrimage
     implementation libs.tinyzip
     implementation libs.bundles.json4s
+    implementation libs.commons.io
 
-    testImplementation libs.bundles.scalatest
+    testImplementation libs.bundles.scala.test
     testRuntimeOnly libs.flexmark.profile.pegdown // https://github.com/scalatest/scalatest/issues/1736
 }
 
