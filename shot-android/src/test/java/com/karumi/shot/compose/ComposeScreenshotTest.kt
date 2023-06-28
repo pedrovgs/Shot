@@ -2,13 +2,16 @@ package com.karumi.shot.compose
 
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import com.karumi.shot.permissions.AndroidStoragePermissions
-import com.nhaarman.mockito_kotlin.*
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.kotlin.any
+import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.never
+import org.mockito.kotlin.verify
 
 @RunWith(MockitoJUnitRunner::class)
 class ComposeScreenshotTest {

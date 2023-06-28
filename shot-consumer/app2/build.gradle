@@ -15,24 +15,23 @@ buildscript {
 
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
-apply plugin: "kotlin-android-extensions"
 apply plugin: "com.trevjonez.composer"
 apply plugin: "shot"
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion libs.versions.targetsdk.get().toInteger()
     defaultConfig {
         applicationId "com.karumi"
-        minSdkVersion 21
-        targetSdkVersion 28
+        minSdkVersion libs.versions.minsdk.get().toInteger()
+        targetSdkVersion libs.versions.targetsdk.get().toInteger()
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "com.karumi.TestRunner"
         multiDexEnabled true
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility libs.versions.java.get()
+        targetCompatibility libs.versions.java.get()
     }
     buildTypes {
         release {
@@ -46,6 +45,9 @@ android {
         if (System.getenv("orchestrated") == "true") {
             execution "ANDROIDX_TEST_ORCHESTRATOR"
         }
+    }
+    kotlinOptions {
+        jvmTarget = libs.versions.java.get()
     }
 }
 
@@ -63,7 +65,6 @@ dependencies {
     implementation libs.picasso
     implementation libs.coroutines.core
     implementation libs.coroutines.android
-    implementation libs.androidx.lifecycle.extensions
     annotationProcessor libs.androidx.lifecycle.compiler
     debugImplementation libs.androidx.fragment.testing
 
@@ -94,8 +95,4 @@ tasks.register("ktlintFormat", JavaExec) {
     main = "com.github.shyiko.ktlint.Main"
     classpath = configurations.ktlint
     args "-F", "src/**/*.kt"
-}
-
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompile).configureEach {
-    kotlinOptions.freeCompilerArgs += ["-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi"]
 }

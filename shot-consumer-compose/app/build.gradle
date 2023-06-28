@@ -5,12 +5,12 @@ plugins {
 apply plugin: "shot"
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion libs.versions.targetsdk.get().toInteger()
 
     defaultConfig {
         applicationId "com.karumi.shotconsumercompose"
-        minSdkVersion 21
-        targetSdkVersion 30
+        minSdkVersion libs.versions.minsdk.get().toInteger()
+        targetSdkVersion libs.versions.targetsdk.get().toInteger()
         versionCode 1
         versionName "1.0"
 
@@ -38,17 +38,17 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility libs.versions.java.get()
+        targetCompatibility libs.versions.java.get()
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = libs.versions.java.get()
     }
     buildFeatures {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion libs.versions.compose.get()
+        kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
     }
     packagingOptions {
         exclude "META-INF/*"

@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-  compileSdk = 30
+  compileSdk = libs.versions.targetsdk.get().toInt()
 
   defaultConfig {
     applicationId = "com.bpawlowski.shotagpbug"
-    minSdk = 26
-    targetSdk = 30
+    minSdk = libs.versions.minsdk.get().toInt()
+    targetSdk = libs.versions.targetsdk.get().toInt()
     versionCode = 1
     versionName = "1.0"
 
@@ -17,7 +17,7 @@ android {
   }
 
   kotlinOptions {
-    jvmTarget = "1.8"
+    jvmTarget = libs.versions.java.get()
   }
 
   testOptions {

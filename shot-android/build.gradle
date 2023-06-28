@@ -4,12 +4,12 @@ apply plugin: "org.jlleitschuh.gradle.ktlint"
 apply plugin: "com.vanniktech.maven.publish"
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion libs.versions.targetsdk.get().toInteger()
     testOptions.unitTests.includeAndroidResources = true
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 28
+        minSdkVersion libs.versions.minsdk.get().toInteger()
+        targetSdkVersion libs.versions.targetsdk.get().toInteger()
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "com.karumi.shot.DexOpenerJUnitRunner"
@@ -22,14 +22,18 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility 1.8
-        targetCompatibility 1.8
+        sourceCompatibility libs.versions.java.get()
+        targetCompatibility libs.versions.java.get()
     }
     testOptions {
         unitTests.returnDefaultValues = true
     }
     packagingOptions {
         exclude "META-INF/*"
+    }
+    kotlinOptions {
+        jvmTarget = libs.versions.java.get()
+        freeCompilerArgs += ["-Xskip-prerelease-check"]
     }
 }
 
@@ -57,7 +61,6 @@ dependencies {
     implementation libs.androidx.fragment.testing
 
     testImplementation libs.junit
-    testImplementation libs.mockito
     testImplementation libs.mockito.kotlin
     testImplementation libs.robolectric
     testImplementation libs.bundles.androidx.test
@@ -65,12 +68,5 @@ dependencies {
     androidTestImplementation libs.dexopener
     androidTestImplementation libs.mockito.android
     androidTestImplementation libs.mockito.kotlin
-    testImplementation libs.bundles.androidx.test
-}
-
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
-    kotlinOptions {
-        jvmTarget = "1.8"
-        freeCompilerArgs += ["-Xskip-prerelease-check"]
-    }
+    androidTestImplementation libs.bundles.androidx.test
 }

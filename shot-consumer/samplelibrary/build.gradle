@@ -3,12 +3,12 @@ apply plugin: 'kotlin-android'
 apply plugin: 'shot'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion libs.versions.targetsdk.get().toInteger()
 
     defaultConfig {
         testApplicationId "com.karumi.samplelibrary.test.app.id"
-        minSdkVersion 21
-        targetSdkVersion 28
+        minSdkVersion libs.versions.minsdk.get().toInteger()
+        targetSdkVersion libs.versions.targetsdk.get().toInteger()
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -16,8 +16,8 @@ android {
         consumerProguardFiles 'consumer-rules.pro'
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility libs.versions.java.get()
+        targetCompatibility libs.versions.java.get()
     }
     buildTypes {
         release {
@@ -26,17 +26,20 @@ android {
         }
     }
     packagingOptions {
-        exclude "META-INF/*"
+        exclude "META-INF/**"
+        exclude "**/attach_hotspot_windows.dll"
     }
     testOptions {
         if (System.getenv("orchestrated") == "true") {
             execution "ANDROIDX_TEST_ORCHESTRATOR"
         }
     }
+    kotlinOptions {
+        jvmTarget = libs.versions.java.get()
+    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation libs.junit
     androidTestUtil libs.androidx.test.orchestrator
 

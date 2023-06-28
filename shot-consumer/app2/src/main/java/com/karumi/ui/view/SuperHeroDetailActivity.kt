@@ -4,6 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.widget.Toolbar
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.widget.ContentLoadingProgressBar
 import com.github.salomonbrys.kodein.Kodein.Module
 import com.github.salomonbrys.kodein.bind
 import com.github.salomonbrys.kodein.instance
@@ -13,7 +16,6 @@ import com.karumi.domain.model.SuperHero
 import com.karumi.domain.usecase.GetSuperHeroByName
 import com.karumi.ui.presenter.SuperHeroDetailPresenter
 import com.karumi.ui.utils.setImageBackground
-import kotlinx.android.synthetic.main.super_hero_detail_activity.*
 
 class SuperHeroDetailActivity : BaseActivity(), SuperHeroDetailPresenter.View {
 
@@ -27,11 +29,20 @@ class SuperHeroDetailActivity : BaseActivity(), SuperHeroDetailPresenter.View {
         }
     }
 
+    private val progressBar: ContentLoadingProgressBar by lazy { findViewById(R.id.progress_bar) }
+    private val tvSuperHeroDescription: TextView
+        by lazy { findViewById(R.id.tv_super_hero_description) }
+    private val tvSuperHeroName: TextView
+            by lazy { findViewById(R.id.tv_super_hero_name) }
+    private val ivSuperHeroPhoto: ImageView
+            by lazy { findViewById(R.id.iv_super_hero_photo) }
+    private val ivAvengersBadge: ImageView
+            by lazy { findViewById(R.id.iv_avengers_badge) }
+
     override val presenter: SuperHeroDetailPresenter by injector.instance()
 
     override val layoutId: Int = R.layout.super_hero_detail_activity
-    override val toolbarView: Toolbar
-        get() = toolbar
+    override val toolbarView: Toolbar by lazy { findViewById(R.id.toolbar) }
 
     override fun preparePresenter(intent: Intent?) {
         val superHeroName = intent?.extras?.getString(SUPER_HERO_NAME_KEY)
@@ -42,19 +53,19 @@ class SuperHeroDetailActivity : BaseActivity(), SuperHeroDetailPresenter.View {
     override fun close() = finish()
 
     override fun showLoading() {
-        progress_bar.visibility = View.VISIBLE
+        progressBar.visibility = View.VISIBLE
     }
 
     override fun hideLoading() {
-        progress_bar.visibility = View.GONE
+        progressBar.visibility = View.GONE
     }
 
     override fun showSuperHero(superHero: SuperHero) {
-        tv_super_hero_name.text = superHero.name
-        tv_super_hero_description.text = superHero.description
-        iv_avengers_badge.visibility =
+        tvSuperHeroName.text = superHero.name
+        tvSuperHeroDescription.text = superHero.description
+        ivAvengersBadge.visibility =
                 if (superHero.isAvenger) View.VISIBLE else View.GONE
-        iv_super_hero_photo.setImageBackground(superHero.photo)
+        ivSuperHeroPhoto.setImageBackground(superHero.photo)
     }
 
     override val activityModules = Module(allowSilentOverride = true) {
