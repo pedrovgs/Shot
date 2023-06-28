@@ -2,6 +2,7 @@
 minsdk = "21"
 targetsdk = "33"
 java = "11"
+shot = "5.14.1"
 
 android-build-tools = "7.4.2"
 androidx-test = "1.5.0"
@@ -74,6 +75,7 @@ kotlin-gradle-plugin = {module = "org.jetbrains.kotlin:kotlin-gradle-plugin", ve
 ktlint-gradle-plugin = {module = "org.jlleitschuh.gradle:ktlint-gradle", version = "10.0.0"}
 scalafmt-gradle-plugin = {module = "gradle.plugin.cz.alenkacz:gradle-scalafmt", version = "1.16.2"}
 scalatest-gradle-plugin = {module = "gradle.plugin.com.github.maiflai:gradle-scalatest", version = "0.32"}
+shot-gradle-plugin = {module = "com.karumi:shot", version.ref = "shot"}
 vanniktech-publish-gradle-plugin = { module = "com.vanniktech:gradle-maven-publish-plugin", version = "0.18.0" }
 
 [bundles]

@@ -1,5 +1,6 @@
 plugins {
   id("com.android.library")
+  id("kotlin-android")
   id("shot")
 }
 
@@ -30,6 +31,10 @@ android {
     if (System.getenv("orchestrated") == "true") {
       execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
+  }
+  compileOptions {
+    targetCompatibility(libs.versions.java.get())
+    sourceCompatibility(libs.versions.java.get())
   }
 }
 

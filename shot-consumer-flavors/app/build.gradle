@@ -8,7 +8,7 @@ buildscript {
     }
     dependencies {
         classpath(libs.android.apt.gradle.plugin)
-        classpath "com.karumi:shot:5.14.1"
+        classpath(libs.shot.gradle.plugin)
         classpath(libs.composer.gradle.plugin)
     }
 }

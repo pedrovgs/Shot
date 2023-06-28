@@ -7,7 +7,7 @@ buildscript {
     dependencies {
         classpath(libs.android.gradle.plugin)
         classpath(libs.kotlin.gradle.plugin)
-        classpath "com.karumi:shot:5.14.1"
+        classpath(libs.shot.gradle.plugin)
     }
 }
 
@@ -16,6 +16,7 @@ allprojects {
         mavenLocal()
         mavenCentral()
         google()
+        jcenter() // This is required for Composer since it isn't published anywhere else
         maven { url "https://jitpack.io" }
     }
 }

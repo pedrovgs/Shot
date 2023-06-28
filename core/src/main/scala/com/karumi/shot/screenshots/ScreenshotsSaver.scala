@@ -89,7 +89,7 @@ class ScreenshotsSaver {
         outputFile.createNewFile()
       }
       val image = ScreenshotComposer.composeNewScreenshot(screenshot)
-      image.output(PngWriter.NoCompression, outputFile)
+      image.output(PngWriter.MaxCompression, outputFile)
     }
   }
 
