@@ -5,6 +5,7 @@ plugins {
 apply plugin: "shot"
 
 android {
+    namespace "com.karumi.shotconsumercompose"
     compileSdkVersion libs.versions.targetsdk.get().toInteger()
 
     defaultConfig {

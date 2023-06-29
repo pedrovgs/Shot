@@ -5,6 +5,7 @@ dependencyResolutionManagement {
     versionCatalogs {
         libs {
             from(files("../gradle/libs.versions.toml"))
+            version("android-build-tools", "8.0.2")
         }
     }
 }
