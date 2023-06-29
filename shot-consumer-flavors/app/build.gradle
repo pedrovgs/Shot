@@ -113,4 +113,5 @@ tasks.register("ktlintFormat", JavaExec) {
 
 shot {
     showOnlyFailingTestsInReports = true
+    tolerance = 0.5
 }

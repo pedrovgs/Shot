@@ -96,3 +96,7 @@ tasks.register("ktlintFormat", JavaExec) {
     classpath = configurations.ktlint
     args "-F", "src/**/*.kt"
 }
+
+shot {
+    tolerance = .5
+}

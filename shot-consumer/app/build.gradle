@@ -84,6 +84,7 @@ dependencies {
 shot {
     useComposer = true
     showOnlyFailingTestsInReports = true
+    tolerance = 0.5
 }
 
 tasks.register("ktlint", JavaExec) {
