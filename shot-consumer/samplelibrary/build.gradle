@@ -51,3 +51,7 @@ dependencies {
     androidTestImplementation libs.mockito.kotlin
     androidTestImplementation libs.keyboardvisibilityevent
 }
+
+shot {
+    tolerance = 0.5
+}
