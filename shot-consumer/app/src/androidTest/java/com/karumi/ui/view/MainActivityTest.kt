@@ -5,9 +5,9 @@ import com.github.salomonbrys.kodein.bind
 import com.github.salomonbrys.kodein.instance
 import com.karumi.data.repository.SuperHeroRepository
 import com.karumi.domain.model.SuperHero
-import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Test
 import org.mockito.Mock
+import org.mockito.kotlin.whenever
 
 class MainActivityTest : AcceptanceTest<MainActivity>(MainActivity::class.java) {
 

@@ -4,7 +4,8 @@ import java.io.File
 
 import com.karumi.shot.domain._
 import com.karumi.shot.domain.model.ScreenshotsSuite
-import com.sksamuel.scrimage.Image
+import com.sksamuel.scrimage.ImmutableImage
+import scala.collection.parallel.CollectionConverters._
 
 class ScreenshotsComparator {
 
@@ -23,7 +24,7 @@ class ScreenshotsComparator {
       Some(ScreenshotNotFound(screenshot))
     } else {
       val oldScreenshot =
-        Image.fromFile(recordedScreenshotFile)
+        ImmutableImage.loader().fromFile(recordedScreenshotFile)
       val newScreenshot = ScreenshotComposer.composeNewScreenshot(screenshot)
       if (!haveSameDimensions(newScreenshot, oldScreenshot)) {
         val originalDimension =
@@ -40,8 +41,8 @@ class ScreenshotsComparator {
 
   private def imagesAreDifferent(
       screenshot: Screenshot,
-      oldScreenshot: Image,
-      newScreenshot: Image,
+      oldScreenshot: ImmutableImage,
+      newScreenshot: ImmutableImage,
       tolerance: Double
   ) = {
     if (oldScreenshot == newScreenshot) {
@@ -67,7 +68,10 @@ class ScreenshotsComparator {
     }
   }
 
-  private def haveSameDimensions(newScreenshot: Image, recordedScreenshot: Image): Boolean =
+  private def haveSameDimensions(
+      newScreenshot: ImmutableImage,
+      recordedScreenshot: ImmutableImage
+  ): Boolean =
     newScreenshot.width == recordedScreenshot.width && newScreenshot.height == recordedScreenshot.height
 
 }

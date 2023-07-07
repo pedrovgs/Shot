@@ -3,12 +3,12 @@ apply plugin: 'kotlin-android'
 apply plugin: 'shot'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion libs.versions.targetsdk.get().toInteger()
 
     defaultConfig {
         testApplicationId "com.karumi.samplelibrary.test.app.id"
-        minSdkVersion 21
-        targetSdkVersion 28
+        minSdkVersion libs.versions.minsdk.get().toInteger()
+        targetSdkVersion libs.versions.targetsdk.get().toInteger()
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -16,8 +16,8 @@ android {
         consumerProguardFiles 'consumer-rules.pro'
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility libs.versions.java.get()
+        targetCompatibility libs.versions.java.get()
     }
     buildTypes {
         release {
@@ -26,29 +26,32 @@ android {
         }
     }
     packagingOptions {
-        exclude "META-INF/*"
+        exclude "META-INF/**"
+        exclude "**/attach_hotspot_windows.dll"
     }
     testOptions {
         if (System.getenv("orchestrated") == "true") {
             execution "ANDROIDX_TEST_ORCHESTRATOR"
         }
     }
+    kotlinOptions {
+        jvmTarget = libs.versions.java.get()
+    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    testImplementation "junit:junit:4.13"
+    testImplementation libs.junit
+    androidTestUtil libs.androidx.test.orchestrator
 
-    androidTestUtil "androidx.test:orchestrator:1.4.1"
+    androidTestImplementation libs.bundles.androidx.test
+    androidTestImplementation libs.asm
+    androidTestImplementation libs.coroutines.test
+    androidTestImplementation libs.dexopener
+    androidTestImplementation libs.mockito.android
+    androidTestImplementation libs.mockito.kotlin
+    androidTestImplementation libs.keyboardvisibilityevent
+}
 
-    androidTestImplementation "androidx.test:runner:1.3.0"
-    androidTestImplementation "androidx.test.espresso:espresso-core:3.3.0"
-    androidTestImplementation "androidx.test.espresso:espresso-intents:3.3.0"
-    androidTestImplementation "androidx.test.espresso:espresso-contrib:3.3.0"
-    androidTestImplementation "androidx.test:rules:1.3.0"
-    androidTestImplementation "androidx.test.ext:junit:1.1.2"
-    androidTestImplementation "asm:asm:3.3.1"
-    androidTestImplementation "com.github.tmurakami:dexopener:2.0.5"
-    androidTestImplementation "org.mockito:mockito-android:2.28.2"
-    androidTestImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
+shot {
+    tolerance = 0.5
 }

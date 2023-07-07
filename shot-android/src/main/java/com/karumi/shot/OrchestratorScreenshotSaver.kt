@@ -1,5 +1,6 @@
 package com.karumi.shot
 
+import android.annotation.SuppressLint
 import android.app.Instrumentation
 import android.os.Bundle
 import androidx.test.internal.runner.RunnerArgs
@@ -11,6 +12,7 @@ class OrchestratorScreenshotSaver {
         var packageName: String? = null
         var orchestrated: Boolean = false
 
+        @SuppressLint("RestrictedApi")
         fun onCreate(instrumentation: Instrumentation, args: Bundle) {
             orchestrated = RunnerArgs.Builder()
                 .fromManifest(instrumentation)

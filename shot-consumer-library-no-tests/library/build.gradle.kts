@@ -1,14 +1,15 @@
 plugins {
   id("com.android.library")
+  id("kotlin-android")
   id("shot")
 }
 
 android {
-  compileSdk = 30
+  compileSdk = libs.versions.targetsdk.get().toInt()
 
   defaultConfig {
-    minSdk = 26
-    targetSdk = 30
+    minSdk = libs.versions.minsdk.get().toInt()
+    targetSdk = libs.versions.targetsdk.get().toInt()
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     consumerProguardFiles("consumer-rules.pro")
@@ -31,6 +32,10 @@ android {
       execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
   }
+  compileOptions {
+    targetCompatibility(libs.versions.java.get())
+    sourceCompatibility(libs.versions.java.get())
+  }
 }
 
 shot {
@@ -38,11 +43,11 @@ shot {
 }
 
 dependencies {
-
-  implementation("androidx.appcompat:appcompat:1.3.0")
-  implementation("com.google.android.material:material:1.3.0")
-  testImplementation("junit:junit:4.+")
-  androidTestUtil("androidx.test:orchestrator:1.4.1")
-  androidTestImplementation("androidx.test.ext:junit:1.1.2")
-  androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
+  implementation(libs.androidx.core)
+  implementation(libs.androidx.appcompat)
+  implementation(libs.material)
+  implementation(libs.androidx.constraint.layout)
+  testImplementation(libs.junit)
+  androidTestUtil(libs.androidx.test.orchestrator)
+  androidTestImplementation(libs.bundles.androidx.test)
 }

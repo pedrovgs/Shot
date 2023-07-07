@@ -23,6 +23,8 @@ import scala.collection.convert.ImplicitConversions.{
   `collection asJava`
 }
 import scala.collection.immutable.Stream.Empty
+import scala.collection.parallel.CollectionConverters._
+import scala.Console.YELLOW
 
 class Shot(
     adb: Adb,
@@ -150,7 +152,7 @@ class Shot(
     } else {
       fileList = files.listFilesInFolder(composeFolder)
     }
-    fileList.forEach { file: File =>
+    fileList.forEach { (file: File) =>
       val rawFilePath = file.getAbsolutePath
       val newFilePath = shotFolder.pulledScreenshotsFolder() + file.getName
       files.rename(rawFilePath, newFilePath)
@@ -311,7 +313,7 @@ class Shot(
     try {
       FileUtils.deleteDirectory(file)
     } catch {
-      case e: Throwable => println(Console.YELLOW + s"Failed to delete directory: $e")
+      case e: Throwable => println(YELLOW + s"Failed to delete directory: $e")
     }
   }
 }

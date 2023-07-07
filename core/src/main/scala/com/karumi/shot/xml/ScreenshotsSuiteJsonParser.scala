@@ -64,9 +64,9 @@ object ScreenshotsSuiteJsonParser {
       testName,
       tilesDimension,
       viewHierarchy,
-      absoluteFileNames,
-      relativeFileNames,
-      relativeFileNames.map(temporalScreenshotsFolder + _),
+      absoluteFileNames.toSeq,
+      relativeFileNames.toSeq,
+      relativeFileNames.map(temporalScreenshotsFolder + _).toSeq,
       Dimension(0, 0)
     )
   }

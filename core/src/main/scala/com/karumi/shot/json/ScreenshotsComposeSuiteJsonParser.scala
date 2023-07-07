@@ -1,6 +1,5 @@
 package com.karumi.shot.json
 
-import com.drew.metadata.Metadata
 import com.karumi.shot.domain.{Dimension, Screenshot}
 import com.karumi.shot.domain.model.{Folder, ScreenshotsSuite}
 import org.json4s._
