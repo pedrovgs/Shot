@@ -2,7 +2,7 @@
 minsdk = "21"
 targetsdk = "33"
 java = "11"
-shot = "5.14.1"
+shot = "6.0.0"
 
 android-build-tools = "7.4.2"
 androidx-test = "1.5.0"
