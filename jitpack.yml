@@ -1,0 +1,8 @@
+jdk:
+  - openjdk11
+before_install:
+  - sdk install java 11.0.2
+  - sdk use java 11.0.2
+  - sdk install maven
+  - mvn -v
+  - echo "RELEASE_SIGNING_ENABLED=false" >> gradle.properties

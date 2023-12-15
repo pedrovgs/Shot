@@ -24,6 +24,7 @@ import androidx.test.espresso.Espresso
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import com.facebook.testing.screenshot.Screenshot
 import com.facebook.testing.screenshot.ViewHelpers
+import com.facebook.testing.screenshot.internal.RecordBuilderImpl
 import com.facebook.testing.screenshot.internal.TestNameDetector
 import com.karumi.shot.compose.ComposeScreenshotRunner
 import com.karumi.shot.compose.ScreenshotMetadata
@@ -50,18 +51,19 @@ interface ScreenshotTest {
         heightInPx: Int? = null,
         widthInPx: Int? = null,
         name: String? = null,
-        backgroundColor: Int = android.R.color.white
+        backgroundColor: Int = android.R.color.white,
+        maxPixels: Long = RecordBuilderImpl.DEFAULT_MAX_PIXELS,
     ) {
         val view = activity.findViewById<View>(android.R.id.content)
 
         if (heightInPx == null && widthInPx == null) {
             disableFlakyComponentsAndWaitForIdle(view)
-            takeActivitySnapshot(activity, name)
+            takeActivitySnapshot(activity, name, maxPixels)
         } else {
             runOnUi {
                 view.setBackgroundResource(backgroundColor)
             }
-            compareScreenshot(view = view!!, heightInPx = heightInPx, widthInPx = widthInPx, name = name)
+            compareScreenshot(view = view!!, heightInPx = heightInPx, widthInPx = widthInPx, name = name, maxPixels = maxPixels)
         }
     }
 
@@ -69,18 +71,20 @@ interface ScreenshotTest {
         fragment: Fragment,
         heightInPx: Int? = null,
         widthInPx: Int? = null,
-        name: String? = null
-    ) = compareScreenshot(view = fragment.requireView(), heightInPx = heightInPx, widthInPx = widthInPx, name = name)
+        name: String? = null,
+        maxPixels: Long = RecordBuilderImpl.DEFAULT_MAX_PIXELS,
+    ) = compareScreenshot(view = fragment.requireView(), heightInPx = heightInPx, widthInPx = widthInPx, name = name, maxPixels = maxPixels)
 
     fun compareScreenshot(
         dialog: Dialog,
         heightInPx: Int? = null,
         widthInPx: Int? = null,
-        name: String? = null
+        name: String? = null,
+        maxPixels: Long = RecordBuilderImpl.DEFAULT_MAX_PIXELS,
     ) {
         val window = dialog.window
         if (window != null) {
-            compareScreenshot(view = window.decorView, heightInPx = heightInPx, widthInPx = widthInPx, name = name)
+            compareScreenshot(view = window.decorView, heightInPx = heightInPx, widthInPx = widthInPx, name = name, maxPixels = maxPixels)
         }
     }
 
@@ -88,10 +92,17 @@ interface ScreenshotTest {
         holder: RecyclerView.ViewHolder,
         heightInPx: Int,
         widthInPx: Int? = null,
-        name: String? = null
-    ) = compareScreenshot(view = holder.itemView, heightInPx = heightInPx, widthInPx = widthInPx, name = name)
+        name: String? = null,
+        maxPixels: Long = RecordBuilderImpl.DEFAULT_MAX_PIXELS,
+    ) = compareScreenshot(view = holder.itemView, heightInPx = heightInPx, widthInPx = widthInPx, name = name, maxPixels = maxPixels)
 
-    fun compareScreenshot(view: View, heightInPx: Int? = null, widthInPx: Int? = null, name: String? = null) {
+    fun compareScreenshot(
+        view: View,
+        heightInPx: Int? = null,
+        widthInPx: Int? = null,
+        name: String? = null,
+        maxPixels: Long = RecordBuilderImpl.DEFAULT_MAX_PIXELS,
+    ) {
         disableFlakyComponentsAndWaitForIdle(view)
 
         val context = getInstrumentation().targetContext
@@ -107,11 +118,14 @@ interface ScreenshotTest {
                 .setExactWidthPx(width)
                 .layout()
         }
-        takeViewSnapshot(name, view)
+        takeViewSnapshot(name, view, maxPixels)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun compareScreenshot(rule: ComposeTestRule, name: String? = null) {
+    fun compareScreenshot(
+        rule: ComposeTestRule,
+        name: String? = null,
+    ) {
         rule.waitForIdle()
         compareScreenshot(rule.onRoot(), name)
     }
@@ -179,7 +193,7 @@ interface ScreenshotTest {
 
     private fun notInAppMainThread() = Looper.myLooper() != Looper.getMainLooper()
 
-    private fun takeViewSnapshot(name: String?, view: View) {
+    private fun takeViewSnapshot(name: String?, view: View, maxPixels: Long) {
         val testName = name ?: TestNameDetector.getTestName()
         val snapshotName = "${TestNameDetector.getTestClass()}_$testName"
         try {
@@ -187,13 +201,14 @@ interface ScreenshotTest {
                 .snap(view)
                 .setIncludeAccessibilityInfo(false)
                 .setName(snapshotName)
+                .setMaxPixels(maxPixels)
                 .record()
         } catch (t: Throwable) {
             Log.e("Shot", "Exception captured while taking screenshot for snapshot with name $snapshotName", t)
         }
     }
 
-    private fun takeActivitySnapshot(activity: Activity, name: String?) {
+    private fun takeActivitySnapshot(activity: Activity, name: String?, maxPixels: Long) {
         val testName = name ?: TestNameDetector.getTestName()
         val snapshotName = "${TestNameDetector.getTestClass()}_$testName"
         try {
@@ -201,6 +216,7 @@ interface ScreenshotTest {
                 .snapActivity(activity)
                 .setIncludeAccessibilityInfo(false)
                 .setName(snapshotName)
+                .setMaxPixels(maxPixels)
                 .record()
         } catch (t: Throwable) {
             Log.e("Shot", "Exception captured while taking screenshot for snapshot with name $snapshotName", t)
