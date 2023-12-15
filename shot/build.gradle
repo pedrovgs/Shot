@@ -23,6 +23,7 @@ dependencies {
 }
 
 tasks.named("compileScala") {
+    dependsOn("compileGroovy")
     classpath = classpath.plus(files(compileGroovy.destinationDir))
 }
 
