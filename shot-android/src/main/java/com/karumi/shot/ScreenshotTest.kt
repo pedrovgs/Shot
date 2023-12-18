@@ -190,6 +190,7 @@ interface ScreenshotTest {
                 .record()
         } catch (t: Throwable) {
             Log.e("Shot", "Exception captured while taking screenshot for snapshot with name $snapshotName", t)
+            throw t
         }
     }
 
@@ -204,6 +205,7 @@ interface ScreenshotTest {
                 .record()
         } catch (t: Throwable) {
             Log.e("Shot", "Exception captured while taking screenshot for snapshot with name $snapshotName", t)
+            throw t
         }
     }
 
