@@ -3,7 +3,7 @@ package com.karumi.shot
 import com.karumi.shot.android.Adb
 import com.karumi.shot.domain.model.AppId
 import com.karumi.shot.mothers.{AppIdMother, ProjectFolderMother, ProjectNameMother}
-import com.karumi.shot.reports.{ConsoleReporter, ExecutionReporter}
+import com.karumi.shot.reports.{ConsoleReporter, HtmlExecutionReporter}
 import com.karumi.shot.screenshots.{
   ScreenshotsComparator,
   ScreenshotsDiffGenerator,
@@ -33,7 +33,7 @@ class ShotSpec
   private val screenshotsComparator    = mock[ScreenshotsComparator]
   private val screenshotsDiffGenerator = mock[ScreenshotsDiffGenerator]
   private val screenshotsSaver         = mock[ScreenshotsSaver]
-  private val reporter                 = mock[ExecutionReporter]
+  private val reporter                 = mock[HtmlExecutionReporter]
   private val consoleReporter          = mock[ConsoleReporter]
   private val envVars                  = mock[EnvVars]
 
@@ -45,7 +45,7 @@ class ShotSpec
       screenshotsDiffGenerator,
       screenshotsSaver,
       console,
-      reporter,
+      List(reporter),
       consoleReporter,
       envVars
     )

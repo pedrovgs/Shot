@@ -4,7 +4,7 @@ import com.karumi.shot.android.Adb
 import com.karumi.shot.domain._
 import com.karumi.shot.domain.model.{AppId, FilePath, Folder, ScreenshotsSuite}
 import com.karumi.shot.json.ScreenshotsComposeSuiteJsonParser
-import com.karumi.shot.reports.{ConsoleReporter, ExecutionReporter}
+import com.karumi.shot.reports.{ConsoleReporter, HtmlExecutionReporter, ExecutionReporter}
 import com.karumi.shot.screenshots.{
   ScreenshotsComparator,
   ScreenshotsDiffGenerator,
@@ -33,7 +33,7 @@ class Shot(
     screenshotsDiffGenerator: ScreenshotsDiffGenerator,
     screenshotsSaver: ScreenshotsSaver,
     console: Console,
-    reporter: ExecutionReporter,
+    reporters: List[ExecutionReporter],
     consoleReporter: ConsoleReporter,
     envVars: EnvVars
 ) {
@@ -54,7 +54,8 @@ class Shot(
     } else {
       val screenshots = regularScreenshotSuite.get ++ composeScreenshotSuite.get
       console.show("😃  Screenshots recorded and saved at: " + shotFolder.screenshotsFolder())
-      reporter.generateRecordReport(appId, screenshots, shotFolder)
+      for (reporter <- reporters)
+        reporter.generateRecordReport(appId, screenshots, shotFolder)
       console.show(
         "🤓  You can review the execution report here: " + shotFolder.reportFolder() + "index.html"
       )
@@ -121,12 +122,13 @@ class Shot(
       } else {
         console.showSuccess("✅  Yeah!!! Your tests are passing.")
       }
-      reporter.generateVerificationReport(
-        appId,
-        comparison,
-        shotFolder,
-        showOnlyFailingTestsInReports
-      )
+      for (reporter <- reporters)
+        reporter.generateVerificationReport(
+          appId,
+          comparison,
+          shotFolder,
+          showOnlyFailingTestsInReports
+        )
       console.show(
         "🤓  You can review the execution report here: " + shotFolder
           .verificationReportFolder() + "index.html"
