@@ -1,11 +1,11 @@
 package com.karumi.shot.reports
 
-import java.io.{File, FileWriter}
-
 import com.karumi.shot.domain._
-import com.karumi.shot.domain.model.{AppId, Folder, ScreenshotComparisionErrors, ScreenshotsSuite}
+import com.karumi.shot.domain.model.{AppId, ScreenshotComparisionErrors, ScreenshotsSuite}
 import com.karumi.shot.templates.RecordIndexTemplate.recordIndexTemplate
 import com.karumi.shot.templates.VerificationIndexTemplate.verificationIndexTemplate
+
+import java.io.{File, FileWriter}
 
 class HtmlExecutionReporter extends ExecutionReporter {
 
@@ -20,18 +20,6 @@ class HtmlExecutionReporter extends ExecutionReporter {
     writeReport(reportFileContents, reportFolder)
   }
 
-  def generateVerificationReport(
-      appId: AppId,
-      comparision: ScreenshotsComparisionResult,
-      shotFolder: ShotFolder,
-      showOnlyFailingTestsInReports: Boolean = false
-  ) = {
-    val reportFileContents =
-      populateVerificationTemplate(appId, comparision, showOnlyFailingTestsInReports)
-    resetVerificationReport(shotFolder)
-    val reportFolder = shotFolder.verificationReportFolder()
-    writeReport(reportFileContents, reportFolder)
-  }
   private def writeReport(
       fileContents: String,
       reportFolder: String
@@ -82,6 +70,19 @@ class HtmlExecutionReporter extends ExecutionReporter {
           "</tr>"
       }
       .mkString("\n")
+  }
+
+  def generateVerificationReport(
+      appId: AppId,
+      comparision: ScreenshotsComparisionResult,
+      shotFolder: ShotFolder,
+      showOnlyFailingTestsInReports: Boolean = false
+  ) = {
+    val reportFileContents =
+      populateVerificationTemplate(appId, comparision, showOnlyFailingTestsInReports)
+    resetVerificationReport(shotFolder)
+    val reportFolder = shotFolder.verificationReportFolder()
+    writeReport(reportFileContents, reportFolder)
   }
 
   private def populateVerificationTemplate(

@@ -1,26 +1,25 @@
 package com.karumi.shot.reports
 
-import com.karumi.shot.domain.{DifferentImageDimensions, DifferentScreenshots, Screenshot, ScreenshotComparisonError, ScreenshotNotFound, ScreenshotsComparisionResult, ShotFolder}
+import com.karumi.shot.domain._
 import com.karumi.shot.domain.model.{AppId, ScreenshotComparisionErrors, ScreenshotsSuite}
 
 import java.io.{File, FileWriter}
-import scala.collection.IterableOnce.iterableOnceExtensionMethods
 import scala.language.postfixOps
 
 class JunitExecutionReporter extends ExecutionReporter {
 
   def generateRecordReport(
-                            appId: AppId,
-                            screenshots: ScreenshotsSuite,
-                            shotFolder: ShotFolder
-                          ): Unit = ()
+      appId: AppId,
+      screenshots: ScreenshotsSuite,
+      shotFolder: ShotFolder
+  ): Unit = ()
 
   def generateVerificationReport(
-                                  appId: AppId,
-                                  comparision: ScreenshotsComparisionResult,
-                                  shotFolder: ShotFolder,
-                                  showOnlyFailingTestsInReports: Boolean = false
-                                ): Unit = {
+      appId: AppId,
+      comparision: ScreenshotsComparisionResult,
+      shotFolder: ShotFolder,
+      showOnlyFailingTestsInReports: Boolean = false
+  ): Unit = {
     val reportFileContents =
       populateVerificationTemplate(appId, comparision)
     resetVerificationReport(shotFolder)
@@ -29,9 +28,9 @@ class JunitExecutionReporter extends ExecutionReporter {
   }
 
   private def writeReport(
-                           fileContents: String,
-                           reportFolder: String
-                         ): Unit = {
+      fileContents: String,
+      reportFolder: String
+  ): Unit = {
     val indexFile = new File(reportFolder + "TEST-Shot.xml")
     new File(reportFolder).mkdirs()
     val writer = new FileWriter(indexFile)
@@ -47,9 +46,9 @@ class JunitExecutionReporter extends ExecutionReporter {
   }
 
   private def populateVerificationTemplate(
-                                            appId: AppId,
-                                            comparision: ScreenshotsComparisionResult
-                                          ): String = {
+      appId: AppId,
+      comparision: ScreenshotsComparisionResult
+  ): String = {
     val title = s"Screenshot results: $appId"
     val summaryTableBody =
       generateVerificationSummaryTableBody(comparision)
@@ -67,52 +66,53 @@ class JunitExecutionReporter extends ExecutionReporter {
   }
 
   private def generateVerificationSummaryTableBody(
-                                                    comparisionResult: ScreenshotsComparisionResult
-
-                                                  ): String = {
+      comparisionResult: ScreenshotsComparisionResult
+  ): String = {
     val groupedScreenshots =
-    comparisionResult
-      .screenshots
-      .groupBy { (screenshot: Screenshot) =>
-        screenshot.testClass
-      }
+      comparisionResult.screenshots
+        .groupBy { (screenshot: Screenshot) =>
+          screenshot.testClass
+        }
     groupedScreenshots
       .map { case (testSuite: String, screenshots: Seq[Screenshot]) =>
-        val tests = screenshots
-          .map((screenshot) => {
-            val error = findError(screenshot = screenshot, comparisionResult.errors)
+        val tests: String = screenshots
+          .map(f = screenshot => {
+            val error =
+              findError(screenshot = screenshot, comparisionResult.errors)
             val isFailedTest = error.isDefined
-            val testClass = screenshot.testClass
-            val testName = screenshot.fileName
-            val reason = generateReasonMessage(error)
+            val testClass    = screenshot.testClass
+            val testName     = screenshot.fileName
+            val reason       = generateReasonMessage(error)
 
             val failureString = if (isFailedTest) {
-              s"""<failure message="${reason}" />"""
+              s"""<failure message="$reason" />"""
             } else {
               ""
             }
 
             s"""<testcase name="$testName" classname="$testClass">
-               |  $failureString
-               |</testcase>""".stripMargin
-          }).mkString("\n")
+                 |  $failureString
+                 |</testcase>""".stripMargin
+          })
+          .mkString("\n")
 
-        s"""<testsuite name="${testSuite}">
-           |  ${tests}
+        s"""<testsuite name="$testSuite">
+           |  $tests
            |</testsuite>
            |""".stripMargin
-      }.mkString("\n")
+      }
+      .mkString("\n")
   }
 
   private def findError(
-                         screenshot: Screenshot,
-                         errors: ScreenshotComparisionErrors
-                       ): Option[ScreenshotComparisonError] =
+      screenshot: Screenshot,
+      errors: ScreenshotComparisionErrors
+  ): Option[ScreenshotComparisonError] =
     errors.find {
-      case ScreenshotNotFound(error) => screenshot == error
+      case ScreenshotNotFound(error)             => screenshot == error
       case DifferentImageDimensions(error, _, _) => screenshot == error
-      case DifferentScreenshots(error, _) => screenshot == error
-      case _ => false
+      case DifferentScreenshots(error, _)        => screenshot == error
+      case _                                     => false
     }
 
   private def generateReasonMessage(error: Option[ScreenshotComparisonError]): String =

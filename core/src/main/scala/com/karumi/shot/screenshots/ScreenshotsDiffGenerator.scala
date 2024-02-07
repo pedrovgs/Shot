@@ -1,6 +1,5 @@
 package com.karumi.shot.screenshots
 
-import java.io.File
 import com.karumi.shot.base64.Base64Encoder
 import com.karumi.shot.domain.model.ScreenshotComparisionErrors
 import com.karumi.shot.domain.{DifferentScreenshots, ScreenshotsComparisionResult}
@@ -9,6 +8,7 @@ import com.sksamuel.scrimage.composite.RedComposite
 import com.sksamuel.scrimage.nio.PngWriter
 
 import java.awt.image.BufferedImage
+import java.io.File
 import scala.collection.parallel.CollectionConverters._
 
 class ScreenshotsDiffGenerator(base64Encoder: Base64Encoder) {
@@ -40,7 +40,10 @@ class ScreenshotsDiffGenerator(base64Encoder: Base64Encoder) {
       .fromFile(new File(originalImagePath))
       .copy(BufferedImage.TYPE_INT_ARGB)
     val newImage =
-      ImmutableImage.loader().fromFile(new File(newImagePath)).copy(BufferedImage.TYPE_INT_ARGB)
+      ImmutableImage
+        .loader()
+        .fromFile(new File(newImagePath))
+        .copy(BufferedImage.TYPE_INT_ARGB)
     val diff           = newImage.composite(new RedComposite(1d), originalImage)
     val outputFilePath = screenshot.getDiffScreenshotPath(outputFolder)
     diff.output(PngWriter.MaxCompression, outputFilePath)
