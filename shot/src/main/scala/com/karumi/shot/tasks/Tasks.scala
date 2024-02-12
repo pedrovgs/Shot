@@ -4,7 +4,7 @@ import com.android.builder.model.BuildType
 import com.karumi.shot.android.Adb
 import com.karumi.shot.base64.Base64Encoder
 import com.karumi.shot.domain.ShotFolder
-import com.karumi.shot.reports.{ConsoleReporter, ExecutionReporter}
+import com.karumi.shot.reports.{ConsoleReporter, HtmlExecutionReporter, JunitExecutionReporter}
 import com.karumi.shot.screenshots.{
   ScreenshotsComparator,
   ScreenshotsDiffGenerator,
@@ -40,7 +40,7 @@ abstract class ShotTask extends DefaultTask {
       new ScreenshotsDiffGenerator(new Base64Encoder),
       new ScreenshotsSaver,
       console,
-      new ExecutionReporter,
+      List(new HtmlExecutionReporter, new JunitExecutionReporter),
       new ConsoleReporter(console),
       new EnvVars()
     )
