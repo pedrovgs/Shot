@@ -83,6 +83,7 @@ class ExecuteScreenshotTests extends ShotTask {
   @TaskAction
   def executeScreenshotTests(): Unit = {
     val tolerance                     = shotExtension.tolerance
+    val colorTolerance                = shotExtension.colorTolerance
     val showOnlyFailingTestsInReports = shotExtension.showOnlyFailingTestsInReports
     if (recordScreenshots) {
       shot.recordScreenshots(appId, shotFolder, orchestrated)
@@ -93,6 +94,7 @@ class ExecuteScreenshotTests extends ShotTask {
         projectName,
         printBase64,
         tolerance,
+        colorTolerance,
         showOnlyFailingTestsInReports,
         orchestrated
       )

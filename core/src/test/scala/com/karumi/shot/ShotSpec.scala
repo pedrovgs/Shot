@@ -236,6 +236,7 @@ class ShotSpec
       ProjectNameMother.anyProjectName,
       shouldPrintBase64Error = false,
       0d,
+      0d,
       showOnlyFailingTestsInReports = false,
       orchestrated = false
     )

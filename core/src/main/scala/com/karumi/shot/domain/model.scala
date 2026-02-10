@@ -12,6 +12,8 @@ object model {
 
 object Config {
   val defaultTolerance: Double         = 0.0
+  /** Per-pixel color tolerance as percentage of 255 (0-100). 0 = strict equality; e.g. 2.0 ≈ ImageMagick -fuzz 2%. */
+  val defaultColorTolerance: Double   = 0.0
   val shotConfiguration: String        = "shotDependencies"
   val androidDependencyMode: FilePath  = "androidTestImplementation"
   val androidDependencyGroup: String   = "com.karumi"
