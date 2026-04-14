@@ -47,9 +47,10 @@ class ScreenshotsSaver {
       shotFolder: ShotFolder
   ) = {
     deleteOldTemporalScreenshots(projectName, shotFolder)
-    saveScreenshots(screenshots, shotFolder.screenshotsTemporalBuildPath() + "/")
+    val temporalPath = shotFolder.screenshotsTemporalBuildPath() + "/"
+    saveScreenshots(screenshots, temporalPath)
     deleteFile(reportFolder)
-    saveScreenshots(screenshots, reportFolder)
+    FileUtils.copyDirectory(new File(temporalPath), new File(reportFolder))
   }
 
   private def deleteOldTemporalScreenshots(projectName: String, shotFolder: ShotFolder): Unit = {
