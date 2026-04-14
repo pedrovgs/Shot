@@ -11,7 +11,7 @@ class ScreenshotsComparator {
 
   def compare(screenshots: ScreenshotsSuite, tolerance: Double): ScreenshotsComparisionResult = {
     val errors =
-      screenshots.par.flatMap(compareScreenshot(_, tolerance)).toList
+      screenshots.flatMap(compareScreenshot(_, tolerance)).toList
     ScreenshotsComparisionResult(errors, screenshots)
   }
 
