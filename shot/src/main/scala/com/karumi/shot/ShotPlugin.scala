@@ -1,114 +1,99 @@
 package com.karumi.shot
 
-import com.android.build.gradle.api.BaseVariant
-import com.android.build.gradle.{AppExtension, LibraryExtension}
-import com.android.builder.model.{BuildType, ProductFlavor}
+import com.android.build.api.dsl.{ApplicationExtension, LibraryExtension}
+import com.android.build.api.variant.{
+  AndroidTest,
+  ApplicationAndroidComponentsExtension,
+  ApplicationVariant,
+  HasAndroidTest,
+  LibraryAndroidComponentsExtension,
+  LibraryVariant,
+  Variant
+}
 import com.karumi.shot.domain.Config
-import com.karumi.shot.exceptions.ShotException
 import com.karumi.shot.tasks.{
   DownloadScreenshotsTask,
   ExecuteScreenshotTests,
   ExecuteScreenshotTestsForEveryFlavor,
-  RemoveScreenshotsTask
+  RemoveScreenshotsTask,
+  ShotTask
 }
-import com.karumi.shot.ui.Console
 import org.gradle.api.artifacts.DependencySet
+import org.gradle.api.plugins.AppliedPlugin
+import org.gradle.api.provider.Provider
+import org.gradle.api.specs.Spec
 import org.gradle.api.tasks.TaskProvider
-import org.gradle.api.{Plugin, Project}
+import org.gradle.api.{Action, Plugin, Project, Task}
 
 import scala.util.Try
-class ShotPlugin extends Plugin[Project] {
 
-  private val console = new Console
+class ShotPlugin extends Plugin[Project] {
 
   override def apply(project: Project): Unit = {
     addExtensions(project)
     addAndroidTestDependency(project)
-    project.afterEvaluate { project =>
-      {
-        addTasks(project)
-      }
-    }
+    // AGP 9 removed the legacy `AppExtension`/`applicationVariants` API that Shot used to enumerate
+    // variants. Wire the screenshot tasks through the new AndroidComponents Variant API instead.
+    // `onVariants` must be registered while the plugin is applied (not inside `afterEvaluate`), so we
+    // react via `withId` to support the Android plugin being applied either before or after Shot.
+    project.getPluginManager.withPlugin(
+      "com.android.application",
+      asAction[AppliedPlugin](_ => configureAppModule(project))
+    )
+    project.getPluginManager.withPlugin(
+      "com.android.library",
+      asAction[AppliedPlugin](_ => configureLibraryModule(project))
+    )
   }
 
-  private def configureAdb(project: Project): Unit = {
-    val adbPath = AdbPathExtractor.extractPath(project)
+  private def configureAppModule(project: Project): Unit = {
+    val androidComponents =
+      project.getExtensions.getByType(classOf[ApplicationAndroidComponentsExtension])
+    val baseTask = registerBaseTask(project)
+    androidComponents.onVariants(
+      androidComponents.selector().all(),
+      asAction[ApplicationVariant](variant => addTaskToVariant(project, baseTask, variant))
+    )
   }
 
-  private def findAdbPath(project: Project): String = {
-    AdbPathExtractor.extractPath(project)
+  private def configureLibraryModule(project: Project): Unit = {
+    val androidComponents =
+      project.getExtensions.getByType(classOf[LibraryAndroidComponentsExtension])
+    val baseTask = registerBaseTask(project)
+    androidComponents.onVariants(
+      androidComponents.selector().all(),
+      asAction[LibraryVariant](variant => addTaskToVariant(project, baseTask, variant))
+    )
   }
 
-  private def addTasks(project: Project): Unit = {
-    if (isAnAndroidProject(project)) {
-      addTasksToAppModule(project)
-    } else if (isAnAndroidLibrary(project)) {
-      addTasksToLibraryModule(project)
-    }
-  }
-
-  private def addTasksToLibraryModule(project: Project) = {
-    val libraryExtension =
-      getAndroidLibraryExtension(project)
-    val baseTask =
-      project.getTasks
-        .register(Config.defaultTaskName, classOf[ExecuteScreenshotTestsForEveryFlavor])
-    libraryExtension.getLibraryVariants.all { variant =>
-      addTaskToVariant(project, baseTask, variant)
-    }
-  }
-
-  private def addTasksToAppModule(project: Project) = {
-    val appExtension =
-      getAndroidAppExtension(project)
-    val baseTask =
-      project.getTasks
-        .register(Config.defaultTaskName, classOf[ExecuteScreenshotTestsForEveryFlavor])
-    appExtension.getApplicationVariants.all { variant =>
-      addTaskToVariant(project, baseTask, variant)
-    }
-  }
+  private def registerBaseTask(
+      project: Project
+  ): TaskProvider[ExecuteScreenshotTestsForEveryFlavor] =
+    project.getTasks.register(Config.defaultTaskName, classOf[ExecuteScreenshotTestsForEveryFlavor])
 
   private def addTaskToVariant(
       project: Project,
       baseTask: TaskProvider[ExecuteScreenshotTestsForEveryFlavor],
-      variant: BaseVariant
-  ) = {
-    val flavor = variant.getMergedFlavor
-    checkIfApplicationIdIsConfigured(project, flavor)
-    val completeAppId = composeCompleteAppId(project, variant)
-    val appTestId     = Option(flavor.getTestApplicationId).getOrElse(completeAppId)
-    val flavorName    = if (variant.getFlavorName.nonEmpty) Some(variant.getFlavorName) else None
-    val orchestrated  = isOrchestratorConnected(project)
-
-    addTasksFor(project, flavorName, variant.getBuildType, appTestId, orchestrated, baseTask)
+      variant: Variant
+  ): Unit = {
+    // Only wire screenshot tasks for variants that actually produce an instrumentation (androidTest)
+    // APK. This mirrors the previous behaviour, which skipped variants whose `connected…AndroidTest`
+    // task did not exist.
+    androidTestOf(variant).foreach { androidTest =>
+      val flavorName    = Option(variant.getFlavorName).filter(_.nonEmpty)
+      val buildTypeName = Option(variant.getBuildType).getOrElse("")
+      // `AndroidTest.applicationId` is already the test application id (defaults to
+      // "<applicationId>.test" for app modules, and the configured testApplicationId for libraries).
+      val appId        = androidTest.getApplicationId
+      val orchestrated = isOrchestratorConnected(project)
+      addTasksFor(project, flavorName, buildTypeName, appId, orchestrated, baseTask)
+    }
   }
 
-  private def composeCompleteAppId(project: Project, variant: BaseVariant): String = {
-    val appId =
-      try {
-        variant.getApplicationId
-      } catch {
-        case _: Throwable =>
-          console.showWarning(
-            "Error found trying to get applicationId from library module. We will use the extension applicationId param as a workaround."
-          )
-          console.showWarning(
-            "More information about this AGP7.0.1 bug can be found here: https://github.com/Karumi/Shot/issues/247"
-          )
-          val extension           = project.getExtensions.getByType[ShotExtension](classOf[ShotExtension])
-          val extensionAppIdValue = extension.applicationId
-          console.showWarning(s"Extension applicationId value read = $extensionAppIdValue")
-          extensionAppIdValue
-      }
-    appId + ".test"
-  }
-
-  private def checkIfApplicationIdIsConfigured(project: Project, flavor: ProductFlavor) =
-    if (isAnAndroidLibrary(project) && flavor.getTestApplicationId == null) {
-      throw ShotException(
-        "Your Android library needs to be configured using an testApplicationId in your build.gradle defaultConfig block."
-      )
+  private def androidTestOf(variant: Variant): Option[AndroidTest] =
+    variant match {
+      case hasAndroidTest: HasAndroidTest => Option(hasAndroidTest.getAndroidTest)
+      case _                              => None
     }
 
   private def addExtensions(project: Project): Unit = {
@@ -119,138 +104,132 @@ class ShotPlugin extends Plugin[Project] {
   private def addTasksFor(
       project: Project,
       flavor: Option[String],
-      buildType: BuildType,
-      appId: String,
+      buildTypeName: String,
+      appId: Provider[String],
       orchestrated: Boolean,
       baseTask: TaskProvider[ExecuteScreenshotTestsForEveryFlavor]
   ): Unit = {
-    val extension = project.getExtensions.getByType[ShotExtension](classOf[ShotExtension])
-    val instrumentationTaskName = if (extension.useComposer) {
-      Config.composerInstrumentationTestTask(flavor, buildType.getName)
-    } else {
-      Config.defaultInstrumentationTestTask(flavor, buildType.getName)
-    }
-    val tasks = project.getTasks
-    // Some projects configure different build types and only one of them is allowed to run instrumentation tasks
-    // Based on this, we need to first check if the instrumentation task is available or not. This let us use Shot
-    // for different build types even if it is not the default one
-    val instrumentationTaskProvider =
-      try {
-        tasks.named(instrumentationTaskName)
-      } catch {
-        case e: Throwable => return
-      }
-
-    val removeScreenshotsAfterExecution = tasks
-      .register(
-        RemoveScreenshotsTask.name(flavor, buildType, beforeExecution = false),
-        classOf[RemoveScreenshotsTask]
-      )
-    val removeScreenshotsBeforeExecution = tasks
-      .register(
-        RemoveScreenshotsTask.name(flavor, buildType, beforeExecution = true),
-        classOf[RemoveScreenshotsTask]
-      )
+    val extension = project.getExtensions.getByType(classOf[ShotExtension])
+    val instrumentationTaskName =
+      if (extension.useComposer) Config.composerInstrumentationTestTask(flavor, buildTypeName)
+      else Config.defaultInstrumentationTestTask(flavor, buildTypeName)
+    val tasks   = project.getTasks
     val adbPath = findAdbPath(project)
-    removeScreenshotsAfterExecution.configure { task =>
-      task.setDescription(RemoveScreenshotsTask.description(flavor, buildType))
-      task.flavor = flavor
-      task.buildTypeName = buildType.getName
-      task.appId = appId
-      task.orchestrated = orchestrated
-      task.projectPath = project.getProjectDir.getAbsolutePath
-      task.buildPath = project.getBuildDir.getAbsolutePath
-      task.shotExtension = project.getExtensions.findByType(classOf[ShotExtension])
-      task.directorySuffix =
-        if (project.hasProperty("directorySuffix"))
-          Some(project.property("directorySuffix").toString)
-        else None
-      task.recordScreenshots = project.hasProperty("record")
-      task.printBase64 = project.hasProperty("printBase64")
-      task.projectName = project.getName
-      task.adbPath = adbPath
-    }
-    removeScreenshotsBeforeExecution.configure { task =>
-      task.setDescription(RemoveScreenshotsTask.description(flavor, buildType))
-      task.flavor = flavor
-      task.buildTypeName = buildType.getName
-      task.appId = appId
-      task.orchestrated = orchestrated
-      task.projectPath = project.getProjectDir.getAbsolutePath
-      task.buildPath = project.getBuildDir.getAbsolutePath
-      task.shotExtension = project.getExtensions.findByType(classOf[ShotExtension])
-      task.directorySuffix =
-        if (project.hasProperty("directorySuffix"))
-          Some(project.property("directorySuffix").toString)
-        else None
-      task.recordScreenshots = project.hasProperty("record")
-      task.printBase64 = project.hasProperty("printBase64")
-      task.projectName = project.getName
-      task.adbPath = adbPath
-    }
 
-    val downloadScreenshots = tasks
-      .register(DownloadScreenshotsTask.name(flavor, buildType), classOf[DownloadScreenshotsTask])
-    downloadScreenshots.configure { task =>
-      task.setDescription(DownloadScreenshotsTask.description(flavor, buildType))
-      task.flavor = flavor
-      task.buildTypeName = buildType.getName
-      task.appId = appId
-      task.orchestrated = orchestrated
-      task.projectPath = project.getProjectDir.getAbsolutePath
-      task.buildPath = project.getBuildDir.getAbsolutePath
-      task.shotExtension = project.getExtensions.findByType(classOf[ShotExtension])
-      task.directorySuffix =
-        if (project.hasProperty("directorySuffix"))
-          Some(project.property("directorySuffix").toString)
-        else None
-      task.recordScreenshots = project.hasProperty("record")
-      task.printBase64 = project.hasProperty("printBase64")
-      task.projectName = project.getName
-      task.adbPath = adbPath
-    }
-    val executeScreenshot = tasks
-      .register(ExecuteScreenshotTests.name(flavor, buildType), classOf[ExecuteScreenshotTests])
-    executeScreenshot.configure { task =>
-      task.setDescription(ExecuteScreenshotTests.description(flavor, buildType))
-      task.flavor = flavor
-      task.buildTypeName = buildType.getName
-      task.appId = appId
-      task.orchestrated = orchestrated
-      task.projectPath = project.getProjectDir.getAbsolutePath
-      task.buildPath = project.getBuildDir.getAbsolutePath
-      task.shotExtension = project.getExtensions.findByType(classOf[ShotExtension])
-      task.directorySuffix =
-        if (project.hasProperty("directorySuffix"))
-          Some(project.property("directorySuffix").toString)
-        else None
-      task.recordScreenshots = project.hasProperty("record")
-      task.printBase64 = project.hasProperty("printBase64")
-      task.projectName = project.getName
-      task.adbPath = adbPath
-    }
+    val removeScreenshotsAfterExecution = tasks.register(
+      RemoveScreenshotsTask.name(flavor, buildTypeName, beforeExecution = false),
+      classOf[RemoveScreenshotsTask]
+    )
+    val removeScreenshotsBeforeExecution = tasks.register(
+      RemoveScreenshotsTask.name(flavor, buildTypeName, beforeExecution = true),
+      classOf[RemoveScreenshotsTask]
+    )
+    val downloadScreenshots = tasks.register(
+      DownloadScreenshotsTask.name(flavor, buildTypeName),
+      classOf[DownloadScreenshotsTask]
+    )
+    val executeScreenshot = tasks.register(
+      ExecuteScreenshotTests.name(flavor, buildTypeName),
+      classOf[ExecuteScreenshotTests]
+    )
+
+    configureShotTask(
+      removeScreenshotsAfterExecution,
+      RemoveScreenshotsTask.description(flavor, buildTypeName),
+      project,
+      flavor,
+      buildTypeName,
+      appId,
+      orchestrated,
+      adbPath
+    )
+    configureShotTask(
+      removeScreenshotsBeforeExecution,
+      RemoveScreenshotsTask.description(flavor, buildTypeName),
+      project,
+      flavor,
+      buildTypeName,
+      appId,
+      orchestrated,
+      adbPath
+    )
+    configureShotTask(
+      downloadScreenshots,
+      DownloadScreenshotsTask.description(flavor, buildTypeName),
+      project,
+      flavor,
+      buildTypeName,
+      appId,
+      orchestrated,
+      adbPath
+    )
+    configureShotTask(
+      executeScreenshot,
+      ExecuteScreenshotTests.description(flavor, buildTypeName),
+      project,
+      flavor,
+      buildTypeName,
+      appId,
+      orchestrated,
+      adbPath
+    )
 
     if (runInstrumentation(project, extension)) {
-      executeScreenshot.configure { task =>
-        task.dependsOn(instrumentationTaskProvider)
+      executeScreenshot.configure(asAction[ExecuteScreenshotTests] { task =>
         task.dependsOn(downloadScreenshots)
         task.dependsOn(removeScreenshotsAfterExecution)
-      }
-
-      downloadScreenshots.configure { task =>
-        task.mustRunAfter(instrumentationTaskProvider)
-      }
-      instrumentationTaskProvider.configure { task =>
-        task.dependsOn(removeScreenshotsBeforeExecution)
-      }
-      removeScreenshotsAfterExecution.configure { task =>
+        // Depend on the instrumentation task by name: under the new Variant API it is registered
+        // after `onVariants` runs, so it cannot be resolved eagerly here.
+        task.dependsOn(instrumentationTaskName)
+      })
+      downloadScreenshots.configure(asAction[DownloadScreenshotsTask] { task =>
+        task.mustRunAfter(instrumentationTaskName)
+      })
+      // Wire the instrumentation task lazily, only if/when it gets registered. Some build types do
+      // not register a `connected…AndroidTest` task, in which case this simply never fires.
+      tasks
+        .matching(nameEquals(instrumentationTaskName))
+        .configureEach(asAction[Task](task => task.dependsOn(removeScreenshotsBeforeExecution)))
+      removeScreenshotsAfterExecution.configure(asAction[RemoveScreenshotsTask] { task =>
         task.mustRunAfter(downloadScreenshots)
-      }
+      })
     }
-    baseTask.configure { task =>
+    baseTask.configure(asAction[ExecuteScreenshotTestsForEveryFlavor] { task =>
       task.dependsOn(executeScreenshot)
-    }
+    })
   }
+
+  private def configureShotTask[T <: ShotTask](
+      taskProvider: TaskProvider[T],
+      description: String,
+      project: Project,
+      flavor: Option[String],
+      buildTypeName: String,
+      appId: Provider[String],
+      orchestrated: Boolean,
+      adbPath: String
+  ): Unit =
+    taskProvider.configure(asAction[T] { task =>
+      task.setDescription(description)
+      task.flavor = flavor
+      task.buildTypeName = buildTypeName
+      task.appId = appId.get()
+      task.orchestrated = orchestrated
+      task.projectPath = project.getProjectDir.getAbsolutePath
+      task.buildPath = project.getBuildDir.getAbsolutePath
+      task.shotExtension = project.getExtensions.findByType(classOf[ShotExtension])
+      task.directorySuffix =
+        if (project.hasProperty("directorySuffix"))
+          Some(project.property("directorySuffix").toString)
+        else None
+      task.recordScreenshots = project.hasProperty("record")
+      task.printBase64 = project.hasProperty("printBase64")
+      task.projectName = project.getName
+      task.adbPath = adbPath
+    })
+
+  private def findAdbPath(project: Project): String =
+    AdbPathExtractor.extractPath(project)
 
   private def addAndroidTestDependency(project: Project): Unit = {
     val configs = project.getConfigurations
@@ -273,7 +252,9 @@ class ShotPlugin extends Plugin[Project] {
 
     if (property != null) {
       if (Try(property.toBoolean).getOrElse(null) == null) {
-        throw ShotException("runInstrumentation value must be true|false")
+        throw com.karumi.shot.exceptions.ShotException(
+          "runInstrumentation value must be true|false"
+        )
       }
 
       return property.toBoolean
@@ -282,39 +263,34 @@ class ShotPlugin extends Plugin[Project] {
     extension.runInstrumentation
   }
 
-  private def isAnAndroidLibrary(project: Project): Boolean =
-    try {
-      getAndroidLibraryExtension(project)
-      true
-    } catch {
-      case _: Throwable => false
-    }
-
-  private def isAnAndroidProject(project: Project): Boolean =
-    try {
-      getAndroidAppExtension(project)
-      true
-    } catch {
-      case _: Throwable => false
-    }
-
-  private def getAndroidLibraryExtension(project: Project) = {
-    project.getExtensions
-      .getByType[LibraryExtension](classOf[LibraryExtension])
-  }
-
-  private def getAndroidAppExtension(project: Project) = {
-    project.getExtensions.getByType[AppExtension](classOf[AppExtension])
-  }
-
-  private def isOrchestratorConnected(project: Project) = {
+  private def isOrchestratorConnected(project: Project): Boolean = {
     val orchestrator = "ANDROIDX_TEST_ORCHESTRATOR"
-    if (isAnAndroidProject(project)) {
-      getAndroidAppExtension(project).getTestOptions.getExecution.equalsIgnoreCase(orchestrator)
-    } else if (isAnAndroidLibrary(project)) {
-      getAndroidLibraryExtension(project).getTestOptions.getExecution.equalsIgnoreCase(orchestrator)
-    } else {
-      false
-    }
+    val execution =
+      if (project.getPlugins.hasPlugin("com.android.application"))
+        Option(
+          project.getExtensions
+            .getByType(classOf[ApplicationExtension])
+            .getTestOptions
+            .getExecution
+        )
+      else if (project.getPlugins.hasPlugin("com.android.library"))
+        Option(
+          project.getExtensions
+            .getByType(classOf[LibraryExtension])
+            .getTestOptions
+            .getExecution
+        )
+      else None
+    execution.exists(_.equalsIgnoreCase(orchestrator))
   }
+
+  private def asAction[T](f: T => Unit): Action[T] =
+    new Action[T] {
+      override def execute(value: T): Unit = f(value)
+    }
+
+  private def nameEquals(taskName: String): Spec[Task] =
+    new Spec[Task] {
+      override def isSatisfiedBy(task: Task): Boolean = task.getName == taskName
+    }
 }

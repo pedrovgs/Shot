@@ -4,7 +4,7 @@ targetsdk = "33"
 java = "11"
 shot = "6.1.0"
 
-android-build-tools = "7.4.2"
+android-build-tools = "8.2.2"
 androidx-test = "1.5.0"
 compose = "1.4.3"
 compose-compiler = "1.4.6"

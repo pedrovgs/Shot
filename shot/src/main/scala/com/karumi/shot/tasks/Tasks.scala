@@ -1,6 +1,5 @@
 package com.karumi.shot.tasks
 
-import com.android.builder.model.BuildType
 import com.karumi.shot.android.Adb
 import com.karumi.shot.base64.Base64Encoder
 import com.karumi.shot.domain.ShotFolder
@@ -63,19 +62,19 @@ abstract class ShotTask extends DefaultTask {
 }
 
 object ShotTask {
-  def prefixName(flavor: Option[String], buildType: BuildType) =
-    s"${flavor.fold(buildType.getName) { s =>
-      s"$s${buildType.getName.capitalize}"
+  def prefixName(flavor: Option[String], buildTypeName: String) =
+    s"${flavor.fold(buildTypeName) { s =>
+      s"$s${buildTypeName.capitalize}"
     }}"
 }
 
 object ExecuteScreenshotTests {
-  def name(flavor: Option[String], buildType: BuildType) =
-    s"${ShotTask.prefixName(flavor, buildType)}ExecuteScreenshotTests"
+  def name(flavor: Option[String], buildTypeName: String) =
+    s"${ShotTask.prefixName(flavor, buildTypeName)}ExecuteScreenshotTests"
 
-  def description(flavor: Option[String], buildType: BuildType) =
+  def description(flavor: Option[String], buildTypeName: String) =
     s"Checks the user interface screenshot tests . If you execute this task using -Precord param the screenshot will be regenerated for the build " +
-      s"${ShotTask.prefixName(flavor, buildType)}"
+      s"${ShotTask.prefixName(flavor, buildTypeName)}"
 }
 
 class ExecuteScreenshotTests extends ShotTask {
@@ -106,12 +105,12 @@ class ExecuteScreenshotTests extends ShotTask {
 }
 
 object DownloadScreenshotsTask {
-  def name(flavor: Option[String], buildType: BuildType) =
-    s"${ShotTask.prefixName(flavor, buildType)}DownloadScreenshots"
+  def name(flavor: Option[String], buildTypeName: String) =
+    s"${ShotTask.prefixName(flavor, buildTypeName)}DownloadScreenshots"
 
-  def description(flavor: Option[String], buildType: BuildType) =
+  def description(flavor: Option[String], buildTypeName: String) =
     s"Retrieves the screenshots stored into the Android device where the tests were executed for the build " +
-      s"${ShotTask.prefixName(flavor, buildType)}"
+      s"${ShotTask.prefixName(flavor, buildTypeName)}"
 }
 
 class DownloadScreenshotsTask extends ShotTask {
@@ -122,13 +121,13 @@ class DownloadScreenshotsTask extends ShotTask {
 }
 
 object RemoveScreenshotsTask {
-  def name(flavor: Option[String], buildType: BuildType, beforeExecution: Boolean) =
-    s"${ShotTask.prefixName(flavor, buildType)}RemoveScreenshots" +
+  def name(flavor: Option[String], buildTypeName: String, beforeExecution: Boolean) =
+    s"${ShotTask.prefixName(flavor, buildTypeName)}RemoveScreenshots" +
       s"${if (beforeExecution) "Before" else "After"}"
 
-  def description(flavor: Option[String], buildType: BuildType) =
+  def description(flavor: Option[String], buildTypeName: String) =
     s"Removes the screenshots recorded during the tests execution from the Android device where the tests were executed for the build " +
-      s"${ShotTask.prefixName(flavor, buildType)}"
+      s"${ShotTask.prefixName(flavor, buildTypeName)}"
 }
 
 class RemoveScreenshotsTask extends ShotTask {
